@@ -9,6 +9,8 @@ return array(
 		'vendor/modernizr.custom.2.8.3.min.js',
 		'vendor/jquery-ui-11.1.4.custom.min.js',
 		'vendor/jquery.dataTables.min.js',
+                'vendor/jquery.royalslider.min.js',
+                'vendor/lightbox.min.js',
 		'app.js',
 		'plugin.mainnavigation.js',
 		'plugin.metanavigation.js',

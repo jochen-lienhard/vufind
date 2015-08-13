@@ -135,6 +135,91 @@ $(function() {
 	});
 
 
+	$('.news-teaser-item.gallery-teaser').each(function() {
+		var imageSource = $(this).css('background-image').replace(/url\((['"])?(.*?)\1\)/gi, '$2').split(',')[0];
+		var image = new Image();
+		image.src = imageSource;
+		var boxContainer = $(this);
+		$(image).load(function() {
+			$(boxContainer).css('height', image.height);
+		});
+	});
+
+
+	lightbox.option({
+		'fadeDuration': 200,
+		'positionFromTop': 600,
+		'resizeDuration': 200,
+		'showImageNumberLabel': false,
+		'wrapAround': true
+	})
+
+
+	$(".royalSlider").royalSlider({
+		// options go here
+		// as an example, enable keyboard arrows nav
+		keyboardNavEnabled: true,
+		autoScaleSlider: true,
+		//autoScaleSliderWidth: 100,
+		imageScaleMode: 'fill',
+		imageScalePadding: 0,
+		controlNavigation: 'bullets',
+		arrowsNav: true,
+		slidesSpacing: 0,
+		loop: true,
+		transitionType: 'move',
+		transitionSpeed: 1200,
+		globalCaption: true,
+		usePreloader: true,
+		numImagesToPreload: 2,
+		autoPlay: {
+			enabled: true,
+			pauseOnHover: true,
+			delay: 8000
+		}
+	});
+
+
+	// minisearch input prompt
+	$('.input-prompt').on('focusin', function () {
+		$(this).attr('placeholder', '');
+	});
+
+	$('.input-prompt').on('focusout', function () {
+		$(this).attr('placeholder', $(this).data().placeholder);
+	});
+
+	if($('.input-flush input').val().length > 0) {
+		$('.input-flush .flush-button').removeClass('hidden');
+	}
+
+	$('.input-flush input').on('input', function () {
+		if($(this).val()) {
+			$(this).parent().find('.flush-button').removeClass('hidden');
+		} else {
+			$(this).parent().find('.flush-button').addClass('hidden');
+		}
+	});
+
+	$('.input-flush .flush-button').on(GLOBALS.CLICK_EVENT, function() {
+		$(this).addClass('hidden');
+		$(this).parent().find('input').val('').focus();
+	})
+
+
+	var vars = [], hash;
+	var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+	for(var i = 0; i < hashes.length; i++)
+	{
+		hash = hashes[i].split('=');
+		vars.push(hash[0]);
+		vars[hash[0]] = decodeURIComponent(hash[1]);
+	}
+
+	$.each(vars['hl'].split('+'), function(i, phrase) {
+		$('#contentWrapper').highlight(phrase);
+	})
+
 
 
 

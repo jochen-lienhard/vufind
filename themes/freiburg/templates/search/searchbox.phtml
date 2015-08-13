@@ -37,7 +37,11 @@
 		<form role="search" method="get" action="<?=$this->url($basicSearch)?>" name="searchForm" id="searchForm" autocomplete="off">
 			<? if($renderSearchTabs) $tabs=$this->render('search/searchTabs'); ?>
 			<? if (!empty($tabs)): ?><?=$tabs ?><? endif; ?>
-			<input class="searchfield search-query<? if($this->searchbox()->autocompleteEnabled($this->searchClassId)):?> autocomplete searcher:<?=$this->escapeHtmlAttr($this->searchClassId) ?><? endif ?>" id="searchForm_lookfor" type="text" name="lookfor" value="<?=$this->escapeHtmlAttr($this->lookfor)?>" placeholder="Suche in..." />
+<span class="input-flush">
+                                <input class="searchfield search-query input-prompt<? if($this->searchbox()->autocompleteEnabled($this->searchClassId)):?> autocomplete searcher:<?=$this->escapeHtmlAttr($this->searchClassId) ?><? endif ?>" id="searchForm_lookfor" type="text" name="lookfor" value="<?=$this->escapeHtmlAttr($this->lookfor)?>" data-placeholder="Suche in ..." placeholder="Suche in ..." />
+                                <span class="flush-button hidden"><span class="icon icon-fa-close-circle"></span></span>
+                        </span>
+
 			<? if ($handlerCount > 1): ?>
 				<select class="form-control" id="searchForm_type" name="type" data-native-menu="false">
 					<? foreach ($handlers as $handler): ?>
