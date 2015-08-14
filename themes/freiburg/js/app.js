@@ -216,11 +216,5 @@ $(function() {
 		vars[hash[0]] = decodeURIComponent(hash[1]);
 	}
 
-	$.each(vars['hl'].split('+'), function(i, phrase) {
-		$('#contentWrapper').highlight(phrase);
-	})
-
-
-
 
 })
