@@ -25,6 +25,11 @@
             <? endif;?>
             <li><a href="<?=$this->url('home') ?>Search/History"><?=$this->transEsc('RDS_RDSHistory')?></a></li>
             <li><a href="<?=$this->url('home') ?>MyResearch"><?=$this->transEsc('RDS_RDSFavorites')?></a></li>
+      <? if ($this->feedback()->tabEnabled()): ?>
+        <li>
+          <a id="feedbackLink" class="modal-link" href="<?=$this->url('feedback-home') ?>"><i class="fa fa-envelope"></i> <?=$this->transEsc("Feedback")?></a>
+        </li>
+      <? endif; ?>
         </ul>        
     </div>
   
