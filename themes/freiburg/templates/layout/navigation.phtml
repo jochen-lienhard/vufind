@@ -24,6 +24,11 @@
             <li><a href="<?=$this->url('home') ?><?=$this->searchClassId ?>/Advanced"><?=$this->transEsc('RDS_ADVANCED_SEARCH')?></li>
             <? endif;?>
             <li><a href="<?=$this->url('home') ?>Search/History"><?=$this->transEsc('RDS_RDSHistory')?></a></li>
+      <? $cart = $this->cart(); if ($cart->isActive()): ?>
+        <li id="cartSummary">
+          <a id="cartItems" class="modal-link" title="<?=$this->transEsc('View Book Bag')?>" href="<?=$this->url('cart-home')?>"><i class="fa fa-suitcase"></i> <strong><?=count($cart->getItems())?></strong> <?=$this->transEsc('items')?><?=$cart->isFull() ? ' (' .  $this->transEsc('bookbag_full') . ')' : ''?></a>
+        </li>
+      <? endif; ?>
             <li><a href="<?=$this->url('home') ?>MyResearch"><?=$this->transEsc('RDS_RDSFavorites')?></a></li>
       <? if ($this->feedback()->tabEnabled()): ?>
         <li>
