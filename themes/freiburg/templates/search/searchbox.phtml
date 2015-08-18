@@ -109,4 +109,6 @@
 		</form>
 	</div>
 	<script type="text/javascript">$("#searchForm_lookfor").focus()</script>
+        <? /* add cookie for ub.uni-freiburg.de */ ?>
+        <?setcookie("query",$this->lookfor,0,"/","ub.uni-freiburg.de")?>
 <? endif; ?>
