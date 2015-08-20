@@ -70,7 +70,7 @@
 				<? endforeach; ?>
 			<? endif; ?>
                         <? /* Fix for keep filters */ ?>
-                        <? $this->filterList=$this->params->getFilters(); ?>
+                        <? if (isset($this->params)) $this->filterList=$this->params->getFilters(); ?>
 			<?
 			$filterDetails = $this->searchbox()->getFilterDetails(
 				isset($this->filterList) && is_array($this->filterList) ? $this->filterList : array(),
