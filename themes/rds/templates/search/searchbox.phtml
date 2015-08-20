@@ -61,6 +61,7 @@
           <input type="checkbox" <?=$isSelected ? 'checked="checked" ' : ''?>name="shard[]" value='<?=$this->escapeHtmlAttr($shard)?>' /> <?=$this->transEsc($shard)?>
       <? endforeach; ?>
     <? endif; ?>
+    <? $this->filterList=$this->params->getFilters(); ?>
     <?
       $filterDetails = $this->searchbox()->getFilterDetails(
           isset($this->filterList) && is_array($this->filterList) ? $this->filterList : array(),
