@@ -14,4 +14,25 @@
       Fachportale
     </a>
   </li>
+  <? $account = $this->auth()->getManager(); ?>
+  <? if (is_object($account) && $account->loginEnabled()): // hide login/logout if unavailable ?>
+     <li class="logoutOptions<? if(!$account->isLoggedIn()): ?> hidden<? endif ?>">
+       <a href="<?=$this->url('myresearch-logout')?>" class="modal-link" title="<?=$this->transEsc("Log Out")?>"><?=$this->transEsc("Log Out")?></a>
+     </li>
+     <li id="loginOptions"<? if($account->isLoggedIn()): ?> class="hidden"<? endif ?>>
+     <? if ($sessionInitiator = $account->getSessionInitiator($this->serverUrl($this->url('myresearch-home')))): ?>
+       <a href="<?=$this->escapeHtmlAttr($sessionInitiator)?>"><?=$this->transEsc("Login")?></a>
+     <? else: ?>
+       <a href="<?=$this->url('myresearch-userlogin')?>" class="modal-link" title="<?=$this->transEsc("Login")?>"><?=$this->transEsc("Login")?></a>
+     <? endif; ?>
+     </li>
+  <? endif; ?>
+  <li id="status">
+     <? if($account->isLoggedIn()): ?>
+        [<?=$this->transEsc("RDS_USER")?>]
+     <? else: ?>
+        [<?=$this->transEsc("RDS_GUEST")?>]
+     <? endif; ?>
+  </li>
+
 </ul>
