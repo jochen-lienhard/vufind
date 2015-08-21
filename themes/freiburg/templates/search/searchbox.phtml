@@ -1,7 +1,7 @@
 <?
     // Set default value if necessary:
     if (!isset($this->searchClassId)) {
-        $this->searchClassId = 'Solr';
+        $this->searchClassId = 'RDSIndex';
     }
 
     // Load search actions and settings (if any):
@@ -35,7 +35,7 @@
 <? else: ?>
 	<div id="miniSearch">
 		<form role="search" method="get" action="<?=$this->url($basicSearch)?>" name="searchForm" id="searchForm" autocomplete="off">
-			<? if($renderSearchTabs) $tabs=$this->render('search/searchTabs'); ?>
+			<? if($renderSearchTabs) $tabs=$this->render('search/searchTabs'); ?> 
 			<? if (!empty($tabs)): ?><?=$tabs ?><? endif; ?>
 <span class="input-flush">
                                 <input class="searchfield search-query input-prompt<? if($this->searchbox()->autocompleteEnabled($this->searchClassId)):?> autocomplete searcher:<?=$this->escapeHtmlAttr($this->searchClassId) ?><? endif ?>" id="searchForm_lookfor" type="text" name="lookfor" value="<?=$this->escapeHtmlAttr($this->lookfor)?>" data-placeholder="Suche in ..." placeholder="Suche in ..." />

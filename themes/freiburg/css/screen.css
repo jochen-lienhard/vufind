@@ -412,7 +412,6 @@ ul.link-list > li a { font-weight: 400; }
 .page-layout-start #miniSearch .search-select .radio span { display: inline-block; padding-left: 10px; }
 .page-layout-start #miniSearch .hidden-button { width: 190px; right: 20px; height: 160px; }
 
-.page-layout-search #miniSearch { position: relative; width: 100%; left: 0; height: 120px; top: 0; margin-bottom: 20px; }
 .page-layout-search #miniSearch:before { display: none; }
 .page-layout-search #miniSearch .flush-button { top: 25%; left: 56%; font-size: 32px; }
 .page-layout-search #miniSearch .searchfield { border-right: solid 2px #d6d3cf; width: 60%; padding: 20px; padding-right: 50px; margin-top: 12px; font-weight: 700; font-size: 1.333em; }

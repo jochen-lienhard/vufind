@@ -109,6 +109,15 @@
 							<?=$this->render('websiteAssets/metaNavigation.phtml')?>
 						</nav>
 
+<?
+  if (!isset($this->renderSearchbox) || $this->renderSearchbox != false) {
+    $this->searchbox = $this->render('search/searchbox.phtml');
+  }
+?>
+
+      <?=$this->searchbox ?>
+
+
 						<div class="probebetrieb-navigation">
 							<div class="content">
 								<span class="heading">Probebetrieb</span>
