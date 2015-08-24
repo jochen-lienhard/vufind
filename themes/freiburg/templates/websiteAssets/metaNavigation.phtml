@@ -35,4 +35,13 @@
      <? endif; ?>
   </li>
 
+        <li id="language">
+          <form method="post" name="langForm" action="" id="langForm">
+                        <input id="mylang" type="hidden" name="mylang" value="xxx" />
+                        <a href="#" onclick="document.getElementById('mylang').value='en'; document.langForm.submit();">EN</a>&nbsp;
+                        <a href="#" onclick="document.getElementById('mylang').value='de'; document.langForm.submit();">DE</a>&nbsp;
+          </form>
+        </li>
+
+
 </ul>

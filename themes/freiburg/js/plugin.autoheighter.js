@@ -12,6 +12,8 @@
 		autoheighter.options = $.extend( {}, defaults, options) ;
 		autoheighter._defaults = defaults;
 		autoheighter.maxHeight = 0;
+		autoheighter.heightGridValue = 75;
+		autoheighter.offsetValue = 8;
 		autoheighter.init();
 
 	}
@@ -19,23 +21,22 @@
 	Autoheighter.prototype = {
 
 		init: function() {
-			autoheighter._calculateMaxHeight();
 			autoheighter._adjustAllHeightSizes();
 		},
 
 		_adjustAllHeightSizes: function() {
 			$autoheightContainer.find(autoheighter.options.elemSelector).each(function() {
-				$(this).height(autoheighter.maxHeight);
+				var originalElemHeight = $(this).outerHeight();
+				var gridFactor = Math.ceil(originalElemHeight / autoheighter.heightGridValue);
+				if(gridFactor > 3) {
+					gridFactor = 3;
+				}
+				//var newElemHeight = (gridFactor * autoheighter.heightGridValue) + (gridFactor - 1) * autoheighter.offsetValue;
+				//var elemOffset = (gridFactor - 1) * autoheighter.offsetValue;
+				//var newElemHeight = (gridFactor * autoheighter.heightGridValue) + elemOffset;
+				$(this).addClass('autoheight-grid-'+gridFactor);
 			});
 		},
-
-		_calculateMaxHeight: function() {
-			$autoheightContainer.find(autoheighter.options.elemSelector).each(function() {
-				if($(this).height() > autoheighter.maxHeight) {
-					autoheighter.maxHeight = $(this).height();
-				}
-			});
-		}
 
 	};
 

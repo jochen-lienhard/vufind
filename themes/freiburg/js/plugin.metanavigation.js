@@ -28,31 +28,36 @@
 		init: function() {
 
 			$(metanavigation.element).find(metanavigation.options.linkSelector).on(metanavigation.clickListener, function(e) {
-				e.preventDefault();
 
-				var clickedMenuUid = parseInt($(this).data().menuUid);
-				var ajaxUrl = $(this).data().ajaxRequest;
+				if($(this).data().ajaxRequest) {
+					e.preventDefault();
 
-				// TODO: Request content before to check if it exists
-				// Note: Ajax is async, so we need to use a callback function or a promise
+					var clickedMenuUid = parseInt($(this).data().menuUid);
+					var ajaxUrl = $(this).data().ajaxRequest;
 
-				if(!metanavigation.activeMenuUid) {
-					metanavigation.activeMenuUid = clickedMenuUid;
-					metanavigation._updateContent(ajaxUrl);
-					metanavigation._openMetaLayer();
+					// TODO: Request content before to check if it exists
+					// Note: Ajax is async, so we need to use a callback function or a promise
+
+					if(!metanavigation.activeMenuUid) {
+						metanavigation.activeMenuUid = clickedMenuUid;
+						metanavigation._updateContent(ajaxUrl);
+						metanavigation._openMetaLayer();
+					}
+					else if(clickedMenuUid !== metanavigation.activeMenuUid) {
+						metanavigation.activeMenuUid = clickedMenuUid;
+						metanavigation._closeMetaLayer();
+						metanavigation._updateContent(ajaxUrl, 500);
+						metanavigation._reopenDelayed(500);
+
+					} else {
+						metanavigation.activeMenuUid = false;
+						metanavigation._closeMetaLayer();
+					}
+
+					metanavigation._setActiveClass();
+
 				}
-				else if(clickedMenuUid !== metanavigation.activeMenuUid) {
-					metanavigation.activeMenuUid = clickedMenuUid;
-					metanavigation._closeMetaLayer();
-					metanavigation._updateContent(ajaxUrl, 500);
-					metanavigation._reopenDelayed(500);
 
-				} else {
-					metanavigation.activeMenuUid = false;
-					metanavigation._closeMetaLayer();
-				}
-
-				metanavigation._setActiveClass();
 
 			});
 
