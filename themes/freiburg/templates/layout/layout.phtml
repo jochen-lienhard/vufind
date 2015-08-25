@@ -110,12 +110,12 @@
 						</nav>
 
 <?
-  if (!isset($this->renderSearchbox) || $this->renderSearchbox != false) {
-    $this->searchbox = $this->render('search/searchbox.phtml');
-  }
+      if (!isset($this->layout()->searchbox)) {
+        $this->layout()->searchbox = $this->render('search/searchbox.phtml');
+      }
 ?>
 
-      <?=$this->searchbox ?>
+      <?=$this->layout()->searchbox ?>
 
 
 						<div class="probebetrieb-navigation">
