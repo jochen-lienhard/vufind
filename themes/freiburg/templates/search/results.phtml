@@ -50,16 +50,9 @@
   $searchHome = $options->getSearchHomeAction();
   $advSearch = $options->getAdvancedSearchAction();
   $searchId = $this->results->getSearchId();
+
+$recordTotal = $this->results->getResultTotal();
 ?>
-
-<? $recordTotal = $this->results->getResultTotal() ?>
-
-<? if ($recordTotal > 0): ?>
-  <div class="result-count">
-    <span>Ihre Suche nach <span class="search-word"><?=$this->escapeHtml($lookfor)?></span> ergab <?=$this->localizedNumber($recordTotal)?> Treffer.</span>
-  </div>
-<? endif; ?>
-
 
 <div class="row">
 
@@ -72,25 +65,30 @@
     <?=$this->flashmessages()?>
     
     <div class="hidden-print search-controls row">
+
+<? if ($recordTotal > 0): ?>
+  <div class="result-count col-xs-12">
+    <span>Ihre Suche nach <span class="search-word"><?=$this->escapeHtml($lookfor)?></span> ergab <?=$this->localizedNumber($recordTotal)?> Treffer.</span>
+  </div>
+<? endif; ?>
+
       <div class="col-xs-6">
         <? if ($recordTotal > 0): ?>
+<? /*
           <?=$this->transEsc("Showing")?>
           <strong><?=$this->localizedNumber($this->results->getStartRecord())?></strong> - <strong><?=$this->localizedNumber($this->results->getEndRecord())?></strong>
           <? if (!isset($this->skipTotalCount)): ?>
             <?=$this->transEsc('of')?> <strong><?=$this->localizedNumber($recordTotal)?></strong>
           <? endif; ?>
-          <!--
           <? if (isset($this->overrideSearchHeading)): ?>
             <?=$this->overrideSearchHeading?>
           <? elseif ($this->params->getSearchType() == 'basic'): ?>
             <?=$this->transEsc('for search')?>: <strong>'<?=$this->escapeHtml($lookfor)?>'</strong>,
           <? endif; ?>
-          -->
-          <!--
           <? if ($qtime = $this->results->getQuerySpeed()): ?>
             <?=$this->transEsc('query time')?>: <?=$this->localizedNumber($qtime, 2).$this->transEsc('seconds_abbrev')?>
           <? endif; ?>
-          -->
+*/ ?>
         <? else: ?>
           <p class="lead"><?=$this->transEsc('nohit_heading')?></p>
         <? endif; ?>
@@ -104,11 +102,15 @@
       </div>
 
       <? if ($recordTotal > 0): ?>
+      <div class="col-xs-12">
+        <div class="col-xs-6">
+          <?=$this->render('search/controls/sort.phtml')?>
+        </div>
         <div class="col-xs-6 text-right">
           <?=$this->render('search/controls/limit.phtml')?>
-          <?=$this->render('search/controls/sort.phtml')?>
           <?=$this->render('search/controls/view.phtml')?>
         </div>
+      </div>
       <? endif; ?>
     </div>
     <? /* End Listing Options */ ?>
