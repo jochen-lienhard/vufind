@@ -163,3 +163,29 @@ au:
     - au:
       - [rds_au, ~]
 
+# for Alphabrowse
+
+ids:
+  QueryFields:
+    id:
+      - [or, ~]
+
+TopicBrowse:
+  QueryFields:
+    topic_browse:
+      - [onephrase, ~]
+
+AuthorBrowse:
+  QueryFields:
+    author_browse:
+      - [onephrase, ~]
+
+CorporationBrowse:
+  QueryFields:
+    corporation_browse:
+      - [onephrase, ~]
+
+CallnumberBrowse:
+  QueryFields:
+    callnumber_browse:
+      - [onephrase, ~]
