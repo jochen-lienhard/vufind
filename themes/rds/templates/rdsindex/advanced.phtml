@@ -57,6 +57,10 @@
 <form role="search" name="searchForm" id="advSearchForm" method="get" action="<?=$this->url($this->options->getSearchAction())?>">
   <div class="row">
     <div class="<?=$this->layoutClass('mainbody')?>">
+      <div class="removeSearchTerms">
+          [ <a href="<?=$this->url($this->options->getAdvancedSearchAction())?>"><?=$this->transEsc("RDS_REMOVE_SEARCH_TERMS")?></a> ]
+      </div>
+
       <input type="hidden" name="sort" value="relevance">
       <div class="clearfix">
         <p class="lead pull-left"><?=$this->transEsc('Advanced Search')?></p>
@@ -83,9 +87,13 @@
         					<div class="search" id="search0_<?=$counter?>">
         						<div class="row">
           						<div class="col-md-4">
+<? /*
           							<select id="search_type0_<?=$counter?>" name="type0[]" class="form-control">
           								<option value="<?=$key;?>"><?=$this->transEsc($value)?></option>
           							</select>
+*/ ?>
+                                                           <?=$this->transEsc($value)?>
+                                                           <input type="hidden" value="<?=$key?>" name="type0[]" />
           						</div>
         							<div class="col-md-8">
         								<input id="search_lookfor0_<?=$counter?>" class="form-control" type="text" name="lookfor0[]" value="<? if(isset($searchTerms[$key])) {echo $searchTerms[$key];}?>">
