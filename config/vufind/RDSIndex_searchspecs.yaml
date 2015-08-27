@@ -163,6 +163,23 @@ au:
     - au:
       - [rds_au, ~]
 
+isn:
+  DismaxFields:
+    - sb
+    - ss
+    - ppn
+  QueryFields:
+    ss:
+      - [and, 100]
+      - [or, ~]
+    sb:
+      - [and, 100]
+      - [or, ~]
+    ppn:
+      - [and, 100]
+      - [or, ~]
+
+
 # for Alphabrowse
 
 ids:
