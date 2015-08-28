@@ -48,7 +48,7 @@ class RDSIndexHolding extends \Zend\View\Helper\AbstractHelper implements Transl
      *
      * @array
      */
-    protected $adis_clients = ["25", "Frei129"];
+    protected $adis_clients = ["25", "Frei26", "Frei129"];
 
     /**
      * Result order
