@@ -412,7 +412,6 @@ class RDSIndexHolding extends \Zend\View\Helper\AbstractHelper implements Transl
         }
     }
 
-
     /**
      * Generates a string for bib_link based on local data set
      *
@@ -422,6 +421,9 @@ class RDSIndexHolding extends \Zend\View\Helper\AbstractHelper implements Transl
      */
     public function getBibLink($bib_sigel)
     {
+        // for Freiburg
+        return "https://www.ub.uni-freiburg.de/index.php?id=1272&sigel=" . $bib_sigel;
+        // for Hohenheim
         return "HOH_LINK_" . $bib_sigel;
     }
 
