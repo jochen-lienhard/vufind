@@ -387,6 +387,8 @@ class RDSIndexHolding extends \Zend\View\Helper\AbstractHelper implements Transl
     /**
      * Generates a string for bib_name based on local data set
      *
+     * @param string $bib_sigel  id of library
+     *
      * @return string 
      */
     public function getBibName($bib_sigel)
@@ -395,7 +397,26 @@ class RDSIndexHolding extends \Zend\View\Helper\AbstractHelper implements Transl
     }
 
     /**
+     * Generates a string for bib_name based on local data set
+     *
+     * @param string $bib_sigel  id of library
+     *
+     * @return string 
+     */
+    public function getBibAddon($bib_sigel)
+    {
+        if (($bib_sigel === 'Frei85') || ($bib_sigel === '25-122') || ($bib_sigel === '25-66')) {
+           return "DE" . str_replace("-","",$bib_sigel) . "Addon";
+        } else {
+           return null;
+        }
+    }
+
+
+    /**
      * Generates a string for bib_link based on local data set
+     *
+     * @param string $bib_sigel  id of library
      *
      * @return string 
      */

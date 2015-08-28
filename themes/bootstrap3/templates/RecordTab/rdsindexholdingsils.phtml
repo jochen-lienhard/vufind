@@ -40,6 +40,7 @@
   <table class="rds_holding_table table table-striped">
   <? if (isset($bib_key)):  
     $bib_name=$this->RDSIndexHolding()->getBibName($bib_key);
+    $bib_addon=$this->RDSIndexHolding()->getBibAddon($bib_key);
     $bib_link=$this->RDSIndexHolding()->getBibLink($bib_key); 
     $adis_link=$this->RDSIndexHolding()->getAdisLink($bib_key);
   ?>
@@ -60,6 +61,13 @@
       <tr>
       <td colspan="4" class="bibname">
       <a href="<?=$this->transEsc($bib_link)?>" target="_blank"><?=$bib_key?> <?=$this->transEsc($bib_name)?></a>
+      </td>
+      </tr>
+    <? endif; ?>
+    <? if ($bib_addon): ?>
+      <tr>
+      <td colspan="4" class="bibname">
+        <?=$this->transEsc($bib_addon)?>
       </td>
       </tr>
     <? endif; ?>
