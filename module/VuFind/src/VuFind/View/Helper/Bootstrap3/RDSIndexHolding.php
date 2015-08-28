@@ -210,10 +210,10 @@ class RDSIndexHolding extends \Zend\View\Helper\AbstractHelper implements Transl
              $lok_mergeResult["RDS_STATUS"] = "";
              foreach ($daia[$lok_set["bib_sigel"]] as $loc_daia) {
                 // ToDo eliminate PHP Warning and replace location
+                $lok_mergeResult["RDS_LOCATION"] = $this->createReadableLocation($loc_daia["location"]);
                 foreach ($loc_daia as $items) {
                   foreach ($items as $item) {
                     if ($item["summary"]) {
-                      $lastlocation = $item["location"];
                       switch ($item["status"]) {
                          case "borrowable": $borrowable++; break;
                          case "order": $borrowable++; break;
@@ -221,6 +221,7 @@ class RDSIndexHolding extends \Zend\View\Helper\AbstractHelper implements Transl
                          case "lent": $lent++; break;
                          case "present": $present++; break;
                       }
+                      // set RDS_LOCATION base on the last summary item
                     }
                   }
                 }
@@ -245,7 +246,7 @@ class RDSIndexHolding extends \Zend\View\Helper\AbstractHelper implements Transl
                 foreach ($loc_daia as $items) {
                   foreach ($items as $item) {
                     if ($this->checkSignature($item["callnumber"],$lok_set["signatur"],$lok_set["bib_sigel"])) {
-                      $lok_mergeResult["RDS_LOCATION"] .= " " . $this->translate($item["location"]); 
+                      $lok_mergeResult["RDS_LOCATION"] .= " " . $this->createReadableLocation($item["location"]); 
                       $localstatus = $this->createReadableStatus($item);
                       $lok_mergeResult["RDS_STATUS"] = $localstatus;
                     }
@@ -364,6 +365,22 @@ class RDSIndexHolding extends \Zend\View\Helper\AbstractHelper implements Transl
             return true;
         } else {
             return false;
+        }
+    }
+
+    /**
+     * Make the aDIS Location readable 
+     *
+     * @param string $adis_loc
+     *
+     * @return string 
+     */
+    protected function createReadableLocation($adis_loc)
+    {
+	if (strpos($adis_loc,'/')) {
+           return substr($adis_loc,0,strpos($adis_loc,'/')); 
+        } else { 
+           return $adis_loc;
         }
     }
 
