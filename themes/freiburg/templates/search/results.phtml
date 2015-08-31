@@ -138,7 +138,7 @@ $recordTotal = $this->results->getResultTotal();
     <? else: ?>
       <form class="form-inline" method="post" name="bulkActionForm" action="<?=$this->url('cart-home')?>">
         <?=$this->paginationControl($this->results->getPaginator(), 'Sliding', 'search/pagination.phtml', array('results' => $this->results))?>
-		<div class="search-results-listing">
+		<div class="search-results-listing iterating-list">
       <?=$this->context($this)->renderInContext('search/bulk-action-buttons.phtml', array('idPrefix' => ''))?>
       <?=$this->render('search/list-' . $this->params->getView() . '.phtml')?>
       <?=$this->context($this)->renderInContext('search/bulk-action-buttons.phtml', array('idPrefix' => 'bottom_'))?>
