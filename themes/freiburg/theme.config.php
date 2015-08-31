@@ -17,4 +17,10 @@ return array(
 		'plugin.autoheighter.js'
     ),
     'favicon' => 'icons/ub-freiburg.ico',
+    'helpers' => array(
+        'invokables' => array(
+            'rdsindexholding' => 'VuFind\View\Helper\Freiburg\RDSIndexHolding',
+        )
+    )
+
 );
