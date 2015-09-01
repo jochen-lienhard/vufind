@@ -1,0 +1,47 @@
+<ul>
+  <li>
+    <a href="https://www.ub.uni-freiburg.de/meta-navigation/chat/" data-menu-uid="4271" data-ajax-request="https://www.ub.uni-freiburg.de/meta-navigation/chat/rawcontent/">
+      Chat
+    </a>
+  </li>
+  <li>
+    <a href="https://www.ub.uni-freiburg.de/meta-navigation/ausleihkonto/" data-menu-uid="4272" data-ajax-request="https://www.ub.uni-freiburg.de/meta-navigation/ausleihkonto/rawcontent/">
+      Ausleihkonto
+    </a>
+  </li>
+  <li>
+    <a href="https://www.ub.uni-freiburg.de/meta-navigation/fachportale/" data-menu-uid="4270" data-ajax-request="https://www.ub.uni-freiburg.de/meta-navigation/fachportale/rawcontent/">
+      Fachportale
+    </a>
+  </li>
+  <? $account = $this->auth()->getManager(); ?>
+  <? if (is_object($account) && $account->loginEnabled()): // hide login/logout if unavailable ?>
+     <li class="logoutOptions<? if(!$account->isLoggedIn()): ?> hidden<? endif ?>">
+       <a href="<?=$this->url('myresearch-logout')?>" class="modal-link" title="<?=$this->transEsc("Log Out")?>"><?=$this->transEsc("Log Out")?></a>
+     </li>
+     <li id="loginOptions"<? if($account->isLoggedIn()): ?> class="hidden"<? endif ?>>
+     <? if ($sessionInitiator = $account->getSessionInitiator($this->serverUrl($this->url('myresearch-home')))): ?>
+       <a href="<?=$this->escapeHtmlAttr($sessionInitiator)?>"><?=$this->transEsc("Login")?></a>
+     <? else: ?>
+       <a href="<?=$this->url('myresearch-userlogin')?>" class="modal-link" title="<?=$this->transEsc("Login")?>"><?=$this->transEsc("Login")?></a>
+     <? endif; ?>
+     </li>
+  <? endif; ?>
+  <li id="status">
+     <? if($account->isLoggedIn()): ?>
+        [<?=$this->transEsc("RDS_USER")?>]
+     <? else: ?>
+        [<?=$this->transEsc("RDS_GUEST")?>]
+     <? endif; ?>
+  </li>
+
+        <li id="language">
+          <form method="post" name="langForm" action="" id="langForm">
+                        <input id="mylang" type="hidden" name="mylang" value="xxx" />
+                        <a href="#" onclick="document.getElementById('mylang').value='en'; document.langForm.submit();">EN</a>&nbsp;
+                        <a href="#" onclick="document.getElementById('mylang').value='de'; document.langForm.submit();">DE</a>&nbsp;
+          </form>
+        </li>
+
+
+</ul>
