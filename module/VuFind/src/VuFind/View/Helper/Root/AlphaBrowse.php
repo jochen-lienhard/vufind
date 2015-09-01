@@ -84,7 +84,7 @@ class AlphaBrowse extends \Zend\View\Helper\AbstractHelper
                 'lookfor' => $this->escapeForSolr($item['heading']),
             ];
         }
-        return $this->url->__invoke('search-results', [], ['query' => $query]);
+        return $this->url->__invoke('rdsindex-search', [], ['query' => $query]);
     }
 
     /**

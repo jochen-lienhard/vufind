@@ -95,7 +95,7 @@ class AlphabrowseController extends AbstractBase
 
         // Connect to Solr:
         $db = $this->getServiceLocator()->get('VuFind\Search\BackendManager')
-            ->get('Solr');
+            ->get('RDSIndex');
 
         // Process incoming parameters:
         $source = $this->params()->fromQuery('source', false);

@@ -1,0 +1,11 @@
+isn:
+  DismaxFields:
+    - sb
+    - ss
+  QueryFields:
+    ss:
+      - [and, 100]
+      - [or, ~]
+    sb:
+      - [and, 100]
+      - [or, ~]
