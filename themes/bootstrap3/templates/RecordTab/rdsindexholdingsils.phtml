@@ -42,7 +42,7 @@
     $bib_name=$this->RDSIndexHolding()->getBibName($bib_key);
     $bib_addon=$this->RDSIndexHolding()->getBibAddon($bib_key);
     $bib_link=$this->RDSIndexHolding()->getBibLink($bib_key); 
-    if ($this->record($this->driver)->getONLINE === "offline") {
+    if ($this->driver->getONLINE() === "offline") {
        $adis_link=$this->RDSIndexHolding()->getAdisLink($bib_key);
     }
     $array_from=['Frei','-'];
