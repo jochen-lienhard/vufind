@@ -380,6 +380,7 @@ $config = [
                 'factories' => [
                     'aleph' => 'VuFind\ILS\Driver\Factory::getAleph',
                     'daia' => 'VuFind\ILS\Driver\Factory::getDAIA',
+                    'rdsdaia' => 'VuFind\ILS\Driver\Factory::getRDSDAIA',
                     'demo' => 'VuFind\ILS\Driver\Factory::getDemo',
                     'horizon' => 'VuFind\ILS\Driver\Factory::getHorizon',
                     'horizonxmlapi' => 'VuFind\ILS\Driver\Factory::getHorizonXMLAPI',
