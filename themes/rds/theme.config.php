@@ -8,4 +8,10 @@ return array(
     'js' => array(
     ),
     'favicon' => 'rds-favicon.ico',
+    'helpers' => array(
+        'invokables' => array(
+            'rdsindexrecord' => 'VuFind\View\Helper\RDS\RDSIndexRecord',
+        )
+    )
+
 );
