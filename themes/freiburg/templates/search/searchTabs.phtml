@@ -1,20 +1,27 @@
-<? $searchTabs = $this->searchtabs($this->searchClassId, $this->lookfor, $this->searchIndex, $this->searchType); ?>
-<? if (count($searchTabs) > 0): ?>
-	<ul class="ui-tabs">
-		<? foreach ($searchTabs as $tab): ?>
-			<li<?=$tab['selected'] ? ' class="active"' : ''?>>
-				<a <?=$tab['selected'] ? '' : 'href="' . $this->escapeHtmlAttr($tab['url']) . '"' ?>><?=$this->transEsc($tab['label']); ?>
-                                <? if ($this->results): ?>
-                                (<? if ($tab['selected']) {
-                                      echo($this->results->getResultTotal());
-                                    } else {
-                                      echo("xxx");
-                                    }
-                                ?>)
-                                <? endif; ?>
-                                </a>
-			</li>
-		<? endforeach; ?>
-	</ul>
-<? endif; ?>
+<? 
+if ($this->createHomeTabs == true) {
+  $searchTabs = $this->searchtabs(null, null, null, null);
+} else {
+  $searchTabs = $this->searchtabs($this->searchClassId, $this->lookfor, $this->searchIndex, $this->searchType);
+}
 
+foreach ($searchTabs as $id => $tab) {
+    if ($tab['selected'] && isset($this->results))
+        $searchTabs[$id]['resultCount'] = '(' . $this->results->getResultTotal() . ')';
+    else {
+        $searchTabs[$id]['resultCount'] = '';
+    }
+}
+
+?>
+
+    <? if (count($searchTabs) > 0): ?>
+      <ul class="ui-tabs">
+        <? foreach ($searchTabs as $tab): ?>
+          <li<?=$tab['selected'] ? ' class="active"' : ''?>>
+            <a <?=$tab['selected'] ? '' : 'href="' . $this->escapeHtmlAttr($tab['url']) . '"' ?>><?=$this->transEsc($tab['label']); ?> <?=$tab['resultCount']; ?>
+                                    </a>
+          </li>
+        <? endforeach; ?>
+      </ul>
+    <? endif; ?>
