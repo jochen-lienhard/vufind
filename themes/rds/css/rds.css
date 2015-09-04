@@ -87,33 +87,43 @@ color: #b2b4b3;
 }
 
 .rds_searchTabs {
-	margin-top: 24px;
+  margin-top: 24px;
 }
 
 .navbar-form {
-	padding: 0px;
+  padding: 0px;
 }
 
 .rds_subnav ul {
-	padding: 4px;
-	margin-top: 8px;
-	background-color: lightgray;
+  padding: 4px;
+  margin-top: 8px;
+  background-color: lightgray;
 }
 
 .rds_subnav ul>li {
-	display: inline;
-	padding: 0px 12px 0px 24px;
+  display: inline;
+  padding: 0px 12px 0px 24px;
 }
 
 [class*="span"] {
-    margin-left: 0px;
+  margin-left: 0px;
 } 
 
 .control-group {
- float: right;
+  float: right;
 }
 
 #langForm {
- float: left;
+  float: left;
 }
 
+.resultCountAjax {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  background-image: url("../images/ajax_loading.gif"); 
+}
+
+.error {
+  color: red;
+}

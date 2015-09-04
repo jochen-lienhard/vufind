@@ -6,6 +6,7 @@ return array(
       'rds-medienicons.css',
     ),
     'js' => array(
+       'rds.js'
     ),
     'favicon' => 'rds-favicon.ico',
     'helpers' => array(
