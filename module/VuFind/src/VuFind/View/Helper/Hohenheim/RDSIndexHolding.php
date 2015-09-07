@@ -39,7 +39,7 @@ use     VuFind\I18n\Translator\TranslatorAwareInterface;
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     http://vufind.org/wiki/vufind2:developer_manual Wiki
  */
-class RDSIndexHolding extends \VuFind\View\Helper\Bootstrap3\RDSIndexHolding 
+class RDSIndexHolding extends \VuFind\View\Helper\Bootstrap3\RDSIndexHolding
 {
     /**
      * List of adis client 
@@ -75,7 +75,8 @@ class RDSIndexHolding extends \VuFind\View\Helper\Bootstrap3\RDSIndexHolding
      *
      * @return boolean
      */
-    protected function checkSummary($lok_set) {
+    protected function checkSummary($lok_set) 
+    {
         // for Hohenheim
         if ($lok_set["zusatz_standort"]=="10") {
             return true;
@@ -91,14 +92,17 @@ class RDSIndexHolding extends \VuFind\View\Helper\Bootstrap3\RDSIndexHolding
      *
      * @return string
      */
-    protected function setLocation($lok_set) {
-       if (isset($lok_set["zusatz_standort"])) {
-           return $lok_set["zusatz_standort"];
-       }
+    protected function setLocation($lok_set) 
+    {
+        if (isset($lok_set["zusatz_standort"])) {
+            return $lok_set["zusatz_standort"];
+        }
     }
 
     /**
      * Generates a string for bib_link based on local data set
+     *
+     * @param string $bib_sigel id of library
      *
      * @return string 
      */
@@ -110,26 +114,26 @@ class RDSIndexHolding extends \VuFind\View\Helper\Bootstrap3\RDSIndexHolding
     /**
      * Generates a string for adis_link based on daia result 
      *
-     * @param string $bib_sigel  id of library 
+     * @param string $bib_sigel id of library 
      *
      * @return string 
      */
     public function getAdisLink($bib_sigel)
     {
-      $adisLink = null;
-      foreach ($this->daia[$bib_sigel] as $loc_daia) {
-         foreach ($loc_daia as $items) {
-            foreach ($items as $item) {
-               if (isset ($item['ilslink'])) {
-                  $adisLink = $item['ilslink'];
-               }
+        $adisLink = null;
+        foreach ($this->daia[$bib_sigel] as $loc_daia) {
+            foreach ($loc_daia as $items) {
+                foreach ($items as $item) {
+                    if (isset ($item['ilslink'])) {
+                        $adisLink = $item['ilslink'];
+                    }
+                }
             }
-         }
-      }
-      if (in_array($bib_sigel,$this->adis_clients) && $adisLink) {
-        return "javascript:msgWindow=window.open('" . $adisLink ."','KIOSK','width=1024,height=580,location=no,menubar=yes,toolbar=not,status=yes,scrollbars=yes,directories=no,resizable=yes,alwaysRaised=yes,hotkeys=no,top=0,left=200,screenY=0,screenX=200');msgWindow.focus();";
-     } else {
-        return null;
-     }
+        }
+        if (in_array($bib_sigel, $this->adis_clients) && $adisLink) {
+            return "javascript:msgWindow=window.open('" . $adisLink ."','KIOSK','width=1024,height=580,location=no,menubar=yes,toolbar=not,status=yes,scrollbars=yes,directories=no,resizable=yes,alwaysRaised=yes,hotkeys=no,top=0,left=200,screenY=0,screenX=200');msgWindow.focus();";
+        } else {
+            return null;
+        }
     }
 }

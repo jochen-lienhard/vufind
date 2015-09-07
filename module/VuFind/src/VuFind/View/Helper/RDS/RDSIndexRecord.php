@@ -39,8 +39,9 @@ use Zend\View\Exception\RuntimeException, Zend\View\Helper\AbstractHelper;
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     http://vufind.org/wiki/vufind2:developer_manual Wiki
  */
-class RDSIndexRecord extends \VuFind\View\Helper\Root\Record 
-{   
+class RDSIndexRecord extends \VuFind\View\Helper\Root\Record
+{
+   
     /**
      * Get HTML to render a title.
      *

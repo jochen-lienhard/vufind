@@ -39,7 +39,7 @@ use     VuFind\I18n\Translator\TranslatorAwareInterface;
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     http://vufind.org/wiki/vufind2:developer_manual Wiki
  */
-class RDSIndexHolding extends \VuFind\View\Helper\Bootstrap3\RDSIndexHolding 
+class RDSIndexHolding extends \VuFind\View\Helper\Bootstrap3\RDSIndexHolding
 {
     /**
      * List of adis client 
@@ -75,9 +75,10 @@ class RDSIndexHolding extends \VuFind\View\Helper\Bootstrap3\RDSIndexHolding
      *
      * @return boolean
      */
-    protected function checkSummary($lok_set) {
+    protected function checkSummary($lok_set) 
+    {
         // for Freiburg
-        if (preg_match('/^LB/',$lok_set["signatur"])) {
+        if (preg_match('/^LB/', $lok_set["signatur"])) {
             return true;
         } else {
             return false;
@@ -91,34 +92,37 @@ class RDSIndexHolding extends \VuFind\View\Helper\Bootstrap3\RDSIndexHolding
      *
      * @return string
      */
-    protected function setLocation($lok_set) {
-       if (isset($lok_set["standort"])) {
-           if (isset($lok_set["R84_zusatz_standort"])) {
-               return $lok_set["R84_zusatz_standort"] . " " . $lok_set["standort"];
-           }
-           return $lok_set["standort"];
-       }
+    protected function setLocation($lok_set) 
+    {
+        if (isset($lok_set["standort"])) {
+            if (isset($lok_set["R84_zusatz_standort"])) {
+                return $lok_set["R84_zusatz_standort"] . " " . $lok_set["standort"];
+            }
+            return $lok_set["standort"];
+        }
     }
 
     /**
      * Generates a string for bib_name based on local data set
      *
-     * @param string $bib_sigel  id of library
+     * @param string $bib_sigel id of library
      *
      * @return string 
      */
     public function getBibAddon($bib_sigel)
     {
         if (($bib_sigel === 'Frei85') || ($bib_sigel === '25-122') || ($bib_sigel === '25-66')) {
-           return "DE" . str_replace("-","",$bib_sigel) . "Addon";
+            return "DE" . str_replace("-", "", $bib_sigel) . "Addon";
         } else {
-           return null;
+            return null;
         }
     }
 
 
     /**
      * Generates a string for bib_link based on local data set
+     *
+     * @param string $bib_sigel id of library
      *
      * @return string 
      */
@@ -131,27 +135,27 @@ class RDSIndexHolding extends \VuFind\View\Helper\Bootstrap3\RDSIndexHolding
     /**
      * Generates a string for adis_link based on daia result 
      *
-     * @param string $bib_sigel  id of library 
+     * @param string $bib_sigel id of library 
      *
      * @return string 
      */
     public function getAdisLink($bib_sigel)
     {
-      $adisLink = null;
-      foreach ($this->daia[$bib_sigel] as $loc_daia) {
-         foreach ($loc_daia as $items) {
-            foreach ($items as $item) {
-               if (isset ($item['ilslink'])) {
-                  $adisLink = $item['ilslink'];
-               }
+        $adisLink = null;
+        foreach ($this->daia[$bib_sigel] as $loc_daia) {
+            foreach ($loc_daia as $items) {
+                foreach ($items as $item) {
+                    if (isset ($item['ilslink'])) {
+                        $adisLink = $item['ilslink'];
+                    }
+                }
             }
-         }
-      }
-      if (in_array($bib_sigel,$this->adis_clients) && $adisLink) {
-        return "javascript:msgWindow=window.open('" . $adisLink . "&specialconfig" . "','KIOSK','width=1024,height=580,location=no,menubar=yes,toolbar=not,status=yes,scrollbars=yes,directories=no,resizable=yes,alwaysRaised=yes,hotkeys=no,top=0,left=200,screenY=0,screenX=200');msgWindow.focus();";
-     } else {
-        return null;
-     }
+        }
+        if (in_array($bib_sigel, $this->adis_clients) && $adisLink) {
+            return "javascript:msgWindow=window.open('" . $adisLink . "&specialconfig" . "','KIOSK','width=1024,height=580,location=no,menubar=yes,toolbar=not,status=yes,scrollbars=yes,directories=no,resizable=yes,alwaysRaised=yes,hotkeys=no,top=0,left=200,screenY=0,screenX=200');msgWindow.focus();";
+        } else {
+            return null;
+        }
     }
 
 }
