@@ -45,7 +45,7 @@ class RDSIndexController extends AbstractSearch
     {
         $this->searchClassId = 'RDSIndex';
         parent::__construct();
-//        $this->searchClassId = 'RDSIndex';
+        //        $this->searchClassId = 'RDSIndex';
     }
 
     /**
@@ -66,9 +66,9 @@ class RDSIndexController extends AbstractSearch
      */
     public function searchAction()
     {
-      $view = $this->resultsAction();
-      $view->lookfor=$this->params()->fromQuery('lookfor');
-      return $view;
+        $view = $this->resultsAction();
+        $view->lookfor=$this->params()->fromQuery('lookfor');
+        return $view;
     }
 }
 

@@ -35,11 +35,11 @@ use VuFind\Code\ISBN;
  *
  * This should be used as the base class for all Solr-based record models.
  *
- * @category VuFind2
- * @package  RecordDrivers
- * @author   Demian Katz <demian.katz@villanova.edu>
- * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
- * @link     http://vufind.org/wiki/vufind2:record_drivers Wiki
+ * @category                                     VuFind2
+ * @package                                      RecordDrivers
+ * @author                                       Demian Katz <demian.katz@villanova.edu>
+ * @license                                      http://opensource.org/licenses/gpl-2.0.php GNU General Public License
+ * @link                                         http://vufind.org/wiki/vufind2:record_drivers Wiki
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  */
 class RDSProxy extends SolrDefault
@@ -291,12 +291,14 @@ class RDSProxy extends SolrDefault
         if (isset($this->fields['pissn'])) {
                 return $this->fields['pissn'];
         } elseif (isset($this->fields['source']) 
-            && isset($this->fields['source']['pissn'])) {
+            && isset($this->fields['source']['pissn'])
+        ) {
                 return $this->fields['source']['pissn'];
         } elseif (isset($this->fields['eissn'])) {
                 return $this->fields['eissn'];
         } elseif (isset($this->fields['source']) 
-            && isset($this->fields['source']['eissn'])) {
+            && isset($this->fields['source']['eissn'])
+        ) {
                 return $this->fields['source']['eissn'];
         } else {
                 return false;
@@ -527,13 +529,15 @@ class RDSProxy extends SolrDefault
         if (isset($this->fields['pisbn'])) {
                 $isbns['print'] = $this->fields['pisbn'];
         } elseif (isset($this->fields['source']) 
-            && isset($this->fields['source']['pisbn'])) {
+            && isset($this->fields['source']['pisbn'])
+        ) {
                 $isbns['print'] = $this->fields['source']['pisbn'];
         }
         if (isset($this->fields['eisbn'])) {
                 $isbns['electronic'] = $this->fields['eisbn'];
         } elseif (isset($this->fields['source']) 
-            && isset($this->fields['source']['eisbn'])) {
+            && isset($this->fields['source']['eisbn'])
+        ) {
                 $isbns['electronic'] = $this->fields['source']['eisbn'];
         }
         return $isbns;
@@ -550,13 +554,15 @@ class RDSProxy extends SolrDefault
         if (isset($this->fields['pissn'])) {
                 $issns['print'] = $this->fields['pissn'];
         } elseif (isset($this->fields['source']) 
-            && isset($this->fields['source']['pissn'])) {
+            && isset($this->fields['source']['pissn'])
+        ) {
                 $issns['print'] = $this->fields['source']['pissn'];
         }
         if (isset($this->fields['eissn'])) {
                 $issns['electronic'] = $this->fields['eissn'];
         } elseif (isset($this->fields['source']) 
-            && isset($this->fields['source']['eissn'])) {
+            && isset($this->fields['source']['eissn'])
+        ) {
                 $issns['electronic'] = $this->fields['source']['eissn'];
         }
         return $issns;
@@ -934,7 +940,8 @@ class RDSProxy extends SolrDefault
         if (isset($this->fields['dates'])) {
                 $dates = $this->fields['dates'];
         } elseif (isset($this->fields['source']) 
-            && isset($this->fields['source']['dates'])) {
+            && isset($this->fields['source']['dates'])
+        ) {
                 $dates = $this->fields['source']['dates'];
         } else {
                 return array();
@@ -1215,7 +1222,7 @@ class RDSProxy extends SolrDefault
                         $myurl[] = (array(
                            'url'=>$value['url'],
                            'desc'=> $value['access'] . " " . $value['provider']
-                    ));
+                        ));
                 }
             }
             return($myurl); 
@@ -1660,11 +1667,10 @@ class RDSProxy extends SolrDefault
     }
 
     /**
-     * special RDSProxy functions
+     * Special RDSProxy functions
      * 
      * @return String return author et al stirng
      */
-
     public function getAuthorsEtAl()
     {
         $result = array();
@@ -1764,7 +1770,7 @@ class RDSProxy extends SolrDefault
     }
 
     /**
-     * protected function for intern use
+     * Protected function for intern use
      * 
      * @param String $element item our source data element name
      * 
@@ -1780,7 +1786,7 @@ class RDSProxy extends SolrDefault
     }
     
     /**
-     * protected function for intern use
+     * Protected function for intern use
      *
      * @param String $element data element name
      *

@@ -939,6 +939,8 @@ class RDSIndex extends SolrMarc
     /**
      * Get an array of information about record holdings, obtained in real-time
      * from the ILS.
+     * 
+     * @param string $patron most empty
      *
      * @return array
      */
@@ -2629,7 +2631,7 @@ class RDSIndex extends SolrMarc
             }
         }
         return $link_array;
-     }
+        }
 
         /**
       * Get the local data set. 
@@ -2786,7 +2788,8 @@ class RDSIndex extends SolrMarc
  * @return string        Name of Smarty template file to display.
  * @access public
  */
-        /*public function getExport($format) {
+        /* 
+        public function getExport($format) {
         global $interface;
         $exportTemplate = parent::getExport($format);
 

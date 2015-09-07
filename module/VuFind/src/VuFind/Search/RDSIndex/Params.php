@@ -66,12 +66,13 @@ class Params extends \VuFind\Search\Solr\Params
      *
      * @param string $facetList     Config section containing fields to activate
      * @param string $facetSettings Config section containing related settings
+     * @param string $cfgFile       Optional config file for facets
      *
      * @return bool                 True if facets set, false if no settings found
      */
     protected function initFacetList($facetList, $facetSettings, $cfgFile = 'RDSIndex_facets')
     {
-	// $this->resetFacetConfig(); // facet Liste zurücksetzen
+        // $this->resetFacetConfig(); // facet Liste zurücksetzen
         $config = $this->getServiceLocator()->get('VuFind\Config')->get('RDSIndex_facets');
         if (!isset($config->$facetList)) {
             return false;
@@ -102,7 +103,7 @@ class Params extends \VuFind\Search\Solr\Params
      */
     public function initBasicFacets()
     {
-	$this->resetFacetConfig();
+        $this->resetFacetConfig();
         $this->initFacetList('ResultsTop', 'Results_Settings');
         $this->initFacetList('Results', 'Results_Settings');
     }
@@ -122,7 +123,7 @@ class Params extends \VuFind\Search\Solr\Params
         );
 
         // Facets
-	$this->initBasicFacets();
+        $this->initBasicFacets();
         $facets = $this->getFacetSettings();
         if (!empty($facets)) {
             $backendParams->add('facet', 'true');

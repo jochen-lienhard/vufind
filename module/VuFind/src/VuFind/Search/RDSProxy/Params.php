@@ -66,12 +66,13 @@ class Params extends \VuFind\Search\Solr\Params
      *
      * @param string $facetList     Config section containing fields to activate
      * @param string $facetSettings Config section containing related settings
+     * @param string $cfgFile       Optional config file for facets
      *
      * @return bool                 True if facets set, false if no settings found
      */
     protected function initFacetList($facetList, $facetSettings, $cfgFile = 'RDSProxy_facets')
     {
-	// $this->resetFacetConfig(); // facet Liste zurücksetzen
+        // $this->resetFacetConfig(); // facet Liste zurücksetzen
         $config = $this->getServiceLocator()->get('VuFind\Config')->get('RDSProxy_facets');
         if (!isset($config->$facetList)) {
             return false;
@@ -102,7 +103,7 @@ class Params extends \VuFind\Search\Solr\Params
      */
     public function initBasicFacets()
     {
-	$this->resetFacetConfig();
+        $this->resetFacetConfig();
         $this->initFacetList('ResultsTop', 'Results_Settings');
         $this->initFacetList('Results', 'Results_Settings');
     }
@@ -117,14 +118,14 @@ class Params extends \VuFind\Search\Solr\Params
         $backendParams = new ParamBag();
 
         // Spellcheck
-	/*
+        /*
         $backendParams->set(
             'spellcheck', $this->getOptions()->spellcheckEnabled() ? 'true' : 'false'
         );
-	*/
+        */
 
         // Facets
-	$this->initBasicFacets();
+        $this->initBasicFacets();
         $facets = $this->getFacetSettings();
         if (!empty($facets)) {
             $backendParams->add('facet', 'true');
@@ -162,9 +163,9 @@ class Params extends \VuFind\Search\Solr\Params
         if ($sort) {
             $backendParams->add('sort', $sort);
         }
-	// ToDo: guest und sid setzten
-	//$backendParams->add('guest', 'y');
-	// $backendParams->add('sid', 'TEST');
+        // ToDo: guest und sid setzten
+        //$backendParams->add('guest', 'y');
+        // $backendParams->add('sid', 'TEST');
 
         // Highlighting -- on by default, but we should disable if necessary:
         if (!$this->getOptions()->highlightEnabled()) {

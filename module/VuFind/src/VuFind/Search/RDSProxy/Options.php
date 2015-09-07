@@ -38,24 +38,23 @@ namespace VuFind\Search\RDSProxy;
  */
 class Options extends \VuFind\Search\Solr\Options
 {
-   /**
+    /**
      * Constructor
      *
      * @param \VuFind\Config\PluginManager $configLoader Config loader
      */
     public function __construct(\VuFind\Config\PluginManager $configLoader)
     {
-	$this->facetsIni = 'RDSProxy_facets';
-	$this->searchIni = 'RDSProxy_searches';
+        $this->facetsIni = 'RDSProxy_facets';
+        $this->searchIni = 'RDSProxy_searches';
         parent::__construct($configLoader);
     }
 
-   /**
+    /**
      * Return the route name for the search results action.
      *
      * @return string
      */
-
     public function getSearchAction()
     {
         return 'rdsproxy-search';

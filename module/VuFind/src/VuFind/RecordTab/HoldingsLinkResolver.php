@@ -47,9 +47,6 @@ class HoldingsLinkResolver extends AbstractBase
 
     /**
      * Constructor
-     *
-     * @param \VuFind\ILS\Connection|bool $catalog ILS connection to use to check
-     * for holdings before displaying the tab; set to false if no check is needed
      */
     public function __construct()
     {

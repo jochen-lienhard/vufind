@@ -65,9 +65,9 @@ class RDSProxyController extends AbstractSearch
      */
     public function searchAction()
     {
-      $view = $this->resultsAction();
-      $view->lookfor=$this->params()->fromQuery('lookfor');
-      return $view;
+        $view = $this->resultsAction();
+        $view->lookfor=$this->params()->fromQuery('lookfor');
+        return $view;
     }
 }
 

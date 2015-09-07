@@ -46,7 +46,7 @@ use DOMDocument, VuFind\Exception\ILS as ILSException,
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     http://vufind.org/wiki/vufind2:building_an_ils_driver Wiki
  */ 
-class RDSDAIA extends DAIA 
+class RDSDAIA extends DAIA
 {
     /**
      * DAIA summaryKey 
@@ -73,11 +73,11 @@ class RDSDAIA extends DAIA
      */
     public function init()
     {
-       parent::init();
-       if (isset($this->config['DAIA']['summaryKey']) && isset($this->config['DAIA']['summaryValue'])) {
-           $this->summaryKey = $this->config['DAIA']['summaryKey'];
-           $this->summaryValue = $this->config['DAIA']['summaryValue'];
-       } 
+        parent::init();
+        if (isset($this->config['DAIA']['summaryKey']) && isset($this->config['DAIA']['summaryValue'])) {
+            $this->summaryKey = $this->config['DAIA']['summaryKey'];
+            $this->summaryValue = $this->config['DAIA']['summaryValue'];
+        } 
     }
 
     /**
@@ -129,11 +129,11 @@ class RDSDAIA extends DAIA
                 $check_key=false;
                 if (isset($item[$this->summaryKey])) {
                     if (is_array($item[$this->summaryKey])) {
-                        if (preg_match("/^$this->summaryValue/",$item[$this->summaryKey]["content"])) {
+                        if (preg_match("/^$this->summaryValue/", $item[$this->summaryKey]["content"])) {
                             $check_key=true;
                         }
                     } else {
-                        if (preg_match("/^$this->summaryValue/",$item[$this->summaryKey])) {
+                        if (preg_match("/^$this->summaryValue/", $item[$this->summaryKey])) {
                             $check_key=true;
                         }
                     }
@@ -194,7 +194,7 @@ class RDSDAIA extends DAIA
             }
         }
 
-        if (array_key_exists("available",$item)) {
+        if (array_key_exists("available", $item)) {
             $loan = 0;
             $presentation = 0;
 
@@ -208,7 +208,7 @@ class RDSDAIA extends DAIA
             }
         }
 
-        if (array_key_exists("unavailable",$item)) {
+        if (array_key_exists("unavailable", $item)) {
             foreach ($item["unavailable"] as $unavailable) {
                 if ($unavailable["service"] == "loan") {
                     $loan = 1;

@@ -80,7 +80,7 @@ class Factory
     public static function getRDSDAIA(ServiceManager $sm)
     {
         return new RDSDAIA(
-                $sm->getServiceLocator()->get('VuFind\DateConverter')
+            $sm->getServiceLocator()->get('VuFind\DateConverter')
         );
     }
 

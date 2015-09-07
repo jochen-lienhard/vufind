@@ -110,8 +110,8 @@ class InjectHighlightingListener
                     $this->backend->getQueryBuilder()
                         ->setCreateHighlightingQuery(true);
                 }
-	        $params->set('guest', 'y');
-		$params->set('sid', 'test');
+                $params->set('guest', 'y');
+                $params->set('sid', 'test');
             }
         }
         return $event;

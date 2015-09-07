@@ -161,10 +161,10 @@ abstract class AbstractRDSProxyBackendFactory implements FactoryInterface
         $events = $this->serviceLocator->get('SharedEventManager');
 
         // Highlighting
-	/*
+        /*
         $highlightListener = new InjectHighlightingListener($backend);
         $highlightListener->attach($events);
-	*/
+        */
 
         // Spellcheck
         /*
@@ -178,7 +178,7 @@ abstract class AbstractRDSProxyBackendFactory implements FactoryInterface
             $spellingListener = new InjectSpellingListener($backend, $dictionaries);
             $spellingListener->attach($events);
         }
-	*/
+        */
 
         // Apply field stripping if applicable:
         $search = $this->config->get($this->searchConfig);
@@ -288,10 +288,10 @@ abstract class AbstractRDSProxyBackendFactory implements FactoryInterface
      */
     protected function createQueryBuilder()
     {
-	
+    
         //$specs   = $this->loadSpecs();
         $config = $this->config->get('config');
-	/*
+        /*
         $defaultDismax = isset($config->Index->default_dismax_handler)
             ? $config->Index->default_dismax_handler : 'dismax';*/
         $builder = new QueryBuilder(); // $specs, $defaultDismax);
@@ -309,7 +309,7 @@ abstract class AbstractRDSProxyBackendFactory implements FactoryInterface
         );
         $builder->setLuceneHelper($helper);
 
-	
+    
         return $builder;
     }
 

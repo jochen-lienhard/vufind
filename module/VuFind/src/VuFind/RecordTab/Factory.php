@@ -178,7 +178,7 @@ class Factory
     }
 
 
-   /**
+    /**
      * Factory for HoldingsLinkResolver tab plugin.
      *
      * @param ServiceManager $sm Service manager.
