@@ -7,8 +7,7 @@
   <!--
 	<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 	-->
-	<?=$this->headMeta()?>
-	<?=$this->headTitle()?>
+
 	<?
 	// Set up OpenSearch link:
 	$this->headLink(
@@ -20,8 +19,12 @@
 		)
 	);
 	?>
-	<?=$this->headLink()?>
-	<?=$this->headStyle()?>
+    <!-- RTL styling -->
+    <? if ($this->layout()->rtl) {
+      $this->headLink()->appendStylesheet('vendor/bootstrap-rtl.min.css');
+    } ?>
+    <?=$this->headLink()?>
+    <?=$this->headStyle()?>
 	<?
 	// Set global path for Javascript code:
 	$this->headScript()->prependScript("path = '" . rtrim($this->url('home'), '/') . "';");
@@ -75,7 +78,7 @@
 	<?=$this->headScript()?>
 </head>
 
-<body class="page-layout-search section-color-10">
+<body class="page-layout-search section-color-10 <?=$this->layoutClass('offcanvas-row')?><? if ($this->layout()->rtl): ?> rtl<? endif; ?>">
 
 	<div id="metaNavigationPanel">
 		<div class="container">
@@ -170,6 +173,9 @@
         </div>
       </div>
     </div>
+
+    <div class="offcanvas-toggle" data-toggle="offcanvas"><i class="fa"></i></div>
+    <div class="offcanvas-overlay" data-toggle="offcanvas"></div>
 
 	<?=$this->piwik()?>
 

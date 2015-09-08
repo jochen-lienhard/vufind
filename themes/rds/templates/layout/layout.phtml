@@ -18,6 +18,10 @@
         )
       );
     ?>
+    <!-- RTL styling -->
+    <? if ($this->layout()->rtl) {
+      $this->headLink()->appendStylesheet('vendor/bootstrap-rtl.min.css');
+    } ?>
     <?=$this->headLink()?>
     <?=$this->headStyle()?>
     <?
@@ -72,7 +76,7 @@
     ?>
     <?=$this->headScript()?>
   </head>
-  <body>
+  <body class="<?=$this->layoutClass('offcanvas-row')?><? if ($this->layout()->rtl): ?> rtl<? endif; ?>">
     <header role="banner" class="hidden-print">
       <div class="container navbar">
         <a class="sr-only" href="#content"><?=$this->transEsc('Skip to content') ?></a>
@@ -140,6 +144,8 @@
         </div>
       </div>
     </div>
+    <div class="offcanvas-toggle" data-toggle="offcanvas"><i class="fa"></i></div>
+    <div class="offcanvas-overlay" data-toggle="offcanvas"></div>
     <?=$this->googleanalytics()?>
     <?=$this->piwik()?>
   </body>
