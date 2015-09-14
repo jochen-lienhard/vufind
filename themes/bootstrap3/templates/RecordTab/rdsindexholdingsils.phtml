@@ -23,7 +23,6 @@
 <? var_dump($holdings) ?> 
 <br />*****************<br />
 */ ?>
-
 <?
     // Show volume link
     $medIcon = $this->driver->getMedienicon(); 
@@ -64,7 +63,7 @@
     <? else: /* colspan=3 */ ?>
       <tr>
       <td colspan="4" class="bibname">
-      <a href="<?=$this->transEsc($bib_link)?>" target="_blank"><?=$bib_key?> <?=$this->transEsc($bib_name)?></a>
+      <a href="<?=$this->transEsc($bib_link)?>" target="_blank"><?=str_replace($array_from,$array_to,$bib_key)?> <?=$this->transEsc($bib_name)?></a>
       </td>
       </tr>
     <? endif; ?>
