@@ -49,6 +49,13 @@ class RDSIndexHolding extends \VuFind\View\Helper\Bootstrap3\RDSIndexHolding
     protected $adis_clients = ["25", "Frei26", "Frei129"];
 
     /**
+     * List of clients, where all is based on daia
+     *
+     * @array
+     */
+    protected $daia_only_clients = ["Frei26", "Frei129"];
+
+    /**
      * Result order
      *
      * @array
