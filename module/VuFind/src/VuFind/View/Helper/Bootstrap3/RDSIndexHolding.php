@@ -51,6 +51,13 @@ class RDSIndexHolding extends \Zend\View\Helper\AbstractHelper implements Transl
     protected $adis_clients = ["25", "Frei26", "Frei129"];
 
     /**
+     * List of clients, where all is based on daia
+     *
+     * @array
+     */
+    protected $daia_only_clients = null;
+
+    /**
      * Result order
      *
      * @array
@@ -123,6 +130,10 @@ class RDSIndexHolding extends \Zend\View\Helper\AbstractHelper implements Transl
             // Iteration based on the daia data
         } else {
             // Iteration based on the lok data
+            $da_on_cl_ar = null;
+            foreach ($this->daia_only_clients as $da_on_cl) {
+                $da_on_cl_ar[$da_on_cl] = null;
+            }
             foreach ($lok as $lok_set) {
                 $lok_mergeResult = $this->mergeResult;
                 // set RDS_SIGNATURE
@@ -167,7 +178,7 @@ class RDSIndexHolding extends \Zend\View\Helper\AbstractHelper implements Transl
                 if (isset($lok_set["lueckenangabe8033"])) {
                     $lok_mergeResult["RDS_HOLDING_LEAK"] = $lok_set["lueckenangabe8033"];
                 }
-                // RDS_INTERN /* only for Freiburg FRIAS and Ordinariat */
+                // RDS_INTERN /* only for Freiburg FRIAS and Ordinariat (incl. fix for ee)  */
                 if (isset($lok_set["int_verm"])) {
                     $lok_mergeResult["RDS_INTERN"] = $lok_set["int_verm"];
                 }
@@ -192,7 +203,7 @@ class RDSIndexHolding extends \Zend\View\Helper\AbstractHelper implements Transl
                     }
                 }
                 //RDS_LOCAL_NOTATION  /* only for PH Freiburg */
-                // set RDS_LEA /* only for Hohenheim, may similar for Freiburg mybib */
+                // set RDS_LEA /* only for Hohenheim, may similar for Freiburg mybib put it in own method */
                 // ToDo check offline and zeitschrift
                 if (($lok_set["bib_sigel"] == "100") && (($lok_set["zusatz_standort"]!="11") && ($lok_set["zusatz_standort"]!="31"))) {
                     $lok_mergeResult["RDS_LEA"] = $this->translate("RDS_LEA_TEXT") . ": <a href='" . $this->translate("RDS_LEA_LINK") . $lok_set["t_idn"] . "' target='LEA'>" . $this->translate("RDS_LEA_LINK_TEXT") . "</a>";
@@ -215,22 +226,19 @@ class RDSIndexHolding extends \Zend\View\Helper\AbstractHelper implements Transl
                     foreach ($daia[$lok_set["bib_sigel"]] as $loc_daia) {
                         // ToDo eliminate PHP Warning and replace location
                         $lok_mergeResult["RDS_LOCATION"] = $this->createReadableLocation($loc_daia["location"]);
-                        foreach ($loc_daia as $items) {
-                            foreach ($items as $item) {
-                                if ($item["summary"]) {
-                                    switch ($item["status"]) {
-                                    case "borrowable": $borrowable++; 
-                                        break;
-                                    case "order": $borrowable++; 
-                                        break;
-                                    case "unknown": $unknown++; 
-                                        break;
-                                    case "lent": $lent++; 
-                                        break;
-                                    case "present": $present++; 
-                                        break;
-                                    }
-                                    // set RDS_LOCATION base on the last summary item
+                        foreach ($loc_daia["items"] as $item) {
+                            if ($item["summary"]) {
+                                switch ($item["status"]) {
+                                case "borrowable": $borrowable++; 
+                                    break;
+                                case "order": $borrowable++; 
+                                    break;
+                                case "unknown": $unknown++; 
+                                    break;
+                                case "lent": $lent++; 
+                                    break;
+                                case "present": $present++; 
+                                    break;
                                 }
                             }
                         }
@@ -252,20 +260,24 @@ class RDSIndexHolding extends \Zend\View\Helper\AbstractHelper implements Transl
                     if (in_array($lok_set["bib_sigel"], $this->adis_clients)) {
                         foreach ($daia[$lok_set["bib_sigel"]] as $loc_daia) {
                             // ToDo eliminate PHP Warning
-                            foreach ($loc_daia as $items) {
-                                foreach ($items as $item) {
-                                    if ($this->checkSignature($item["callnumber"], $lok_set["signatur"], $lok_set["bib_sigel"])) {
-                                        $lok_mergeResult["RDS_LOCATION"] .= " " . $this->createReadableLocation($item["location"]); 
-                                        $localstatus = $this->createReadableStatus($item);
-                                        $lok_mergeResult["RDS_STATUS"] = $localstatus;
-                                    }
+                            foreach ($loc_daia["items"] as $item) {
+                                if ($this->checkSignature($item["callnumber"], $lok_set["signatur"], $lok_set["bib_sigel"])) {
+                                    $lok_mergeResult["RDS_LOCATION"] .= " " . $this->createReadableLocation($item["location"]); 
+                                    $localstatus = $this->createReadableStatus($item);
+                                    $lok_mergeResult["RDS_STATUS"] = $localstatus;
                                 }
                             }
                         }
                     }
                 } // end else checkSummary
-                // ToDo sorting $lok_mergeResult   
-                $result[$lok_set["bib_sigel"]][] = $lok_mergeResult;
+                if (in_array($lok_set["bib_sigel"],$this->daia_only_clients)) {
+                    if (($da_on_cl_ar[$lok_set["bib_sigel"]] == null)) {
+                        $da_on_cl_ar[$lok_set["bib_sigel"]] = $this->getDAIAItems($daia[$lok_set["bib_sigel"]]);
+                        $result[$lok_set["bib_sigel"]] = $this->getDAIAItems($daia[$lok_set["bib_sigel"]]);
+                    }
+                } else {
+                  $result[$lok_set["bib_sigel"]][] = $lok_mergeResult;
+                }
             }
             return $result;
         }
@@ -297,6 +309,27 @@ class RDSIndexHolding extends \Zend\View\Helper\AbstractHelper implements Transl
     protected function checkDaiaLeading() 
     {
         return false;
+    }
+
+    /**
+     * Get items only from DAIA result
+     *
+     * @param array $daia_items
+     *
+     * @return array
+     */
+    protected function getDAIAItems($daia_items) {
+        foreach ($daia_items as $loc_daia) {
+           foreach ($loc_daia["items"] as $item) {
+              $lok_mergeResult = $this->mergeResult;
+              $lok_mergeResult["RDS_SIGNATURE"] = $item["callnumber"];
+              $lok_mergeResult["RDS_LOCATION"] = $this->createReadableLocation($item["location"]);
+              $localstatus = $this->createReadableStatus($item);
+              $lok_mergeResult["RDS_STATUS"] = $localstatus;
+              $tempresult[] = $lok_mergeResult; 
+           } 
+        }
+        return ($tempresult);
     }
 
     /**
