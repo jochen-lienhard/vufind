@@ -140,6 +140,20 @@ class Backend extends AbstractBackend
      */
     public function retrieveBatch($ids, ParamBag $params = null)
     {
+        
+        $result = null;
+        foreach ($ids as $id) {
+            $recordCollection = $this->retrieve($id, $params);
+            
+            if (isset($result)) {
+                $result->add($recordCollection->first());
+            } else {
+                $result = $recordCollection;
+            }
+        }
+        
+        return $result;
+        
         // Load 100 records at a time; this is a good number to avoid memory
         // problems while still covering a lot of ground.
         $pageSize = 100;
