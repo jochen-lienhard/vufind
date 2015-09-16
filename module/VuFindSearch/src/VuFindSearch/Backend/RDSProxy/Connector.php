@@ -117,6 +117,13 @@ class Connector
     protected $proxy;
 
     /**
+     * Guest flag 
+     *
+     * @var boolean 
+     */
+    protected $guest = true;
+
+    /**
      * HTTP client adapter.
      *
      * Either the class name or a adapter instance.
@@ -171,6 +178,16 @@ class Connector
     public function getUniqueKey()
     {
         return $this->uniqueKey;
+    }
+
+    /**
+     * Set guest flag.
+     *
+     * @param boolean $guest   Set the guest flag
+     */
+    public function setGuest()
+    {
+        $this->guest = $guest;
     }
 
     /**
@@ -367,11 +384,15 @@ class Connector
      */
     public function query($handler, ParamBag $params)
     {
-
         $url         = $this->url . '/' . $handler;
         $paramString = implode('&', $params->request());
 	// ToDo Fix
-	$paramString .= "&guest=y";
+	//$paramString .= "&guest=y";
+        if ($this->guest) {
+           $paramString .= "&guest=y";
+        } else {
+           $paramString .= "&guest=n";
+        }
 	$paramString .= "&sid=" . session_id();
         if (strlen($paramString) > self::MAX_GET_URL_LENGTH) {
             $method = Request::METHOD_POST;
