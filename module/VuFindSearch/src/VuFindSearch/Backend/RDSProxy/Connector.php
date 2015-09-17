@@ -121,7 +121,7 @@ class Connector
      *
      * @var boolean 
      */
-    protected $guest = true;
+    protected $hadPermission = false;
 
     /**
      * HTTP client adapter.
@@ -181,13 +181,13 @@ class Connector
     }
 
     /**
-     * Set guest flag.
+     * Set permission flag.
      *
-     * @param boolean $guest   Set the guest flag
+     * @param boolean $hasPermission   Set the guest flag
      */
-    public function setGuest()
+    public function setHasPermission($hasPermission)
     {
-        $this->guest = $guest;
+        $this->hasPermission= $hasPermission;
     }
 
     /**
@@ -387,11 +387,10 @@ class Connector
         $url         = $this->url . '/' . $handler;
         $paramString = implode('&', $params->request());
 	// ToDo Fix
-	//$paramString .= "&guest=y";
-        if ($this->guest) {
-           $paramString .= "&guest=y";
-        } else {
+        if ($this->hasPermission) {
            $paramString .= "&guest=n";
+        } else {
+           $paramString .= "&guest=y";
         }
 	$paramString .= "&sid=" . session_id();
         if (strlen($paramString) > self::MAX_GET_URL_LENGTH) {

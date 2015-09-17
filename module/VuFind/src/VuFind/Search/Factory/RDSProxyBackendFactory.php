@@ -78,7 +78,7 @@ class RDSProxyBackendFactory extends AbstractRDSProxyBackendFactory
      */
     protected function createBackend(Connector $connector)
     {
-        if ($this->hasPermission()) $connector->setGuest(false);
+        if ($this->hasPermission()) $connector->setHasPermission($this->hasPermission());
         $backend = parent::createBackend($connector);
         $manager = $this->serviceLocator->get('VuFind\RecordDriverPluginManager');
         $factory = new RecordCollectionFactory(array($manager, 'getSolrRecord'));
