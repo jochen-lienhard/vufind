@@ -93,6 +93,25 @@ class RDSIndexHolding extends \VuFind\View\Helper\Bootstrap3\RDSIndexHolding
     }
 
     /**
+     * Creates the status based on lok_set 
+     *
+     * @param array $lok_set 
+     *
+     * @return string
+     */
+    protected function setLocStatus($lok_set)
+    {
+        if (isset($lok_set["praesenz"]) && $lok_set["praesenz"]=='p') {
+            return "RDS_REF_STOCK";
+        } else {
+           if ($lok_set["bib_sigel"] == "Frei160") {
+               return "<a href=javascript:msgWindow=window.open('http://www.eh-freiburg.de/studieren/bibliothek','KIOSK','width=1024,height=580,location=no,menubar=yes,toolbar=not,status=yes,scrollbars=yes,directories=no,resizable=yes,alwaysRaised=yes,hotkeys=no,top=0,left=200,screenY=0,screenX=200');msgWindow.focus();>Bibliothek der evangelischen Hochschule Freiburg</a>";
+           }
+           return null;
+        }
+    }
+
+    /**
      * Creates the location depending on the data loc set
      *
      * @param array $lok_set 
