@@ -145,6 +145,7 @@ class RDSIndexHolding extends \Zend\View\Helper\AbstractHelper implements Transl
                     }
                 }
                 // set RDS_STATUS (default, may be modified by daia)
+                $lok_mergeResult["RDS_STATUS"] = $this->setLocStatus($lok_set);
                 if (isset($lok_set["praesenz"]) && $lok_set["praesenz"]=='p') {
                     $lok_mergeResult["RDS_STATUS"] = "RDS_REF_STOCK";
                 }
@@ -331,6 +332,23 @@ class RDSIndexHolding extends \Zend\View\Helper\AbstractHelper implements Transl
         }
         return ($tempresult);
     }
+
+    /**
+     * Creates the status based on lok_set 
+     *
+     * @param array $lok_set 
+     *
+     * @return string
+     */
+    protected function setLocStatus($lok_set)
+    {
+        if (isset($lok_set["praesenz"]) && $lok_set["praesenz"]=='p') {
+            return "RDS_REF_STOCK";
+        } else {
+            return null;
+        }
+    }
+
 
     /**
      * Creates the location depending on the data loc set
