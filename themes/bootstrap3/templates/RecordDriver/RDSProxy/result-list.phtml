@@ -233,7 +233,7 @@
       <? if ($sessionInitiator = $account->getSessionInitiator($this->serverUrl($this->url('myresearch-home')))): ?>
         <a href="<?=$this->escapeHtmlAttr($sessionInitiator)?>" class="login-link"><?=$this->transEsc("RDS_MORE_INFO_FOR_AUTHORIZED_USERS (RDS_LOGIN_HERE)")?></a>
       <? else: ?>
-        <a href="<?=$this->url('myresearch-userlogin')?>" class="login-link" title="<?=$this->transEsc("RDS_MORE_INFO_FOR_AUTHORIZED_USERS (RDS_LOGIN_HERE)")?>"><?=$this->transEsc("RDS_AUTHORIZED_USERS_ONLY (RDS_LOGIN_HERE)")?></a>
+        <a href="<?=$this->url('myresearch-userlogin')?>" class="login-link" title="<?=$this->transEsc("RDS_MORE_INFO_FOR_AUTHORIZED_USERS (RDS_LOGIN_HERE)")?>"><?=$this->transEsc("RDS_MORE_INFO_FOR_AUTHORIZED_USERS (RDS_LOGIN_HERE)")?></a>
       <? endif; ?>
       
     </div>
