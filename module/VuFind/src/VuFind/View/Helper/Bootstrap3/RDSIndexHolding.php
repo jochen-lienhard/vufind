@@ -204,6 +204,7 @@ class RDSIndexHolding extends \Zend\View\Helper\AbstractHelper implements Transl
                     }
                 }
                 //RDS_LOCAL_NOTATION  /* only for PH Freiburg */
+                $lok_mergeResult["RDS_PROVENIENCE"] = $this->setLocalNotation($lok_set);
                 // set RDS_LEA /* only for Hohenheim, may similar for Freiburg mybib put it in own method */
                 // ToDo check offline and zeitschrift
                 if (($lok_set["bib_sigel"] == "100") && (($lok_set["zusatz_standort"]!="11") && ($lok_set["zusatz_standort"]!="31"))) {
@@ -349,6 +350,17 @@ class RDSIndexHolding extends \Zend\View\Helper\AbstractHelper implements Transl
         }
     }
 
+    /**
+     * Creates the local notation based on lok_set 
+     *
+     * @param array $lok_set 
+     *
+     * @return string
+     */
+    protected function setLocalNotation($lok_set)
+    {
+        return null;
+    }
 
     /**
      * Creates the location depending on the data loc set
