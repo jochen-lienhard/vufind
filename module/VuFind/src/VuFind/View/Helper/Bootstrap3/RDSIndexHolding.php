@@ -280,9 +280,11 @@ class RDSIndexHolding extends \Zend\View\Helper\AbstractHelper implements Transl
                     if (($da_on_cl_ar[$lok_set["bib_sigel"]] == null)) {
                         $da_on_cl_ar[$lok_set["bib_sigel"]] = $this->getDAIAItems($daia[$lok_set["bib_sigel"]]);
                         $result[$lok_set["bib_sigel"]] = $this->getDAIAItems($daia[$lok_set["bib_sigel"]]);
-                        // ToDo lok_notation to current result set
                     }
-                    $result[$lok_set["bib_sigel"]][]["RDS_LOCAL_NOTATION"]=$this->setLocalNotation($lok_set);
+                    // local notations to daia_only_clients
+                    if (isset($lok_set["lok_no"])) {
+                        $result[$lok_set["bib_sigel"]][]["RDS_LOCAL_NOTATION"]=$this->setLocalNotation($lok_set);
+                    }
                 } else {
                   $result[$lok_set["bib_sigel"]][] = $lok_mergeResult;
                 }
