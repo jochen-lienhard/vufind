@@ -129,6 +129,25 @@ class RDSIndexHolding extends \VuFind\View\Helper\Bootstrap3\RDSIndexHolding
     }
 
     /**
+     * Creates the local notation based on lok_set 
+     *
+     * @param array $lok_set 
+     *
+     * @return array 
+     */
+    protected function setLocalNotation($lok_set)
+    {
+       $urlHelper = $this->getView()->plugin('url');
+       $url = $urlHelper('rdsindex-search');
+       $localvalue = "";
+       foreach ($lok_set["lok_no"] as $lok_no) {
+             $localvalue .= "<a href='". $url . "?lookfor=zr:\"". $lok_no . "\"&type=allfields&submit=Suchen'>" . $lok_no . "</a><br />";
+       }
+       return $localvalue;
+    }
+
+
+    /**
      * Generates a string for bib_name based on local data set
      *
      * @param string $bib_sigel id of library
