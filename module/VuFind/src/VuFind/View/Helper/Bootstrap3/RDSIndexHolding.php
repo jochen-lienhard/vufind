@@ -186,6 +186,8 @@ class RDSIndexHolding extends \Zend\View\Helper\AbstractHelper implements Transl
 
                 // RDS_PROVENIENCE 
                 if (isset($lok_set["lok_prov"])) {
+                    $urlHelper = $this->getView()->plugin('url');
+                    $url = $urlHelper('rdsindex-search');
                     foreach ($lok_set["lok_prov"] as $provience) {
                         // split ids and text
                         if (preg_match('/ \| /', $provience)) {
@@ -193,18 +195,20 @@ class RDSIndexHolding extends \Zend\View\Helper\AbstractHelper implements Transl
                             // split id in provid and dnbid
                             if (preg_match('/ ; /', $prov_list[0])) {
                                 $prov_id = explode(" ; ", $prov_list[0]);
-                                $lok_mergeResult["RDS_PROVENIENCE"] = "prnid: " . $prov_id[0] . " prnname " . $prov_list[1] . " ";
-                                $lok_mergeResult["RDS_PROVENIENCE"] .=  "<a class='dnb' href='http://d-nb.info/gnd/" . $prov_id[1] . "'  target='_blank' title='" . $this->translate('RDS_PERS_DNB') . "'></a>";
+                                $lok_mergeResult["RDS_PROVENIENCE"] = "<a href='". $url . "?lookfor=prnid:" . $prov_id[0] . "&type=allfields&submit=Suchen'>" . $prov_list[1] . "</a>";
+                                $lok_mergeResult["RDS_PROVENIENCE"] .=  " <a class='dnb' href='http://d-nb.info/gnd/" . $prov_id[1] . "'  target='_blank' title='" . $this->translate('RDS_PERS_DNB') . "'></a>";
                             } else {
-                                $lok_mergeResult["RDS_PROVENIENCE"] = "prnid: " . $prov_list[0] . " prnname " . $prov_list[1];
+                                $lok_mergeResult["RDS_PROVENIENCE"] = "<a href='". $url . "?lookfor=prnid:" . $prov_list[0] . "&type=allfields&submit=Suchen'>" . $prov_list[1] . "</a>";
                             }
                         } else {
-                            $lok_mergeResult["RDS_PROVENIENCE"] = "prn: $provience";
+                            $lok_mergeResult["RDS_PROVENIENCE"] = "<a href='". $url . "?lookfor=prn:" . $provience. "&type=allfields&submit=Suchen'>" . $provience . "</a>";
                         }
                     }
                 }
                 //RDS_LOCAL_NOTATION  /* only for PH Freiburg */
-                $lok_mergeResult["RDS_PROVENIENCE"] = $this->setLocalNotation($lok_set);
+                if (isset($lok_set["lok_no"])) {
+                    $lok_mergeResult["RDS_LOCAL_NOTATION"] = $this->setLocalNotation($lok_set);
+                }
                 // set RDS_LEA /* only for Hohenheim, may similar for Freiburg mybib put it in own method */
                 // ToDo check offline and zeitschrift
                 if (($lok_set["bib_sigel"] == "100") && (($lok_set["zusatz_standort"]!="11") && ($lok_set["zusatz_standort"]!="31"))) {
@@ -276,7 +280,9 @@ class RDSIndexHolding extends \Zend\View\Helper\AbstractHelper implements Transl
                     if (($da_on_cl_ar[$lok_set["bib_sigel"]] == null)) {
                         $da_on_cl_ar[$lok_set["bib_sigel"]] = $this->getDAIAItems($daia[$lok_set["bib_sigel"]]);
                         $result[$lok_set["bib_sigel"]] = $this->getDAIAItems($daia[$lok_set["bib_sigel"]]);
+                        // ToDo lok_notation to current result set
                     }
+                    $result[$lok_set["bib_sigel"]][]["RDS_LOCAL_NOTATION"]=$this->setLocalNotation($lok_set);
                 } else {
                   $result[$lok_set["bib_sigel"]][] = $lok_mergeResult;
                 }
