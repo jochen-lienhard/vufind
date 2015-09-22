@@ -75,6 +75,39 @@ class RDSIndexHolding extends \VuFind\View\Helper\Bootstrap3\RDSIndexHolding
        "RDS_LOCAL_NOTATION",
     ];
 
+
+    /**
+     * Check if signatures fit together 
+     *
+     * @param string $daia_sig  signature from daia
+     * @param string $loc_sig   signature from loc set 
+     * @param string $bib_sigel sigel of the library
+     *
+     * @return boolean
+     */
+    protected function checkSignature($daia_sig,$loc_sig, $bib_sigel)
+    {
+        if ($bib_sigel == "25") {
+            if (preg_match('/\</', $daia_sig) {
+               $loc_length = strlen(str_replace(' ', '', (strtolower($loc_sig))));  
+            } else {
+               $loc_length = strlen(str_replace(' ', '', (strtolower($daia_sig))));
+            }
+            if (substr(str_replace(' ', '', (strtolower($daia_sig))),0,$loc_length)== substr(str_replace(' ', '', (strtolower($loc_sig))),0,$loc_length)) {
+               return true;
+            } else {
+               return false;
+            }
+        } else {
+            if (str_replace(' ', '', (strtolower($daia_sig))) == str_replace(' ', '', (strtolower($loc_sig)))) {
+               return true;
+            } else {
+               return false;
+            }
+        }
+    }
+
+
     /**
      * Check if item is part of something special 
      *
