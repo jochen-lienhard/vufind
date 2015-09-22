@@ -532,6 +532,17 @@ class RDSIndexHolding extends \Zend\View\Helper\AbstractHelper implements Transl
      *
      * @return array 
      */
+    public function getSpecial()
+    {
+        return null;
+    }
+
+
+    /**
+     * Returns the array of the result order 
+     *
+     * @return array 
+     */
     public function getResultOrder()
     {
         return $this->resultOrder;
