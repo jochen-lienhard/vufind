@@ -178,6 +178,40 @@ class RDSIndexHolding extends \VuFind\View\Helper\Bootstrap3\RDSIndexHolding
     }
 
     /**
+     * Returns the array of the result order 
+     *
+     * @param string $bib_sigel id of library
+     *
+     * @return array 
+     */
+    public function getSpecial($bib_sigel)
+    {
+        $mybibarr = [
+           "25",
+           "25-3",
+           "25-5",
+           "25-6",
+           "25-15",
+           "25-16",
+           "25-19",
+           "25-33",
+           "25-34",
+           "25-462",
+           "25-71",
+           "25-74",
+           "25-77",
+           "25-91",
+           "25-140",
+        ];
+        if (in_array($bib_sigel, $mybibarr) {
+           // ToDo issn and ti not available
+           return "<a href='https://mybib.ub.uni-freiburg.de/intern/bestellung2/?sigel=" . $bib_sigel . "&amp;id=" . $this->lok["t_idn"] . "&amp;sign=" . $this->lok["signatur"] . "&amp;best=" . $this->lok["bestand8032"] . "+" . $this->lok["lueckenangabe8033"] . ">" . $this->translate("RDS_PRINT_COPY" . "}</a>";
+        } else {
+           return null;
+        }
+    }
+
+    /**
      * Generates a string for adis_link based on daia result 
      *
      * @param string $bib_sigel id of library 
