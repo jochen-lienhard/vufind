@@ -80,4 +80,26 @@ class Factory
         }
         return new LayoutClass($left, $offcanvas);
     }
+    
+        /**
+     * Construct the RDSProxyHoldings helper.
+     *
+     * @param ServiceManager $sm Service manager.
+     *
+     * @return RDSProxyHoldings
+     */
+    public static function getRDSProxyHoldings(ServiceManager $sm) {
+        $serviceLocator = $sm->getServiceLocator();
+        $config = $serviceLocator->get('VuFind\Config')->get('config');
+        
+        $linkresolver = null;
+        if (isset($config->OpenURL) && isset($config->OpenURL->resolver)) {
+            $resolverDriverPluginManger= $serviceLocator
+                ->get('VuFind\ResolverDriverPluginManager');
+            $linkresolver = $resolverDriverPluginManger
+                ->get($config->OpenURL->resolver);
+        } 
+        
+        return new RDSProxyHoldings($linkresolver);
+    }
 }

@@ -176,22 +176,19 @@ class Factory
         }
         return new RDSIndexHoldingsILS($catalog);
     }
-
-
+    
     /**
-     * Factory for HoldingsLinkResolver tab plugin.
+     * Factory for RDSProxyHoldings tab plugin for RDSProxy.
      *
      * @param ServiceManager $sm Service manager.
      *
-     * @return HoldingsLinkResolver
+     * @return RDSProxyHoldings
      */
-    public static function getHoldingsLinkResolver(ServiceManager $sm)
-    {
-        $config = $sm->getServiceLocator()->get('VuFind\Config')->get('RDSProxy');
-        return new HoldingsLinkResolver();
+    public static function getRDSProxyHoldings(ServiceManager $sm) {
+        
+        return new RDSProxyHoldings();
     }
-
-
+    
     /**
      * Factory for HoldingsWorldCat tab plugin.
      *

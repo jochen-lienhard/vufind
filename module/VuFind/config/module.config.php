@@ -478,7 +478,8 @@ $config = [
                     'hierarchytree' => 'VuFind\RecordTab\Factory::getHierarchyTree',
                     'holdingsils' => 'VuFind\RecordTab\Factory::getHoldingsILS',
                     'rdsindexholdingsils' => 'VuFind\RecordTab\Factory::getRDSIndexHoldingsILS',
-		    'holdingslinkresolver' => 'VuFind\RecordTab\Factory::getHoldingsLinkResolver',
+                    'rdsproxyholdings' => 'VuFind\RecordTab\Factory::getRDSProxyHoldings',
+		                'holdingslinkresolver' => 'VuFind\RecordTab\Factory::getHoldingsLinkResolver',
                     'holdingsworldcat' => 'VuFind\RecordTab\Factory::getHoldingsWorldCat',
                     'map' => 'VuFind\RecordTab\Factory::getMap',
                     'preview' => 'VuFind\RecordTab\Factory::getPreview',
@@ -642,7 +643,7 @@ $config = [
 	    ],
             'VuFind\RecordDriver\RDSProxy' => [
                 'tabs' => [
-                    'Holdings' => 'HoldingsLinkResolver',
+                    'Holdings' => 'RDSProxyHoldings',
                     'Description' => 'Description',
                     'Details' => 'StaffViewArray',
                  ],

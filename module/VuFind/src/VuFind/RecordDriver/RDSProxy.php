@@ -1508,6 +1508,8 @@ class RDSProxy extends SolrDefault
      */
     public function openURLActive($area)
     {
+        return false;
+        
         // Only display OpenURL link if the option is turned on and we have
         // an ISSN.  We may eventually want to make this rule more flexible.
         if (!$this->getCleanISSN()) {
@@ -1800,16 +1802,66 @@ class RDSProxy extends SolrDefault
                 return '';
         }
     }
+    
+    
+    public function getFulltextLinks() {
+            $links = array_merge(
+            $this->getLinks(array('category' => 'fulltext', 'type' => 'pdf')),
+            $this->getLinks(array('category' => 'fulltext', 'type' => 'external', 'access' => 'yellow')),
+            $this->getLinks(array('category' => 'fulltext', 'type' => 'html')),
+            $this->getLinks(array('category' => 'fulltext', 'type' => 'external', 'access' => 'green')),
+            $this->getLinks(array('category' => 'openurl', 'indicator' => '2'))
+        );
+            
+        return (empty($links) ? '' : $links);
+    }
+    
+    public function getInfoLinks() {
+         $links = $this->getLinks(array('category' => 'info', 'type' => 'external'));
+        return (empty($links) ? '' : $links);
+    }
 
+    protected function getLinks($properties)
+    {
+        $links = array();
+      if(isset($this->fields['links'])) {
+        foreach($this->fields['links'] as $link) {
+          if(!is_array($link)) {
+            continue;
+          }
+          $match = true;
+          foreach($properties as $pKey => $pValue) {
+            if(!isset($link[$pKey]) || $link[$pKey] !== $pValue) {
+              $match = false;
+              break;
+            }
+          }
+          if($match) {
+            $links[] = $link;
+          }
+        }
+      }
+      return $links;
+    }
+    
+    public function getOpenUrlEmbedded()
+    {
+      $openUrl = $this->getLink(array('category' => 'openurl', 'type' => 'embedded'));
+      if($openUrl !== '') {
+        return $openUrl['url'];
+      }
+    }
+    public function getOpenUrlExternal()
+    {
+    	$openUrl = $this->getLink(array('category' => 'openurl', 'type' => 'external'));
+    	if($openUrl !== '') {
+    		return $openUrl['url'];
+    	}
+    }
+    
     /** 
     * ToDO: these functions may be intergrated
     */
-
-    /*
-    protected function getNumPages()
-    {
-        return $this->getItemOrSourceData('numpages');
-    }
 
     protected function getLink($properties)
     {
@@ -1832,6 +1884,13 @@ class RDSProxy extends SolrDefault
         }
         return '';
     }
+
+    /*
+    protected function getNumPages()
+    {
+        return $this->getItemOrSourceData('numpages');
+    }
+
     protected function getCover()
     {
         $cover = $this->getLink(array('category' => 'cover', 'type' => 'thumb'));
