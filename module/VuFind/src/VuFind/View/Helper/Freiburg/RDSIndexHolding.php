@@ -203,9 +203,9 @@ class RDSIndexHolding extends \VuFind\View\Helper\Bootstrap3\RDSIndexHolding
            "25-91",
            "25-140",
         ];
-        if (in_array($bib_sigel, $mybibarr) {
+        if (in_array($bib_sigel, $mybibarr)) {
            // ToDo issn and ti not available
-           return "<a href='https://mybib.ub.uni-freiburg.de/intern/bestellung2/?sigel=" . $bib_sigel . "&amp;id=" . $this->lok["t_idn"] . "&amp;sign=" . $this->lok["signatur"] . "&amp;best=" . $this->lok["bestand8032"] . "+" . $this->lok["lueckenangabe8033"] . ">" . $this->translate("RDS_PRINT_COPY" . "}</a>";
+           return "<a href='https://mybib.ub.uni-freiburg.de/intern/bestellung2/?sigel=" . $bib_sigel . "&amp;id=" . $this->lok["t_idn"] . "&amp;sign=" . $this->lok["signatur"] . "&amp;best=" . $this->lok["bestand8032"] . "+" . $this->lok["lueckenangabe8033"] . "'>" . $this->translate("RDS_PRINT_COPY") . "</a>";
         } else {
            return null;
         }
