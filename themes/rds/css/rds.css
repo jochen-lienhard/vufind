@@ -127,3 +127,75 @@ color: #b2b4b3;
 .error {
   color: red;
 }
+
+
+
+
+
+.t_ezb_red {
+    display: inline-block;
+    background: url("../images/ezb_rot.png") no-repeat center;
+    width: 41px;
+    height: 20px;
+}
+
+.t_ezb_yellow {
+    display: inline-block;
+    background: url("../images/ezb_gelb.png") no-repeat center;
+    width: 41px;
+    height: 20px;
+}
+
+.t_ezb_green {
+    display: inline-block;
+    background: url("../images/ezb_gruen.png") no-repeat center;
+    width: 41px;
+    height: 20px;
+}
+
+div.tg h2 {
+  font-size: 1em;
+  font-weight: bold;
+  padding: 12px 0px 2px 0px;
+  border-bottom: solid 2px darkgray;
+  
+}
+
+div.tg p {
+  padding: 6px 0px 0px 0px;
+}]
+
+div.tg img {
+  vertical-align: middle;
+}
+
+div.tg div.t_text {
+  line-height: 1.2em;
+}
+
+.t_link a, .t_infolink a, button.t_link {
+    background: none repeat scroll 0 0 #CCCCCC;
+    border-bottom: 1px solid #black;
+    color: black;
+    display: inline-block;
+    font-weight: bold;
+    margin: 0 0 0 5px;
+    padding: 0 4px;
+    text-decoration: none;
+}
+
+.redi_links_icon {
+   background: url('../images/redi_links.gif') no-repeat center;
+   width: 125px;
+   height: 19px;
+   display: inline-block;
+}
+
+
+
+
+
+
+
+
+
