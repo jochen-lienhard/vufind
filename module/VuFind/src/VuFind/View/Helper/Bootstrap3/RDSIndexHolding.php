@@ -122,7 +122,7 @@ class RDSIndexHolding extends \Zend\View\Helper\AbstractHelper implements Transl
     public function mergeData($lok, $daia)
     {
         $result=[];
-        // $this->lok=$lok;
+        $this->lok=$lok;
         $this->daia=$daia;
 
         // check which is the leading data set
@@ -530,9 +530,11 @@ class RDSIndexHolding extends \Zend\View\Helper\AbstractHelper implements Transl
     /**
      * Returns the array of the result order 
      *
+     * @param string $bib_sigel id of library
+     *
      * @return array 
      */
-    public function getSpecial()
+    public function getSpecial($bib_sigel)
     {
         return null;
     }

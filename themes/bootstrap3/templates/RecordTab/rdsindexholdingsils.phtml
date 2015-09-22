@@ -42,8 +42,8 @@
     $bib_addon=$this->RDSIndexHolding()->getBibAddon($bib_key);
     $bib_link=$this->RDSIndexHolding()->getBibLink($bib_key); 
     if ($this->isGranted("access.RDSIndexSpecial")) {
-       // means MyBib for Freiburg
-       $special = $this->RDSIndexHolding()->getSpecial(); 
+       // means MyBib for Freiburg issn, ti necessary and format
+       $special = $this->RDSIndexHolding()->getSpecial($bib_key); 
     }
     if ($this->driver->getONLINE() === "offline") {
        $adis_link=$this->RDSIndexHolding()->getAdisLink($bib_key);

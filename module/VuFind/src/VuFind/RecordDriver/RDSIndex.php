@@ -1407,6 +1407,7 @@ class RDSIndex extends SolrMarc
         if (!$this->getCleanISSN()) {
             return false;
         }
+        return false;
         return parent::openURLActive($area);
     }
 
