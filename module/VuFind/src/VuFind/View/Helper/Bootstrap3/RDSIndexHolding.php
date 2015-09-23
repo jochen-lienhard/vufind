@@ -163,7 +163,7 @@ class RDSIndexHolding extends \Zend\View\Helper\AbstractHelper implements Transl
                 // set RDS_HINT
                 // set RDS_COMMENT
                 if (isset($lok_set["bestandKomment8034"])) {
-                    $lok_mergeResult["RDS_COMMENT"] = $lok_set["bestandKomment8034"];
+                    $lok_mergeResult["RDS_COMMENT"] = $this->setComment($lok_set);
                 }
                 // set RDS_HOLDING 
                 if (isset($lok_set["bestand8032"]) && ($lok_set["bestand8032"]!="komment")) {
@@ -356,6 +356,18 @@ class RDSIndexHolding extends \Zend\View\Helper\AbstractHelper implements Transl
         } else {
             return null;
         }
+    }
+
+   /**
+     * Creates the comment based on lok_set 
+     *
+     * @param array $lok_set 
+     *
+     * @return string
+     */
+    protected function setComment($lok_set)
+    {
+        return $lok_set["bestandKomment8034"];
     }
 
     /**
