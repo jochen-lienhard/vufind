@@ -88,7 +88,7 @@ class RDSIndexHolding extends \VuFind\View\Helper\Bootstrap3\RDSIndexHolding
     protected function checkSignature($daia_sig,$loc_sig, $bib_sigel)
     {
         if ($bib_sigel == "25") {
-            if (preg_match('/\</', $daia_sig) {
+            if (preg_match('/\</', $daia_sig)) {
                $loc_length = strlen(str_replace(' ', '', (strtolower($loc_sig))));  
             } else {
                $loc_length = strlen(str_replace(' ', '', (strtolower($daia_sig))));
