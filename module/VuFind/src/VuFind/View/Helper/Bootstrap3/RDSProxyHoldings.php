@@ -64,7 +64,7 @@ class RDSProxyHoldings extends \Zend\View\Helper\AbstractHelper implements Trans
         
         $output = substr ($xmlResponse, strpos($xmlResponse,'<div id="services">'));
         $pos = strpos($output, '<div id="services_end">');
-        $output = substr ($output, 0, $pos) . '</div>';
+        $output = substr ($output, 0, $pos);
         
         return $output;
     }   
