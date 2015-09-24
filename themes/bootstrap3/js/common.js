@@ -549,4 +549,23 @@ $(document).ready(function() {
     var parts = this.href.split('/');
     return Lightbox.get(parts[parts.length-3],'Save',{id:$(this).attr('id')});
   });
+  
+  $('.doExportRecord').click(function() {
+    var id = $(this).data('id');
+    $.ajax({
+      url: path + '/Cart/doExport',
+      type:'POST',
+      dataType:'html',
+      data:{doExport: 'Print', cachePolicy: 'Favorite', 'ids[]': id},
+      success:function(data) {
+        var win = window.open();
+        $(win.document.body).html(data);
+        Lightbox.close();
+      },
+      error:function(d,e) {
+        //console.log(d,e); // Error reporting
+      }
+    });
+    return false;
+  });
 });

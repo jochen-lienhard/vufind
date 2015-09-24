@@ -219,4 +219,14 @@ $(document).ready(function() {
       cartCount.html(cart.length);
     }
   });
+  
+  $('.addItemToCart').click(function(){
+    var vufindId = $(this).data('id');
+    var source = vufindId.split("|")[0];
+    var id = vufindId.split("|")[1];
+    removeItemFromCart(id, source);
+    addItemToCart(id, source);
+    return false;
+  });
+  
 });

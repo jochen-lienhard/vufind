@@ -1,13 +1,12 @@
 <? if ($this->pageCount && count($this->pagesInRange) > 1): ?>
   <div class="ui-pagination">
+    <?=$this->transEsc('RDS_PAGES') ?>
     <? if (isset($this->previous)): ?>
       <ul class="controls">
-        <li><a href="<?=$this->currentPath() . $this->results->getUrlQuery()->setPage(1)?>"><span><i class="icon icon-ubfr-pointer-start"></i></span></a></li>
         <li><a href="<?=$this->currentPath() . $this->results->getUrlQuery()->setPage($this->previous)?>"><span><i class="icon icon-ubfr-pointer-prev"></i></span></a></li>
       </ul>
     <? else: ?>
       <ul class="controls disabled">
-        <li><span><i class="icon icon-ubfr-pointer-start"></i></span></li>
         <li><span><i class="icon icon-ubfr-pointer-prev"></i></span></li>
       </ul>
     <? endif; ?>
@@ -23,13 +22,12 @@
     <? if (isset($this->next)): ?>
       <ul class="controls">
         <li><a href="<?=$this->currentPath() . $this->results->getUrlQuery()->setPage($this->next)?>"><span class="icon icon-ubfr-pointer-next"></span></a></li>
-        <li><a href="<?=$this->currentPath() . $this->results->getUrlQuery()->setPage($this->pageCount)?>"><span class="icon icon-ubfr-pointer-end"></span></a></li>
       </ul>
     <? else: ?>
       <ul class="controls disabled">
         <li><span class="icon icon-ubfr-pointer-next"></span></li>
-        <li><span class="icon icon-ubfr-pointer-end"></span></li>
       </ul>
     <? endif; ?>
+    <?=$this->transEsc('RDS_FROM') ?> <?=$this->pageCount ?>
   </div>
 <? endif; ?>

@@ -3,7 +3,6 @@
     $this->layout()->searchbox = $this->render('search/searchbox.phtml');
   }
 ?>
-
 <div>
 
   <div class="rds_searchTabs">
@@ -18,12 +17,16 @@
             <li><a href="<?=$this->url('home') ?><?=$this->searchClassId ?>/Advanced"><?=$this->transEsc('RDS_ADVANCED_SEARCH')?></li>
             <? endif;?>
             <li><a href="<?=$this->url('home') ?>Search/History"><?=$this->transEsc('RDS_RDSHistory')?></a></li>
-      <? $cart = $this->cart(); if ($cart->isActive()): ?>
-        <li id="cartSummary">
-          <a id="cartItems" class="modal-link" title="<?=$this->transEsc('View Book Bag')?>" href="<?=$this->url('cart-home')?>"><i class="fa fa-suitcase"></i> <strong><?=count($cart->getItems())?></strong> <?=$this->transEsc('items')?><?=$cart->isFull() ? ' (' .  $this->transEsc('bookbag_full') . ')' : ''?></a>
-        </li>
-      <? endif; ?>
-            <li><a href="<?=$this->url('home') ?>MyResearch"><?=$this->transEsc('RDS_RDSFavorites')?></a></li>
+          
+            <?if ($this->auth()->isLoggedIn()): ?>
+                <li><a href="<?=$this->url('home') ?>MyResearch"><?=$this->transEsc('RDS_RDSFavorites')?></a></li>
+            <?else: ?>
+                <? $cart = $this->cart(); if ($cart->isActive()): ?>
+                  <li id="cartSummary">
+                    <a id="cartItems" class="modal-link" title="<?=$this->transEsc('View Book Bag')?>" href="<?=$this->url('cart-home')?>"><i class="fa fa-suitcase"></i> <strong><?=count($cart->getItems())?></strong> <?=$this->transEsc('items')?><?=$cart->isFull() ? ' (' .  $this->transEsc('bookbag_full') . ')' : ''?></a>
+                  </li>
+                <? endif; ?>
+             <?endif; ?>
       <? if ($this->feedback()->tabEnabled()): ?>
         <li>
           <a id="feedbackLink" class="modal-link" href="<?=$this->url('feedback-home') ?>"><i class="fa fa-envelope"></i> <?=$this->transEsc("Feedback")?></a>
