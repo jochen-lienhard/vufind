@@ -64,7 +64,7 @@ $recordTotal = $this->results->getResultTotal();
       <div class="col-xs-4">
         <? if ($recordTotal > 0): ?>
 
-          <?=$this->paginationControl($this->results->getPaginator(), 'Sliding', 'search/pagination.phtml', array('results' => $this->results))?>
+          <?=$this->paginationControl($this->results->getPaginator()->setPageRange(2), 'Sliding', 'search/pagination.phtml', array('results' => $this->results))?>
 
         <? else: ?>
           <p class="lead"><?=$this->transEsc('nohit_heading')?></p>
