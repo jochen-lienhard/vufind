@@ -3,7 +3,14 @@
     $this->layout()->searchbox = $this->render('search/searchbox.phtml');
   }
 ?>
+
 <div>
+
+<div class="rds_searchbox">
+    <nav class="nav searchbox">
+      <?=$this->layout()->searchbox ?>
+    </nav>
+</div>
 
   <div class="rds_searchTabs">
       <?= $this->render('search/searchTabs'); ?>
