@@ -449,7 +449,7 @@ $config = [
             'recorddriver' => [
                 'abstract_factories' => ['VuFind\RecordDriver\PluginFactory'],
                 'factories' => [
-		    'solrrdsindex' => 'VuFind\RecordDriver\Factory::getRDSIndex',
+                    'solrrdsindex' => 'VuFind\RecordDriver\Factory::getRDSIndex',
                     'solrrdsproxy' => 'VuFind\RecordDriver\Factory::getRDSProxy',
                     'eds' => 'VuFind\RecordDriver\Factory::getEDS',
                     'eit' => 'VuFind\RecordDriver\Factory::getEIT',
@@ -525,7 +525,7 @@ $config = [
                     'EIT' => 'VuFind\Search\Factory\EITBackendFactory',
                     'LibGuides' => 'VuFind\Search\Factory\LibGuidesBackendFactory',
                     'Pazpar2' => 'VuFind\Search\Factory\Pazpar2BackendFactory',
-		    'RDSIndex' => 'VuFind\Search\Factory\RDSIndexBackendFactory',
+                    'RDSIndex' => 'VuFind\Search\Factory\RDSIndexBackendFactory',
                     'RDSProxy' => 'VuFind\Search\Factory\RDSProxyBackendFactory',
                     'Primo' => 'VuFind\Search\Factory\PrimoBackendFactory',
                     'Solr' => 'VuFind\Search\Factory\SolrDefaultBackendFactory',
@@ -626,21 +626,13 @@ $config = [
             ],
             'VuFind\RecordDriver\RDSIndex' => [
                 'tabs' => [
-		    'Holdings' => 'RDSIndexHoldingsILS', 
+                    'Holdings' => 'RDSIndexHoldingsILS', 
                     'Description' => 'RDSIndexDescription',
                     'Details' => 'StaffViewArray',
-                    'TOC' => 'TOC', 
-                    'UserComments' => 'UserComments',
-                    'Reviews' => 'Reviews', 
-                    'Excerpt' => 'Excerpt',
-                    'Preview' => 'preview',
-                    'HierarchyTree' => 'HierarchyTree', 
-                    'Map' => 'Map',
                     'Similar' => 'SimilarItemsCarousel',
-
                  ],
-	         'defaultTab' => null,
-	    ],
+                'defaultTab' => null,
+            ],
             'VuFind\RecordDriver\RDSProxy' => [
                 'tabs' => [
                     'Holdings' => 'RDSProxyHoldings',
