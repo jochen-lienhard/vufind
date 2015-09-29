@@ -181,7 +181,7 @@ class RDSIndexHolding extends \Zend\View\Helper\AbstractHelper implements Transl
                 }
                 // RDS_INTERN /* only for Freiburg FRIAS and Ordinariat (incl. fix for ee)  */
                 if (isset($lok_set["int_verm"])) {
-                    $lok_mergeResult["RDS_INTERN"] = $lok_set["int_verm"];
+                    $lok_mergeResult["RDS_INTERN"] = $this->setIntern($lok_set);
                 }
 
                 // RDS_PROVENIENCE 
@@ -380,6 +380,18 @@ class RDSIndexHolding extends \Zend\View\Helper\AbstractHelper implements Transl
     protected function setLocalNotation($lok_set)
     {
         return null;
+    }
+
+    /**
+     * Creates the intern comment based on lok_set 
+     *
+     * @param array $lok_set 
+     *
+     * @return string
+     */
+    protected function setIntern($lok_set)
+    {
+       return $lok_set["int_verm"];
     }
 
     /**
