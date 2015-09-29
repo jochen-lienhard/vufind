@@ -28,6 +28,7 @@
  */
 namespace VuFind\View\Helper\Freiburg;
 use     VuFind\I18n\Translator\TranslatorAwareInterface;
+use     ZfcRbac\View\Helper\IsGranted;
 
 /**
  * RDSIndexHolding view helper
@@ -46,7 +47,7 @@ class RDSIndexHolding extends \VuFind\View\Helper\Bootstrap3\RDSIndexHolding
      *
      * @array
      */
-    protected $adis_clients = ["25", "Frei26", "Frei129"];
+    protected $adis_clients = ["25", "25-122", "Frei26", "Frei129"];
 
     /**
      * List of clients, where all is based on daia
@@ -144,6 +145,26 @@ class RDSIndexHolding extends \VuFind\View\Helper\Bootstrap3\RDSIndexHolding
         }
     }
 
+  /**
+     * Creates the comment based on lok_set 
+     *
+     * @param array $lok_set 
+     *
+     * @return string
+     */
+    protected function setComment($lok_set)
+    {
+        if (preg_match('/papierausdruck/', strtolower($lok_set["bestandKomment8034"])) && 
+           $this->getAdisLink("25-122") && 
+           $lok_set["type"] =="y" &&  
+           preg_match('/Frei122-/', $lok_set["signatur"])) {
+           return $lok_set["bestandKomment8034"] . " <a href=" . $this->getAdisLink("25-122") . ">" .$this->translate("RDS_AUSLEIHE") . "</a>";  
+        } else {
+           return $lok_set["bestandKomment8034"]; 
+        }
+    }
+
+
     /**
      * Creates the location depending on the data loc set
      *
@@ -209,6 +230,24 @@ class RDSIndexHolding extends \VuFind\View\Helper\Bootstrap3\RDSIndexHolding
         // for Freiburg
         return "https://www.ub.uni-freiburg.de/index.php?id=1272&sigel=" . $bib_sigel;
     }
+
+    /**
+     * Generates HTML code to add content to the signature 
+     *
+     * @param string $signature
+     *
+     * @return string 
+     */
+    public function getSignatureAddon($signature)
+    {
+        $addon = "";
+	// if staff of the library show adis statistic
+        $addon = "<a class='fa fa-bar-chart' href='http://adisstat.ub.uni-freiburg.de/gsig.php?user_eingabe=" . $signature . "' target='stat'></a>";
+        // if guidance system exist for current signature 
+        // generate link
+        return $addon;
+    }
+
 
     /**
      * Returns the array of the result order 
