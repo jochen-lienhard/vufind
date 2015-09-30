@@ -164,6 +164,44 @@ class RDSIndexHolding extends \VuFind\View\Helper\Bootstrap3\RDSIndexHolding
         }
     }
 
+    /**
+     * Creates the intern comment based on lok_set 
+     *
+     * @param array $lok_set 
+     *
+     * @return string
+     */
+    protected function setIntern($lok_set)
+    {
+       if (preg_match('/FRIAS/', $lok_set["signatur"])) {
+          return $this->translate("RDS_USE_REQU") . "<a href='http://www.frias.uni-freiburg.de/de/das-institut/kontakt/bib-stadtstrasse'>" . $this->translate("RDS_CONTACT") . "</a>";
+       } else {
+          if (isset($lok_set["int_verm"]) && !preg_match('/Zugriff/', $lok_set["int_verm"])) {
+             if (preg_match('/http/', $lok_set["int_verm"])) {
+               return "<a href='" . $lok_set["int_verm"] . "'>" . $lok_set["int_verm"] . "</a>";
+             } else {
+               return $lok_set["int_verm"];
+             }
+          } else {
+             if (isset($lok_set["ee"])) {
+             /* ordinariat fix */
+                $ord= "";
+                foreach ($lok_set["ee"] as $eekey => $eevalue) {
+                  if ($eekey == "int_verm") {
+                     $ord .= $eevalue . " ";
+                  }
+                }
+                if ($ord == "") {
+                   return null;
+                } else {
+                   return $ord;
+                }
+             } else {
+                return null;
+             }
+          }
+       }
+    }
 
     /**
      * Creates the location depending on the data loc set
