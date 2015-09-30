@@ -180,7 +180,7 @@ JS;
                 <a href="<?=$addURL ?>" class="list-group-item facet<?=$thisFacet['operator'] ?><? if ($i>5): ?> <?=$moreClass ?><?endif ?>">
               <? endif; ?>
               <span class="badge">
-                <?=$this->localizedNumber($thisFacet['count'])?>
+                (<?=$this->localizedNumber($thisFacet['count'])?>)
               </span>
               <span class="notbadge">
                 <? if ($allowExclude): ?>
