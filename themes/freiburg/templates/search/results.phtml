@@ -61,7 +61,7 @@ $recordTotal = $this->results->getResultTotal();
         <span><?=$this->transEsc('RDS_SEARCH_TERMS')?> <span class="search-word"><?=$this->escapeHtml($lookfor)?></span>
       </div>
 
-      <div class="col-xs-4">
+      <div class="col-xs-3">
         <? if ($recordTotal > 0): ?>
 
           <?=$this->paginationControl($this->results->getPaginator()->setPageRange(2), 'Sliding', 'search/pagination.phtml', array('results' => $this->results))?>
@@ -69,6 +69,7 @@ $recordTotal = $this->results->getResultTotal();
         <? else: ?>
           <p class="lead"><?=$this->transEsc('nohit_heading')?></p>
         <? endif; ?>
+<? /*
         <? if ($this->searchType == 'advanced'): ?>
           <p class="adv_search_links">
               <a href="<?=$this->url($advSearch)?>?edit=<?=$this->escapeHtmlAttr($searchId)?>"><?=$this->transEsc("Edit this Advanced Search")?></a> |
@@ -76,13 +77,10 @@ $recordTotal = $this->results->getResultTotal();
               <a href="<?=$this->url($searchHome)?>"><?=$this->transEsc("Start a new Basic Search")?></a>
           </p>
         <? endif; ?>
+*/ ?>
       </div>
 
       <div class="col-xs-3">
-          <?=$this->render('search/controls/sort.phtml')?>
-      </div>
-
-      <div class="col-xs-2">
         <?=$this->transEsc("RDS_MEDIEN")?>
           <strong><?=$this->localizedNumber($this->results->getStartRecord())?></strong> - <strong><?=$this->localizedNumber($this->results->getEndRecord())?></strong>
           <? if (!isset($this->skipTotalCount)): ?>
@@ -101,9 +99,12 @@ $recordTotal = $this->results->getResultTotal();
           
       </div>
 
-      <div class="col-xs-3 text-right">
+      <div class="col-xs-2">
           <?=$this->render('search/controls/limit.phtml')?>
-          <?=$this->render('search/controls/view.phtml')?>
+      </div>
+
+      <div class="col-xs-4 text-right">
+          <?=$this->render('search/controls/sort.phtml')?>
       </div>
     </div>
     <? /* End Listing Options */ ?>

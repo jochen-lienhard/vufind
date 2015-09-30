@@ -11,13 +11,7 @@
       </ul>
     <? endif; ?>
     <ul class="pages">
-      <? foreach ($this->pagesInRange as $page): ?>
-        <? if ($page != $this->current): ?>
-          <li><a href="<?=$this->currentPath() . $this->results->getUrlQuery()->setPage($page)?>"><?=$page?></a></li>
-        <? else: ?>
-          <li class="active"><a href="<?=$this->currentPath() . $this->results->getUrlQuery()->setPage($page)?>"><?=$page?></a></li>
-        <? endif; ?>
-      <? endforeach; ?>
+          <li class="active"><a href="<?=$this->currentPath() . $this->results->getUrlQuery()->setPage($this->current)?>"><?=$this->current?></a></li>
     </ul>
     <? if (isset($this->next)): ?>
       <ul class="controls">
