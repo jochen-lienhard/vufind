@@ -255,6 +255,16 @@ class RDSIndexHolding extends \VuFind\View\Helper\Bootstrap3\RDSIndexHolding
         }
     }
 
+    /**
+     * Generates a string for bib_name based on local data set
+     *
+     * @return string 
+     */
+    public function getDigitalRepro()
+    {
+       return "<a href='http://www.ub.uni-freiburg.de/?id=3900&amp;ppn=" . $this->lok["t_idn"] . ">Kostenpflichtige, digitale Reproduktion bestellen</a>"
+    }
+
 
     /**
      * Generates a string for bib_link based on local data set
