@@ -262,7 +262,7 @@ class RDSIndexHolding extends \VuFind\View\Helper\Bootstrap3\RDSIndexHolding
      */
     public function getDigitalRepro()
     {
-       return "<a href='http://www.ub.uni-freiburg.de/?id=3900&amp;ppn=" . $this->lok["t_idn"] . ">Kostenpflichtige, digitale Reproduktion bestellen</a>"
+       return "<a href='http://www.ub.uni-freiburg.de/?id=3900&amp;ppn=" . $this->lok["t_idn"] . ">Kostenpflichtige, digitale Reproduktion bestellen</a>";
     }
 
 
