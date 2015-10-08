@@ -46,3 +46,7 @@
       return false;
     });
   });
+ 
+ function userAction() {
+   return false;
+ }
