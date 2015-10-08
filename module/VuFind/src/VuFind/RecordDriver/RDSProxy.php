@@ -1820,7 +1820,15 @@ class RDSProxy extends SolrDefault
          $links = $this->getLinks(array('category' => 'info', 'type' => 'external'));
         return (empty($links) ? '' : $links);
     }
-
+    
+    public function showFulltextLinks() {
+      return ($this->recordConfig->showFulltextLinks == true);
+    }
+    
+    public function showCitationLinks() {
+      return ($this->recordConfig->showCitationLinks == true);
+    }
+    
     protected function getLinks($properties)
     {
         $links = array();
