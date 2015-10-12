@@ -1,5 +1,16 @@
 <?
   $dataView = $this->params->getOptions()->getListViewOption();
+  
+  $ppn = $this->driver->getUniqueID();
+  $source = $this->driver->getResourceSource();
+  
+ if (isset($this->list) && is_object($this->list)) {
+    $list_id = $this->list->id;
+    $user_id = $this->list->user_id;
+  } else {
+    $list_id = null;
+    $user_id = $this->user ? $this->user->id : null;
+  }
 ?>
 
 <div class="<?=$this->driver->supportsAjaxStatus()?'ajaxItem ':''?>col-xs-12">
@@ -211,6 +222,29 @@
           <?endif; ?>
           <a href="/Cart/doExport" class="fa fa-print doExportRecord" data-id="<?=$this->driver->getResourceSource()?>|<?=$this->driver->getUniqueID()?>"></a>
           <a href="/link?id=<?=$this->driver->getUniqueID()?>" class="fa fa-bookmark"></a>
+      
+      <?if ($this->favorites): ?>
+                <a class="fa fa-fw fa-edit edit tool" href="<?=$this->url('myresearch-edit')?>?id=<?=urlencode($ppn)?>&amp;source=<?=urlencode($source)?><? if (!is_null($list_id)):?>&amp;list_id=<?=urlencode($list_id)?><? endif; ?>"></a>
+                
+                <? /* Use a different delete URL if we're removing from a specific list or the overall favorites: */
+                  $deleteUrl = null === $list_id
+                      ? $this->url('myresearch-favorites')
+                      : $this->url('userList', array('id' => $list_id));
+                  $deleteUrlGet = $deleteUrl . '?delete=' . urlencode($id) . '&amp;source=' . urlencode($source);
+                  $dLabel = 'delete-label-' . preg_replace('[\W]','-',$id);
+                ?>
+                <div class="dropdown">
+                  <a class="dropdown-toggle" id="<?=$dLabel ?>" role="button" data-toggle="dropdown" data-target="#" href="<?=$deleteUrlGet ?>">
+                    <i class="fa fa-fw fa-trash-o"></i>
+                  </a>
+                  <ul class="dropdown-menu" role="menu" aria-labelledby="<?=$dLabel ?>">
+                    <li><a onClick="$.post('<?=$deleteUrl?>', {'delete':'<?=$this->escapeJs($ppn) ?>','source':'<?=$this->escapeHtmlAttr($source) ?>','confirm':true},function(){location.reload(true)})" title="<?=$this->transEsc('confirm_delete_brief')?>"><?=$this->transEsc('confirm_dialog_yes')?></a></li>
+                    <li><a><?=$this->transEsc('confirm_dialog_no')?></a></li>
+                  </ul>
+                </div>
+                <?=$this->record($this->driver)->getCheckbox() ?>
+            <?endif; ?>
+      
       <? endif; ?>
     </div>
   
