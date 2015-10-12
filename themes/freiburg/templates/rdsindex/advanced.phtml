@@ -99,7 +99,18 @@
                                                            <input type="hidden" value="<?=$key?>" name="type0[]" />
           						</div>
         							<div class="col-md-8">
+<? if ($key=="au" || $key=="co" || $key=="ct" || $key=="si"): ?>
+<span>
+<input id="search_lookfor0_<?=$counter?>" class="form-control" type="text" name="lookfor0[]" value="<? if(isset($searchTerms[$key])) {echo $searchTerms[$key];}?>">
+<span class="index">
+<a href="<?=$this->url('alphabrowse-home')?>?source=author&amp;from=" onclick="this.href+=document.getElementById('search_lookfor0_<?=$counter?>').value"><span class="reg_button" title="Indexsuche">Index</span></a>
+</span>
+</span>
+<? else: ?>
+<span>
         								<input id="search_lookfor0_<?=$counter?>" class="form-control" type="text" name="lookfor0[]" value="<? if(isset($searchTerms[$key])) {echo $searchTerms[$key];}?>">
+</span>
+<? endif; ?>
           						</div>
           						
         						<div class="hidden">
