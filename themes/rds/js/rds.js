@@ -50,3 +50,10 @@
  function userAction() {
    return false;
  }
+
+function myhelp(a,b) {
+      jQuery("#tippHeader").text(a);
+      jQuery("#tippBody").html(b);
+      jQuery("#searchTipps").show();
+}
+
