@@ -158,17 +158,18 @@ $recordTotal = $this->results->getResultTotal();
   <div class="<?=$this->layoutClass('sidebar')?> sidebar-offset">
     <? /* add Search-History and Favorites to sidebar */ ?>
     <ul>
-           <li><a href="<?=$this->url('home') ?>Search/History"><?=$this->transEsc('RDS_RDSHistory')?></a></li>
-          
+
             <?if ($this->auth()->isLoggedIn()): ?>
-                <li><a href="<?=$this->url('home') ?>MyResearch"><?=$this->transEsc('RDS_RDSFavorites')?></a></li>
+                <li><a href="<?=$this->url('myresearch-home') ?>"><?=$this->transEsc('RDS_RDSFavorites')?></a></li>
             <?else: ?>
                 <? $cart = $this->cart(); if ($cart->isActive()): ?>
                   <li id="cartSummary">
-                    <a id="cartItems" class="modal-link" title="<?=$this->transEsc('View Book Bag')?>" href="<?=$this->url('cart-home')?>"><i class="fa fa-suitcase"></i> <strong><?=count($cart->getItems())?></strong> <?=$this->transEsc('items')?><?=$cart->isFull() ? ' (' .  $this->transEsc('bookbag_full') . ')' : ''?></a>
+                    <a id="cartItems" class="modal-link" title="<?=$this->transEsc('RDS_RDSFavorites')?>" href="<?=$this->url('cart-home')?>"><?=$this->transEsc('RDS_RDSFavorites')?> (<strong><?=count($cart->getItems())?></strong>)</a>
                   </li>
                 <? endif; ?>
              <?endif; ?>
+
+           <li><a href="<?=$this->url('home') ?>Search/History"><?=$this->transEsc('RDS_RDSHistory')?></a></li>
     </ul>
     <? foreach ($this->results->getRecommendations('side') as $current): ?>
       <?=$this->recommend($current)?>

@@ -109,7 +109,7 @@
     <ul>
 
             <?if ($this->auth()->isLoggedIn()): ?>
-                <li><a href="<?=$this->url('home') ?>MyResearch"><?=$this->transEsc('RDS_RDSFavorites')?></a></li>
+                <li><a href="<?=$this->url('myresearch-home') ?>"><?=$this->transEsc('RDS_RDSFavorites')?></a></li>
             <?else: ?>
                 <? $cart = $this->cart(); if ($cart->isActive()): ?>
                   <li id="cartSummary">
