@@ -76,9 +76,6 @@
 
   <div class="<?=$this->layoutClass('sidebar')?> sidebar-offset sidebar-fav-admin">
     <?=$this->context($this)->renderInContext("myresearch/menu.phtml", array('active' => isset($list) ? 'list' . $list['id'] : 'favorites'))?>
-    
-    <h4 class="fav-action-title"><?=$this->transEsc('RDS_FAVLIST_MANAGE_ITEMS')?></h4>
-    <?=$this->context($this)->renderInContext('myresearch/bulk-action-buttons.phtml', array('idPrefix' => '', 'list' => isset($list) ? $list : null, 'account' => $this->account))?>
   </div>
   
   <div class="<?=$this->layoutClass('sidebar')?> sidebar-offset sidebar-fav-info">

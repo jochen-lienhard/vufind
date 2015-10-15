@@ -286,8 +286,9 @@
             <a href="/Cart/doExport" class="fa fa-print doExportRecord" data-id="<?=$this->driver->getResourceSource()?>|<?=$this->driver->getUniqueID()?>"></a>
     
             <?if ($this->favorites): ?>
-                <a class="fa fa-fw fa-edit edit tool" href="<?=$this->url('myresearch-edit')?>?id=<?=urlencode($ppn)?>&amp;source=<?=urlencode($source)?><? if (!is_null($list_id)):?>&amp;list_id=<?=urlencode($list_id)?><? endif; ?>"></a>
-                
+                <?if (!is_null($list_id)): ?>
+                  <a class="fa fa-fw fa-edit edit tool" href="<?=$this->url('myresearch-edit')?>?id=<?=urlencode($ppn)?>&amp;source=<?=urlencode($source)?><? if (!is_null($list_id)):?>&amp;list_id=<?=urlencode($list_id)?><? endif; ?>"></a>
+                <?endif; ?>
                 <? /* Use a different delete URL if we're removing from a specific list or the overall favorites: */
                   $deleteUrl = null === $list_id
                       ? $this->url('myresearch-favorites')
@@ -295,6 +296,7 @@
                   $deleteUrlGet = $deleteUrl . '?delete=' . urlencode($id) . '&amp;source=' . urlencode($source);
                   $dLabel = 'delete-label-' . preg_replace('[\W]','-',$id);
                 ?>
+                <?if (!is_null($list_id)): ?>
                 <div class="dropdown">
                   <a class="dropdown-toggle" id="<?=$dLabel ?>" role="button" data-toggle="dropdown" data-target="#" href="<?=$deleteUrlGet ?>">
                     <i class="fa fa-fw fa-trash-o"></i>
@@ -304,6 +306,7 @@
                     <li><a><?=$this->transEsc('confirm_dialog_no')?></a></li>
                   </ul>
                 </div>
+                <?endif; ?>
                 <?=$this->record($this->driver)->getCheckbox() ?>
             <?endif; ?>
         <? endif; ?>
