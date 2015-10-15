@@ -62,8 +62,12 @@
 			});
 
 			$('.trigger-close a').on(metanavigation.clickListener, function(e) {
-				metanavigation.activeMenuUid = false;
-				metanavigation._closeMetaLayer();
+				metanavigation._closeAll();
+			});
+
+			// listen to event when user clicks somewhere outside metanavigation and close down everything
+			$(document).on("clickOutsideMetanavigation", function() {
+				metanavigation._closeAll();
 			});
 
 
@@ -91,6 +95,9 @@
 		},
 
 		_openMetaLayer: function() {
+			$.event.trigger({
+				type: "openMetaNavigation"
+			});
 			$(metanavigation.metaLayer).addClass('open-meta');
 		},
 
@@ -105,7 +112,6 @@
 					$.ajax({
 						url: url,
 						complete: function(data) {
-							console.log(data.responseText);
 							metanavigation.handleContentReplacement(data.responseText);
 						}
 					});
@@ -115,6 +121,12 @@
 
 		handleContentReplacement: function (content) {
 			$(metanavigation.metaContentContainer).html(content);
+		},
+
+		_closeAll: function () {
+			metanavigation.activeMenuUid = false;
+			metanavigation._setActiveClass();
+			metanavigation._closeMetaLayer();
 		}
 
 	};

@@ -78,30 +78,32 @@
 	<?=$this->headScript()?>
 </head>
 
-<body class="page-layout-search section-color-10 <?=$this->layoutClass('offcanvas-row')?><? if ($this->layout()->rtl): ?> rtl<? endif; ?>">
+<body class="page-layout-catalog section-color-7 <?=$this->layoutClass('offcanvas-row')?><? if ($this->layout()->rtl): ?> rtl<? endif; ?>">
 
 	<div id="metaNavigationPanel">
 		<div class="container">
 			<div class="row">
 				<div class="col-md-12">
 					<div class="trigger-close"><a class="ui-trigger"><span class="icon icon-ubfr-close"></span></a></div>
-					<div class="meta-content"></div>
+					<div class="meta-content">
+					</div>
 				</div>
 			</div>
 		</div>
 	</div>
 
-
 	<header role="banner" id="pageHead" class="hidden-print">
+		<div class="container">
+			<div class="row">
+				<div class="col col-md-12">
+					<div class="header-banner">
 
-			<div class="container">
-				<div class="row">
-					<div class="col-md-12">
 						<div id="pageLogo">
 							<a href="/">
 								<img src="<?=$this->imageLink('/probebetrieb/ub-freiburg-logo-probebetrieb.svg')?>" alt="Universitätsbibliothek Freiburg" />
 							</a>
 						</div>
+
 						<nav id="mainNavigation" role="navigation">
 							<?=$this->render('websiteAssets/mainNavigation.phtml')?>
 						</nav>
@@ -109,33 +111,24 @@
 						<nav id="metaNavigation" role="navigation">
 							<?=$this->render('websiteAssets/metaNavigation.phtml')?>
 						</nav>
-<? /*
-<?
-      if (!isset($this->layout()->searchbox)) {
-        $this->layout()->searchbox = $this->render('search/searchbox.phtml');
-      }
-?>
 
-      <?=$this->layout()->searchbox ?>
-*/ ?>
-
-
-						<div class="probebetrieb-navigation">
-							<div class="content">
-								<span class="heading">Probebetrieb</span>
-								<ul>
-									<li><a href="/probebetrieb/was-bedeutet-probebetrieb/">Der Probebetrieb</a></li>
-									<li><a href="/probebetrieb/was-ist-neu/">Neu</a></li>
-								</ul>
-							</div>
+						<div class="page-title">
+							<span class="title">Suche im Katalog Plus</span>
+							<span class="subtitle">ToDo</span>
 						</div>
-						<div class="probebetrieb-layer-02"></div>
+
+						<?
+						if (!isset($this->layout()->searchbox)) {
+							$this->layout()->searchbox = $this->render('search/searchbox.phtml');
+						}
+						?>
+
+						<?=$this->layout()->searchbox ?>
 
 					</div>
 				</div>
 			</div>
 		</div>
-
 	</header>
 
 	<div id="contentWrapper" role="main" class="main template-dir-<?=$this->templateDir?> template-name-<?=$this->templateName?>">

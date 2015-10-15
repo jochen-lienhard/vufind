@@ -20,8 +20,24 @@
     $renderSearchTabs = false;
 ?>
 <? if ($this->searchType == 'advanced'): ?>
+
+
+	<!-- New advanced search slot starts here -->
+	<div id="searchSlot" class="centered collapsed">
+
+                <span class="icon icon-ubfr-search"></span>
+
+		<div class="switch-search">
+			<a href="<?=$this->url($advSearch)?>" class="switch-advanced link-internal">Zur erweiterten Suche</a>
+			<a href="<?=$this->url($searchHome)?>" class="switch-simple link-internal">Zur einfachen Suche</a>
+		</div>
+
+	</div>
+	<!-- New advanced search slot ends here -->
+
+
+
 	<? // TODO: We currently have no advanced search. No styles or restructuring has been made at this point ?>
-        <div id ="miniSearch"></div>
 	<div id="searchForm" class="navbar-form navbar-left">
 		<? if ($renderSearchTabs) $tabs = $this->render('search/searchTabs'); ?>
 		<? if (!empty($tabs)): ?><?=$tabs ?><div class="tab-content clearfix"><? endif; ?>
@@ -30,19 +46,19 @@
 			<p class="adv_search_links">
 				<a href="<?=$this->url($advSearch)?>?edit=<?=$this->escapeHtmlAttr($this->searchId)?>"><?=$this->transEsc("Edit this Advanced Search")?></a> |
 				<a href="<?=$this->url($advSearch)?>"><?=$this->transEsc("Start a new Advanced Search")?></a> |
-*/ ?>
 				<a href="<?=$this->url($searchHome)?>"><?=$this->transEsc("Start a new Basic Search")?></a>
-<? /*			</p>  */ ?>
+			</p>  */ ?>
 			<? if (!empty($tabs)): ?></div><? endif; ?>
 	</div>
 <? else: ?>
-	<div id="miniSearch">
+
+        <div id="searchSlot" class="centered">
 		<form role="search" method="get" action="<?=$this->url($basicSearch)?>" name="searchForm" id="searchForm" autocomplete="off">
-			<? if($renderSearchTabs) $tabs=$this->render('search/searchTabs'); ?> 
+			<? if($renderSearchTabs) $tabs=$this->render('search/searchTabs'); ?>
 			<? if (!empty($tabs)): ?><?=$tabs ?><? endif; ?>
 <span class="input-flush">
                                 <input class="searchfield search-query input-prompt<? if($this->searchbox()->autocompleteEnabled($this->searchClassId)):?> autocomplete searcher:<?=$this->escapeHtmlAttr($this->searchClassId) ?><? endif ?>" id="searchForm_lookfor" type="text" name="lookfor" value="<?=$this->escapeHtmlAttr($this->lookfor)?>" data-placeholder="Suche in ..." placeholder="Suche in ..." />
-                                <span class="flush-button hidden"><span class="fa fa-close"></span></span>
+                                <span class="flush-button hidden"><span class="icon icon-fa-close-circle"></span></span>
                         </span>
 
 			<? if ($handlerCount > 1): ?>
@@ -54,12 +70,12 @@
 			<? elseif ($handlerCount == 1): ?>
 				<input type="hidden" name="type" value="<?=$this->escapeHtmlAttr($handlers[0]['value'])?>" />
 			<? endif; ?>
-			<button type="submit" class="hidden-button"><?=$this->transEsc("Find")?></button>
-<? /*
-			<? if ($advSearch): ?>
-				<a href="<?=$this->url($advSearch)?>" class="btn btn-link"><?=$this->transEsc("Advanced")?></a>
-			<? endif; ?>
-*/ ?>
+                        <button type="submit"><span class="icon icon-ubfr-search"></span></button>
+           <? if ($advSearch): ?>
+                <div class="switch-search">
+                        <a href="<?=$this->url($advSearch)?>" class="switch-advanced link-internal">Zur erweiterten Suche</a>
+                </div>
+           <? endif; ?>
 
 			<? $shards = $options->getShards(); if ($options->showShardCheckboxes() && !empty($shards)): ?>
 				<?
@@ -72,10 +88,6 @@
 					<input type="checkbox" <?=$isSelected ? 'checked="checked" ' : ''?>name="shard[]" value='<?=$this->escapeHtmlAttr($shard)?>' /> <?=$this->transEsc($shard)?>
 				<? endforeach; ?>
 			<? endif; ?>
-                        <? /* Link for advSearch */ ?>
-                        <? if ($advSearch): ?>
-                                <a href="<?=$this->url($advSearch)?>" class="btn btn-link"><?=$this->transEsc("Advanced")?></a>
-                        <? endif; ?>
 
                         <? /* Fix for keep filters */ ?>
                         <? if (isset($this->params)) $this->filterList=$this->params->getFilters(); ?>

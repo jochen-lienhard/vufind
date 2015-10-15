@@ -25,10 +25,16 @@
 
 		init: function() {
 			navbar.prepareMainLevel(navbar.options.mainLevelATag);
+			// listen to metanavigation open event and close down all opened menu items
+			$(document).on("clickOutsideMainnavigation", function() {
+				navbar._closeAll();
+			});
 		},
 
 		prepareMainLevel: function(mainLevelATag) {
 			$navbar.find(mainLevelATag).on(navbar.clickListener, function(e){
+
+				//e.stopPropagation();
 
 				var hasSub = $(this).parent().find(navbar.options.subLevelContainer).length;
 
@@ -53,18 +59,16 @@
 		},
 
 		_resetInactiveMenus: function() {
-
-
 			$(navbar.options.mainLevelContainer).find('.'+navbar.openStateClass).each(function() {
-
-				console.log("ICH SETZE ZURÜCK");
-
 				if(navbar.currentMenuId != $(this).data().menuId) {
 					$(this).removeClass(navbar.openStateClass);
 				}
-
 			});
+		},
 
+		_closeAll: function() {
+			$(navbar.options.mainLevelContainer).find('.'+navbar.openStateClass).removeClass(navbar.openStateClass);
+			navbar.currentMenuId = null;
 		}
 
 
