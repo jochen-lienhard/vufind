@@ -1,1 +1,47 @@
 .page-layout-search #miniSearch { position: relative; width: 100%; left: 0; height: 120px; top: 0; margin-bottom: 20px; }
+
+.sidebar-fav-admin, .sidebar-fav-info, .sidebar-fav-history, .sidebar-fav-lists {
+  margin: 16px 0px 0px 0px;
+}
+
+.sidebar-fav-info {
+  background-color:lightgray;
+  color: gray;
+}
+
+.sidebar-fav-admin {
+  background-color: #655e5e;
+}
+
+.sidebar-fav-admin a{
+  color: white;
+  padding: 0px 0px 4px 0px;
+  background-color: transparent;
+  border: none;
+}
+
+.sidebar-fav-history a, .sidebar-fav-admin a{
+  color: white;
+  font-weight: bold;
+}
+
+.search-results-listing {
+    min-height: 750px;
+}
+
+.test {
+  float: right;
+}
+
+.bulk-link {
+  color: white;
+  background-color:transparent;
+  border:none;
+  cursor: pointer;
+  font-size: 85%;
+  
+}
+
+.fav-action-title {
+  padding: 24px 0px 8px 0px; 
+}

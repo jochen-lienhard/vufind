@@ -1,0 +1,52 @@
+<? if ($this->userlist()->getMode() !== 'disabled' && $user = $this->auth()->isLoggedIn()): ?>
+  <h4><?=$this->transEsc('RDS_FAVLIST_LISTS')?></h4>
+  <div class="list-group">
+    <a href="<?=$this->url('myresearch-favorites')?>" class="list-group-item<?=$this->active == 'favorites' ? ' active' : ''?>">
+      <?=$this->transEsc('Your Favorites')?>
+      <span class="pull-right flip"><i class="fa fa-fw fa-star"></i></span>
+    </a>
+    <? $lists = $user->getLists() ?>
+    <? foreach ($lists as $list): ?>
+        <a href="<?=$this->url('userList', array('id' => $list['id']))?>" class="list-group-item<?=$this->active == 'list' . $list['id'] ? ' active' : ''?>">
+          <?=$this->escapeHtml($list['title'])?>
+          <span class="badge"><?=$list->cnt?></span>
+        </a>
+    <? endforeach; ?>
+  </div>
+<? endif ?>
+
+<?
+if (isset($this->results)) {
+    $list = $this->results->getListObject();
+}
+$account = $this->auth()->getManager();
+?>
+
+<h4><?=$this->transEsc('RDS_FAVLIST_MANAGE_LISTS')?></h4>
+
+    <a href="<?=$this->url('editList', array('id'=>'NEW'))?>" title="<?=$this->transEsc('Create a List') ?>" class="btn btn-link">
+        <i class="fa fa-plus"></i> <?=$this->transEsc('Create a List') ?>
+    </a>
+    <br />
+    
+<? if (isset($list)): ?>
+  <? if ($list->editAllowed($account->isLoggedIn())): ?>
+    <a href="<?=$this->url('editList', array('id' => $list->id)) ?>" class="btn btn-link" title="<?=$this->transEsc("edit_list")?>"><i class="fa fa-edit"></i> <?=$this->transEsc("edit_list")?></a>
+    <br />
+    <div class="btn-group">
+      <a class="btn btn-link dropdown-toggle" data-toggle="dropdown" href="<?=$this->url('myresearch-deletelist') ?>?listID=<?=urlencode($list->id)?>">
+        <i class="fa fa-trash-o"></i> <?=$this->transEsc("delete_list")?>
+      </a>
+      <ul class="dropdown-menu">
+        <li><a href="<?=$this->url('myresearch-deletelist') ?>?listID=<?=urlencode($list->id)?>&amp;confirm=1"><?=$this->transEsc('confirm_dialog_yes') ?></a></li>
+        <li><a href="#"><?=$this->transEsc('confirm_dialog_no')?></a></li>
+      </ul>
+    </div>
+    <br />
+      
+  <? endif; ?>
+<? elseif ($recordTotal > 0): ?>
+  <?=$this->transEsc("Showing")?>
+  <strong><?=$this->localizedNumber($this->results->getStartRecord())?></strong> - <strong><?=$this->localizedNumber($this->results->getEndRecord())?></strong>
+  <?=$this->transEsc('of')?> <strong><?=$this->localizedNumber($recordTotal)?></strong>
+<? endif; ?>
