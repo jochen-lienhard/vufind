@@ -1,0 +1,50 @@
+<?
+  $this->searchClassId = 'RDSIndex';
+  $this->createHomeTabs = true;
+  $this->layout()->navigation = $this->render('layout/navigation.phtml');
+?>
+
+<?=$this->layout()->navigation ?>
+
+<?
+  // Set page title.
+  $this->headTitle($this->translate('Search History'));
+
+  // Set up breadcrumbs:
+  $this->layout()->breadcrumbs = '<li><a href="' .  $this->url('myresearch-home') . '">' . $this->transEsc('Your Account') . '</a></li>'
+    . '<li class="active">' . $this->transEsc('History') . '</li>';
+?>
+
+<div class="row">
+  <div class="<?=$this->layoutClass('mainbody')?>">
+    <? if (!empty($this->saved)): ?>
+      <h2><?=$this->transEsc("history_saved_searches")?></h2>
+      <?=$this->context()->renderInContext('search/history-table.phtml', array('showSaved' => true));?>
+    <? endif; ?>
+
+    <h2><?=$this->transEsc("history_recent_searches")?></h2>
+    <? if (!empty($this->unsaved)): ?>
+      <?=$this->context()->renderInContext('search/history-table.phtml', array('showSaved' => false));?>
+    <? else: ?>
+      <?=$this->transEsc("history_no_searches")?>
+    <? endif; ?>
+  </div>
+
+  <div class="<?=$this->layoutClass('sidebar')?>">
+      <div class="sidebar-link">
+        <?if ($this->auth()->isLoggedIn()): ?>
+            <a href="<?=$this->url('myresearch-home') ?>"><?=$this->transEsc('RDS_RDSFavorites')?> <i class="fa fa-arrow-right"></i></a>
+        <?else: ?>
+            <? $cart = $this->cart(); if ($cart->isActive()): ?>
+                <a id="cartItems" class="modal-link" title="<?=$this->transEsc('RDS_RDSFavorites')?>" href="<?=$this->url('cart-home')?>"><?=$this->transEsc('RDS_RDSFavorites')?> (<strong><?=count($cart->getItems())?></strong>)</a>
+            <? endif; ?>
+        <?endif; ?>
+    </div>
+  </div>
+
+  <div class="<?=$this->layoutClass('sidebar')?> sidebar-offset sidebar-fav-admin">
+    <h4><?=$this->transEsc('RDS_HISTORY_ADMIN')?></h4>
+    <a href="?purge=true"><i class="fa fa-remove"></i> <?=$this->transEsc("history_purge")?></a>
+  </div>
+      
+</div>

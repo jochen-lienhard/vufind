@@ -1,0 +1,22 @@
+<div class="sidebar-link">
+    <?if ($this->auth()->isLoggedIn()): ?>
+        <a href="<?=$this->url('myresearch-home') ?>"><?=$this->transEsc('RDS_RDSFavorites')?> <i class="fa fa-arrow-right"></i></a>
+    <?else: ?>
+        <? $cart = $this->cart(); if ($cart->isActive()): ?>
+            <a id="cartItems" class="modal-link" title="<?=$this->transEsc('RDS_RDSFavorites')?>" href="<?=$this->url('cart-home')?>"><?=$this->transEsc('RDS_RDSFavorites')?> (<strong><?=count($cart->getItems())?></strong>)</a>
+        <? endif; ?>
+    <?endif; ?>
+</div>
+
+<div class="sidebar-link">
+   <a href="<?=$this->url('home') ?>Search/History"><?=$this->transEsc('RDS_RDSHistory')?> <i class="fa fa-arrow-right"></i></a>
+</div>
+        
+<span class="simple-link autoheight-element sidebar-note">
+   <span class="link-heading">
+   <?=$this->transEsc("RDS_HOME_HELP_" . $this->searchClassId);?>
+   </span>
+   <span class="link-caption">
+   <?=$this->translate("RDS_HOME_HELP_" . $this->searchClassId . "_TEXT"); ?>
+   </span>
+</span>

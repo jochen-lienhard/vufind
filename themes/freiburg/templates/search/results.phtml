@@ -154,26 +154,30 @@ $recordTotal = $this->results->getResultTotal();
   </div>
   <? /* End Main Listing */ ?>
 
-  <? /* Narrow Search Options */ ?>
-  <div class="<?=$this->layoutClass('sidebar')?> sidebar-offset">
-    <? /* add Search-History and Favorites to sidebar */ ?>
-    <ul>
 
-            <?if ($this->auth()->isLoggedIn()): ?>
-                <li><a href="<?=$this->url('myresearch-home') ?>"><?=$this->transEsc('RDS_RDSFavorites')?></a></li>
-            <?else: ?>
-                <? $cart = $this->cart(); if ($cart->isActive()): ?>
-                  <li id="cartSummary">
-                    <a id="cartItems" class="modal-link" title="<?=$this->transEsc('RDS_RDSFavorites')?>" href="<?=$this->url('cart-home')?>"><?=$this->transEsc('RDS_RDSFavorites')?> (<strong><?=count($cart->getItems())?></strong>)</a>
-                  </li>
-                <? endif; ?>
-             <?endif; ?>
-
-           <li><a href="<?=$this->url('home') ?>Search/History"><?=$this->transEsc('RDS_RDSHistory')?></a></li>
-    </ul>
-    <? foreach ($this->results->getRecommendations('side') as $current): ?>
-      <?=$this->recommend($current)?>
-    <? endforeach; ?>
-  </div>
-  <? /* End Narrow Search Options */ ?>
+  <? if ($recordTotal > 0): ?>
+      <? /* Narrow Search Options */ ?>
+      <div class="<?=$this->layoutClass('sidebar')?> sidebar-results ">
+      
+        <div class="sidebar-link">
+          <?if ($this->auth()->isLoggedIn()): ?>
+            <a href="<?=$this->url('myresearch-home') ?>"><?=$this->transEsc('RDS_RDSFavorites')?> <i class="fa fa-arrow-right"></i></a>
+          <?else: ?>
+            <? $cart = $this->cart(); if ($cart->isActive()): ?>
+                <a id="cartItems" class="modal-link" title="<?=$this->transEsc('RDS_RDSFavorites')?>" href="<?=$this->url('cart-home')?>"><?=$this->transEsc('RDS_RDSFavorites')?> (<strong><?=count($cart->getItems())?></strong>)</a>
+            <? endif; ?>
+        <?endif; ?>
+        </div>
+        <div class="sidebar-link">
+          <a href="<?=$this->url('home') ?>Search/History"><?=$this->transEsc('RDS_RDSHistory')?> <i class="fa fa-arrow-right"></i></a>
+        </div>
+      
+        <div class="sidebar-recommendations">
+            <? foreach ($this->results->getRecommendations('side') as $current): ?>
+              <?=$this->recommend($current)?>
+            <? endforeach; ?>
+        </div>
+      </div>
+      <? /* End Narrow Search Options */ ?>
+  <?endif; ?>
 </div>

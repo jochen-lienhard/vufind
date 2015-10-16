@@ -33,17 +33,8 @@
            </span>
         </span>
      </div>
-
      <div class="col-sm-3 col-xs-3 csc-default">
-        <span class="simple-link autoheight-element">
-           <span class="link-heading">
-           <?=$this->transEsc("RDS_HOME_HELP_" . $this->searchClassId);?>
-           </span>
-           <span class="link-caption">
-           <?=$this->translate("RDS_HOME_HELP_" . $this->searchClassId . "_TEXT"); ?>
-           </span>
-        </span>
-
+        <?=$this->render("layout/sidebar-home.phtml"); ?>
      </div>
   </div>
 

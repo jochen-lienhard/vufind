@@ -20,9 +20,37 @@
   border: none;
 }
 
-.sidebar-fav-history a, .sidebar-fav-admin a{
+.sidebar-fav-history a, 
+.sidebar-fav-admin a, 
+.sidebar-link a{
   color: white;
   font-weight: bold;
+}
+
+.sidebar-link {
+  color: white;
+  padding: 15px;
+  margin: 8px -15px 8px -15px;
+  background-color: #28afe1;
+  border: none;
+}
+
+.sidebar-results {
+  background-color:transparent;
+}
+
+.sidebar-recommendations {
+  background-color: gray;
+  margin: 8px -15px 8px -15px;
+  padding: 15px;
+}
+
+.sidebar-note {
+  margin: 8px -15px 8px -15px;
+}
+
+.sidebar-link a {
+  color:white;
 }
 
 .search-results-listing {
