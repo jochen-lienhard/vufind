@@ -13,6 +13,9 @@
     $list_id = null;
     $user_id = $this->user ? $this->user->id : null;
   }
+  
+  $target = $this->url('myresearch-home') . '?followupUrl=' . $this->serverUrl(true)
+  
   ?>
 
 
@@ -29,7 +32,7 @@
 
               <? if($this->driver->getGuestView() == 'login'): ?>
                 <? if($this->auth()->isLoggedIn() === false ): ?>
-                  <? if ($sessionInitiator = $account->getSessionInitiator($this->serverUrl(true))): ?>
+                  <? if ($sessionInitiator = $account->getSessionInitiator($target)): ?>
                     <a href="<?=$this->escapeHtmlAttr($sessionInitiator)?>" class="login-link"><?=$this->transEsc("RDS_AUTHORIZED_USERS_ONLY")?></a>
                   <? else: ?>
                     <a href="<?=$this->url('myresearch-userlogin')?>" class="login-link" title="<?=$this->transEsc("RDS_AUTHORIZED_USERS_ONLY")?>"><?=$this->transEsc("RDS_AUTHORIZED_USERS_ONLY")?></a>
@@ -46,7 +49,7 @@
 
                   <? if($this->driver->getGuestView() == 'brief' && $this->auth()->isLoggedIn() === false): ?>
                     <div>
-                      <? if ($sessionInitiator = $account->getSessionInitiator($this->serverUrl($this->url('myresearch-home')))): ?>
+                      <? if ($sessionInitiator = $account->getSessionInitiator($target)): ?>
                         <a href="<?=$this->escapeHtmlAttr($sessionInitiator)?>" class="login-link"><?=$this->transEsc("RDS_MORE_INFO_FOR_AUTHORIZED_USERS") ?></a>
                       <? else: ?>
                         <a href="<?=$this->url('myresearch-userlogin')?>" class="login-link" title="<?=$this->transEsc("RDS_MORE_INFO_FOR_AUTHORIZED_USERS") ?>"><?=$this->transEsc("RDS_MORE_INFO_FOR_AUTHORIZED_USERS") ?></a>
