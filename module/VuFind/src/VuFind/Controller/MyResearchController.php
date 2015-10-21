@@ -107,7 +107,13 @@ class MyResearchController extends AbstractBase
         }
         // Logged in?  Forward user to followup action
         // or default action (if no followup provided):
-        if ($url = $this->getFollowupUrl()) {
+
+        $url = $this->params()->fromQuery('followupUrl', null);
+        if (!isset($url)) {
+            $url = $this->getFollowupUrl();
+        }
+        
+        if ($url) {
             $this->clearFollowupUrl();
             // If a user clicks on the "Your Account" link, we want to be sure
             // they get to their account rather than being redirected to an old
