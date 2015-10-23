@@ -429,16 +429,16 @@ class RDSIndexHolding extends \Zend\View\Helper\AbstractHelper implements Transl
     {
         $localstatus = "";
         switch ($item["status"]) {
-        case "borrowable": $localstatus = "RDS_AVAIL"; 
+        case "borrowable": $localstatus = $this->translate("RDS_AVAIL"); 
             break;
-        case "order": $localstatus = "RDS_ORDER"; 
+        case "order": $localstatus = $this->translate("RDS_ORDER"); 
             break;
         case "unknown": 
             if ($item["notes"] == "provided") {
-                $localstatus = "RDS_WAITING";
+                $localstatus = $this->translate("RDS_WAITING");
             }
             if ($item["notes"] == "missing") {
-                $localstatus = "RDS_MISSING";
+                $localstatus = $this->translate("RDS_MISSING");
             }
             break;
         case "lent": 
@@ -458,9 +458,9 @@ class RDSIndexHolding extends \Zend\View\Helper\AbstractHelper implements Transl
             break;
         case "present":
             if ($lok_set["status"] == "p") {
-                $localstatus = "RDS_REF_STOCK_SPECIAL";
+                $localstatus = $this->translate("RDS_REF_STOCK_SPECIAL");
             } else {
-                $localstatus = "RDS_REF_STOCK_TEXT";
+                $localstatus = $this->translate("RDS_REF_STOCK_TEXT");
             }
             break;
         }
