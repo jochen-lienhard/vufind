@@ -7,7 +7,9 @@
     $fulltextLinks = '';
   }
   $authManager = $this->auth()->getManager();
-  $sessionInitiator = $authManager->getSessionInitiator($this->serverUrl($this->url('myresearch-home')));
+  
+  $target = $this->serverUrl() . $_SESSION['Search']['last'];
+  $sessionInitiator = $authManager->getSessionInitiator($target);
   if ($sessionInitiator) {
     $loginLink = $this->escapeHtmlAttr($sessionInitiator);
   } else {
@@ -18,7 +20,7 @@
 <?if ($proxyHelper->isFulltextView()): ?>
   <?if ($fulltextLinks || $infoLinks): ?>
     <div class="tg">
-      <h2><?=$this->transEsc("RDS_ELECTRONTIC_FULLTEXT")?></h2>
+      <h2><?=$this->transEsc("RDS_PROXY_HOLDINGS_ELECTRONIC_FULLTEXT")?></h2>
       
       <?if ($fulltextLinks): ?>
         <?foreach ($fulltextLinks as $fulltextLink): ?>
@@ -27,26 +29,26 @@
               <?if ($this->auth()->isLoggedIn() === false):?>
                 <span class="t_ezb_yellow"></span>
                 <a style="text-decoration: none;" href='<?=$loginLink ?>'; return false;">
-                    <?=$this->transEsc("RDS_PROXY_PDF_FULLTEXT")?> (via <?=$fulltextLink['provider']?>) <?=$this->transEsc("RDS_PROXY_HOLDINGS_FOR_AUTHORIZED_USERS_ONLY")?>
+                    <?=$this->transEsc("RDS_PROXY_HOLDINGS_PDF_FULLTEXT")?> (via <?=$fulltextLink['provider']?>) <?=$this->transEsc("RDS_PROXY_HOLDINGS_AUTHORIZED_USERS_ONLY_LOGIN")?>
                 </a>
               <?elseif ($this->driver->getGuestView() == 'brief'):?>
                 <span class="t_ezb_yellow"></span>
-                <?=$this->transEsc("RDS_PROXY_PDF_FULLTEXT")?> (via <?=$fulltextLink['provider']?>) - <?=$this->transEsc("RDS_PROXY_FOR_AUTHORIZED_USERS_ONLY")?>
+                <?=$this->transEsc("RDS_PROXY_HOLDINGS_PDF_FULLTEXT")?> (via <?=$fulltextLink['provider']?>) - <?=$this->transEsc("RDS_PROXY_AUTHORIZED_USERS_ONLY")?>
               <?endif;?>
             <?elseif ($fulltextLink['indicator'] != 2):?>
                 <div class="t_ezb_result">
                   <p>
                       <?if ($fulltextLink['type'] == "pdf"):?>
                         <span class="t_ezb_yellow"></span>
-                        <?=$this->transEsc("RDS_PROXY_PDF_FULLTEXT")?> (via <?=$fulltextLink['provider']?>)
+                        <?=$this->transEsc("RDS_PROXY_HOLDINGS_PDF_FULLTEXT")?> (via <?=$fulltextLink['provider']?>)
                       <?endif;?>
                       <?if ($fulltextLink['type'] == "html"):?>
                         <span class="t_ezb_yellow"></span>
-                        <?=$this->transEsc("RDS_PROXY_HTML_FULLTEXT")?> (via <?=$fulltextLink['provider']?>)
+                        <?=$this->transEsc("RDS_PROXY_HOLDINGS_HTML_FULLTEXT")?> (via <?=$fulltextLink['provider']?>)
                       <?endif;?>
                       <?if ($fulltextLink['type'] == "external"):?>
                         <span class="t_ezb_{$fulltextLink.access}"></span>
-                        <?=$this->transEsc("RDS_PROXY_TO_THE_FULLTEXT")?> (via <?=$fulltextLink['provider']?>)
+                        <?=$this->transEsc("RDS_PROXY_HOLDINGS_TO_THE_FULLTEXT")?> (via <?=$fulltextLink['provider']?>)
                       <?endif;?>
                     <span class="t_link"><a target="_blank" href="<?=$fulltextLink['url']?>">&#187;</a></span>
                   </p>
@@ -72,9 +74,9 @@
 
   <?if ($proxyHelper->isLinkresolverView() && (!empty($fulltextLinks) || !empty($infoLinks))):?>
     <div class="tg">
-      <h2><?=$this->transEsc("RDS_PROXY_MORE_SOURCES")?></h2>
+      <h2><?=$this->transEsc("RDS_PROXY_HOLDINGS_MORE_SOURCES")?></h2>
       <p>
-        <a class="redi_links_icon" target="linkresolver" href="<?=$this->driver->getOpenUrlExternal();?>" title="<?=$this->transEsc("RDS_PROXY_REDI_LINKS")?>"></a>
+        <a class="redi_links_icon" target="linkresolver" href="<?=$this->driver->getOpenUrlExternal();?>" title="<?=$this->transEsc("RDS_PROXY_HOLDINGS_REDI_LINKS")?>"></a>
       </p>
     </div>
   <?endif;?>
