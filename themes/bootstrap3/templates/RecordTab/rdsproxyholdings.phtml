@@ -8,7 +8,9 @@
   }
   $authManager = $this->auth()->getManager();
   
-  $target = $this->serverUrl() . $_SESSION['Search']['last'];
+  $followupUrl = $this->serverUrl() . $_SESSION['Search']['last'];
+  $target = $this->url('myresearch-home') . '?followupUrl=' . $followupUrl;
+  
   $sessionInitiator = $authManager->getSessionInitiator($target);
   if ($sessionInitiator) {
     $loginLink = $this->escapeHtmlAttr($sessionInitiator);
