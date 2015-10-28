@@ -490,6 +490,7 @@ $config = [
                 'invokables' => [
                     'description' => 'VuFind\RecordTab\Description',
                     'rdsindexdescription' => 'VuFind\RecordTab\RDSIndexDescription',
+                    'rdsproxydescription' => 'VuFind\RecordTab\RDSProxyDescription',
                     'staffviewarray' => 'VuFind\RecordTab\StaffViewArray',
                     'staffviewmarc' => 'VuFind\RecordTab\StaffViewMARC',
                     'toc' => 'VuFind\RecordTab\TOC',
@@ -636,7 +637,7 @@ $config = [
             'VuFind\RecordDriver\RDSProxy' => [
                 'tabs' => [
                     'Holdings' => 'RDSProxyHoldings',
-                    'Description' => 'Description',
+                    'Description' => 'RDSProxyDescription',
                     'Details' => 'StaffViewArray',
                  ],
                  'defaultTab' => null,

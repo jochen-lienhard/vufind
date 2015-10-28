@@ -1,0 +1,60 @@
+<?
+    // Set page title.
+    $this->headTitle($this->translate('Description') . ': ' . $this->driver->getBreadcrumb());
+
+    // Grab clean ISBN for convenience:
+    $isbn = $this->driver->getCleanISBN();
+?>
+<table class="table table-striped" summary="<?=$this->transEsc('Description___')?>">
+  <? $subjectsGeneral = $this->driver->getSubjectsGeneral(); if (!empty($subjectsGeneral)): ?>
+    <? $contentDisplayed = true; ?>
+    <tr>
+      <th><?=$this->transEsc('Subjects')?>: </th>
+      <td>
+        <? foreach ($subjectsGeneral as $field): ?>
+          <?=$this->escapeHtml($field)?><br/>
+        <? endforeach; ?>
+      </td>
+    </tr>
+  <? endif; ?>
+  
+    <? $abstracts = $this->driver->getAbstracts(); if (!empty($abstracts)): ?>
+    <? $contentDisplayed = true; ?>
+    <tr>
+      <th><?=$this->transEsc('Abstracts')?>: </th>
+      <td>
+        <? foreach ($abstracts as $field): ?>
+          <?=$this->escapeHtml($field)?><br/>
+        <? endforeach; ?>
+      </td>
+    </tr>
+  <? endif; ?>
+  
+    <? $review = $this->driver->getReview(); if (!empty($review)): ?>
+    <? $contentDisplayed = true; ?>
+    <tr>
+      <th><?=$this->transEsc('Review')?>: </th>
+      <td>
+        <? foreach ($review as $field): ?>
+          <?=$this->escapeHtml($field)?><br/>
+        <? endforeach; ?>
+      </td>
+    </tr>
+  <? endif; ?>
+  
+    <? $reviewers = $this->driver->getReviewers(); if (!empty($reviewers)): ?>
+    <? $contentDisplayed = true; ?>
+    <tr>
+      <th><?=$this->transEsc('Reviewers')?>: </th>
+      <td>
+        <? foreach ($reviewers as $field): ?>
+          <?=$this->escapeHtml($field)?><br/>
+        <? endforeach; ?>
+      </td>
+    </tr>
+  <? endif; ?>
+  
+  <? if (!isset($contentDisplayed) || !$contentDisplayed): // Avoid errors if there were no rows above ?>
+    <tr><td><?=$this->transEsc('no_description')?></td></tr>
+  <? endif; ?>
+</table>

@@ -1960,4 +1960,40 @@ class RDSProxy extends SolrDefault
 
     */
 
+    public function getSubjects($category)
+    {
+    	if(isset($this->fields['subjects']) && isset($this->fields['subjects'][$category])) {
+    		return $this->fields['subjects'][$category];
+    	} else {
+    		return array();
+    	}
+    }
+
+    public function getSubjectsGeneral()
+    {
+    	return $this->getSubjects('general');
+    }
+    
+    public function getAbstracts()
+    {
+    	return (isset($this->fields['abstracts']) ? $this->fields['abstracts'] : '');
+    }
+    
+    public function getReview()
+    {
+    	return (isset($this->fields['review']) ? $this->fields['review'] : '');
+    } 
+    
+    public function getReviewers()
+    {
+    	$result = array();
+    	if(isset($this->fields['reviewers'])) {
+    		$result = $this->fields['reviewers'];
+    		for($i = 0; $i < count($result); $i++) {
+    			$result[$i] = preg_replace('| [0-9]+$|', '', $result[$i]);
+    		}
+    	}
+    	return implode(' ; ', $result);
+    } 
+    
 }
