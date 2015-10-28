@@ -1809,6 +1809,37 @@ class RDSIndex extends SolrMarc
     }
 
     /**
+     * Get  LOC of title 
+     * RDS
+     * @return array
+     */
+    public function getLoc()
+    {
+        return isset($this->fields['loc']) ? ($this->fields['loc']) : '';
+    }
+
+    /**
+     * Get  DDC of title 
+     * RDS
+     * @return array
+     */
+    public function getDdc()
+    {
+        return isset($this->fields['ddc']) ? ($this->fields['ddc']) : '';
+    }
+
+    /**
+     * Get  MSH of title 
+     * RDS
+     * @return array
+     */
+    public function getMsh()
+    {
+        return isset($this->fields['mesh']) ? ($this->fields['mesh']) : '';
+    }
+
+
+    /**
      * Get  edition of title 
      * RDS
      * @return array
