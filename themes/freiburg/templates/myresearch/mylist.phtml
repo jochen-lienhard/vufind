@@ -39,7 +39,26 @@
 
   <div class="<?=$this->layoutClass('mainbody')?>">
     <div class="clearfix hidden-print">
-      
+    
+      <h2 class="pull-left flip"><?=$list ? $this->escapeHtml($list->title) : $this->transEsc("Your Favorites")?> (<?=$recordTotal?>) </h2>
+        
+      <div class="fav-list-actions">
+        <? if ($list && $list->editAllowed($account->isLoggedIn())): ?>
+          <div class="btn-group">
+            <a class="btn btn-link dropdown-toggle" title="<?=$this->transEsc("delete_list")?>" data-toggle="dropdown" href="<?=$this->url('myresearch-deletelist') ?>?listID=<?=urlencode($list->id)?>">
+              <i class="fa fa-trash-o"></i>
+            </a>
+            <ul class="dropdown-menu">
+              <li><a href="<?=$this->url('myresearch-deletelist') ?>?listID=<?=urlencode($list->id)?>&amp;confirm=1"><?=$this->transEsc('confirm_dialog_yes') ?></a></li>
+              <li><a href="#"><?=$this->transEsc('confirm_dialog_no')?></a></li>
+            </ul>
+          </div>
+          <a href="<?=$this->url('editList', array('id' => $list->id)) ?>" class="btn btn-link" title="<?=$this->transEsc("edit_list")?>">
+            <i class="fa fa-cog"></i>
+          </a>
+        <? endif; ?>
+      </div>
+    
     </div>
   <? if ($list && !empty($list->description)): ?>
     <p><?=$this->escapeHtml($list->description)?></p>
@@ -75,8 +94,13 @@
   </div>
 
   <div class="<?=$this->layoutClass('sidebar')?> sidebar-offset sidebar-fav-admin">
-    <?=$this->context($this)->renderInContext("myresearch/menu.phtml", array('active' => isset($list) ? 'list' . $list['id'] : 'favorites'))?>
+    <?=$this->context($this)->renderInContext("myresearch/menu-fav-items.phtml", array('active' => isset($list) ? 'list' . $list['id'] : 'favorites'))?>
   </div>
+  
+  <div class="<?=$this->layoutClass('sidebar')?> sidebar-offset sidebar-fav-admin">
+    <?=$this->context($this)->renderInContext("myresearch/menu-fav-lists.phtml", array('active' => isset($list) ? 'list' . $list['id'] : 'favorites'))?>
+  </div>
+  
   
   <div class="<?=$this->layoutClass('sidebar')?> sidebar-offset sidebar-fav-info">
     <h4><?=$this->transEsc('RDS_FAVLIST_INFO_TITLE')?></h4>

@@ -70,6 +70,7 @@
   
 }
 
-.fav-action-title {
-  padding: 24px 0px 8px 0px; 
+.fav-list-actions {
+  padding-top: 30px;
+  text-align: right;
 }
