@@ -121,17 +121,6 @@
         </tr>
       <? endif; ?>
 
-<? // TODO only for Hohenheim???? TODO ?>
-      <? $titleCut = $this->driver->getTitleCut(); if (!empty($titleCut)): ?>
-      <tr>
-        <th><?=$this->transEsc('RDS_TITLECUT')?>: </th>
-        <td><? $i = 0; foreach ($titleCut as $cut): ?><?=($i++ == 0)?'':'<br />'?>
-	<?=$this->escapeHtml($cut)?><? endforeach; ?>
-        </td>
-      </tr>
-      <? endif; ?>
-<? // END TODO  ?>
-
       <? $ureihe = $this->driver->getUnterreihe(); if (!empty($ureihe)): ?>
         <tr>
           <th><?=$this->transEsc('RDS_UREIHE')?>: </th>
@@ -171,15 +160,6 @@
           <td><?= $this->escapeHtml($cjkauthor)?></td>
         </tr>
       <? endif; ?>
-
-<? /* only for PHFR TODO not tested TODO */ ?>
-      <? $fn_beigwerk = $this->driver->getFnAttWork(); if (!empty($fn_beigwerk)): ?>
-        <tr>
-          <th><?=$this->transEsc('RDS_FN_BEIGWERK')?>: </th>
-          <td><?= $this->escapeHtml($fn_beigwerk)?></td>
-        </tr>
-      <? endif; ?>
-<? /* END TODO */ ?>
 
      <? $co_display = $this->driver->getCorporation(); ?>	
       <? if (isset($co_display) && !empty($co_display)): ?>

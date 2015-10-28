@@ -57,7 +57,6 @@
         </tr>
       <? endif; ?>
 
-<? // TODO **** not for all bibs  *** TODO ?>
    <? $rvk_no = $this->driver->getNotation(); if (!empty($rvk_no)): ?>
    <? $contentDisplayed = true; ?>
         <tr>
@@ -71,32 +70,6 @@
         </tr>
    <? endif; ?>
 
-<? /* This for HOhenheim, Tuebingen Ulm ... TODO */ ?>
-   <? $rvk_no = $this->driver->getNotation(); $lok_no = $this->driver->getLokNotation();?>
-   <? if ((!empty($rvk_no)) || (!empty($lok_no))): ?>
-   <? $contentDisplayed = true; ?>
-        <tr>
-         <th><?=$this->transEsc('RDS_SY')?>: </th>
-         <td><? if (!empty($rvk_no)): ?>
-	 <? $i = 0; foreach ($rvk_no as $field): ?><?=($i++ == 0)?'':'<br />'?>
-          <a href="<?=$this->record($this->driver)->getLink('rvk', $field['url'])?>"><?=$this->escapeHtml($field['url'])?></a>
-	  <? if (isset($field['txt']) && !empty($field['txt'])): ?>
-	  <?=$this->escapeHtml($field['txt'])?>
-	     <? endif; ?>
-	  <? endforeach; ?>
-	  <? endif; ?>
-	  <? if (!empty($lok_no)): ?>
-	    <? if (!empty($rvk_no)): ?><br /><? endif; ?>
-	     <? $i = 0; foreach ($lok_no as $field): ?><?=($i++ == 0)?'':'<br />'?>
-	         <a href="<?=$this->record($this->driver)->getLink('zr', $field)?>"><?=$this->escapeHtml($field)?></a>
-		 <?=$this->transEsc('BB_'.$field)?>
-	     <? endforeach; ?>
-	  <? endif; ?>
-<? /* TODO END */ ?>	  
-	  
-	  </td>
-        </tr>
-   <? endif; ?>
 
   <? $ct_display = $this->driver->getCT(); ?>
   <? if (isset($ct_display) && !empty($ct_display)): ?>
@@ -115,6 +88,37 @@
     </td>
     </tr>
   <? endif; ?>
+
+   <? $loc = $this->driver->getLoc(); if (!empty($loc)): ?>
+   <? $contentDisplayed = true; ?>
+        <tr>
+         <th><?=$this->transEsc('RDS_LOC')?>: </th>
+         <td><? $i = 0; foreach ($loc as $value): ?><?=($i++ == 0)?'':'<br />'?>
+	 <?=$this->escapeHtml($value)?>
+        <? endforeach; ?></td>
+        </tr>
+   <? endif; ?>
+   
+   <? $ddc = $this->driver->getDdc(); if (!empty($ddc)): ?>
+   <? $contentDisplayed = true; ?>
+        <tr>
+         <th><?=$this->transEsc('RDS_DDC')?>: </th>
+         <td><? $i = 0; foreach ($ddc as $value): ?><?=($i++ == 0)?'':'<br />'?>
+	 <?=$this->escapeHtml($value)?>
+        <? endforeach; ?></td>
+        </tr>
+   <? endif; ?>
+
+   <? $msh = $this->driver->getMsh(); if (!empty($msh)): ?>
+   <? $contentDisplayed = true; ?>
+        <tr>
+         <th><?=$this->transEsc('RDS_MSH')?>: </th>
+         <td><? $i = 0; foreach ($msh as $value): ?><?=($i++ == 0)?'':'<br />'?>
+	 <?=$this->escapeHtml($value)?>
+        <? endforeach; ?></td>
+        </tr>
+   <? endif; ?>
+
 
    <? $lokct = $this->driver->getLokCt(); if (!empty($lokct)): ?>
    <? $contentDisplayed = true; ?>
