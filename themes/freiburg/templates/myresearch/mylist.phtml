@@ -33,7 +33,42 @@
 	<? $this->layout()->navigation = $this->render('layout/navigation.phtml');?>
   <?=$this->layout()->navigation ?>
 </nav>
+
+      <div class="col-xs-3">
+        <? if ($recordTotal > 0): ?>
+
+          <?=$this->paginationControl($this->results->getPaginator()->setPageRange(2), 'Sliding', 'search/pagination.phtml', array('results' => $this->results))?>
+
+        <? else: ?>
+          <p class="lead"><?=$this->transEsc('nohit_heading')?></p>
+        <? endif; ?>
+      </div>
+
+      <div class="col-xs-3">
+        <?=$this->transEsc("RDS_MEDIEN")?>
+          <strong><?=$this->localizedNumber($this->results->getStartRecord())?></strong> - <strong><?=$this->localizedNumber($this->results->getEndRecord())?></strong>
+          <? if (!isset($this->skipTotalCount)): ?>
+            <?=$this->transEsc('of')?> <strong><?=$this->localizedNumber($recordTotal)?></strong>
+          <? endif; ?>
+          <!--
+          <? if (isset($this->overrideSearchHeading)): ?>
+            <?=$this->overrideSearchHeading?>
+          <? elseif ($this->params->getSearchType() == 'basic'): ?>
+            <?=$this->transEsc('for search')?>: <strong>'<?=$this->escapeHtml($lookfor)?>'</strong>,
+          <? endif; ?>
+          <? if ($qtime = $this->results->getQuerySpeed()): ?>
+            <?=$this->transEsc('query time')?>: <?=$this->localizedNumber($qtime, 2).$this->transEsc('seconds_abbrev')?>
+          <? endif; ?>
+          -->
+          
+      </div>
+
+      <div class="col-xs-2">
+          <?=$this->render('search/controls/limit.phtml')?>
+      </div>
 <div class="row">
+
+
   <form class="form-inline" method="post" name="bulkActionForm" action="<?=$this->url('cart-myresearchbulk')?>">
   
 
