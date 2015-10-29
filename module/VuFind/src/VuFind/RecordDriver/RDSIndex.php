@@ -1347,6 +1347,11 @@ class RDSIndex extends SolrMarc
      */
     public function getXML($format)
     {
+        if ($format == 'marc21') {
+            return parent::getXML($format);
+        }
+        
+        
         // For OAI-PMH Dublin Core, produce the necessary XML:
         if ($format == 'oai_dc') {
             $dc = 'http://purl.org/dc/elements/1.1/';

@@ -629,7 +629,7 @@ $config = [
                 'tabs' => [
                     'Holdings' => 'RDSIndexHoldingsILS', 
                     'Description' => 'RDSIndexDescription',
-                    'Details' => 'StaffViewArray',
+                    'Details' => 'StaffViewMARC',
                     'Similar' => 'SimilarItemsCarousel',
                  ],
                 'defaultTab' => null,
