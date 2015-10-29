@@ -57,7 +57,7 @@
         </tr>
       <? endif; ?>
 
-<? // TODO **** not for all bibs  *** TODO ?>
+<? // TODO **** not Hohenheim  *** TODO ?>
    <? $rvk_no = $this->driver->getNotation(); if (!empty($rvk_no)): ?>
    <? $contentDisplayed = true; ?>
         <tr>
@@ -70,8 +70,9 @@
 	  <? endforeach; ?></td>
         </tr>
    <? endif; ?>
+<? /* TODO END */ ?>	  
 
-<? /* This for HOhenheim, Tuebingen Ulm ... TODO */ ?>
+<? /* This for HOhenheim ... TODO */ ?>
    <? $rvk_no = $this->driver->getNotation(); $lok_no = $this->driver->getLokNotation();?>
    <? if ((!empty($rvk_no)) || (!empty($lok_no))): ?>
    <? $contentDisplayed = true; ?>
@@ -115,6 +116,38 @@
     </td>
     </tr>
   <? endif; ?>
+
+<? /* This for Ulm only... TODO */ ?>
+   <? $loc = $this->driver->getLoc(); if (!empty($loc)): ?>
+      <? $contentDisplayed = true; ?>
+       <tr>
+         <th><?=$this->transEsc('RDS_LOC')?>: </th>
+         <td><? $i = 0; foreach ($loc as $value): ?><?=($i++ == 0)?'':'<br />'?>
+         <?=$this->escapeHtml($value)?>
+         <? endforeach; ?></td>
+       </tr>
+    <? endif; ?>
+
+    <? $ddc = $this->driver->getDdc(); if (!empty($ddc)): ?>
+      <? $contentDisplayed = true; ?>
+      <tr>
+      <th><?=$this->transEsc('RDS_DDC')?>: </th>
+          <td><? $i = 0; foreach ($ddc as $value): ?><?=($i++ == 0)?'':'<br />'?>
+             <?=$this->escapeHtml($value)?>
+             <? endforeach; ?></td>
+      </tr>
+    <? endif; ?>
+
+    <? $msh = $this->driver->getMsh(); if (!empty($msh)): ?>
+      <? $contentDisplayed = true; ?>
+     <tr>
+        <th><?=$this->transEsc('RDS_MSH')?>: </th>
+          <td><? $i = 0; foreach ($msh as $value): ?><?=($i++ == 0)?'':'<br />'?>
+              <?=$this->escapeHtml($value)?>
+             <? endforeach; ?></td>
+     </tr>
+    <? endif; ?>
+<? /* TODO END */ ?>	  
 
    <? $lokct = $this->driver->getLokCt(); if (!empty($lokct)): ?>
    <? $contentDisplayed = true; ?>
