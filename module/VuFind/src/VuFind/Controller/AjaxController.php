@@ -1353,7 +1353,12 @@ class AjaxController extends AbstractBase
     {
         return $this->getServiceLocator()->get('VuFind\SearchResultsPluginManager');
     }
-    
+
+    /**
+     * Method to get result details (i.e. total result count) via AJAX call
+     *
+     * @return mixed
+     */
     public function getResultDetailsAjax() {
         $searchClassId = $this->params()->fromQuery('searchClassId');
         try {
@@ -1373,7 +1378,12 @@ class AjaxController extends AbstractBase
         );
     }
     
- public function getFulltextLinkAjax() {
+    /**
+     * Method to get fulltext link for RDSProxy via AJAX call
+     *
+     * @return mixed
+     */
+    public function getFulltextLinkAjax() {
         $driver = $this->getRecordLoader()->load(
             $this->params()->fromQuery('id'),
             $this->params()->fromQuery('source')
