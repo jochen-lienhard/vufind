@@ -54,7 +54,7 @@ class Factory
 
         $driver = new RDSIndex(
             $sm->getServiceLocator()->get('VuFind\Config')->get('config'),
-            $rdsindex, $rdsindex
+            null, $rdsindex
         );
 
         $driver->attachILS(
@@ -78,7 +78,7 @@ class Factory
         $rdsproxy = $sm->getServiceLocator()->get('VuFind\Config')->get('RDSProxy');
         return new RDSProxy(
             $sm->getServiceLocator()->get('VuFind\Config')->get('config'),
-            $rdsproxy, $rdsproxy
+            null, $rdsproxy
         );
     }
 
