@@ -150,6 +150,36 @@
 # See the CallNumber search below for an example of custom munging in action.
 #-----------------------------------------------------------------------------------
 
+
+allfields:
+  CustomMunge:
+    rds_allfields:
+      - [preg_replace, '/[:]/', ' ']
+      - [preg_replace, '/-,/', ' ']
+      - [preg_replace, '/[-]/', ' ']
+      - [preg_replace, '/[+]/', ' ']
+      - [preg_replace, '/[#]/', ' ']
+      - [preg_replace, '/[¬]/', ' ']
+      - [preg_replace, '/[!]/', '\!']
+      - [preg_replace, '/[\/]/', ' ']
+  QueryFields:
+    - allfields:
+      - [rds_allfields, ~]
+
+ti:
+  CustomMunge:
+    rds_ti:
+      - [preg_replace, '/[:]/', ' ']
+      - [preg_replace, '/[-]/', ' ']
+      - [preg_replace, '/[+]/', ' ']
+      - [preg_replace, '/[#]/', ' ']
+      - [preg_replace, '/[¬]/', ' ']
+      - [preg_replace, '/[!]/', '\!']
+      - [preg_replace, '/[\/]/', ' ']
+  QueryFields:
+    - ti:
+      - [rds_ti, ~]
+
 au:
   DismaxFields:
     - au^100
@@ -162,6 +192,35 @@ au:
   QueryFields:
     - au:
       - [rds_au, ~]
+
+ct:
+  CustomMunge:
+    rds_ct:
+      - [preg_replace, '/[:]/', ' ']
+      - [preg_replace, '/[-]/', ' ']
+      - [preg_replace, '/[+]/', ' ']
+      - [preg_replace, '/[#]/', ' ']
+      - [preg_replace, '/[!]/', '\!']
+      - [preg_replace, '/[\/]/', ' ']
+  QueryFields:
+    - ct:
+      - [rds_ct, ~]
+
+sb:
+  CustomMunge:
+    rds_sb:
+      - [preg_replace, '/[:]/', ' ']
+  QueryFields:
+    - sb:
+      - [rds_sb, ~]
+
+ss:
+  CustomMunge:
+    rds_ss:
+      - [preg_replace, '/[:]/', ' ']
+  QueryFields:
+    - ss:
+      - [rds_ss, ~]
 
 isn:
   DismaxFields:
@@ -178,6 +237,92 @@ isn:
     ppn:
       - [and, 100]
       - [or, ~]
+
+co:
+  CustomMunge:
+    rds_co:
+      - [preg_replace, '/[:]/', ' ']
+      - [preg_replace, '/[-]/', ' ']
+      - [preg_replace, '/[+]/', ' ']
+      - [preg_replace, '/[#]/', ' ']
+      - [preg_replace, '/[!]/', '\!']
+      - [preg_replace, '/[\/]/', ' ']
+  QueryFields:
+    - co:
+      - [rds_co, ~]
+
+py:
+  CustomMunge:
+    rds_py:
+      - [preg_replace, '/[:]/', ' ']
+  QueryFields:
+    - py:
+      - [rds_py, ~]
+
+pp:
+  CustomMunge:
+    rds_pp:
+      - [preg_replace, '/[:]/', ' ']
+      - [preg_replace, '/[-]/', ' ']
+      - [preg_replace, '/[+]/', ' ']
+      - [preg_replace, '/[#]/', ' ']
+      - [preg_replace, '/[!]/', '\!']
+      - [preg_replace, '/[\/]/', ' ']
+  QueryFields:
+    - pp:
+      - [rds_pp, ~]
+
+pu:
+  CustomMunge:
+    rds_pu:
+      - [preg_replace, '/[:]/', ' ']
+      - [preg_replace, '/[-]/', ' ']
+      - [preg_replace, '/[+]/', ' ']
+      - [preg_replace, '/[#]/', ' ']
+      - [preg_replace, '/[!]/', '\!']
+      - [preg_replace, '/[\/]/', ' ']
+  QueryFields:
+    - pu:
+      - [rds_pu, ~]
+
+si:
+  CustomMunge:
+    rds_si:
+      - [preg_replace, '/[:]/', '\:']
+      - [preg_replace, '/[ ]/', ""]
+  QueryFields:
+    - si:
+      - [rds_si, ~]
+
+ta:
+  CustomMunge:
+    rds_ta:
+      - [preg_replace, '/[:]/', '\:']
+      - [preg_replace, '/[!]/', '\!']
+  QueryFields:
+    - ta:
+      - [rds_ta, ~]
+      - [onephrase, ~]
+
+sy:
+  CustomMunge:
+    rds_sy:
+      - [preg_replace, '/[:]/', '\:']
+      - [preg_replace, '/[!]/', '\!']
+  QueryFields:
+    - sy:
+      - [rds_sy, ~]
+      - [onephrase, ~]
+
+zr:
+  CustomMunge:
+    rds_zr:
+      - [preg_replace, '/[:]/', '\:']
+      - [preg_replace, '/[!]/', '\!']
+  QueryFields:
+    - zr:
+      - [rds_zr, ~]
+      - [onephrase, ~]
 
 
 # for Alphabrowse
