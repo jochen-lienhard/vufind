@@ -58,7 +58,6 @@ class Params extends \VuFind\Search\Solr\Params
         ) {
             $this->setFacetLimit($config->Results_Settings->facet_limit);
         }
-
     }
 
     /**
@@ -72,7 +71,6 @@ class Params extends \VuFind\Search\Solr\Params
      */
     protected function initFacetList($facetList, $facetSettings, $cfgFile = 'RDSIndex_facets')
     {
-        // $this->resetFacetConfig(); // facet Liste zurücksetzen
         $config = $this->getServiceLocator()->get('VuFind\Config')->get('RDSIndex_facets');
         if (!isset($config->$facetList)) {
             return false;
@@ -95,79 +93,4 @@ class Params extends \VuFind\Search\Solr\Params
         }
         return true;
     }
-
-    /**
-     * Initialize facet settings for the standard search screen.
-     *
-     * @return void
-     */
-    public function initBasicFacets()
-    {
-        $this->resetFacetConfig();
-        $this->initFacetList('ResultsTop', 'Results_Settings');
-        $this->initFacetList('Results', 'Results_Settings');
-    }
-
-    /**
-     * Create search backend parameters for advanced features.
-     *
-     * @return ParamBag
-     */
-    public function getBackendParameters()
-    {
-        $backendParams = new ParamBag();
-
-        // Spellcheck
-        $backendParams->set(
-            'spellcheck', $this->getOptions()->spellcheckEnabled() ? 'true' : 'false'
-        );
-
-        // Facets
-        $this->initBasicFacets();
-        $facets = $this->getFacetSettings();
-        if (!empty($facets)) {
-            $backendParams->add('facet', 'true');
-            foreach ($facets as $key => $value) {
-                $backendParams->add("facet.{$key}", $value);
-            }
-            $backendParams->add('facet.mincount', 1);
-        }
-
-        // Filters
-        $filters = $this->getFilterSettings();
-        foreach ($filters as $filter) {
-            $backendParams->add('fq', $filter);
-        }
-
-        // Shards
-        $allShards = $this->getOptions()->getShards();
-        $shards = $this->getSelectedShards();
-        if (is_null($shards)) {
-            $shards = array_keys($allShards);
-        }
-
-        // If we have selected shards, we need to format them:
-        if (!empty($shards)) {
-            $selectedShards = array();
-            foreach ($shards as $current) {
-                $selectedShards[$current] = $allShards[$current];
-            }
-            $shards = $selectedShards;
-            $backendParams->add('shards', implode(',', $selectedShards));
-        }
-
-        // Sort
-        $sort = $this->getSort();
-        if ($sort) {
-            $backendParams->add('sort', $this->normalizeSort($sort));
-        }
-
-        // Highlighting -- on by default, but we should disable if necessary:
-        if (!$this->getOptions()->highlightEnabled()) {
-            $backendParams->add('hl', 'false');
-        }
-
-        return $backendParams;
-    }
-
 }
