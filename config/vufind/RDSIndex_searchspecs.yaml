@@ -151,21 +151,6 @@
 #-----------------------------------------------------------------------------------
 
 
-allfields:
-  CustomMunge:
-    rds_allfields:
-      - [preg_replace, '/[:]/', ' ']
-      - [preg_replace, '/-,/', ' ']
-      - [preg_replace, '/[-]/', ' ']
-      - [preg_replace, '/[+]/', ' ']
-      - [preg_replace, '/[#]/', ' ']
-      - [preg_replace, '/[¬]/', ' ']
-      - [preg_replace, '/[!]/', '\!']
-      - [preg_replace, '/[\/]/', ' ']
-  QueryFields:
-    - allfields:
-      - [rds_allfields, ~]
-
 ti:
   CustomMunge:
     rds_ti:
