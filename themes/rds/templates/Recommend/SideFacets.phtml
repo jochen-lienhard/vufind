@@ -62,7 +62,70 @@
       </div>
       <div id="side-collapse-<?=$this->escapeHtmlAttr($title) ?>" class="collapse<? if(!in_array($title, $collapsedFacets)): ?> in<? endif ?>">
         <? if (isset($rangeFacets[$title])): ?>
-          <div class="list-group-item">
+            <? /* add pubdate_block */ ?>
+            <div id="pubdate_block">
+            <? foreach (($cluster['list']) as $i=>$thisFacet): /* umdrehen ?? */ ?>
+              <?
+                if(strlen($thisFacet['displayText']) == 0) {
+                  $thisFacet['displayText'] = "-";
+                }
+              ?>
+              <? $moreClass = 'narrowGroupHidden-'.$this->escapeHtmlAttr($title).' hidden'; ?>
+            <? if ($thisFacet['isApplied']): ?>
+              <a class="list-group-item active<? if ($thisFacet['operator'] == 'OR'): ?> facetOR applied<? endif ?>" href="<?=$this->currentPath().$results->getUrlQuery()->removeFacet($title, $thisFacet['value'], true, $thisFacet['operator']) ?>">
+                <? if ($thisFacet['operator'] == 'OR'): ?>
+                  <i class="fa fa-check-square-o"></i>
+                <? else: ?>
+                  <span class="pull-right flip"><i class="fa fa-check"></i></span>
+                <? endif; ?>
+                <? if ($thisFacet['displayText'] == "0"): ?>
+                <?=$this->transEsc('RDS_NONE'); ?>
+                <? else: ?>
+                <?=$this->escapeHtml($thisFacet['displayText'])?>
+                <? endif; ?>
+              </a>
+            <? else: ?>
+              <? $addURL = $this->currentPath().$results->getUrlQuery()->addFacet($title, $thisFacet['value'], $thisFacet['operator']); ?>
+              <? if ($allowExclude): ?>
+                <div data-year="<?=$thisFacet['displayText']?>" data-count="<?=$thisFacet['count']?>" class="list-group-item facet<?=$thisFacet['operator'] ?><? if ($i>5): ?> <?=$moreClass ?><?endif ?>">
+              <? else: ?>
+                <a href="<?=$addURL ?>" class="list-group-item facet<?=$thisFacet['operator'] ?><? if ($i>5): ?> <?=$moreClass ?><?endif ?>">
+              <? endif; ?>
+              <span class="badge">
+                (<?=$this->localizedNumber($thisFacet['count'])?>)
+              <? /* add span to separate NOT from count */ ?>
+              </span>
+              <span class="notbadge">
+              <? /* end add span */ ?>
+                <? if ($allowExclude): ?>
+                  <a href="<?=$this->currentPath().$results->getUrlQuery()->addFacet($title, $thisFacet['value'], 'NOT') ?>" title="<?=$this->transEsc('exclude_facet') ?>"><i class="fa fa-times"></i></a>
+                <? endif; ?>
+              </span>
+              <? if ($allowExclude): ?>
+                <a href="<?=$addURL ?>">
+              <? endif; ?>
+              <? if($thisFacet['operator'] == 'OR'): ?>
+                <i class="fa fa-square-o"></i>
+              <? endif; ?>
+                <? if ($thisFacet['displayText'] == "0"): ?>
+                <?=$this->transEsc('RDS_NONE'); ?>
+                <? else: ?>
+                <?=$this->escapeHtml($thisFacet['displayText'])?>
+                <? endif; ?>
+              <? if ($allowExclude): ?>
+                  </a>
+                </div>
+              <? else: ?>
+                </a>
+              <? endif; ?>
+            <? endif; ?>
+          <? endforeach; ?>
+            <? if (count($cluster['list']) > 9): ?>
+            <? $this->headScript()->appendFile('pubdate_block.js'); ?>
+           <? endif; ?>
+            </div>
+            <? /* end pubdate_block */ ?>
+         <div class="list-group-item">
             <form name="<?=$this->escapeHtmlAttr($title)?>Filter" id="<?=$this->escapeHtmlAttr($title)?>Filter">
               <?=$results->getUrlQuery()->asHiddenFields(array('page' => "/./", 'filter' => "/^{$title}:.*/"))?>
               <input type="hidden" name="<?=$this->escapeHtmlAttr($rangeFacets[$title]['type'])?>range[]" value="<?=$this->escapeHtmlAttr($title)?>"/>
@@ -181,8 +244,10 @@ JS;
               <? endif; ?>
               <span class="badge">
                 (<?=$this->localizedNumber($thisFacet['count'])?>)
+              <? /* add span to separate NOT from count */ ?>
               </span>
               <span class="notbadge">
+              <? /* end add span */ ?>
                 <? if ($allowExclude): ?>
                   <a href="<?=$this->currentPath().$results->getUrlQuery()->addFacet($title, $thisFacet['value'], 'NOT') ?>" title="<?=$this->transEsc('exclude_facet') ?>"><i class="fa fa-times"></i></a>
                 <? endif; ?>
