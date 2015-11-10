@@ -1,6 +1,6 @@
 <div class="sidebar-link">
     <?if ($this->auth()->isLoggedIn()): ?>
-        <a href="<?=$this->url('myresearch-home') ?>"><?=$this->transEsc('RDS_RDSFavorites')?> <i class="fa fa-arrow-right"></i></a>
+        <a href="<?=$this->url('myresearch-home') ?>?redirect=0"><?=$this->transEsc('RDS_RDSFavorites')?> <i class="fa fa-arrow-right"></i></a>
     <?else: ?>
         <? $cart = $this->cart(); if ($cart->isActive()): ?>
             <a id="cartItems" class="modal-link" title="<?=$this->transEsc('RDS_RDSFavorites')?>" href="<?=$this->url('cart-home')?>"><?=$this->transEsc('RDS_RDSFavorites')?> (<strong><?=count($cart->getItems())?></strong>)</a>
