@@ -78,7 +78,7 @@ class Factory
         $rdsproxy = $sm->getServiceLocator()->get('VuFind\Config')->get('RDSProxy');
         return new RDSProxy(
             $sm->getServiceLocator()->get('VuFind\Config')->get('config'),
-            null, $rdsproxy
+            $rdsproxy, $rdsproxy
         );
     }
 
