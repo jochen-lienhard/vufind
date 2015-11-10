@@ -74,3 +74,14 @@
   padding-top: 30px;
   text-align: right;
 }
+
+body.modal-open {
+    overflow: visible;
+    padding-right: 0!important;
+}
+
+.favActionDel {
+  width: 16px;
+  display:inline-block;
+}
+

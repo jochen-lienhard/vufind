@@ -37,19 +37,47 @@
       return false;
     });
     
-    $('.addItemToCart').click(function(){
+    $('.cartAction').click(function(){
       var vufindId = $(this).data('id');
       var source = vufindId.split("|")[0];
       var id = vufindId.split("|")[1];
-      removeItemFromCart(id, source);
-      addItemToCart(id, source);
+      
+      var fullCartItems = getFullCartItems();
+      if (fullCartItems.indexOf(source+'|'+id) == -1) {
+        addItemToCart(id, source);
+      } else  {
+        removeItemFromCart(id, source);
+      }
+      updateCartStatus(this);
+      
       return false;
     });
+    
+    updateCartStatus();
+});
+
+function updateCartStatus(selector) {
+  if (typeof(selector) == "undefined") {
+    selector = $('.cartAction');
+  } 
+  
+  $(selector).each(function(idx, val) {
+    var vufindId = $(val).data('id');
+    var fullCartItems = getFullCartItems();
+    if (fullCartItems.indexOf(vufindId) == -1) {
+      $(val).removeClass('fa-star');
+      $(val).addClass('fa-star-o');
+    } else {
+      $(val).removeClass('fa-star-o');
+      $(val).addClass('fa-star');
+    }
   });
- 
- function userAction() {
-   return false;
- }
+  return false;
+} 
+
+function userAction() {
+  return false;
+}
 
 function myhelp(a,b) {
       jQuery("#tippHeader").text(a);
