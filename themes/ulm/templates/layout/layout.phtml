@@ -25,6 +25,9 @@
     } ?>
     <?=$this->headLink()?>
     <?=$this->headStyle()?>
+
+<link href="https://www.uni-ulm.de/fileadmin/externe_websites/ext.rds/css/uulm_rds2.css" media="all" rel="stylesheet" type="text/css">
+
     <?
       // Set global path for Javascript code:
       $this->headScript()->prependScript("path = '" . rtrim($this->url('home'), '/') . "';");
@@ -76,27 +79,28 @@
       }
     ?>
 
-    <link href="https://www.uni-ulm.de/fileadmin/externe_websites/ext.rds/css/uulm_rds2.css" media="all" rel="stylesheet" type="text/css">
-
     <?=$this->headScript()?>
   </head>
   <body class="<?=$this->layoutClass('offcanvas-row')?><? if ($this->layout()->rtl): ?> rtl<? endif; ?>">
     <header role="banner" class="hidden-print">
-        <div class="container">
 
-           <ul class="breadcrumb hidden-print">
-              <li><a href="http://www.uni-ulm.de" target="_self" title="Struktur und Einrichtungen der Universität Ulm"><span>Universität</span></a></li>
-              <li><a href="https://ulm.ibs-bw.de/aDISWeb/app?service=direct/0/Home/$DirectLink&sp=S127.0.0.1:23002" target="_self" title="Online Katalog"><span>Online Katalog</span></a></li>
-              <li class="active"><span>RDS</span></a></li>
-           </ul>
+<div class="container">
 
-           <div id="thema" class="clearfix">
-               <div class="themenbild1"><img src="https://www.uni-ulm.de/fileadmin/externe_websites/ext.rds/img/themenbilder/header.kiz-bib.jpg" class="" alt="Zentralbibliothek" title="Zentralbibliothek" /></div>
-               <div class="themenbild2"><img src="https://www.uni-ulm.de/fileadmin/externe_websites/ext.rds/img/themenbilder/schmucklogo.png" class="" alt="Schmucklogo" title="Schmucklogo" /></div>
-               <!-- <div class="themenbild2"><img src="https://www.uni-ulm.de/fileadmin/website_uni_ulm/Corporate_Design/logo/sRGB/jpeg/logo_30_sRGB.jpg" class="" alt="Schmucklogo" title="Schmucklogo" /></div> -->
-           </div>
+	<ul class="breadcrumb hidden-print">
+		<li><a href="http://www.uni-ulm.de" target="_self" title="Struktur und Einrichtungen der Universität Ulm"><span>Universität</span></a></li>
+		<li><a href="https://ulm.ibs-bw.de/aDISWeb/app?service=direct/0/Home/$DirectLink&sp=S127.0.0.1:23002" target="_self" title="Online Katalog"><span>Online Katalog</span></a></li>
+		<li class="active"><span>RDS</span></a></li>
+	</ul>
 
-      </div>
+	<div id="thema" class="clearfix">
+		<div class="themenbild1"><img src="https://www.uni-ulm.de/fileadmin/externe_websites/ext.rds/img/themenbilder/header.kiz-bib.jpg" class="" alt="Zentralbibliothek" title=
+		"Zentralbibliothek" /></div>
+		<div class="themenbild2"><img src="https://www.uni-ulm.de/fileadmin/externe_websites/ext.rds/img/themenbilder/schmucklogo.png" class="" alt="Schmucklogo" title=
+		"Schmucklogo" /></div>
+	</div>
+			
+</div>
+
 
       <div class="container navbar">
         <a class="sr-only" href="#content"><?=$this->transEsc('Skip to content') ?></a>
