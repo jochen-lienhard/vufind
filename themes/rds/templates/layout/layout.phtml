@@ -83,12 +83,6 @@
         <?=$this->render('header.phtml')?>
       </div>
       <div class="container">
-        <? 
-          $alreadyDefinedBreadcrumbs = $this->layout()->breadcrumbs;
-          $this->layout()->breadcrumbs .= '<li class=""><a href="' . $this->url('home') . '">' . $this->transEsc('RDS_CATALOG_TITLE') . '</a></li>';
-          $this->layout()->breadcrumbs .= $alreadyDefinedBreadcrumbs;
-        ?>
-        
         <? if((!isset($this->layout()->showBreadcrumbs) || $this->layout()->showBreadcrumbs == true)
           && !empty($this->layout()->breadcrumbs)
           && $this->layout()->breadcrumbs !== false
