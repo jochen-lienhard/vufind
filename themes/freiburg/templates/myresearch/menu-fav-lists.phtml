@@ -14,7 +14,7 @@
   </a>
   </div>
   
-  <a href="<?=$this->url('editList', array('id'=>'NEW'))?>" title="<?=$this->transEsc('RDS_FAVLIST_NEW') ?>" class="btn btn-link">
+  <a id="newListLink" onclick="rdsEditList('NEW');return false;" href="<?=$this->url('editList', array('id'=>'NEW'))?>" title="<?=$this->transEsc('RDS_FAVLIST_NEW') ?>" class="btn btn-link">
         <i class="fa fa-plus"></i> <?=$this->transEsc('RDS_FAVLIST_NEW') ?>
     </a>
 <? endif ?>

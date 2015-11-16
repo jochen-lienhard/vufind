@@ -85,3 +85,6 @@ function myhelp(a,b) {
       jQuery("#searchTipps").show();
 }
 
+function rdsEditList(listId) {
+  Lightbox.get('MyResearch', 'EditList', {id:listId}); 
+}

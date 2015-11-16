@@ -497,6 +497,111 @@ $(document).ready(function() {
     });
     return false;
   });
+  
+  Lightbox.addFormHandler('exportListForm', function(evt) {
+    $.ajax({
+      url: path + '/AJAX/JSON?' + $.param({method:'getLightbox',submodule:'Cart',subaction:'Export'}),
+      type:'POST',
+      dataType:'html',
+      data:Lightbox.getFormData($(evt.target)),
+      success:function(data) {
+          Lightbox.changeContent(data);
+      },
+      error:function(d,e) {
+        //console.log(d,e); // Error reporting
+      }
+    });
+    return false;
+  });
+  
+  Lightbox.addFormHandler('emailListForm', function(evt) {
+    $.ajax({
+      url: path + '/AJAX/JSON?' + $.param({method:'getLightbox',submodule:'Cart',subaction:'Email'}),
+      type:'POST',
+      dataType:'html',
+      data:Lightbox.getFormData($(evt.target)),
+      success:function(data) {
+          Lightbox.changeContent(data);
+      },
+      error:function(d,e) {
+        //console.log(d,e); // Error reporting
+      }
+    });
+    return false;
+  });
+  
+  Lightbox.addFormHandler('deleteListForm', function(evt) {
+    $.ajax({
+      url: path + '/AJAX/JSON?' + $.param({method:'getLightbox',submodule:'MyResearch',subaction:'Delete'}),
+      type:'POST',
+      dataType:'html',
+      data:Lightbox.getFormData($(evt.target)),
+      success:function(data) {
+          Lightbox.changeContent(data);
+      },
+      error:function(d,e) {
+        //console.log(d,e); // Error reporting
+      }
+    });
+    return false;
+  });
+  
+  Lightbox.addFormHandler('doExportForm', function(evt) {
+    $.ajax({
+      url: path + '/Cart/doExport',
+      type:'POST',
+      dataType:'html',
+      data:Lightbox.getFormData($(evt.target)),
+      success:function(data) {
+        var win = window.open();
+        $(win.document.body).html(data);
+        Lightbox.close();
+      },
+      error:function(d,e) {
+        //console.log(d,e); // Error reporting
+      }
+    });
+    return false;
+  });
+  
+  Lightbox.addFormHandler('editListForm', function(evt) {
+    var listId = $(this).find("[name='id']").val();
+    
+    $.ajax({
+      url: path + '/MyResearch/EditList/' + listId,
+      type:'POST',
+      dataType:'html',
+      data:Lightbox.getFormData($(evt.target)),
+      success:function(data) {
+        Lightbox.close();
+        location.reload();
+      },
+      error:function(d,e) {
+        //console.log(d,e); // Error reporting
+      }
+    });
+    return false;
+  });
+  
+  Lightbox.addFormHandler('newList', function(evt) {
+    var listId = $(this).find("[name='id']").val();
+    
+    $.ajax({
+      url: path + '/MyResearch/EditList/' + listId,
+      type:'POST',
+      dataType:'html',
+      data:Lightbox.getFormData($(evt.target)),
+      success:function(data) {
+        Lightbox.close();
+        location.reload();
+      },
+      error:function(d,e) {
+        //console.log(d,e); // Error reporting
+      }
+    });
+    return false;
+  });
+  
   Lightbox.addFormHandler('feedback', function(evt) {
     var $form = $(evt.target);
     // Grabs hidden inputs

@@ -94,7 +94,7 @@
               <li><a href="#"><?=$this->transEsc('confirm_dialog_no')?></a></li>
             </ul>
           </div>
-          <a href="<?=$this->url('editList', array('id' => $list->id)) ?>" class="btn btn-link" title="<?=$this->transEsc("edit_list")?>">
+          <a href="<?=$this->url('editList', array('id' => $list->id)) ?>" onclick="rdsEditList(<?=$list->id ?>);return false;" class="btn btn-link" title="<?=$this->transEsc("edit_list")?>">
             <i class="fa fa-cog"></i>
           </a>
         <? endif; ?>
@@ -128,15 +128,15 @@
     <? endif; ?>
   </div>
   
-  
-  
   <div class="<?=$this->layoutClass('sidebar')?> sidebar-offset sidebar-fav-history">
       <a href="<?=$this->url('search-history')?>"><?=$this->transEsc('RDS_SEARCH_HISTORY_LINK_TITLE')?> <i class="fa fa-arrow-right"></i></a>
   </div>
 
-  <div class="<?=$this->layoutClass('sidebar')?> sidebar-offset sidebar-fav-admin">
-    <?=$this->context($this)->renderInContext("myresearch/menu-fav-items.phtml", array('active' => isset($list) ? 'list' . $list['id'] : 'favorites'))?>
-  </div>
+  <? if ($recordTotal > 0): ?>
+    <div class="<?=$this->layoutClass('sidebar')?> sidebar-offset sidebar-fav-admin">
+      <?=$this->context($this)->renderInContext("myresearch/menu-fav-items.phtml", array('active' => isset($list) ? 'list' . $list['id'] : 'favorites'))?>
+    </div>
+  <? endif; ?>
   
   <div class="<?=$this->layoutClass('sidebar')?> sidebar-offset sidebar-fav-admin">
     <?=$this->context($this)->renderInContext("myresearch/menu-fav-lists.phtml", array('active' => isset($list) ? 'list' . $list['id'] : 'favorites'))?>
