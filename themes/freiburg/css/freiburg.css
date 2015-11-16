@@ -85,3 +85,6 @@ body.modal-open {
   display:inline-block;
 }
 
+.fa-placeholder {
+  width: 16px;
+}
