@@ -34,9 +34,6 @@ body {
   position: relative;
 }
 
-.container {
-	width: 1008px;
-}
 
 .header-site .header-site__logo img {
   display: inline-block;
