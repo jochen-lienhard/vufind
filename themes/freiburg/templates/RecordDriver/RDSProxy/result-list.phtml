@@ -25,7 +25,6 @@
       <? if($this->driver->getGuestView() != 'login'): ?>
         <a href="<?=$this->recordLink()->getUrl($this->driver)?>" class="title getFull" data-view="<?=$dataView ?>">+</a>
       <?endif; ?>
-      <?=str_replace('class="', 'class="label label-info ', $this->record($this->driver)->getMedienicon())?>
     </div>
 
     <div class="col-xs-9">

@@ -17,7 +17,7 @@
   
     <div class="col-xs-1">
       <a href="<?=$this->recordLink()->getUrl($this->driver)?>" class="title getFull" data-view="<?=$dataView ?>">+</a>
-      <?=str_replace('class="', 'class="label label-info ', $this->record($this->driver)->getMedienicon())?>
+      <?=str_replace('class="', 'class="label label-info ', $this->RDSIndexRecord($this->driver)->getMedienicon())?>
     </div>
 
     <div class="col-xs-9">
