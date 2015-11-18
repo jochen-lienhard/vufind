@@ -84,4 +84,19 @@ class RDSIndexRecord extends \VuFind\View\Helper\Root\Record
         $transEsc = $this->getView()->plugin('transEsc');
         return $transEsc('Title not available');
     }
+
+    /**
+     * Render a list of record formats. RDS-Helper
+     *
+     * @return string
+     */
+    public function getMedienicon()
+    {
+        if ($this->driver->getResourceSource()=="RDSIndex") {
+            return $this->renderTemplate('medienicon.phtml');
+        } else {
+            return false;
+        }
+    }
+
 }

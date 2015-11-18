@@ -11,7 +11,7 @@
         <? endif; ?>
         <?=sprintf('%03d',$recordNumber)?>
       </label>
-      <?=str_replace('class="', 'class="label label-info ', $this->record($current)->getMedienicon())?>
+      <?=str_replace('class="', 'class="label label-info ', $this->RDSIndexRecord($current)->getMedienicon())?>
     </div>
     <?=$this->record($current)->getSearchResult('list')?>
   </div>
