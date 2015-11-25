@@ -153,6 +153,9 @@
         <td property="author">
 	<? $i = 0; foreach ($authors_long as $field): ?><?=($i++ == 0)?'':'<br />'?>
 	<a href="<?=$this->record($this->driver)->getLink('author', $field['link'])?>"><?=$this->escapeHtml($field['link'])?></a>
+	<? if (isset($field['link_text']) && !empty($field['link_text'])): ?>
+	<?= $this->escapeHtml($field['link_text'])?>
+	<? endif; ?>
 	<? if (isset($field['gnd']) && !empty($field['gnd'])): ?>
 	<a class="dnb" href="<?=$this->record($this->driver)->getLink('gnd', $field['gnd'])?>" target="_blank" title="<?=$this->transEsc('RDS_PERS_DNB')?>"></a>
 	<? $myau = explode(",",$field['link']);
@@ -188,6 +191,9 @@
         <td property="creator">
 	<? $i = 0; foreach ($co_display as $field): ?><?=($i++ == 0)?'':'<br />'?>
 	<a href="<?=$this->record($this->driver)->getLink('corporate', $field['link'])?>"><?=$this->escapeHtml($field['link'])?></a>
+	<? if (isset($field['link_text']) && !empty($field['link_text'])): ?>
+	[<?= $this->escapeHtml($field['link_text'])?>]
+	<? endif; ?>
 	<? if (isset($field['gnd']) && !empty($field['gnd'])): ?>
 	        <a class="dnb" href="<?=$this->record($this->driver)->getLink('gnd', $field['gnd'])?>" target="_blank" title="<?=$this->transEsc('RDS_CO_DNB')?>"></a>
 	<? endif; ?>
@@ -310,7 +316,14 @@
       <? $est = $this->driver->getEst(); if (!empty($est)): ?>
         <tr>
           <th><?=$this->transEsc('RDS_EST')?>: </th>
-          <td><?= $this->escapeHtml($est)?></td>
+          <td>
+	<? $i = 0; foreach ($est as $field): ?><?=($i++ == 0)?'':'<br />'?>
+	<?=$this->escapeHtml($field['txt'])?>
+	<? if (isset($field['gnd']) && !empty($field['gnd'])): ?>
+	        <a class="dnb" href="<?=$this->record($this->driver)->getLink('gnd', $field['gnd'])?>" target="_blank" title="<?=$this->transEsc('RDS_CO_DNB')?>"></a>
+	<? endif; ?>
+	<? endforeach; ?>
+	</td>
         </tr>
       <? endif; ?>
 
