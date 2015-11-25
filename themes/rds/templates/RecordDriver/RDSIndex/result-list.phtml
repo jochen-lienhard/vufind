@@ -36,9 +36,9 @@
 	<? endforeach; ?>
 
     <? else: ?>
-	<? $co_display = $this->driver->getCorporation(); ?>
+	<? $co_display = $this->driver->getCoForList(); ?>
 	 <? if (isset($co_display) && !empty($co_display)): ?>
-		<? $i = 0; foreach ($co_display as $field): ?><?=($i++ == 0)?'':'<br />'?>
+		<? $i = 0; foreach ($co_display as $field): ?><?=($i++ == 0)?'':' ; '?>
 		<?=$this->escapeHtml($field['link'])?>
 		<? endforeach; ?>
 	<? else: ?>
