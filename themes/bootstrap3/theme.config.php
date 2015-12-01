@@ -33,7 +33,7 @@ return array(
             'flashmessages' => 'VuFind\View\Helper\Bootstrap3\Factory::getFlashmessages',
             'layoutclass' => 'VuFind\View\Helper\Bootstrap3\Factory::getLayoutClass',
             'rdsproxyholdings' => 'VuFind\View\Helper\Bootstrap3\Factory::getRDSProxyHoldings',
-            'rdsexport' => 'VuFind\View\Helper\Root\Factory::getRDSExport',
+            'rdsexport' => 'VuFind\View\Helper\Bootstrap3\Factory::getRDSExport',
         ),
         'invokables' => array(
             'highlight' => 'VuFind\View\Helper\Bootstrap3\Highlight',

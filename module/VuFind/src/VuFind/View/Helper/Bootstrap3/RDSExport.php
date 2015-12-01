@@ -1,5 +1,5 @@
 <?php
-namespace VuFind\View\Helper\Root;
+namespace VuFind\View\Helper\Bootstrap3;
 use Zend\View\Exception\RuntimeException, Zend\View\Helper\AbstractHelper;
 use VuFind\Export\DataProvider\RDSDataProviderProxy;
 use VuFind\Export\DataProvider\RDSDataProviderIndex;

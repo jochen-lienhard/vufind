@@ -190,8 +190,6 @@ class RDSToHTML {
     public function getRDSProxy_Holdings() {
         $output = "";
         
-        return $output;
-        
         $fulltextLinks = $this->driver->getFulltextLinks();
         $infoLinks = $this->driver->getInfoLinks();
         
