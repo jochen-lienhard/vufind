@@ -18,6 +18,7 @@ return array(
     'helpers' => array(
         'invokables' => array(
             'rdsindexholding' => 'VuFind\View\Helper\Hohenheim\RDSIndexHolding',
+            'rdsindexdescription' => 'VuFind\View\Helper\Hohenheim\RDSIndexDescription',
         )
     )
 

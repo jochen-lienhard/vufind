@@ -10,6 +10,7 @@ return array(
     'helpers' => array(
         'invokables' => array(
             'rdsindexholding' => 'VuFind\View\Helper\Ulm\RDSIndexHolding',
+            'rdsindexdescription' => 'VuFind\View\Helper\Ulm\RDSIndexDescription',
         )
     )
 
