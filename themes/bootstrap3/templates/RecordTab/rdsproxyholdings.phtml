@@ -1,92 +1,17 @@
 <?
-  $proxyHelper = $this->RDSProxyHoldings();
-  $fulltextLinks = $this->driver->getFulltextLinks();
-  $infoLinks = $this->driver->getInfoLinks();
-
-  if ($fulltextLinks && count($fulltextLinks) == 1 && $fulltextLinks[0]['indicator'] == 2) {
-    $fulltextLinks = '';
-  }
-  $authManager = $this->auth()->getManager();
-  
-  $followupUrl = $this->serverUrl() . $_SESSION['Search']['last'];
-  $target = $this->url('myresearch-home') . '?followupUrl=' . $followupUrl;
-  
-  $sessionInitiator = $authManager->getSessionInitiator($target);
-  if ($sessionInitiator) {
-    $loginLink = $this->escapeHtmlAttr($sessionInitiator);
-  } else {
-    $loginLink = $this->url('myresearch-userlogin');
-  }
+    // Set page title.
+    $this->headTitle($this->translate('Holdings') . ': ' . $this->driver->getBreadcrumb());
+    $holdings = $this->RDSProxyHoldings($this->driver)->getItems();
 ?>
 
-<?if ($proxyHelper->isFulltextView()): ?>
-  <?if ($fulltextLinks || $infoLinks): ?>
-    <div class="tg">
-      <h2><?=$this->transEsc("RDS_PROXY_HOLDINGS_ELECTRONIC_FULLTEXT")?></h2>
-      
-      <?if ($fulltextLinks): ?>
-        <?foreach ($fulltextLinks as $fulltextLink): ?>
-            
-            <?if ($fulltextLink['indicator'] == 1):?>
-              <?if ($this->auth()->isLoggedIn() === false):?>
-                <span class="t_ezb_yellow"></span>
-                <a style="text-decoration: none;" href='<?=$loginLink ?>'; return false;">
-                    <?=$this->transEsc("RDS_PROXY_HOLDINGS_PDF_FULLTEXT")?> (via <?=$fulltextLink['provider']?>) <?=$this->transEsc("RDS_PROXY_HOLDINGS_AUTHORIZED_USERS_ONLY_LOGIN")?>
-                </a>
-              <?elseif ($this->driver->getGuestView() == 'brief'):?>
-                <span class="t_ezb_yellow"></span>
-                <?=$this->transEsc("RDS_PROXY_HOLDINGS_PDF_FULLTEXT")?> (via <?=$fulltextLink['provider']?>) - <?=$this->transEsc("RDS_PROXY_AUTHORIZED_USERS_ONLY")?>
-              <?endif;?>
-            <?elseif ($fulltextLink['indicator'] != 2):?>
-                <div class="t_ezb_result">
-                  <p>
-                      <?if ($fulltextLink['type'] == "pdf"):?>
-                        <span class="t_ezb_yellow"></span>
-                        <?=$this->transEsc("RDS_PROXY_HOLDINGS_PDF_FULLTEXT")?> (via <?=$fulltextLink['provider']?>)
-                      <?endif;?>
-                      <?if ($fulltextLink['type'] == "html"):?>
-                        <span class="t_ezb_yellow"></span>
-                        <?=$this->transEsc("RDS_PROXY_HOLDINGS_HTML_FULLTEXT")?> (via <?=$fulltextLink['provider']?>)
-                      <?endif;?>
-                      <?if ($fulltextLink['type'] == "external"):?>
-                        <span class="t_ezb_{$fulltextLink.access}"></span>
-                        <?=$this->transEsc("RDS_PROXY_HOLDINGS_TO_THE_FULLTEXT")?> (via <?=$fulltextLink['provider']?>)
-                      <?endif;?>
-                    <span class="t_link"><a target="_blank" href="<?=$fulltextLink['url']?>">&#187;</a></span>
-                  </p>
-                </div>
-              <?endif;?>
-              
-        <?endforeach; ?>
-      <?endif; ?>
-      
-      <?if ($infoLinks): ?>
-        <?foreach ($infoLinks as $infoLink): ?>
-          <div class="t_ezb_result">
-            <p>
-              <span class="t_ezb_<?$infoLink['access'] ?>"></span>
-              <?=$this->transEsc("RDS_LINKS_INFO_" . strtoupper($infoLink[info]))?>
-              <span class="t_link"><a target="_blank" href="<?=$infoLink['url'] ?>">&#187;</a></span>
-            </p>
-          </div>
-        <?endforeach; ?>
-      <?endif; ?>
-    </div>
-  <?endif; ?>
-
-  <?if ($proxyHelper->isLinkresolverView() && (!empty($fulltextLinks) || !empty($infoLinks))):?>
-    <div class="tg">
-      <h2><?=$this->transEsc("RDS_PROXY_HOLDINGS_MORE_SOURCES")?></h2>
-      <p>
-        <a class="redi_links_icon" target="linkresolver" href="<?=$this->driver->getOpenUrlExternal();?>" title="<?=$this->transEsc("RDS_PROXY_HOLDINGS_REDI_LINKS")?>"></a>
-      </p>
-    </div>
-  <?endif;?>
-
-<?endif; ?>
-
-<div>
-<?if (!$proxyHelper->isFulltextView() || (empty($fulltextLinks) && empty($infoLinks))):?>
-  <?=$proxyHelper->getServicesHTML($this->driver->getOpenUrlExternal()) ?>
-<?endif; ?>
-</div>
+<table class="table table-striped" summary="<?=$this->transEsc('Holdings')?>">
+  
+    <? foreach ($holdings as $itemName => $itemValue): ?>
+    <? $contentDisplayed = true; ?>
+          <?=$itemValue?><br/>
+    <? endforeach; ?>
+  
+  <? if (!isset($contentDisplayed) || !$contentDisplayed): // Avoid errors if there were no rows above ?>
+    <tr><td><?=$this->transEsc('no_holdings')?></td></tr>
+  <? endif; ?>
+</table>

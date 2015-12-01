@@ -102,4 +102,21 @@ class Factory
         
         return new RDSProxyHoldings($linkresolver);
     }
+    
+    
+    public static function getRDSExport(ServiceManager $sm) {
+    $serviceLocator = $sm->getServiceLocator();
+        $config = $serviceLocator->get('VuFind\Config')->get('config');
+        
+        $linkresolver = null;
+        if (isset($config->OpenURL) && isset($config->OpenURL->resolver)) {
+            $resolverDriverPluginManger= $serviceLocator
+                ->get('VuFind\ResolverDriverPluginManager');
+            $linkresolver = $resolverDriverPluginManger
+                ->get($config->OpenURL->resolver);
+        } 
+        
+        return new RDSExport($linkresolver);
+        
+    }
 }

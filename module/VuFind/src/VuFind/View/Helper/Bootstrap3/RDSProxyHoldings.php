@@ -44,9 +44,7 @@ class RDSProxyHoldings extends \Zend\View\Helper\AbstractHelper implements Trans
     use \VuFind\I18n\Translator\TranslatorAwareTrait;
     
     protected $linkresolver = null;
-    protected $linkresolverview = true;
-    
-    protected $fulltextview = true;
+    protected $formatter = null;
     
     /**
      * Constructor
@@ -58,33 +56,13 @@ class RDSProxyHoldings extends \Zend\View\Helper\AbstractHelper implements Trans
         $this->linkresolver = $linkresolver;
     }
     
-    public function getServicesHTML($openUrl) {
-        
-        $xmlResponse = $this->fetchLinks($openUrl, $this->translator->getLocale());
-        
-        $output = substr ($xmlResponse, strpos($xmlResponse,'<div id="services">'));
-        $pos = strpos($output, '<div id="services_end">');
-        $output = substr ($output, 0, $pos);
-        
-        return $output;
-    }   
     
-    public function fetchLinks($openUrl, $locale = null) {
-        if (isset($locale)) {
-            $openUrl .= "&rl_language=" . $locale;
-        }
-        $xmlResponse = $this->linkresolver->fetchLinks($openUrl);
-        
-        return $xmlResponse;
+    public function __invoke($driver) {
+        $this->formatter = new \VuFind\Export\RDSToHTML($driver, $this->view, $this->linkresolver);
+        return $this;
     }
     
-    public function isFulltextView() {
-        
-        return $this->fulltextview;;
+    public function getItems() {
+        return $this->formatter->getHoldings();
     }
-    
-    public function isLinkresolverView() {
-        return $this->linkresolverview;
-    }
-    
 }

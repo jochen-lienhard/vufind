@@ -518,55 +518,7 @@ class RDSProxy extends SolrDefault
             ? $this->fields['zj'] : array();
     }
 
-    /**
-     * Get an array of all ISBNs associated with the record (may be empty).
-     *
-     * @return array
-     */
-    public function getISBNs()
-    {
-        $isbns = array();
-        if (isset($this->fields['pisbn'])) {
-                $isbns['print'] = $this->fields['pisbn'];
-        } elseif (isset($this->fields['source']) 
-            && isset($this->fields['source']['pisbn'])
-        ) {
-                $isbns['print'] = $this->fields['source']['pisbn'];
-        }
-        if (isset($this->fields['eisbn'])) {
-                $isbns['electronic'] = $this->fields['eisbn'];
-        } elseif (isset($this->fields['source']) 
-            && isset($this->fields['source']['eisbn'])
-        ) {
-                $isbns['electronic'] = $this->fields['source']['eisbn'];
-        }
-        return $isbns;
-    }
 
-    /**
-     * Get an array of all ISSNs associated with the record (may be empty).
-     *
-     * @return array
-     */
-    public function getISSNs()
-    {
-        $issns = array();
-        if (isset($this->fields['pissn'])) {
-                $issns['print'] = $this->fields['pissn'];
-        } elseif (isset($this->fields['source']) 
-            && isset($this->fields['source']['pissn'])
-        ) {
-                $issns['print'] = $this->fields['source']['pissn'];
-        }
-        if (isset($this->fields['eissn'])) {
-                $issns['electronic'] = $this->fields['eissn'];
-        } elseif (isset($this->fields['source']) 
-            && isset($this->fields['source']['eissn'])
-        ) {
-                $issns['electronic'] = $this->fields['source']['eissn'];
-        }
-        return $issns;
-    }
 
     /**
      * Get an array of all the languages associated with the record.
@@ -1152,16 +1104,7 @@ class RDSProxy extends SolrDefault
         return false;
     }
 
-    /**
-     * Get the full title of the record.
-     *
-     * @return string
-     */
-    public function getTitle()
-    {
-        return isset($this->fields['title']) ?
-            $this->fields['title'] : '';
-    }
+
 
     /**
      * Get the text of the part/section portion of the title.
@@ -1690,38 +1633,23 @@ class RDSProxy extends SolrDefault
         return implode(' ; ', $result);
     }
 
-    /**
-     * Get an array of author names.
-     *
-     * @return array
-     */
-    public function getAuthors()
-    {
-        $result = array();
-        if (isset($this->fields['authors'])) {
-            $result = $this->fields['authors'];
-            for ($i = 0; $i < count($result); $i++) {
-                $result[$i] = preg_replace('|<sup>[^<]*</sup>|u', '', $result[$i]);
-            }
-        }
-        return implode(' ; ', $result);
-    }
 
-    /**
-     * Get an datasource.
-     *
-     * @return String
-     */
-    public function getDatasource()
-    {
-        $datasource = '';
-        if (isset($this->fields['datasource'])) {
-            $datasource = $this->translate('RDS_DATASOURCE');
-            $datasource .=  ': ' . $this->fields['datasource'];   
-        } 
+
+//     /**
+//      * Get an datasource.
+//      *
+//      * @return String
+//      */
+//     public function getDatasource()
+//     {
+//         $datasource = '';
+//         if (isset($this->fields['datasource'])) {
+//             $datasource = $this->translate('RDS_DATASOURCE');
+//             $datasource .=  ': ' . $this->fields['datasource'];   
+//         } 
         
-        return $datasource;
-    }
+//         return $datasource;
+//     }
 
     /**
      * Get an datasource.
@@ -1741,15 +1669,7 @@ class RDSProxy extends SolrDefault
     }
     
     
-    /**
-     * Get an DOI.
-     *
-     * @return String
-     */
-    public function getDoi()
-    {
-        return (isset($this->fields['doi']) ? $this->fields['doi'] : '');
-    }
+
 
     /**
      * Get an mediaicon.
@@ -1948,11 +1868,6 @@ class RDSProxy extends SolrDefault
         return $this->getLink(array('category' => 'fulltext', 'access' => 'green'));
     }
 
-    protected function getPmid()
-    {
-        return (isset($this->fields['pmid']) ? $this->fields['pmid'] : '');
-    }
-
     public function getPrintData()
     {
         return str_replace('    ', '  ', print_r($this->fields, true));
@@ -1960,15 +1875,178 @@ class RDSProxy extends SolrDefault
 
     */
 
-    public function getSubjects($category)
+    
+
+
+    
+    public function getPersistentLink() 
     {
-    	if(isset($this->fields['subjects']) && isset($this->fields['subjects'][$category])) {
-    		return $this->fields['subjects'][$category];
+        return '';
+    }
+    
+    public function getRelated() 
+    {
+        return false;
+    }
+    
+    // *******************************************************************
+    // Bibliographic Details
+    // *******************************************************************
+    /**
+     * Get the full title of the record.
+     *
+     * @return string
+     */
+    public function getTitle()
+    {
+        return isset($this->fields['title']) ?
+            $this->fields['title'] : '';
+    }
+    
+    public function getTitleAlt()
+    {
+    	return (isset($this->fields['titlealt']) ? $this->fields['titlealt'] : '');
+    }
+    
+    /**
+     * Get an array of author names.
+     *
+     * @return array
+     */
+    public function getAuthors()
+    {
+        $result = array();
+        if (isset($this->fields['authors'])) {
+            $result = $this->fields['authors'];
+            for ($i = 0; $i < count($result); $i++) {
+                $result[$i] = preg_replace('|<sup>[^<]*</sup>|u', '', $result[$i]);
+            }
+        }
+        return implode(' ; ', $result);
+    }
+    
+    public function getSource()
+    {
+    	if(!isset($this->fields['source']) || !isset($this->fields['source']['display'])) {
+    		return '';
+    	}
+    	// TODO: use appropriate modifier instead of removing the tags
+    	return str_replace('&amp;', '&', strip_tags($this->fields['source']['display']));
+    }
+    
+    public function getSeriesTitle()
+    {
+    	if(isset($this->fields['series']) && isset($this->fields['series']['title'])) {
+    		return $this->fields['series']['title'];
     	} else {
-    		return array();
+			return '';
     	}
     }
+    
+    public function getPmid()
+    {
+        return (isset($this->fields['pmid']) ? $this->fields['pmid'] : '');
+    }
+    
+    /**
+     * Get an DOI.
+     *
+     * @return String
+     */
+    public function getDoi()
+    {
+        return (isset($this->fields['doi']) ? $this->fields['doi'] : '');
+    }
+    
+    /**
+     * Get an array of all ISBNs associated with the record (may be empty).
+     *
+     * @return array
+     */
+    public function getISBNs()
+    {
+        $isbns = array();
+        if (isset($this->fields['pisbn'])) {
+                $isbns['print'] = $this->fields['pisbn'];
+        } elseif (isset($this->fields['source']) 
+            && isset($this->fields['source']['pisbn'])
+        ) {
+                $isbns['print'] = $this->fields['source']['pisbn'];
+        }
+        if (isset($this->fields['eisbn'])) {
+                $isbns['electronic'] = $this->fields['eisbn'];
+        } elseif (isset($this->fields['source']) 
+            && isset($this->fields['source']['eisbn'])
+        ) {
+                $isbns['electronic'] = $this->fields['source']['eisbn'];
+        }
+        return $isbns;
+    }
 
+    /**
+     * Get an array of all ISSNs associated with the record (may be empty).
+     *
+     * @return array
+     */
+    public function getISSNs()
+    {
+        $issns = array();
+        if (isset($this->fields['pissn'])) {
+                $issns['print'] = $this->fields['pissn'];
+        } elseif (isset($this->fields['source']) 
+            && isset($this->fields['source']['pissn'])
+        ) {
+                $issns['print'] = $this->fields['source']['pissn'];
+        }
+        if (isset($this->fields['eissn'])) {
+                $issns['electronic'] = $this->fields['eissn'];
+        } elseif (isset($this->fields['source']) 
+            && isset($this->fields['source']['eissn'])
+        ) {
+                $issns['electronic'] = $this->fields['source']['eissn'];
+        }
+        return $issns;
+    }
+    
+    public function getPubYear()
+    {
+    	if(isset($this->fields['dates'])) {
+    		$dates = $this->fields['dates'];
+    	} elseif(isset($this->fields['source']) && isset($this->fields['source']['dates'])) {
+    		$dates = $this->fields['source']['dates'];
+    	} else {
+    		return '';
+    	}
+
+    	if(isset($dates['published'])) {
+    		return $dates['published']['year'];
+    	} else {
+    		return '';
+    	}
+    }
+    
+    public function getDataSource()
+    {
+    	return (isset($this->fields['datasource']) ? $this->fields['datasource'] : '');
+    }
+    
+    public function getCitationLinks()
+    {
+    	if (strpos($this->proxySettings['Holdings']['displayedCustomLinks'],'citationLinks') === false) {
+    		return '';
+    	}
+    	
+        $links = array_merge(
+            $this->getLinks(array('category' => 'citation', 'type' => 'external')),
+        	$this->getLinks(array('category' => 'citation', 'type' => 'ehost'))
+        );
+        return (empty($links) ? '' : $links);
+    }
+    
+    // *******************************************************************
+    // Description
+    // *******************************************************************
+    
     public function getSubjectsGeneral()
     {
     	return $this->getSubjects('general');
@@ -1994,6 +2072,19 @@ class RDSProxy extends SolrDefault
     		}
     	}
     	return implode(' ; ', $result);
-    } 
+    }
     
+
+    // *******************************************************************
+    // Helper methods
+    // *******************************************************************
+    public function getSubjects($category)
+    {
+    	if(isset($this->fields['subjects']) && isset($this->fields['subjects'][$category])) {
+    		return $this->fields['subjects'][$category];
+    	} else {
+    		return array();
+    	}
+    }
 }
+

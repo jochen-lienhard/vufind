@@ -1,6 +1,6 @@
 <?php
 /**
- * Record driver view helper
+ * RDSIndexDescription tab
  *
  * PHP version 5
  *
@@ -20,35 +20,31 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  * @category VuFind2
- * @package  View_Helpers
+ * @package  RecordTabs
  * @author   Demian Katz <demian.katz@villanova.edu>
- * @author   Jochen Lienhard <lienhard@ub.uni-freiburg.de>
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
- * @link     http://vufind.org/wiki/vufind2:developer_manual Wiki
+ * @link     http://vufind.org/wiki/vufind2:record_tabs Wiki
  */
-namespace VuFind\View\Helper\Bootstrap3;
-use Zend\View\Exception\RuntimeException, Zend\View\Helper\AbstractHelper;
-    
+namespace VuFind\RecordTab;
+
 /**
- * Record driver view helper
+ * Description tab
  *
  * @category VuFind2
- * @package  View_Helpers
+ * @package  RecordTabs
  * @author   Demian Katz <demian.katz@villanova.edu>
- * @author   Jochen Lienhard <lienhard@ub.uni-freiburg.de>
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
- * @link     http://vufind.org/wiki/vufind2:developer_manual Wiki
+ * @link     http://vufind.org/wiki/vufind2:record_tabs Wiki
  */
-class RDSProxyDescription extends AbstractHelper
+class RDSProxyBibliographicDetails extends AbstractBase
 {
-    protected $formatter = null;
-    
-    public function __invoke($driver) {
-        $this->formatter = new \VuFind\Export\RDSToHTML($driver, $this->view);
-        return $this;
-    }
-    
-    public function getItems() {
-        return $this->formatter->getDescription();
+    /**
+     * Get the on-screen description for this tab.
+     *
+     * @return string
+     */
+    public function getDescription()
+    {
+        return 'Bibliographic Details';
     }
 }

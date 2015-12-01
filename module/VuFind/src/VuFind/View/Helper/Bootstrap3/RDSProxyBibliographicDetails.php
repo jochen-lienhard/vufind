@@ -28,7 +28,7 @@
  */
 namespace VuFind\View\Helper\Bootstrap3;
 use Zend\View\Exception\RuntimeException, Zend\View\Helper\AbstractHelper;
-    
+
 /**
  * Record driver view helper
  *
@@ -39,7 +39,7 @@ use Zend\View\Exception\RuntimeException, Zend\View\Helper\AbstractHelper;
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     http://vufind.org/wiki/vufind2:developer_manual Wiki
  */
-class RDSProxyDescription extends AbstractHelper
+class RDSProxyBibliographicDetails extends AbstractHelper
 {
     protected $formatter = null;
     
@@ -49,6 +49,7 @@ class RDSProxyDescription extends AbstractHelper
     }
     
     public function getItems() {
-        return $this->formatter->getDescription();
+        return $this->formatter->getBibliographicDetails();
     }
+    
 }
