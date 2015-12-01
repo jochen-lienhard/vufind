@@ -40,6 +40,7 @@ return array(
             'vudl' => 'VuDL\View\Helper\Bootstrap3\VuDL',
             'rdsindexholding' => 'VuFind\View\Helper\Bootstrap3\RDSIndexHolding',
             'rdsproxydescription' => 'VuFind\View\Helper\Bootstrap3\RDSProxyDescription',
+            'rdsindexdescription' => 'VuFind\View\Helper\Bootstrap3\RDSIndexDescription',
         )
     )
 );

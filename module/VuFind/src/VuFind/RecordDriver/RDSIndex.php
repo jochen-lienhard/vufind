@@ -2059,7 +2059,6 @@ class RDSIndex extends SolrMarc
 
 			    } else {
 			    	$est[$key]['txt'] = $link;
-				
 			    }
 
 		    }
