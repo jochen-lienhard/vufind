@@ -5,7 +5,6 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
     <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-
     <?=$this->headMeta()?>
     <?=$this->headTitle()?>
     <?
@@ -23,6 +22,16 @@
     <? if ($this->layout()->rtl) {
       $this->headLink()->appendStylesheet('vendor/bootstrap-rtl.min.css');
     } ?>
+
+    <?
+      $this->headLink()->appendStylesheet([
+        'href' => 'https://web-fallback.uni-hohenheim.de/hohsearch/hohsearch.css',
+        'media' => 'all',
+        'type' => 'text/css',
+        'rel' => 'stylesheet',
+      ]);
+    ?>
+
     <?=$this->headLink()?>
     <?=$this->headStyle()?>
     <?
@@ -38,8 +47,7 @@
             'bulk_save_success' => 'bulk_save_success',
             'close' => 'close',
             'loading' => 'Loading',
-            'sms_success' => 'sms_success',
-            'number_thousands_separator' => ['number_thousands_separator', null, ',']
+            'sms_success' => 'sms_success'
           )
         );
         if ($cart->isActive()) {
@@ -77,123 +85,29 @@
       }
     ?>
     <?=$this->headScript()?>
-    
-    
   </head>
   <body class="<?=$this->layoutClass('offcanvas-row')?><? if ($this->layout()->rtl): ?> rtl<? endif; ?>">
-    <? // Set up the search box -- there are three possible cases:
-      // 1. No search box was set; we should default to the normal box
-      // 2. It was set to false; we should display nothing
-      // 3. It is set to a custom string; we should display the provided version
-      // Set up default search box if no data was provided from the template;
-      // this covers case 1.  Cases 2 and 3 are then covered by logic below.
-      if (!isset($this->layout()->searchbox)) {
-        $this->layout()->searchbox = $this->render('search/searchbox.phtml');
-      }
-    ?>
-    <header role="banner" class="header-site hidden-print">
+    <div class="logos hidden-xs">
       <div class="container">
-        <a class="sr-only" href="#content"><?=$this->transEsc('Skip to content') ?></a>
-        <?=$this->render('header.phtml')?>
-      </div>
- </header>
-
- <nav class="navigation-main ">
-    <div class="navigation-main__wrp-1">
-      <div class="navigation-main__wrp-2"> 
-        
-        
-        <!--
-				button group
-
-				additional classes:
-				.navigation-main__button_active = active button (used on search and login buttons)
-			-->
-      	<form method="post" name="langForm" action="" id="langForm">
-					<input type="hidden" name="mylang">
-        </form>
-
-        <div class="navigation-main__button-group"> 
-        	<a class="navigation-main__button navigation-main__button-navigation" data-gremlin="MobileNavToggle"><i></i><span>Navigation</span></a> 
-        	<a class="navigation-main__button navigation-main__button-search" href="#nav-panel-search" tabindex="10" data-gremlin="NavbarToggle"><i></i><span>Suche</span></a> 
-          <? $newLang = ($this->layout()->userLang == 'de' ? ['en','English'] : ['de','Deutsch']); ?>            
-       	  <a class="navigation-main__language-select" href="#" onclick="document.langForm.mylang.value='<?=$newLang[0]?>';document.langForm.submit()"><?=$newLang[1]?></a>
-       	</div>
-        
-        <!--
-				navigation content
-			-->
-        
-        <div class="navigation-main__toggle-content" data-gremlin="SiteNavigation,MobileNavigation">
-          <div class="navigation-main-flyout-cover-strap"></div>
-          <div class="navigation-main-flyout-cover-head"></div>
-          <section class="navigation-main__section" id="nav-themenbereiche">
-            <h6 class="navigation-main__section-title">Themenbereiche</h6>
-            <ul>
-              <li class="nav-section nav-section__level-1"><a href="<?=$this->serverUrl() . $this->url('home') . 'RDSIndex/Home'?>"  data-nav-toggle="level-1" class="nav-section__toggle">HohSearch</a></li>
-              <li class="nav-section nav-section__level-1"><a href="https://hohsearch-info.uni-hohenheim.de/103627?&amp;N=1"  data-nav-toggle="level-1" class="nav-section__toggle">Bibliothekskonto</a></li>
-              <li class="nav-section nav-section__level-1 "><a href="https://hohsearch-info.uni-hohenheim.de/103790?&amp;N=1"  data-nav-toggle="level-1" class="nav-section__toggle">Systematik</a></li>
-              <li class="nav-section nav-section__level-1"><a href="https://hohsearch-info.uni-hohenheim.de/103628?&amp;N=1"  data-nav-toggle="level-1" class="nav-section__toggle">Infos zur Ausleihe</a></li>
-              <li class="nav-section nav-section__level-1"><a href="https://hohsearch-info.uni-hohenheim.de/103711?&amp;N=1"  data-nav-toggle="level-1" class="nav-section__toggle">Fachdatenbanken</a></li>
-              <li class="nav-section nav-section__level-1"><a href="https://hohsearch-info.uni-hohenheim.de/103629?&amp;N=1"  data-nav-toggle="level-1" class="nav-section__toggle">Hilfe</a></li>
-                            <li class="nav-section nav-section__level-1"><a href="http://rdsui2.ub.uni-freiburg.de/MyResearch"  data-nav-toggle="level-1" class="nav-section__toggle">Merkliste</a></li>
-            </ul>
-          </section>
-          <!-- /section --> 
-          
+        <div class="row">
+          <div class="col-sm-4 logo-hohsearch"> <a href="https://hohsearch.uni-hohenheim.de" title="Startseite hohsearch"><img src="<?=$this->imageLink('/logo-hohsearch.png')?>" alt="Logo hohsearch" title="Die Literatursuchmaschine der Universität Hohenheim"></a> </div>
+            <div class="col-sm-8 hidden-xs logo-uni-hohenheim text-right"> <a href="https://www.uni-hohenheim.de" title="Homepage der Universität Hohenheim" target="_blank"><span class="logo-uni-hohenheim-text">Universität Hohenheim</span> <img src="<?=$this->imageLink('/logo-uni-hohenheim.png')?>" alt="Logo der Universität Hohenheim" title="Universität Hohenheim"></a> </div>
+          </div>
         </div>
-        <!-- /toggle-content --> 
-        
-      </div>
-      <!-- /wrp-2 --> 
     </div>
-    <!-- /wrp-1 -->
-    
-     <div class="navigation-main__wrp-3" data-gremlin="SiteNavObserver">
-      <div id="nav-panel-search" class="navigation-main__panel navigation-main__panel-search" data-gremlin="Navbar">       
-        <!-- site search -->
-        <div class="site-search">
-          <form class="form-inline" id="tx-solr-search-form-breadcrumb" role="form" action="/103440?N=1">
-            <div class="site-search__col-1">
-              <label for="tx-solr-q-breadcrumb" class="sr-only">Suche</label>
-              <input name="tx_solr[q]" autocomplete="off" id="tx-solr-q-breadcrumb" class="ac_input ui-autocomplete-input form-control site-search__form-search" placeholder="Suchbegriff, Name, Studiengang …" type="text">
-            </div>
-            <div class="site-search__col-2">
-              <button type="submit" id="suchbutton" class="btn btn-primary site-search__form-submit"> <span>Suchen</span><i></i> </button>
-            </div>
-          </form>
+  
+    <header role="banner" class="hidden-print">
+      <div id="navho">
+        <div class="container navbar">
+          <a class="visible-xs pull-left logo-xs" href="https://hohsearch.uni-hohenheim.de"><img src="<?=$this->imageLink('/logo-hohsearch-hell.png')?>" alt=""></a>
+          <a class="sr-only" href="#content"><?=$this->transEsc('Skip to content') ?></a>
+          <?=$this->render('header.phtml')?>
         </div>
-        <!-- /site-search --> 
-        
       </div>
-      <!-- /panel-search --> 
-      
-      <!-- /panel-login --> 
-      
-    </div>
-    <!-- /wrp-3 --> 
-
-  </nav>
-
- <div data-gremlin="Site" class="site"> 
-    
-
-    <!-- breadcrumbs -->
-
-    <? 
-      $alreadyDefinedBreadcrumbs = $this->layout()->breadcrumbs;
-   
-      $this->layout()->breadcrumbs  = '<li class=""><a href="' . $this->url('home') . 'RDSIndex/Home">' . $this->transEsc('Startseite') . '</a></li>';
-      $this->layout()->breadcrumbs .= '<li class="active">' . $this->transEsc('Suche') . '</li>';
-      $this->layout()->breadcrumbs .= $alreadyDefinedBreadcrumbs;
-    ?>
- 
-    <section class="container">
-      <div class="row">
-        <nav class="breadcrumbs">
-              <? if((!isset($this->layout()->showBreadcrumbs) || $this->layout()->showBreadcrumbs == true)
-                    && !empty($this->layout()->breadcrumbs)
-                    && $this->layout()->breadcrumbs !== false
+      <div class="container">
+        <? if((!isset($this->layout()->showBreadcrumbs) || $this->layout()->showBreadcrumbs == true)
+          && !empty($this->layout()->breadcrumbs)
+          && $this->layout()->breadcrumbs !== false
         ): ?>
           <ul class="breadcrumb hidden-print">
           <? if(is_array($this->layout()->breadcrumbs)): ?>
@@ -215,22 +129,17 @@
           <? endif; ?>
           </ul>
         <? endif; ?>
-        </nav>
       </div>
-    </section>
-    <!-- / breadcrumbs --> 
-
-    
+    </header>
     <div role="main" class="main template-dir-<?=$this->templateDir?> template-name-<?=$this->templateName?>">
       <div class="container">
         <?=$this->layout()->content ?>
       </div>
     </div>
-    
-    
-    <footer role="contentinfo" class="hidden-print footer-site">
+    <footer class="section section-primary">
       <div class="container">
         <?=$this->render('footer.phtml')?>
+        <?=$this->layout()->poweredBy ?>
       </div>
     </footer>
     <!-- MODAL IN CASE WE NEED ONE -->
@@ -245,12 +154,9 @@
         </div>
       </div>
     </div>
-
     <div class="offcanvas-toggle" data-toggle="offcanvas"><i class="fa"></i></div>
     <div class="offcanvas-overlay" data-toggle="offcanvas"></div>
-
     <?=$this->googleanalytics()?>
     <?=$this->piwik()?>
-
   </body>
 </html>
