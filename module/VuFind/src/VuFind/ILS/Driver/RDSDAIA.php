@@ -140,7 +140,7 @@ class RDSDAIA extends DAIA
                 }
                 // status and availability will be calculated in own function
                 if ($check_key) {
-                    $result_item['summary'] = ["summary" => $number]; 
+                    $result_item['summary'] = ["summary" => $number, "location" => $this->getItemLocation($item)]; 
                 } 
                 // get callnumber
                 if (isset($item["label"])) {
