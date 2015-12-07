@@ -272,7 +272,7 @@ class RDSIndexHolding extends \Zend\View\Helper\AbstractHelper implements Transl
                             // ToDo eliminate PHP Warning
                             foreach ($loc_daia["items"] as $item) {
                                 if ($this->checkSignature($item["callnumber"], $lok_set["signatur"], $lok_set["bib_sigel"])) {
-                                    $lok_mergeResult["RDS_LOCATION"] .= " " . $this->createReadableLocation($item["location"]); 
+                                    $lok_mergeResult["RDS_LOCATION"] = $this->createReadableLocation($item["location"]); 
                                     $localstatus = $this->createReadableStatus($item);
                                     $lok_mergeResult["RDS_STATUS"] = $localstatus;
                                 }
