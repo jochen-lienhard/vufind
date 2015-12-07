@@ -286,14 +286,30 @@ class RDSIndexHolding extends \VuFind\View\Helper\Bootstrap3\RDSIndexHolding
      *
      * @return string 
      */
-    public function getSignatureAddon($signature)
+    public function getSignatureAddon($signature, $permission)
     {
         $addon = "";
-	// if staff of the library show adis statistic
-        $addon = "<a class='fa fa-bar-chart' href='http://adisstat.ub.uni-freiburg.de/gsig.php?user_eingabe=" . $signature . "' target='stat'></a>";
+        $stataddon = "";
+        // search corresponding lok-set to signature
+        foreach ($this->lok as $mylok) {
+           if (isset($mylok["signatur"]) && $mylok["signatur"] == $signature) {
+           // check if ee set is available
+              if (isset($mylok["ee"])) {
+                 foreach ($mylok["ee"] as $mykey => $myex) {
+                    if ($mykey == "ee") { 
+                       $addon .= "<br />" . $myex;
+                    }
+                 }
+              }
+           // if staff of the library show adis statistic
+              if (isset($mylok["bib_sigel"]) && $mylok["bib_sigel"] == "25" && $permission){
+                 $stataddon = "<a class='fa-bar-chart' href='http://adisstat.ub.uni-freiburg.de/gsig.php?user_eingabe=" . $signature . "' target='stat'></a>";
+              }
+           }
+        }
         // if guidance system exist for current signature 
         // generate link
-        return $addon;
+        return $addon . $stataddon;
     }
 
 
