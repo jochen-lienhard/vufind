@@ -152,6 +152,8 @@
 
 
 ti:
+  DismaxFields:
+    - ti^100
   CustomMunge:
     rds_ti:
       - [preg_replace, '/[:]/', ' ']
@@ -179,6 +181,8 @@ au:
       - [rds_au, ~]
 
 ct:
+  DismaxFields:
+    - ct^100
   CustomMunge:
     rds_ct:
       - [preg_replace, '/[:]/', ' ']
@@ -192,6 +196,8 @@ ct:
       - [rds_ct, ~]
 
 sb:
+  DismaxFields:
+    - sb^100
   CustomMunge:
     rds_sb:
       - [preg_replace, '/[:]/', ' ']
@@ -200,6 +206,8 @@ sb:
       - [rds_sb, ~]
 
 ss:
+  DismaxFields:
+    - ss^100
   CustomMunge:
     rds_ss:
       - [preg_replace, '/[:]/', ' ']
@@ -224,6 +232,8 @@ isn:
       - [or, ~]
 
 co:
+  DismaxFields:
+    - co^100
   CustomMunge:
     rds_co:
       - [preg_replace, '/[:]/', ' ']
@@ -237,6 +247,8 @@ co:
       - [rds_co, ~]
 
 py:
+  DismaxFields:
+    - py^100
   CustomMunge:
     rds_py:
       - [preg_replace, '/[:]/', ' ']
@@ -245,6 +257,8 @@ py:
       - [rds_py, ~]
 
 pp:
+  DismaxFields:
+    - pp^100
   CustomMunge:
     rds_pp:
       - [preg_replace, '/[:]/', ' ']
@@ -258,6 +272,8 @@ pp:
       - [rds_pp, ~]
 
 pu:
+  DismaxFields:
+    - pu^100
   CustomMunge:
     rds_pu:
       - [preg_replace, '/[:]/', ' ']
@@ -271,6 +287,8 @@ pu:
       - [rds_pu, ~]
 
 si:
+  DismaxFields:
+    - si^100
   CustomMunge:
     rds_si:
       - [preg_replace, '/[:]/', '\:']
@@ -280,6 +298,8 @@ si:
       - [rds_si, ~]
 
 ta:
+  DismaxFields:
+    - ta^100
   CustomMunge:
     rds_ta:
       - [preg_replace, '/[:]/', '\:']
@@ -290,6 +310,8 @@ ta:
       - [onephrase, ~]
 
 sy:
+  DismaxFields:
+    - sy^100
   CustomMunge:
     rds_sy:
       - [preg_replace, '/[:]/', '\:']
@@ -300,6 +322,8 @@ sy:
       - [onephrase, ~]
 
 zr:
+  DismaxFields:
+    - zr^100
   CustomMunge:
     rds_zr:
       - [preg_replace, '/[:]/', '\:']
