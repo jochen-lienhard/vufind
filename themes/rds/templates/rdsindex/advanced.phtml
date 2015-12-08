@@ -60,7 +60,7 @@
       <div class="advSearch"><?=$this->transEsc("RDS_ADVANCED_SEARCH")?></div>
 
       <div id="group0" class="group well row">
-				
+      <input type="hidden" name="join" value="AND">				
 	<div class="col-md-12">
            <div class="row">
       	       <? $counter = 0; ?>
@@ -74,18 +74,17 @@
  			<div class="col-md-8">
                            <? if ($key=="au" || $key=="co" || $key=="ct"): ?>
                               <span>
-                               <input id="search_lookfor0_<?=$counter?>" onfocus="myhelp('<?=$this->transEsc("RDS_B_" . $key . "_help_head")?>','<?=$this->transEsc("RDS_B_" . $key . "_help_text")?>');" class="form-control" type="text" name="lookfor0[]" value="<? if(isset($searchTerms[$key])) {echo $searchTerms[$key];}?>">
+                               <input id="search_lookfor0_<?=$key?>" onfocus="myhelp('<?=$this->transEsc("RDS_B_" . $key . "_help_head")?>','<?=$this->transEsc("RDS_B_" . $key . "_help_text")?>');" class="form-control" type="text" name="lookfor0[]" value="<? if(isset($searchTerms[$key])) {echo $searchTerms[$key];}?>">
                                <span class="index">
-                               <a href="<?=$this->url('alphabrowse-home')?>?source=<?=$this->transEsc('register_' . $key)?>&amp;from=" onclick="this.href+=document.getElementById('search_lookfor0_<?=$counter?>').value"><span class="reg_button" title="Indexsuche">Index</span></a>
+                               <a href="<?=$this->url('alphabrowse-home')?>?source=<?=$this->transEsc('register_' . $key)?>&amp;from=" onclick="this.href+=document.getElementById('search_lookfor0_<?=$key?>').value"><span class="reg_button" title="Indexsuche">Index</span></a>
                                </span>
                               </span>
                           <? else: ?>
                              <span>
-        			<input id="search_lookfor0_<?=$counter?>" class="form-control" onfocus="myhelp('<?=$this->transEsc("RDS_B_" . $key . "_help_head")?>','<?=$this->transEsc("RDS_B_" . $key . "_help_text")?>');" type="text" name="lookfor0[]" value="<? if(isset($searchTerms[$key])) {echo $searchTerms[$key];}?>">
+        			<input id="search_lookfor0_<?=$key?>" class="form-control" onfocus="myhelp('<?=$this->transEsc("RDS_B_" . $key . "_help_head")?>','<?=$this->transEsc("RDS_B_" . $key . "_help_text")?>');" type="text" name="lookfor0[]" value="<? if(isset($searchTerms[$key])) {echo $searchTerms[$key];}?>">
                              </span>
                           <? endif; ?>
           	       </div>
-                       <input type="hidden" name="join" value="AND">
                        <input type="hidden" name="bool0[]" value="AND">
                     </div>
       		</div>
