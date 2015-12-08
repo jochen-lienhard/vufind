@@ -223,7 +223,7 @@ $(function() {
 		$(this).attr('placeholder', $(this).data().placeholder);
 	});
 
-	if($('.input-flush input').val().length > 0) {
+	if($('.input-flush input').val() && $('.input-flush input').val().length > 0) {
 		$('.input-flush .flush-button').removeClass('hidden');
 	}
 

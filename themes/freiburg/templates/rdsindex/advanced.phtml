@@ -60,7 +60,7 @@
       <div class="advSearch"><?=$this->transEsc("RDS_ADVANCED_SEARCH")?></div>
 
       <div id="group0" class="group well row">
-				
+	<input type="hidden" name="join" value="AND">	
 	<div class="col-md-12">
            <div class="row">
       	       <? $counter = 0; ?>
@@ -85,7 +85,6 @@
                              </span>
                           <? endif; ?>
           	       </div>
-                       <input type="hidden" name="join" value="AND">
                        <input type="hidden" name="bool0[]" value="AND">
                     </div>
       		</div>

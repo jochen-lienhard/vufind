@@ -58,6 +58,12 @@ $recordTotal = $this->results->getResultTotal();
     <div class="hidden-print search-controls row">
 
       <div class="result-count col-xs-12">
+        <? if ($this->searchType == 'advanced'): ?>
+          <span class="adv_search_links">
+              <a href="<?=$this->url($advSearch)?>?edit=<?=$this->escapeHtmlAttr($searchId)?>"><?=$this->transEsc("Edit this Advanced Search")?></a>
+          </span>
+        <? endif; ?>
+
         <span><?=$this->transEsc('RDS_SEARCH_TERMS')?> <span class="search-word"><?=$this->escapeHtml($lookfor)?></span>
       </div>
 
