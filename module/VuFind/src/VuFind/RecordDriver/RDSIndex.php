@@ -1806,6 +1806,18 @@ class RDSIndex extends SolrMarc
     }
 
     /**
+     * Get included work of the record.
+     * RDS
+     * @return string
+     */
+    public function getIncludedWork()
+    {
+	    return isset($this->fields['beig_werk']) ?
+		    $this->fields['beig_werk'] : '';
+    }
+
+
+    /**
      * Get main heading of title 
      * RDS
      * @return string
@@ -2260,9 +2272,9 @@ class RDSIndex extends SolrMarc
      * RDS
      * @return array
      */
-    public function getFnEnthWerk() 
+    public function getEnthWerk() 
     {
-	    return isset($this->fields['fn_enthWerke']) ? $this->fields['fn_enthWerke'] : '';
+	    return isset($this->fields['enth_werke']) ? $this->fields['enth_werke'] : '';
     }
 
     /**
@@ -2341,6 +2353,7 @@ class RDSIndex extends SolrMarc
 	    if (isset($this->fields['zs_hinweis'])) {
 		    $arr_links = $this->fields['zs_hinweis'];
 		    foreach ($arr_links as $key => $link) {
+
 			    if (strstr($link, "|")) {
 				    $arr_link = explode(" | ", $link);
 				    if (substr_count($zdb_nr, $arr_link[0])> 0) {
@@ -2760,6 +2773,16 @@ class RDSIndex extends SolrMarc
     public function getLokCt()
     {
 	    return isset($this->fields['zs']) ? $this->fields['zs'] : '';
+    }
+
+    /**
+     * Get an array of all the genre subjects associated with the record.
+     * RDS
+     * @return array
+     */
+    public function getCtGenre()
+    {
+	   return isset($this->fields['ct_genre']) ? $this->fields['ct_genre'] : '';	
     }
 
     /**

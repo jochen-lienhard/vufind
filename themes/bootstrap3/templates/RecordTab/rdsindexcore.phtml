@@ -1,0 +1,21 @@
+<?
+    // Set page title.
+    $this->headTitle($this->translate('Bibliograhic Detials') . ': ' . $this->driver->getBreadcrumb());
+    $bibliographicDetails = $this->rdsindexcore($this->driver)->getItems();
+?>
+<table class="table table-striped" summary="<?=$this->transEsc('Description')?>">
+  
+    <? foreach ($bibliographicDetails as $itemName => $itemValue): ?>
+    <? $contentDisplayed = true; ?>
+    <tr>
+      <th><?=$this->translate($itemName)?>: </th>
+      <td>
+          <?=$itemValue?><br/>
+      </td>
+    </tr>
+    <? endforeach; ?>
+  
+  <? if (!isset($contentDisplayed) || !$contentDisplayed): // Avoid errors if there were no rows above ?>
+    <tr><td><?=$this->transEsc('no_description')?></td></tr>
+  <? endif; ?>
+</table>
