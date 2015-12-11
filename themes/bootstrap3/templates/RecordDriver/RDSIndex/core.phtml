@@ -113,7 +113,7 @@
           <th><?=$this->transEsc('RDS_CJK_TITLE')?>: </th>
           <td>
 	  <?= $this->escapeHtml($titleCjkPart)?>
-	  <? if (!empty($$titleCjkAst)): ?>
+	  <? if (!empty($titleCjkAst)): ?>
 	  	<?= $this->escapeHtml($titleCjkAst)?>
 	  <? endif; ?>
 	  
@@ -408,7 +408,7 @@
       <? endif; ?>
 
 <? // TODO not tested  TODO ?>
-      <? $fn_enthWek = $this->driver->getFnEnthWerk(); if (!empty($fn_enthWek)): ?>
+      <? $fn_enthWek = $this->driver->getEnthWerk(); if (!empty($fn_enthWek)): ?>
         <tr>
           <th><?=$this->transEsc('RDS_FN_ENTHWERK')?>: </th>
           <td><? $i = 0; foreach ($fn_enthWek as $value): ?><?=($i++ == 0)?'':'<br />'?>
