@@ -140,11 +140,13 @@
     <div class="expSearchContent col-md-8">
       <div class="groupSearchHolder">
            <div class="expRow">
-             <input type="hidden" value="ex" name="type" />
+             <input type="hidden" name="join" value="AND">
+             <input type="hidden" value="ex" name="type0[]" />
              <input id="search_lookfor_ex" type="text" 
                     value="<? if(isset($searchTerms["ex"])) {echo $searchTerms["ex"];}?>" 
                     onfocus="myhelp('<?=$this->transEsc("RDS_B_ex_help_head")?>','<?=$this->transEsc("RDS_B_ex_help_text")?>');"
-                    size="50" name="lookfor"/>
+                    size="50" name="lookfor0[]"/>
+              <input type="hidden" name="bool0[]" value="AND">
               <input class="btn btn-primary pull-right" type="submit" value="<?= $this->transEsc('RDS_SEARCH')?>">
            </div>
       </div>
