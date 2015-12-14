@@ -1,10 +1,12 @@
 <?php
+
 /**
- * RDSIndex Controller
+ * RDSIndex hierarchical facet listener.
  *
  * PHP version 5
  *
- * Copyright (C) Villanova University 2010.
+ * Copyright (C) Villanova University 2013.
+ * Copyright (C) The National Library of Finland 2014.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -20,54 +22,32 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  * @category VuFind2
- * @package  Controller
- * @author   Demian Katz <demian.katz@villanova.edu>
+ * @package  Search
+ * @author   David Maus <maus@hab.de>
+ * @author   Ere Maijala <ere.maijala@helsinki.fi>
+ * @author   Jochen Lienhard <lienhard@ub.uni-freiburg.de>
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     http://vufind.org   Main Site
  */
-namespace VuFind\Controller;
+namespace VuFind\Search\RDSIndex;
+
+use VuFindSearch\Backend\BackendInterface;
+
+use Zend\EventManager\SharedEventManagerInterface;
+use Zend\EventManager\EventInterface;
+use Zend\ServiceManager\ServiceLocatorInterface;
 
 /**
- * RDSIndex Controller
+ * RDSIndex hierarchical facet handling listener.
  *
  * @category VuFind2
- * @package  Controller
- * @author   Chris Hallberg <challber@villanova.edu>
+ * @package  Search
+ * @author   David Maus <maus@hab.de>
+ * @author   Ere Maijala <ere.maijala@helsinki.fi>
+ * @author   Jochen Lienhard <lienhard@ub.uni-freiburg.de>
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     http://vufind.org   Main Site
  */
-class RDSIndexController extends AbstractSearch
+class HierarchicalFacetListener extends \VuFind\Search\Solr\HierarchicalFacetListener
 {
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->searchClassId = 'RDSIndex';
-        parent::__construct();
-    }
-
-    /**
-     * Home action
-     *
-     * @return mixed
-     */
-    public function homeAction()
-    {
-        // Set up default parameters:
-        return $this->createViewModel();
-    }
-
-    /**
-     * Search action -- call standard results action
-     *
-     * @return mixed
-     */
-    public function searchAction()
-    {
-        $view = $this->resultsAction();
-        $view->lookfor=$this->params()->fromQuery('lookfor');
-        return $view;
-    }
 }
-

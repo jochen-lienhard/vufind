@@ -28,13 +28,9 @@
  */
 namespace VuFind\Search\Factory;
 
-use VuFind\RecordDriver\PluginManager;
-
 use VuFindSearch\Backend\RDSIndex\Response\Json\RecordCollectionFactory;
 use VuFindSearch\Backend\RDSIndex\Connector;
 use VuFindSearch\Backend\RDSIndex\Backend;
-
-use VuFind\Search\Listener\NormalizeSolrSort;
 
 /**
  * Factory for the default SOLR backend.
@@ -54,12 +50,12 @@ class RDSIndexBackendFactory extends AbstractRDSIndexBackendFactory
     {
         parent::__construct();
         $this->searchConfig = 'RDSIndex_searches';
-        //$this->searchConfig = 'RDSIndex';
         $this->searchYaml = 'RDSIndex_searchspecs.yaml';
+        $this->facetConfig = 'RDSIndex_facets';
     }
 
     /**
-     * Get the Solr core.
+     * Get the RDSIndex Solr core.
      *
      * @return string
      */
@@ -81,7 +77,7 @@ class RDSIndexBackendFactory extends AbstractRDSIndexBackendFactory
     {
         $backend = parent::createBackend($connector);
         $manager = $this->serviceLocator->get('VuFind\RecordDriverPluginManager');
-        $factory = new RecordCollectionFactory(array($manager, 'getSolrRecord'));
+        $factory = new RecordCollectionFactory([$manager, 'getSolrRecord']);
         $backend->setRecordCollectionFactory($factory);
         return $backend;
     }

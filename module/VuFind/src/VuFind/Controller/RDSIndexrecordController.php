@@ -48,6 +48,5 @@ class RDSIndexrecordController extends AbstractRecord
 
         // Call standard record controller initialization:
         parent::__construct();
-        // $this->searchClassId = 'RDSIndex';
     }
 }

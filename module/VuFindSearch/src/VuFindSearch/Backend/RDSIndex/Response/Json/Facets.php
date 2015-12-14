@@ -26,7 +26,6 @@
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     http://vufind.org
  */
-
 namespace VuFindSearch\Backend\RDSIndex\Response\Json;
 
 use ArrayObject;
@@ -62,6 +61,13 @@ class Facets
      * @var array
      */
     protected $facets;
+
+    /**
+     * SOLR pivot facet information.
+     *
+     * @var ArrayObject
+     */
+    protected $pivotFacets = null;
 
     /**
      * Constructor.
@@ -111,4 +117,26 @@ class Facets
         return $this->queries;
     }
 
+    /**
+     * Return facet pivot information.
+     *
+     * @return ArrayObject
+     */
+    public function getPivotFacets()
+    {
+        if (null === $this->pivotFacets) {
+            $this->pivotFacets = new ArrayObject();
+            if (isset($this->facets['facet_pivot'])) {
+                foreach ($this->facets['facet_pivot'] as $facetdata) {
+                    foreach ($facetdata as $onefacet) {
+                        // Gives us an ArrayObject with the field value
+                        // as the key and the full data for that field,
+                        // including count and pivot, as the value.
+                        $this->pivotFacets->offsetSet($onefacet['value'], $onefacet);
+                    }
+                }
+            }
+        }
+        return $this->pivotFacets;
+    }
 }

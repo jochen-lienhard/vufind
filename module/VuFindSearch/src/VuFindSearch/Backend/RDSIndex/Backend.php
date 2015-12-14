@@ -1,6 +1,6 @@
 <?php
 /**
- * SOLR backend.
+ * RDSIndex backend.
  *
  * PHP version 5
  *
@@ -40,6 +40,7 @@ use VuFindSearch\Backend\RDSIndex\Response\Json\Terms;
 use VuFindSearch\Backend\AbstractBackend;
 use VuFindSearch\Feature\SimilarInterface;
 use VuFindSearch\Feature\RetrieveBatchInterface;
+use VuFindSearch\Feature\RandomInterface;
 
 use VuFindSearch\Backend\Exception\BackendException;
 use VuFindSearch\Backend\Exception\RemoteErrorException;
@@ -56,7 +57,7 @@ use VuFindSearch\Exception\InvalidArgumentException;
  * @link     http://vufind.org
  */
 class Backend extends AbstractBackend
-    implements SimilarInterface, RetrieveBatchInterface
+    implements SimilarInterface, RetrieveBatchInterface, RandomInterface
 {
     /**
      * Connector.
@@ -112,6 +113,28 @@ class Backend extends AbstractBackend
     }
 
     /**
+     * Get Random records
+     *
+     * @param AbstractQuery $query  Search query
+     * @param integer       $limit  Search limit
+     * @param ParamBag      $params Search backend parameters
+     *
+     * @return RecordCollectionInterface
+     */
+    public function random(
+        AbstractQuery $query, $limit, ParamBag $params = null
+    ) {
+        $params = $params ?: new ParamBag();
+        $this->injectResponseWriter($params);
+
+        $random = rand(0, 1000000);
+        $sort = "{$random}_random asc";
+        $params->set('sort', $sort);
+
+        return $this->search($query, 0, $limit, $params);
+    }
+
+    /**
      * Retrieve a single document.
      *
      * @param string   $id     Document identifier
@@ -140,6 +163,8 @@ class Backend extends AbstractBackend
      */
     public function retrieveBatch($ids, ParamBag $params = null)
     {
+        $params = $params ?: new ParamBag();
+
         // Load 100 records at a time; this is a good number to avoid memory
         // problems while still covering a lot of ground.
         $pageSize = 100;
@@ -152,15 +177,11 @@ class Backend extends AbstractBackend
         // Retrieve records a page at a time:
         $results = false;
         while (count($ids) > 0) {
-            $currentPage = array_splice($ids, 0, $pageSize, array());
+            $currentPage = array_splice($ids, 0, $pageSize, []);
             $currentPage = array_map($formatIds, $currentPage);
-            $params = new ParamBag(
-                array(
-                    'q' => 'id:(' . implode(' OR ', $currentPage) . ')',
-                    'start' => 0,
-                    'rows' => $pageSize
-                )
-            );
+            $params->set('q', 'id:(' . implode(' OR ', $currentPage) . ')');
+            $params->set('start', 0);
+            $params->set('rows', $pageSize);
             $this->injectResponseWriter($params);
             $next = $this->createRecordCollection(
                 $this->connector->search($params)
@@ -226,23 +247,25 @@ class Backend extends AbstractBackend
     /**
      * Obtain information from an alphabetic browse index.
      *
-     * @param string   $source Name of index to search
-     * @param string   $from   Starting point for browse results
-     * @param int      $page   Result page to return (starts at 0)
-     * @param int      $limit  Number of results to return on each page
-     * @param ParamBag $params Additional parameters
+     * @param string   $source      Name of index to search
+     * @param string   $from        Starting point for browse results
+     * @param int      $page        Result page to return (starts at 0)
+     * @param int      $limit       Number of results to return on each page
+     * @param ParamBag $params      Additional parameters
      * POST)
+     * @param int      $offsetDelta Delta to use when calculating page
+     * offset (useful for showing a few results above the highlighted row)
      *
      * @return array
      */
     public function alphabeticBrowse($source, $from, $page, $limit = 20,
-        $params = null
+        $params = null, $offsetDelta = 0
     ) {
         $params = $params ?: new ParamBag();
         $this->injectResponseWriter($params);
 
         $params->set('from', $from);
-        $params->set('offset', $page * $limit);
+        $params->set('offset', ($page * $limit) + $offsetDelta);
         $params->set('rows', $limit);
         $params->set('source', $source);
 
@@ -341,7 +364,7 @@ class Backend extends AbstractBackend
         }
         $qtime = isset($response['responseHeader']['QTime'])
             ? $response['responseHeader']['QTime'] : 'n/a';
-        $this->log('debug', 'Deserialized SOLR response', array('qtime' => $qtime));
+        $this->log('debug', 'Deserialized SOLR response', ['qtime' => $qtime]);
         return $response;
     }
 
@@ -381,7 +404,7 @@ class Backend extends AbstractBackend
      */
     protected function injectResponseWriter(ParamBag $params)
     {
-        if (array_diff($params->get('wt') ?: array(), array('json'))) {
+        if (array_diff($params->get('wt') ?: [], ['json'])) {
             throw new InvalidArgumentException(
                 sprintf(
                     'Invalid response writer type: %s',
@@ -389,7 +412,7 @@ class Backend extends AbstractBackend
                 )
             );
         }
-        if (array_diff($params->get('json.nl') ?: array(), array('arrarr'))) {
+        if (array_diff($params->get('json.nl') ?: [], ['arrarr'])) {
             throw new InvalidArgumentException(
                 sprintf(
                     'Invalid named list implementation type: %s',
@@ -397,7 +420,7 @@ class Backend extends AbstractBackend
                 )
             );
         }
-        $params->set('wt', array('json'));
-        $params->set('json.nl', array('arrarr'));
+        $params->set('wt', ['json']);
+        $params->set('json.nl', ['arrarr']);
     }
 }
