@@ -56,7 +56,8 @@ class RDSIndexDescription extends \Zend\View\Helper\AbstractHelper implements Tr
 		"Links",
 		"Notation", // not Hohenheim
 		"CT",
-		"LokCT"
+		"LokCT",
+		"CT_GENRE",
 		];
 
 	protected $driver = null;
@@ -154,13 +155,12 @@ class RDSIndexDescription extends \Zend\View\Helper\AbstractHelper implements Tr
 					$last_item = end($ct_display);
 					foreach ($ct_field as $field){
 						$last_item = end($ct_field);
-						//$html_result .= "<a href=".$this->record($this->driver)->getLink('ct', $field['link']).">".$this->escapeHtml($field['link'])."</a>";
 						$html_result .= "<a href=".$this->view->render('/RecordDriver/RDSIndex/link-ct.phtml', ['lookfor' => $field['link']]).">".$field['link']."</a>";
 						if (isset($field['gnd']) && !empty($field['gnd'])){
-							$html_result .= " <a class='dnb' href=".$this->view->render('/RecordDriver/RDSIndex/link-gnd.phtml', ['lookfor' => $field['gnd']])." target ='_blank'"
+		$html_result .= " <a class='dnb' href=".$this->view->render('/RecordDriver/RDSIndex/link-gnd.phtml', ['lookfor' => $field['gnd']])." target ='_blank'"
 								."title='".$this->translate('RDS_CT_DNB')."'></a>";
 						}
-						if($ct_field != $last_item )
+						if($field != $last_item )
 							$html_result .=" / " ;
 					}
 					if($ct_display != $last_item )
@@ -178,6 +178,20 @@ class RDSIndexDescription extends \Zend\View\Helper\AbstractHelper implements Tr
 					$last_item = end($links);
 					$html_result .= "<a href=".$this->view->render('/RecordDriver/RDSIndex/link-zs.phtml', ['lookfor' => $field]).">".$field."</a>";
 					if($links != $last_item )
+						$html_result .="<br /> " ;
+				}
+			}
+			return $html_result;
+		}
+
+		protected function getCT_GENRE (){
+			$html_result = "";
+			$result = $this->driver->getCtGenre();
+			if($result != null){
+				foreach ($result as $value){
+					$last_item = end($abstract);
+					$html_result .= htmlspecialchars($value);
+					if($result != $last_item )
 						$html_result .="<br /> " ;
 				}
 			}
