@@ -4,7 +4,6 @@ namespace VuFind\Export;
 
 class RDSToHTML {
     
-    
     protected $driver = null; 
     protected $translator = null;
     protected $sourceIdentifier = ''; 
@@ -152,8 +151,17 @@ class RDSToHTML {
     }
     public function getRDSProxy_CitationLinks() {
       //<a target="_blank" href="{$summCitationLinks[0].url}" onclick="userAction('click', 'RdsCitationLink', '{$ppn}');">&rarr;{translate text="Link zum Zitat"}</a>
-      $value = $this->driver->getCitationLinks();
-      return $value;
+      
+      if ($this->driver->showCitationLinks() == false) {
+        return '';
+      };  
+        
+      $html = '';
+      foreach ($this->driver->getCitationLinks() as $citationLink) {
+          $html .= '<a target="_blank" href="' . $citationLink[url] . '" onclick="userAction(\'click\', \'RdsCitationLink\', \'{$ppn}\');">&rarr; ' . $this->translate("Link zum Zitat") .'</a>';
+      }  
+      
+      return $html;
     }
     
     // RDSProxy Description
@@ -184,9 +192,6 @@ class RDSToHTML {
     
     // RDSProxy Holdings
     
-    protected $fulltextview = true;
-    protected $linkresolverview = true;
-    
     public function getRDSProxy_Holdings() {
         $output = "";
         
@@ -197,7 +202,7 @@ class RDSToHTML {
             $fulltextLinks = '';
         }
         
-        if ($this->fulltextview) {
+        if ($this->driver->getFulltextview()) {
             if ($fulltextLinks || $infoLinks) {
                 $output .= '<div class="tg">';
                 $output .= '<h2>' . $this->translate("RDS_PROXY_HOLDINGS_ELECTRONIC_FULLTEXT") . '</h2>';
@@ -206,11 +211,11 @@ class RDSToHTML {
                 $output .= '</div>';
             }
             
-            if ($this->linkresolverview && (!empty($fulltextLinks) || !empty($infoLinks))) {
+            if ($this->driver->getLinkresolverview() && (!empty($fulltextLinks) || !empty($infoLinks))) {
                 $output .= $this->getLinkresolverLink();
             }
         }
-        if (!$this->fulltextview || (empty($fulltextLinks) && empty($infoLinks))) {
+        if (!$this->driver->getFulltextview() || (empty($fulltextLinks) && empty($infoLinks))) {
             $output .= $this->getLinkresolverEmbedded();
         }
         return $output;
@@ -280,8 +285,8 @@ class RDSToHTML {
      }
      
      protected function getLoginLink() {
-        $followupUrl = $this->view->plugin('serverUrl') . $_SESSION['Search']['last'];
-        $target = $this->view->plugin('url')->__invoke('myresearch-home') . '?followupUrl=' . $followupUrl;
+        $followupUrl = $this->view->plugin('serverUrl')->__invoke() . $_SESSION['Search']['last'];
+        $target = $this->view->plugin('url')->__invoke('myresearch-home') . '?followupUrl=' . urlencode($followupUrl);
   
         $sessionInitiator = $this->authManager->getManager()->getSessionInitiator($target);
         if ($sessionInitiator) {

@@ -1749,6 +1749,14 @@ class RDSProxy extends SolrDefault
       return ($this->recordConfig->showCitationLinks == true);
     }
     
+    public function getLinkresolverview() {
+      return ($this->recordConfig->linkresolverview == true);
+    }
+    
+    public function getFulltextview() {
+      return ($this->recordConfig->fulltextview == true);
+    }
+    
     protected function getLinks($properties)
     {
         $links = array();
@@ -2032,10 +2040,6 @@ class RDSProxy extends SolrDefault
     
     public function getCitationLinks()
     {
-    	if (strpos($this->proxySettings['Holdings']['displayedCustomLinks'],'citationLinks') === false) {
-    		return '';
-    	}
-    	
         $links = array_merge(
             $this->getLinks(array('category' => 'citation', 'type' => 'external')),
         	$this->getLinks(array('category' => 'citation', 'type' => 'ehost'))

@@ -220,14 +220,7 @@ class Export
             return $retVal->asXML();
         } else {
             // Not in XML mode -- just concatenate everything together:
-            if ($format == 'HTML') {
-                $content = '<!DOCTYPE html><html><body>';
-                $content .= implode('', $parts);
-                $content .= '</body></html>';
-            } else {
-                $content = implode('', $parts);
-            }
-            
+            $content = implode('', $parts);
             return $content;
         }
     }

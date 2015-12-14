@@ -8,6 +8,7 @@ use VuFind\Export\RDSToRIS;
 use VuFind\Export\RDSToJSON;
 use VuFind\Export\RDSToCOinS;
 use VuFind\Export\RDSToHTML;
+use VuFind\Export\RDSToPRINT;
 
 class RDSExport extends AbstractHelper
 {
@@ -22,6 +23,9 @@ class RDSExport extends AbstractHelper
         switch ($format) {
             case 'HTML':
                 $formatter = new RDSToHTML($driver, $this->view, $this->linkresolver);
+                break;
+            case 'PRINT':
+                $formatter = new RDSToPrint($driver, $this->view, $this->linkresolver);
                 break;
             case 'BibTeX':
                 $formatter = new RDSToBibTeX($driver);

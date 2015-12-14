@@ -1,35 +1,46 @@
+<div class="title">
 <? $locale = $this->plugin('translate')->getTranslator()->getLocale(); ?>
 
-<h2>RDS_BIBLIOGRAPHIC_DETAILS</h2>
+<h2><?=$this->transEsc(RDS_BIBLIOGRAPHIC_DETAILS) ?></h2>
 
-<?
-    $informationItem = $this->rdsexport($this->driver, 'HTML')->getBibliographicDetails();
-?>
-
+<? $informationItem = $this->rdsexport($this->driver, 'HTML')->getBibliographicDetails(); ?>
+<table>
 <? foreach ($informationItem as $itemName => $itemValue): ?>
-<h4><?=$itemName?></h4>
-<?=$itemValue ?>
+    <tr>
+      <th><?=$this->transEsc($itemName)?>: </th>
+      <td>
+          <?=$itemValue?><br/>
+      </td>
+    </tr>
 <? endforeach; ?>
+</table>
 
-<h2>RDS_CONTENT_DETAILS</h2>
-<?
-    $descriptionItems = $this->rdsexport($this->driver, 'HTML')->getDescription();
-?>
-
+<? $descriptionItems = $this->rdsexport($this->driver, 'HTML')->getDescription(); ?>
+<? if(!empty($descriptionItems)): ?>
+<h2><?=$this->transEsc(RDS_CONTENT_DETAILS) ?></h2>
+<table>
 <? foreach ($descriptionItems as $itemName => $itemValue): ?>
-<h4><?=$itemName?></h4>
-<?=$itemValue ?>
+    <tr>
+      <th><?=$this->transEsc($itemName)?></th>
+      <td>
+          <?=$itemValue?><br/>
+      </td>
+    </tr>
 <? endforeach; ?>
+</table>
+<?endif; ?>
 
-<? 
-    $holdings = $this->rdsexport($this->driver, 'HTML')->getHoldings();
-?>
-<? if ($holdings): ?>
-<h2>RDS_HOLDINGS_INFOS</h2>
-<? foreach ($holdings as $itemName => $itemValue): ?>
-<h4><?=$itemName?></h4>
-<?=$itemValue ?>
-<? endforeach; ?>
+<? $holdings = $this->rdsexport($this->driver, 'PRINT')->getHoldings(); ?>
+<? if (!empty($holdings)): ?>
+<h2><?=$this->transEsc(RDS_HOLDINGS_INFOS) ?></h2>
+<table>
+    <? foreach ($holdings as $itemName => $itemValue): ?>
+      <tr>
+      <th><?=$this->transEsc($itemName)?></th>
+      <td><?=$itemValue ?></td>
+      </div>
+      </tr>
+    <? endforeach; ?>
+</table>
 <? endif; ?>
-
 <!-- ?=$this->record($this->driver)->getTab(new VuFind\RecordTab\RDSProxyHoldings()) ?> -->
