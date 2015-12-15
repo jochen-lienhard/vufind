@@ -162,22 +162,22 @@ ti:
       - [preg_replace, '/[#]/', ' ']
       - [preg_replace, '/[¬]/', ' ']
       - [preg_replace, '/[!]/', '\!']
-      - [preg_replace, '/[\/]/', ' ']
+      - [preg_replace, '/[\\\/]/', ' ']
   QueryFields:
-    - ti:
+    ti:
       - [rds_ti, ~]
 
 au:
   DismaxFields:
-    - au^100
+    - au
   CustomMunge:
     rds_au:
       - [preg_replace, "/[:]/", "\:"]
       - [preg_replace, "/[;]/", " "]
       - [preg_replace, "/[!]/", "\!"]
-      - [preg_replace, "/[\/]/", " "]
+      - [preg_replace, '/[\\\/]/', ' ']
   QueryFields:
-    - au:
+    au:
       - [rds_au, ~]
 
 ct:
@@ -190,9 +190,9 @@ ct:
       - [preg_replace, '/[+]/', ' ']
       - [preg_replace, '/[#]/', ' ']
       - [preg_replace, '/[!]/', '\!']
-      - [preg_replace, '/[\/]/', ' ']
+      - [preg_replace, '/[\\\/]/', ' ']
   QueryFields:
-    - ct:
+    ct:
       - [rds_ct, ~]
 
 sb:
@@ -202,7 +202,7 @@ sb:
     rds_sb:
       - [preg_replace, '/[:]/', ' ']
   QueryFields:
-    - sb:
+    sb:
       - [rds_sb, ~]
 
 ss:
@@ -212,7 +212,7 @@ ss:
     rds_ss:
       - [preg_replace, '/[:]/', ' ']
   QueryFields:
-    - ss:
+    ss:
       - [rds_ss, ~]
 
 isn:
@@ -241,9 +241,9 @@ co:
       - [preg_replace, '/[+]/', ' ']
       - [preg_replace, '/[#]/', ' ']
       - [preg_replace, '/[!]/', '\!']
-      - [preg_replace, '/[\/]/', ' ']
+      - [preg_replace, '/[\\\/]/', ' ']
   QueryFields:
-    - co:
+    co:
       - [rds_co, ~]
 
 py:
@@ -253,7 +253,7 @@ py:
     rds_py:
       - [preg_replace, '/[:]/', ' ']
   QueryFields:
-    - py:
+    py:
       - [rds_py, ~]
 
 pp:
@@ -266,9 +266,9 @@ pp:
       - [preg_replace, '/[+]/', ' ']
       - [preg_replace, '/[#]/', ' ']
       - [preg_replace, '/[!]/', '\!']
-      - [preg_replace, '/[\/]/', ' ']
+      - [preg_replace, '/[\\\/]/', ' ']
   QueryFields:
-    - pp:
+    pp:
       - [rds_pp, ~]
 
 pu:
@@ -281,9 +281,9 @@ pu:
       - [preg_replace, '/[+]/', ' ']
       - [preg_replace, '/[#]/', ' ']
       - [preg_replace, '/[!]/', '\!']
-      - [preg_replace, '/[\/]/', ' ']
+      - [preg_replace, '/[\\\/]/', ' ']
   QueryFields:
-    - pu:
+    pu:
       - [rds_pu, ~]
 
 si:
@@ -294,7 +294,7 @@ si:
       - [preg_replace, '/[:]/', '\:']
       - [preg_replace, '/[ ]/', ""]
   QueryFields:
-    - si:
+    si:
       - [rds_si, ~]
 
 ta:
@@ -305,7 +305,7 @@ ta:
       - [preg_replace, '/[:]/', '\:']
       - [preg_replace, '/[!]/', '\!']
   QueryFields:
-    - ta:
+    ta:
       - [rds_ta, ~]
       - [onephrase, ~]
 
@@ -317,7 +317,7 @@ sy:
       - [preg_replace, '/[:]/', '\:']
       - [preg_replace, '/[!]/', '\!']
   QueryFields:
-    - sy:
+    sy:
       - [rds_sy, ~]
       - [onephrase, ~]
 
@@ -329,7 +329,7 @@ zr:
       - [preg_replace, '/[:]/', '\:']
       - [preg_replace, '/[!]/', '\!']
   QueryFields:
-    - zr:
+    zr:
       - [rds_zr, ~]
       - [onephrase, ~]
 
