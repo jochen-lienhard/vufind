@@ -9,7 +9,7 @@ class RDSToHTML {
     protected $sourceIdentifier = ''; 
     
     protected $items = [
-       'RDSProxyBibliographicDetails' =>  [
+       'RDSProxyCore' =>  [
             'RDSProxy_Title',
             'RDSProxy_TitleAlt',
             'RDSProxy_Authors',
@@ -40,8 +40,8 @@ class RDSToHTML {
         return $this->driver->getTitle();
     }
     
-    public function getBibliographicDetails() {
-        return $this->getItems('BibliographicDetails');
+    public function getCore() {
+        return $this->getItems('Core');
     }
     
     public function getDescription() {

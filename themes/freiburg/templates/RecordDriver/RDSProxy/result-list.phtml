@@ -1,0 +1,329 @@
+<?
+  $dataView = $this->params->getOptions()->getListViewOption();
+  $account = $this->auth()->getManager(); 
+  $fulltextLinks = $this->driver->getFulltextLinks();
+  $path = $this->url('home');
+  $ppn = $this->driver->getUniqueID();
+  $source = $this->driver->getResourceSource();
+  
+ if (isset($this->list) && is_object($this->list)) {
+    $list_id = $this->list->id;
+    $user_id = $this->list->user_id;
+  } else {
+    $list_id = null;
+    $user_id = $this->user ? $this->user->id : null;
+  }
+  
+  $target = $this->url('myresearch-home') . '?followupUrl=' . $this->serverUrl(true)
+  
+  ?>
+
+
+<div class="<?=$this->driver->supportsAjaxStatus()?'ajaxItem ':''?>col-xs-12">
+
+    <div class="col-xs-1">
+      <? if($this->driver->getGuestView() != 'login'): ?>
+        <a href="<?=$this->recordLink()->getUrl($this->driver)?>" class="title getFull" data-view="<?=$dataView ?>">+</a>
+      <?endif; ?>
+    </div>
+
+    <div class="col-xs-9">
+
+              <? if($this->driver->getGuestView() == 'login'): ?>
+                <? if($this->auth()->isLoggedIn() === false ): ?>
+                  <? if ($sessionInitiator = $account->getSessionInitiator($target)): ?>
+                    <a href="<?=$this->escapeHtmlAttr($sessionInitiator)?>" class="login-link"><?=$this->transEsc("RDS_AUTHORIZED_USERS_ONLY")?></a>
+                  <? else: ?>
+                    <a href="<?=$this->url('myresearch-userlogin')?>" class="login-link" title="<?=$this->transEsc("RDS_AUTHORIZED_USERS_ONLY")?>"><?=$this->transEsc("RDS_AUTHORIZED_USERS_ONLY")?></a>
+                  <? endif; ?>
+                <? else: ?>
+                    <?=$this->transEsc("RDS_USER_NOT_AUTHORIZED")?>
+                <? endif; ?>
+              <? else: ?>
+            
+                <? if('full' != $dataView): ?>
+                  <a href="<?=$this->recordLink()->getUrl($this->driver)?>" class="title getFull" data-view="<?=$dataView ?>">
+                    <?=$this->record($this->driver)->getTitleHtml()?>
+                  </a>
+
+                  <? if($this->driver->getGuestView() == 'brief' && $this->auth()->isLoggedIn() === false): ?>
+                    <div>
+                      <? if ($sessionInitiator = $account->getSessionInitiator($target)): ?>
+                        <a href="<?=$this->escapeHtmlAttr($sessionInitiator)?>" class="login-link"><?=$this->transEsc("RDS_MORE_INFO_FOR_AUTHORIZED_USERS") ?></a>
+                      <? else: ?>
+                        <a href="<?=$this->url('myresearch-userlogin')?>" class="login-link" title="<?=$this->transEsc("RDS_MORE_INFO_FOR_AUTHORIZED_USERS") ?>"><?=$this->transEsc("RDS_MORE_INFO_FOR_AUTHORIZED_USERS") ?></a>
+                      <? endif; ?>
+                      
+                    </div>
+                  <? endif; ?>
+
+                  <div class="loading hidden">
+                    <i class="fa fa-spin fa-spinner"></i> <?=$this->transEsc("Loading")?>...
+                  </div>
+                  <div class="short-view<?=$this->driver->supportsAjaxStatus() ? ' ajaxItem' : '' ?>">
+                <? endif; ?>
+                <div class="row">
+                  <div>
+                    <input type="hidden" value="<?=$this->escapeHtmlAttr($this->driver->getUniqueID())?>" class="hiddenId" />
+                    <input type="hidden" value="<?=$this->escapeHtmlAttr($source)?>" class="hiddenSource" />
+                  </div>
+                  <? if ($cover = $this->record($this->driver)->getCover('result-list', 'medium', $this->recordLink()->getUrl($this->driver))): ?>
+                    <div class="col-sm-2 col-xs-3 left"><?=$cover ?></div>
+                  <? endif ?>
+                  <div class="<?=$cover ? 'col-sm-7 col-xs-6' : 'col-sm-9 col-xs-9'?> middle">
+                    <? if('full' == $dataView): ?>
+                      <div>
+                        <a href="<?=$this->recordLink()->getUrl($this->driver)?>" class="title">
+                          <?=$this->record($this->driver)->getTitleHtml()?>
+                        </a>
+                      </div>
+                    <? endif; ?>
+                    <div>
+                      <? if($this->driver->isCollection()): ?>
+                        <?=implode('<br>', array_map(array($this, 'escapeHtml'), $this->driver->getSummary())); ?>
+                      <? else: ?>
+                        <? $summAuthor = $this->driver->getPrimaryAuthor(); if (!empty($summAuthor)): ?>
+                        <?=$this->transEsc('by')?>
+                        <a href="<?=$this->record($this->driver)->getLink('author', $summAuthor)?>"><?
+                          $summHighlightedAuthor = $this->driver->getHighlightedAuthor();
+                          echo !empty($summHighlightedAuthor)
+                              ? $this->highlight($summHighlightedAuthor)
+                              : $this->escapeHtml($summAuthor);
+                        ?></a>
+                        <? endif; ?>
+              
+                        <? /****** add by RDS **********/ ?>
+                        <? $sourceDisplay = $this->driver->getSourceDisplay(); ?>
+                        <? if (!empty($sourceDisplay)):?>
+                          <br /><?=$sourceDisplay?>  
+                        <? endif;?>
+                        
+                        <? $dataSource=$this->driver->getDatasource();?>
+                        <? if (!empty($dataSource)):?>
+                          <br /><?=$dataSource ?>
+                        <? endif;?>
+
+                        <?  $desc = $this->rdsexport($this->driver, 'HTML')->getCore(); 
+                            $citLink = $desc['RDSProxy_CitationLinks'];
+                        ?>        
+                        <?=$citLink?>
+                        
+                        <? /****** end add by RDS **********/ ?>
+              
+                        <? /* ******* removed by RDS **********
+                        <? $journalTitle = $this->driver->getContainerTitle(); $summDate = $this->driver->getPublicationDates(); ?>
+                        <? if (!empty($journalTitle)): ?>
+                          <?=!empty($summAuthor) ? '<br />' : ''?>
+                          <?=$this->transEsc('Published in')?>
+                          <? $containerID = $this->driver->getContainerRecordID(); ?>
+                          <? // TODO: handle highlighting more elegantly here: ?>
+                          <a href="<?=($containerID ? $this->recordLink()->getUrl("VuFind|$containerID") : $this->record($this->driver)->getLink('journaltitle', str_replace(array('{{{{START_HILITE}}}}', '{{{{END_HILITE}}}}'), '', $journalTitle)))?>"><?=$this->highlight($journalTitle) ?></a>
+                          <?=!empty($summDate) ? ' (' . $this->escapeHtml($summDate[0]) . ')' : ''?>
+                        <? elseif (!empty($summDate)): ?>
+                          <?=!empty($summAuthor) ? '<br />' : ''?>
+                          <?=$this->transEsc('Published') . ' ' . $this->escapeHtml($summDate[0])?>
+                        <? endif; ?>
+                        <? $summInCollection = $this->driver->getContainingCollections(); if (!empty($summInCollection)): ?>
+                          <? foreach ($summInCollection as $collId => $collText): ?>
+                            <div>
+                              <b><?=$this->transEsc("in_collection_label")?></b>
+                              <a class="collectionLinkText" href="<?=$this->url('collection', array('id' => $collId))?>?recordID=<?=urlencode($this->driver->getUniqueID())?>">
+                                <?=$this->escapeHtml($collText)?>
+                              </a>
+                            </div>
+                          <? endforeach; ?>
+                        <? endif; ?>
+                         /************** edn removed by RDS **************/ ?>
+                      <? endif; ?>
+                    </div>
+              
+                    <? if(!$this->driver->isCollection()): ?>
+                      <? if ($snippet = $this->driver->getHighlightedSnippet()): ?>
+                        <? if (!empty($snippet['caption'])): ?>
+                          <strong><?=$this->transEsc($snippet['caption']) ?>:</strong> ';
+                        <? endif; ?>
+                        <? if (!empty($snippet['snippet'])): ?>
+                          <span class="quotestart">&#8220;</span>...<?=$this->highlight($snippet['snippet']) ?>...<span class="quoteend">&#8221;</span><br/>
+                        <? endif; ?>
+                      <? endif; ?>
+                    <? endif; ?>
+              
+                    <?
+                    /* Display information on duplicate records if available */
+                    if ($dedupData = $this->driver->getDedupData()): ?>
+                      <div class="dedupInformation">
+                      <?
+                        $i = 0;
+                        foreach ($dedupData as $source => $current) {
+                          if (++$i == 1) {
+                            ?><span class="currentSource"><a href="<?=$this->recordLink()->getUrl($this->driver)?>"><?=$this->transEsc("source_$source", array(), $source)?></a></span><?
+                          } else {
+                            if ($i == 2) {
+                              ?> <span class="otherSources">(<?=$this->transEsc('Other Sources')?>: <?
+                            } else {
+                              ?>, <?
+                            }
+                            ?><a href="<?=$this->recordLink()->getUrl($current['id'])?>"><?=$this->transEsc("source_$source", array(), $source)?></a><?
+                          }
+                        }
+                        if ($i > 1) {
+                          ?>)</span><?
+                        }?>
+                      </div>
+                    <? endif; ?>
+              
+                    <div class="callnumAndLocation ajax-availability hidden">
+                      <? if ($this->driver->supportsAjaxStatus()): ?>
+                        <strong class="hideIfDetailed"><?=$this->transEsc('Call Number')?>:</strong>
+                        <span class="callnumber ajax-availability hidden">
+                          <?=$this->transEsc('Loading')?>...<br/>
+                        </span>
+                        <strong><?=$this->transEsc('Located')?>:</strong>
+                        <span class="location ajax-availability hidden">
+                          <?=$this->transEsc('Loading')?>...
+                        </span>
+                        <div class="locationDetails"></div>
+                      <? else: ?>
+                        <? $summCallNo = $this->driver->getCallNumber(); if (!empty($summCallNo)): ?>
+                          <strong><?=$this->transEsc('Call Number')?>:</strong> <?=$this->escapeHtml($summCallNo)?>
+                        <? endif; ?>
+                      <? endif; ?>
+                    </div>
+              
+              
+                    <? /* We need to find out if we're supposed to display an OpenURL link ($openUrlActive),
+                          but even if we don't plan to display the link, we still want to get the $openUrl
+                          value for use in generating a COinS (Z3988) tag -- see bottom of file.
+                      $openUrl = $this->openUrl($this->driver, 'results');
+                      $openUrlActive = $openUrl->isActive();
+                      // Account for replace_other_urls setting
+                      $urls = $this->record($this->driver)->getLinkDetails($openUrlActive);
+              
+                      if ($openUrlActive || !empty($urls)): ?>
+                      <? if ($openUrlActive): ?>
+                        <br/>
+                        <?=$openUrl->renderTemplate()?>
+                      <? endif; ?>
+                      <? if (!is_array($urls)) $urls = array();
+                        if(!$this->driver->isCollection()):
+                          foreach ($urls as $current): ?>
+                            <a href="<?=$this->escapeHtmlAttr($this->proxyUrl($current['url']))?>" class="fulltext" target="new"><i class="fa fa-external-link"></i> <?=($current['url'] == $current['desc']) ? $this->transEsc('Get full text') : $this->escapeHtml($current['desc'])?></a><br/>
+                        <? endforeach; ?>
+                      <? endif; ?>
+                    <? endif; ?>
+                        */?>
+
+                    <? if ($this->driver->showFulltextLinks()): ?>
+                        <? if (!empty($fulltextLinks)): ?>
+                          <? if (($fulltextLinks[0]['indicator'] == 1) ): ?>
+                                <?if ($this->driver->getGuestView() != 'brief' && $this->auth()->isLoggedIn() == true):?>
+                                    <a target="_blank" href='<?=$path?>AJAX/JSON?method=getFulltextLink&source=RDSProxy&id=<?=$ppn?>' onclick="userAction('click', 'RdsFulltextLink', '<?=$ppn?>');">&rarr;<?=$this->transEsc("RDS_FULLTEXT_LINK") ?></a>
+                                <? else: ?>
+                                    <a href="<?=$path?>RDSProxyrecord/<?=$ppn?>"{if $record_view != "flat"} data-view="<?=$dataView ?>" class="getFull" onclick="userAction('click', 'RdsFulltextAvailable', '<?=$ppn?>'); return false;"{/if}>&rarr;<?=$this->transEsc("RDS_FULLTEXT_AVAILABLE") ?></a>
+                                <? endif; ?>
+                          <?elseif ($fulltextLinks[0]['indicator'] == 2): ?>
+                                <a href="<?=$path?>RDSProxyrecord/<?=$ppn?>"{if $record_view != "flat"} data-view="<?=$dataView ?>" class="getFull" onclick="userAction('click', 'RdsFulltextAvailable', '<?=$ppn?>'); return false;"{/if}>&rarr;<?=$this->transEsc("RDS_FULLTEXT_AVAILABLE") ?></a>
+                          <? else: ?>
+                                <a target="_blank" href='<?=$fulltextLinks[0]['url']?>' onclick="userAction('click', 'RdsFulltextLink', '<?=$ppn?>');">&rarr;<?=$this->transEsc("RDS_FULLTEXT_LINK") ?></a>
+                          <? endif; ?>
+                        <? else: ?>
+                                <a href="<?=$path?>RDSProxyRecord/<?=$ppn?>"{if $record_view != "flat"} data-view="<?=$dataView ?>" class="getFull" onclick="userAction('click', 'RdsCheckAvailability', '<?=$ppn?>'); return false;"{/if}>&rarr;<?=$this->transEsc("RDS_CHECK_AVIALABILITY") ?></a>
+                        <? endif; ?>
+                    <? endif; ?>
+
+                    <?=str_replace('class="', 'class="label label-info ', $this->record($this->driver)->getFormatList())?>
+              
+                    <? if (!$openUrlActive && empty($urls) && $this->driver->supportsAjaxStatus()): ?>
+                      <span class="status ajax-availability hidden">
+                        <span class="label label-default"><?=$this->transEsc('Loading')?>...</span>
+                      </span>
+                    <? endif; ?>
+                    <?=$this->record($this->driver)->getPreviews()?>
+                  </div>
+                  <div class="col-xs-3 right hidden-print">
+                    <? /* Display qrcode if appropriate: */ ?>
+                    <? if ($QRCode = $this->record($this->driver)->getQRCode("results")): ?>
+                      <?
+                        // Add JS Variables for QrCode
+                        $this->jsTranslations()->addStrings(array('qrcode_hide' => 'qrcode_hide', 'qrcode_show' => 'qrcode_show'));
+                      ?>
+                      <span class="hidden-xs">
+                        <i class="fa fa-fw fa-qrcode"></i> <a href="<?=$this->escapeHtmlAttr($QRCode);?>" class="qrcodeLink"><?=$this->transEsc('qrcode_show')?></a>
+                        <div class="qrcode hidden">
+                          <script type="text/template" class="qrCodeImgTag">
+                            <img alt="<?=$this->transEsc('QR Code')?>" src="<?=$this->escapeHtmlAttr($QRCode);?>"/>
+                          </script>
+                        </div><br/>
+                      </span>
+                    <? endif; ?>
+              
+                    <? /* Hierarchy tree link */ ?>
+                    <? $trees = $this->driver->tryMethod('getHierarchyTrees'); if (!empty($trees)): ?>
+                      <? foreach ($trees as $hierarchyID => $hierarchyTitle): ?>
+                        <div class="hierarchyTreeLink">
+                          <input type="hidden" value="<?=$this->escapeHtmlAttr($hierarchyID)?>" class="hiddenHierarchyId" />
+                          <i class="fa fa-fw fa-sitemap"></i>
+                          <a class="hierarchyTreeLinkText modal-link" href="<?=$this->recordLink()->getTabUrl($this->driver, 'HierarchyTree')?>?hierarchy=<?=urlencode($hierarchyID)?>#tabnav" title="<?=$this->transEsc('hierarchy_tree')?>">
+                            <?=$this->transEsc('hierarchy_view_context')?><? if (count($trees) > 1): ?>: <?=$this->escapeHtml($hierarchyTitle)?><? endif; ?>
+                          </a>
+                        </div>
+                      <? endforeach; ?>
+                    <? endif; ?>
+              
+                    <?=$this->driver->supportsCoinsOpenUrl()?'<span class="Z3988" title="'.$this->escapeHtmlAttr($this->driver->getCoinsOpenUrl()).'"></span>':''?>
+                  </div>
+                </div>
+                <? if('full' != $dataView): ?>
+                  </div>
+                  <div class="long-view hidden"></div>
+                <? endif; ?>
+              <? endif; ?>
+               
+              
+    </div>
+    
+    <div class="col-xs-2 itemActions">
+      <? if($this->driver->getGuestView() != 'login'): ?>
+        <? if ($this->userlist()->getMode() !== 'disabled'): ?>
+            <? /* Add to favorites */ ?>
+            <? if($this->auth()->isLoggedIn()): ?> 
+              <a href="<?=$this->recordLink()->getActionUrl($this->driver, 'Save')?>" class="fa fa-star save-record modal-link favActionAdd" id="<?=$this->driver->getUniqueId() ?>" title="<?=$this->transEsc('Add to favorites')?>"></a>
+            <?else: ?>
+              <a href="<?=$this->recordLink()->getActionUrl($this->driver, 'Save')?>" data-id="<?=$this->driver->getResourceSource()?>|<?=$this->driver->getUniqueID()?>" class="fa fa-star cartAction" id="<?=$this->driver->getUniqueId() ?>" title="<?=$this->transEsc('Add to favorites')?>"></a>
+            <?endif; ?>
+            
+            <? if($this->auth()->isLoggedIn()): ?>
+            <? /* Use a different delete URL if we're removing from a specific list or the overall favorites: */
+                  $deleteUrl = null === $list_id
+                      ? $this->url('myresearch-favorites')
+                      : $this->url('userList', array('id' => $list_id));
+                  $deleteFavoriteConfirmation = null === $list_id
+                      ? 'RDS_FAV_LIST_REMOVE_FORM_ALL_LISTS'
+                      : 'RDS_FAV_LIST_REMOVE_FORM_CURRENT_LIST';
+                  $deleteUrlGet = $deleteUrl . '?delete=' . urlencode($id) . '&amp;source=' . urlencode($source);
+                  $dLabel = 'delete-label-' . preg_replace('[\W]','-',$id);
+                ?>
+                <div class="dropdown favActionDel hidden">
+                  <a class="dropdown-toggle" id="<?=$dLabel ?>" role="button" data-toggle="dropdown" data-target="#" href="<?=$deleteUrlGet ?>">
+                    <i class="fa fa-trash-o"></i>
+                  </a>
+                  <ul class="dropdown-menu" role="menu" aria-labelledby="<?=$dLabel ?>">
+                    <li><a onClick="$.post('<?=$deleteUrl?>', {'delete':'<?=$this->escapeJs($ppn) ?>','source':'<?=$this->escapeHtmlAttr($source) ?>','confirm':true},function(){location.reload(true)})" title="<?=$this->transEsc('confirm_delete_brief')?>"><?=$this->transEsc($deleteFavoriteConfirmation)?></a></li>
+                    <li><a><?=$this->transEsc('RDS_FAV_LIST_CANCEL_DELETE')?></a></li>
+                  </ul>
+                </div>
+            <?endif ?>
+            
+            <a href="/Cart/doExport" class="fa fa-print doExportRecord" data-id="<?=$this->driver->getResourceSource()?>|<?=$this->driver->getUniqueID()?>"></a>
+            <a href="" class="fa fa-placeholder"></a>
+            
+            <?if ($this->favorites): ?>
+                <?=$this->record($this->driver)->getCheckbox() ?>
+            <?endif; ?>
+        
+        <? endif; ?>
+        
+      <? endif; ?>
+    </div>
+    
+</div>

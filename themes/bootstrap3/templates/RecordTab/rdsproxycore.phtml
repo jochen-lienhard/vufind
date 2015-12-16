@@ -1,11 +1,11 @@
 <?
     // Set page title.
     $this->headTitle($this->translate('Bibliograhic Detials') . ': ' . $this->driver->getBreadcrumb());
-    $bibliographicDetails = $this->rdsproxybibliographicdetails($this->driver)->getItems();
+    $coreItems = $this->rdsproxycore($this->driver)->getItems();
 ?>
 <table class="table table-striped" summary="<?=$this->transEsc('Description')?>">
   
-    <? foreach ($bibliographicDetails as $itemName => $itemValue): ?>
+    <? foreach ($coreItems as $itemName => $itemValue): ?>
     <? $contentDisplayed = true; ?>
     <tr>
       <th><?=$this->transEsc($itemName)?>: </th>
