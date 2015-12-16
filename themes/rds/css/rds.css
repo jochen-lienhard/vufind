@@ -191,6 +191,50 @@ div.tg div.t_text {
    display: inline-block;
 }
 
+/* Hintbox */
+
+.hintbox {
+    margin-top: 16px;
+}
+
+.hintbox .hintbox_tab {
+    display: inline-block;
+    border: 1px solid #CCCCCC;
+    border-bottom: none;
+    width: 120px;
+    background-color: white;
+    padding: 4px;
+    margin-bottom: -1px;
+    font-weight: bold;
+    color: #06C;
+}
+
+.hintbox .line {
+    padding-bottom: 8px;
+}
+
+.hintbox .saveAllLink {
+    padding: 0px;
+    margin: 0px 8px 0px 0px;
+    color: #06C;
+    background: none;
+    border:none;
+    text-decoration: underline;
+}
+
+.hintbox .saveAllLink:hover {
+    cursor: Pointer;
+}
+
+.hintbox .hintbox_content {
+    border: 1px solid #CCCCCC;
+    padding: 8px 4px 4px 8px;
+}
+
+.hintbox .loading {
+    background: url('../icons/loading.gif') no-repeat right;
+    padding-right: 20px;
+}
 
 
 
