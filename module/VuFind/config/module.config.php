@@ -489,6 +489,7 @@ $config = [
                 ],
                 'invokables' => [
                     'description' => 'VuFind\RecordTab\Description',
+                    'rdsindexcore' => 'VuFind\RecordTab\RDSIndexCore',
                     'rdsindexdescription' => 'VuFind\RecordTab\RDSIndexDescription',
                     'rdsproxybibliographicdetails' => 'VuFind\RecordTab\RDSProxyBibliographicDetails',
                     'rdsproxydescription' => 'VuFind\RecordTab\RDSProxyDescription',
@@ -628,8 +629,9 @@ $config = [
             ],
             'VuFind\RecordDriver\RDSIndex' => [
                 'tabs' => [
-                    'Holdings' => 'RDSIndexHoldingsILS', 
+                    'Core' => 'RDSIndexCore',
                     'Description' => 'RDSIndexDescription',
+                    'Holdings' => 'RDSIndexHoldingsILS', 
                     'Details' => 'StaffViewMARC',
                     'Similar' => 'SimilarItemsCarousel',
                  ],
