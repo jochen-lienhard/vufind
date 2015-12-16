@@ -90,20 +90,20 @@ class RDSIndexHolding extends \VuFind\View\Helper\Bootstrap3\RDSIndexHolding
     {
         if ($bib_sigel == "25") {
             if (preg_match('/\</', $daia_sig)) {
-               $loc_length = strlen(str_replace(' ', '', (strtolower($loc_sig))));  
+                $loc_length = strlen(str_replace(' ', '', (strtolower($loc_sig))));  
             } else {
-               $loc_length = strlen(str_replace(' ', '', (strtolower($daia_sig))));
+                $loc_length = strlen(str_replace(' ', '', (strtolower($daia_sig))));
             }
-            if (substr(str_replace(' ', '', (strtolower($daia_sig))),0,$loc_length)== substr(str_replace(' ', '', (strtolower($loc_sig))),0,$loc_length)) {
-               return true;
+            if (substr(str_replace(' ', '', (strtolower($daia_sig))), 0, $loc_length)== substr(str_replace(' ', '', (strtolower($loc_sig))), 0, $loc_length)) {
+                return true;
             } else {
-               return false;
+                return false;
             }
         } else {
             if (str_replace(' ', '', (strtolower($daia_sig))) == str_replace(' ', '', (strtolower($loc_sig)))) {
-               return true;
+                return true;
             } else {
-               return false;
+                return false;
             }
         }
     }
@@ -138,14 +138,14 @@ class RDSIndexHolding extends \VuFind\View\Helper\Bootstrap3\RDSIndexHolding
         if (isset($lok_set["praesenz"]) && $lok_set["praesenz"]=='p') {
             return "RDS_REF_STOCK";
         } else {
-           if ($lok_set["bib_sigel"] == "Frei160") {
-               return "<a href=javascript:msgWindow=window.open('http://www.eh-freiburg.de/studieren/bibliothek','KIOSK','width=1024,height=580,location=no,menubar=yes,toolbar=not,status=yes,scrollbars=yes,directories=no,resizable=yes,alwaysRaised=yes,hotkeys=no,top=0,left=200,screenY=0,screenX=200');msgWindow.focus();>Bibliothek der evangelischen Hochschule Freiburg</a>";
-           }
-           return null;
+            if ($lok_set["bib_sigel"] == "Frei160") {
+                return "<a href=javascript:msgWindow=window.open('http://www.eh-freiburg.de/studieren/bibliothek','KIOSK','width=1024,height=580,location=no,menubar=yes,toolbar=not,status=yes,scrollbars=yes,directories=no,resizable=yes,alwaysRaised=yes,hotkeys=no,top=0,left=200,screenY=0,screenX=200');msgWindow.focus();>Bibliothek der evangelischen Hochschule Freiburg</a>";
+            }
+            return null;
         }
     }
 
-  /**
+    /**
      * Creates the comment based on lok_set 
      *
      * @param array $lok_set 
@@ -154,13 +154,14 @@ class RDSIndexHolding extends \VuFind\View\Helper\Bootstrap3\RDSIndexHolding
      */
     protected function setComment($lok_set)
     {
-        if (preg_match('/papierausdruck/', strtolower($lok_set["bestandKomment8034"])) && 
-           $this->getAdisLink("25-122") && 
-           $lok_set["type"] =="y" &&  
-           preg_match('/Frei122-/', $lok_set["signatur"])) {
-           return $lok_set["bestandKomment8034"] . " <a href=" . $this->getAdisLink("25-122") . ">" .$this->translate("RDS_AUSLEIHE") . "</a>";  
+        if (preg_match('/papierausdruck/', strtolower($lok_set["bestandKomment8034"]))  
+            && $this->getAdisLink("25-122")  
+            && $lok_set["type"] =="y"   
+            && preg_match('/Frei122-/', $lok_set["signatur"])
+        ) {
+            return $lok_set["bestandKomment8034"] . " <a href=" . $this->getAdisLink("25-122") . ">" .$this->translate("RDS_AUSLEIHE") . "</a>";  
         } else {
-           return $lok_set["bestandKomment8034"]; 
+            return $lok_set["bestandKomment8034"]; 
         }
     }
 
@@ -173,34 +174,34 @@ class RDSIndexHolding extends \VuFind\View\Helper\Bootstrap3\RDSIndexHolding
      */
     protected function setIntern($lok_set)
     {
-       if (preg_match('/FRIAS/', $lok_set["signatur"])) {
-          return $this->translate("RDS_USE_REQU") . "<a href='http://www.frias.uni-freiburg.de/de/das-institut/kontakt/bib-stadtstrasse'>" . $this->translate("RDS_CONTACT") . "</a>";
-       } else {
-          if (isset($lok_set["int_verm"]) && !preg_match('/Zugriff/', $lok_set["int_verm"])) {
-             if (preg_match('/http/', $lok_set["int_verm"])) {
-               return "<a href='" . $lok_set["int_verm"] . "'>" . $lok_set["int_verm"] . "</a>";
-             } else {
-               return $lok_set["int_verm"];
-             }
-          } else {
-             if (isset($lok_set["ee"])) {
-             /* ordinariat fix */
-                $ord= "";
-                foreach ($lok_set["ee"] as $eekey => $eevalue) {
-                  if ($eekey == "int_verm") {
-                     $ord .= $eevalue . " ";
-                  }
-                }
-                if ($ord == "") {
-                   return null;
+        if (preg_match('/FRIAS/', $lok_set["signatur"])) {
+            return $this->translate("RDS_USE_REQU") . "<a href='http://www.frias.uni-freiburg.de/de/das-institut/kontakt/bib-stadtstrasse'>" . $this->translate("RDS_CONTACT") . "</a>";
+        } else {
+            if (isset($lok_set["int_verm"]) && !preg_match('/Zugriff/', $lok_set["int_verm"])) {
+                if (preg_match('/http/', $lok_set["int_verm"])) {
+                    return "<a href='" . $lok_set["int_verm"] . "'>" . $lok_set["int_verm"] . "</a>";
                 } else {
-                   return $ord;
+                    return $lok_set["int_verm"];
                 }
-             } else {
-                return null;
-             }
-          }
-       }
+            } else {
+                if (isset($lok_set["ee"])) {
+                    /* ordinariat fix */
+                    $ord= "";
+                    foreach ($lok_set["ee"] as $eekey => $eevalue) {
+                        if ($eekey == "int_verm") {
+                            $ord .= $eevalue . " ";
+                        }
+                    }
+                    if ($ord == "") {
+                        return null;
+                    } else {
+                        return $ord;
+                    }
+                } else {
+                    return null;
+                }
+            }
+        }
     }
 
     /**
@@ -229,13 +230,13 @@ class RDSIndexHolding extends \VuFind\View\Helper\Bootstrap3\RDSIndexHolding
      */
     protected function setLocalNotation($lok_set)
     {
-       $urlHelper = $this->getView()->plugin('url');
-       $url = $urlHelper('rdsindex-search');
-       $localvalue = "";
-       foreach ($lok_set["lok_no"] as $lok_no) {
+        $urlHelper = $this->getView()->plugin('url');
+        $url = $urlHelper('rdsindex-search');
+        $localvalue = "";
+        foreach ($lok_set["lok_no"] as $lok_no) {
              $localvalue .= "<a href='". $url . "?lookfor=zr:\"". $lok_no . "\"&type=allfields&submit=Suchen'>" . $lok_no . "</a><br />";
-       }
-       return $localvalue;
+        }
+        return $localvalue;
     }
 
 
@@ -262,7 +263,7 @@ class RDSIndexHolding extends \VuFind\View\Helper\Bootstrap3\RDSIndexHolding
      */
     public function getDigitalRepro()
     {
-       return "<a href='http://www.ub.uni-freiburg.de/?id=3900&amp;ppn=" . $this->lok["t_idn"] . ">Kostenpflichtige, digitale Reproduktion bestellen</a>";
+        return "<a href='http://www.ub.uni-freiburg.de/?id=3900&amp;ppn=" . $this->lok["t_idn"] . ">Kostenpflichtige, digitale Reproduktion bestellen</a>";
     }
 
 
@@ -282,7 +283,8 @@ class RDSIndexHolding extends \VuFind\View\Helper\Bootstrap3\RDSIndexHolding
     /**
      * Generates HTML code to add content to the signature 
      *
-     * @param string $signature
+     * @param string $signature  corresponding signature
+     * @param string $permission staff 
      *
      * @return string 
      */
@@ -292,20 +294,20 @@ class RDSIndexHolding extends \VuFind\View\Helper\Bootstrap3\RDSIndexHolding
         $stataddon = "";
         // search corresponding lok-set to signature
         foreach ($this->lok as $mylok) {
-           if (isset($mylok["signatur"]) && $mylok["signatur"] == $signature) {
-           // check if ee set is available
-              if (isset($mylok["ee"])) {
-                 foreach ($mylok["ee"] as $mykey => $myex) {
-                    if ($mykey == "ee") { 
-                       $addon .= "<br />" . $myex;
+            if (isset($mylok["signatur"]) && $mylok["signatur"] == $signature) {
+                // check if ee set is available
+                if (isset($mylok["ee"])) {
+                    foreach ($mylok["ee"] as $mykey => $myex) {
+                        if ($mykey == "ee") { 
+                            $addon .= "<br />" . $myex;
+                        }
                     }
-                 }
-              }
-           // if staff of the library show adis statistic
-              if (isset($mylok["bib_sigel"]) && $mylok["bib_sigel"] == "25" && $permission){
-                 $stataddon = "<a class='fa-bar-chart' href='http://adisstat.ub.uni-freiburg.de/gsig.php?user_eingabe=" . $signature . "' target='stat'></a>";
-              }
-           }
+                }
+                // if staff of the library show adis statistic
+                if (isset($mylok["bib_sigel"]) && $mylok["bib_sigel"] == "25" && $permission) {
+                    $stataddon = "<a class='fa-bar-chart' href='http://adisstat.ub.uni-freiburg.de/gsig.php?user_eingabe=" . $signature . "' target='stat'></a>";
+                }
+            }
         }
         // if guidance system exist for current signature 
         // generate link
@@ -340,10 +342,10 @@ class RDSIndexHolding extends \VuFind\View\Helper\Bootstrap3\RDSIndexHolding
            "25-140",
         ];
         if (in_array($bib_sigel, $mybibarr)) {
-           // ToDo issn and ti not available
-           return "<a href='https://mybib.ub.uni-freiburg.de/intern/bestellung2/?sigel=" . $bib_sigel . "&amp;id=" . $this->lok["t_idn"] . "&amp;sign=" . $this->lok["signatur"] . "&amp;best=" . $this->lok["bestand8032"] . "+" . $this->lok["lueckenangabe8033"] . "'>" . $this->translate("RDS_PRINT_COPY") . "</a>";
+            // ToDo issn and ti not available
+            return "<a href='https://mybib.ub.uni-freiburg.de/intern/bestellung2/?sigel=" . $bib_sigel . "&amp;id=" . $this->lok["t_idn"] . "&amp;sign=" . $this->lok["signatur"] . "&amp;best=" . $this->lok["bestand8032"] . "+" . $this->lok["lueckenangabe8033"] . "'>" . $this->translate("RDS_PRINT_COPY") . "</a>";
         } else {
-           return null;
+            return null;
         }
     }
 
