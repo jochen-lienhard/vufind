@@ -1,11 +1,11 @@
 <div class="title">
 <? $locale = $this->plugin('translate')->getTranslator()->getLocale(); ?>
 
-<h2><?=$this->transEsc(RDS_BIBLIOGRAPHIC_DETAILS) ?></h2>
+<h2><?=$this->transEsc(RDS_TITLE) ?></h2>
 
-<? $informationItem = $this->rdsexport($this->driver, 'HTML')->getBibliographicDetails(); ?>
+<? $coreItems = $this->rdsindexcore($this->driver)->getItems(); ?>
 <table>
-<? foreach ($informationItem as $itemName => $itemValue): ?>
+<? foreach ($coreItems as $itemName => $itemValue): ?>
     <tr>
       <th><?=$this->transEsc($itemName)?>: </th>
       <td>
@@ -15,7 +15,7 @@
 <? endforeach; ?>
 </table>
 
-<? $descriptionItems = $this->rdsexport($this->driver, 'HTML')->getDescription(); ?>
+<? $descriptionItems = $this->rdsindexdescription($this->driver)->getItems(); ?>
 <? if(!empty($descriptionItems)): ?>
 <h2><?=$this->transEsc(RDS_CONTENT_DETAILS) ?></h2>
 <table>
@@ -30,7 +30,7 @@
 </table>
 <?endif; ?>
 
-<? $holdings = $this->rdsexport($this->driver, 'PRINT')->getHoldings(); ?>
+<? $holdings = []; // $this->rdsindexholding($this->driver)->getItems(); ?>
 <? if (!empty($holdings)): ?>
 <h2><?=$this->transEsc(RDS_HOLDINGS_INFOS) ?></h2>
 <table>

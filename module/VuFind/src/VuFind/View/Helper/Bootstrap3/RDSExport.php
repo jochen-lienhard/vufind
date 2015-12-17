@@ -44,8 +44,8 @@ class RDSExport extends AbstractHelper
         return $this->formatter->getRecord();
     }
 
-    public function getBibliographicDetails() {
-        return $this->formatter->getBibliographicDetails();
+    public function getCore() {
+        return $this->formatter->getCore();
     }
     
     public function getDescription() {

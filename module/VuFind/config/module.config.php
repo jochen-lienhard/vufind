@@ -489,8 +489,9 @@ $config = [
                 ],
                 'invokables' => [
                     'description' => 'VuFind\RecordTab\Description',
+                    'rdsindexcore' => 'VuFind\RecordTab\RDSIndexCore',
                     'rdsindexdescription' => 'VuFind\RecordTab\RDSIndexDescription',
-                    'rdsproxybibliographicdetails' => 'VuFind\RecordTab\RDSProxyBibliographicDetails',
+                    'rdsproxycore' => 'VuFind\RecordTab\RDSProxyCore',
                     'rdsproxydescription' => 'VuFind\RecordTab\RDSProxyDescription',
                     'staffviewarray' => 'VuFind\RecordTab\StaffViewArray',
                     'staffviewmarc' => 'VuFind\RecordTab\StaffViewMARC',
@@ -628,8 +629,9 @@ $config = [
             ],
             'VuFind\RecordDriver\RDSIndex' => [
                 'tabs' => [
-                    'Holdings' => 'RDSIndexHoldingsILS', 
+                    'Core' => 'RDSIndexCore',
                     'Description' => 'RDSIndexDescription',
+                    'Holdings' => 'RDSIndexHoldingsILS', 
                     'Details' => 'StaffViewMARC',
                     'Similar' => 'SimilarItemsCarousel',
                  ],
@@ -637,7 +639,7 @@ $config = [
             ],
             'VuFind\RecordDriver\RDSProxy' => [
                 'tabs' => [
-                    'BibliographicDetails' => 'RDSProxyBibliographicDetails',
+                    'Core' => 'RDSProxyCore',
                     'Description' => 'RDSProxyDescription',
                     'Holdings' => 'RDSProxyHoldings',
                     'Details' => 'StaffViewArray',
