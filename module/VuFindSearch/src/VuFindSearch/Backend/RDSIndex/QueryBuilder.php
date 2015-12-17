@@ -166,6 +166,13 @@ class QueryBuilder implements QueryBuilderInterface
                 }
             }
         }
+
+        // remove filter query, if $string contains rn:
+        if (preg_match('/\(rn\:/',$string) || preg_match('/\ rn\:/',$string) || 
+            preg_match('/^rn\:/',$string) || preg_match('/\brn\:/',$string)) {
+           $params->set('fq', null);
+        } 
+
         $params->set('q', $string);
 
         return $params;
