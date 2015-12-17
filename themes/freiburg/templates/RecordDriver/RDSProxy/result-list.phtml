@@ -102,6 +102,11 @@
                         <? if (!empty($dataSource)):?>
                           <br /><?=$dataSource ?>
                         <? endif;?>
+                        
+                        <?  $desc = $this->rdsproxycore($this->driver)->getItems(); 
+                            $citLink = $desc['RDS_CitationLinks'];
+                        ?>        
+                        <?=$citLink?>
                         <? /****** end add by RDS **********/ ?>
               
                         <? /* ******* removed by RDS **********
