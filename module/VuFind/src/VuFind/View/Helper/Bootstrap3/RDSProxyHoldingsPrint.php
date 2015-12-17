@@ -1,6 +1,6 @@
 <?php
 /**
- * Record driver view helper
+ * RDSProxyHolding view helper
  *
  * PHP version 5
  *
@@ -27,49 +27,23 @@
  * @link     http://vufind.org/wiki/vufind2:developer_manual Wiki
  */
 namespace VuFind\View\Helper\Bootstrap3;
-use Zend\View\Exception\RuntimeException, Zend\View\Helper\AbstractHelper;
-    
+use     VuFind\I18n\Translator\TranslatorAwareInterface;
+
 /**
- * Record driver view helper
+ * RDSProxyHolding view helper
  *
  * @category VuFind2
  * @package  View_Helpers
  * @author   Demian Katz <demian.katz@villanova.edu>
- * @author   Jochen Lienhard <lienhard@ub.uni-freiburg.de>
+ * @author   Markus Beh <markus.beh@ub.uni-freiburg.de>
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     http://vufind.org/wiki/vufind2:developer_manual Wiki
  */
-class RDSProxyDescription extends RDSHelper
+class RDSProxyHoldingsPrint extends RDSProxyHoldings
 {
-    protected $items = [
-        'SubjectsGeneral',
-        'Abstracts',
-        'Review',
-        'Reviewers'
-    ];
-    
- public function getSubjectsGeneral() {
-        foreach ($this->driver->getSubjectsGeneral() as $subjectGeneral) {
-            $html .= $subjectGeneral . '<br />';
-        }
-        
+    protected function getLinkresolverLink() {
+        $html = '  <h2>' . $this->translate("RDS_PROXY_HOLDINGS_MORE_SOURCES") .' </h2>';
+        $html .= ' <a target="linkresolver" href="' . $this->driver->getOpenUrlExternal() . '" title="' . $this->translate("RDS_PROXY_HOLDINGS_REDI_LINKS") . '">' . $this->translate("RDS_PROXY_HOLDINGS_REDI_LINKS") . '</a>';
         return $html;
-    }
-    
-    public function getAbstracts() {
-        foreach ($this->driver->getAbstracts() as $abstract) {
-            $html .= $abstract . '<br />';
-        }
-        
-        return $html;
-    }
-    
-    public function getReview() {
-        return $this->driver->getReview();
-    }
-    
-    public function getReviewers() {
-        return $this->driver->getReviewers();
-    }
-	
+     }
 }

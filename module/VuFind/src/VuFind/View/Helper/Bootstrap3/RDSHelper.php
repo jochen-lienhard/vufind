@@ -28,7 +28,8 @@
  */
 namespace VuFind\View\Helper\Bootstrap3;
 use Zend\View\Exception\RuntimeException, Zend\View\Helper\AbstractHelper;
-    
+use Zend\Filter\File\UpperCase;
+
 /**
  * Record driver view helper
  *
@@ -39,37 +40,49 @@ use Zend\View\Exception\RuntimeException, Zend\View\Helper\AbstractHelper;
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     http://vufind.org/wiki/vufind2:developer_manual Wiki
  */
-class RDSProxyDescription extends RDSHelper
+class RDSHelper extends AbstractHelper
 {
-    protected $items = [
-        'SubjectsGeneral',
-        'Abstracts',
-        'Review',
-        'Reviewers'
-    ];
+    protected $driver = null; 
+    protected $translator = null;
+    protected $sourceIdentifier = '';
+    protected $authManager = null;
+    protected $linkresolver = null;
     
- public function getSubjectsGeneral() {
-        foreach ($this->driver->getSubjectsGeneral() as $subjectGeneral) {
-            $html .= $subjectGeneral . '<br />';
+    protected $items = [];
+
+    public function __invoke($driver)
+    {
+        $this->driver = $driver;
+        $this->translator = $this->view->plugin('translate')->getTranslator();
+        $this->authManager = $this->view->plugin('auth');
+        return $this;
+    }
+    
+    public function getItems() {
+        $results = [];
+        foreach ($this->items as $item) {
+            $function = [$this, 'get' . $item];
+            $itemValue = call_user_func($function);
+            if ($itemValue) {
+                $wordingKey = preg_replace('/([A-Z])/', '_$1', $item);
+                $wordingKey = preg_replace('/^_/', '', $wordingKey);
+                $results['RDS_' . strtoupper($wordingKey)] = $itemValue;
+            }
         }
-        
-        return $html;
+        return $results;
     }
     
-    public function getAbstracts() {
-        foreach ($this->driver->getAbstracts() as $abstract) {
-            $html .= $abstract . '<br />';
-        }
-        
-        return $html;
+    protected function render($template) {
+        return $this->view->render($template);
     }
     
-    public function getReview() {
-        return $this->driver->getReview();
+    protected function translate($str) {
+        $translation = ($this->translator) ? $this->translator->translate($str) : $str;
+        return $translation;
     }
     
-    public function getReviewers() {
-        return $this->driver->getReviewers();
+    protected function getLocale() {
+        $locale = ($this->translator) ? $this->translator->getLocale() : 'de';
+        return $locale;
     }
-	
 }

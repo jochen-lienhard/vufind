@@ -1,7 +1,7 @@
 <?
     // Set page title.
     $this->headTitle($this->translate('Description') . ': ' . $this->driver->getBreadcrumb());
-    $descriptionItems = $this->RDSProxyDescription($this->driver)->getItems();
+    $descriptionItems = $this->rdsproxydescription($this->driver)->getItems();
 ?>
 <table class="table table-striped" summary="<?=$this->transEsc('Description')?>">
   

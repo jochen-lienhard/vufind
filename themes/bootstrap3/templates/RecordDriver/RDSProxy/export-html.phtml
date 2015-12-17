@@ -1,7 +1,7 @@
 <div class="title">
 <? $locale = $this->plugin('translate')->getTranslator()->getLocale(); ?>
 
-<h2><?=$this->transEsc(RDS_BIBLIOGRAPHIC_DETAILSxx) ?></h2>
+<h2><?=$this->transEsc(RDS_BIBLIOGRAPHIC_DETAILS) ?></h2>
 
 <? $coreItems = $this->rdsproxycore($this->driver)->getItems(); ?>
 <table>
@@ -30,7 +30,7 @@
 </table>
 <?endif; ?>
 
-<? $holdings = []; // $this->rdsproxyholding($this->driver)->getItems(); ?>
+<? $holdings = $this->rdsproxyholdingsprint($this->driver)->getItems(); ?>
 <? if (!empty($holdings)): ?>
 <h2><?=$this->transEsc(RDS_HOLDINGS_INFOS) ?></h2>
 <table>

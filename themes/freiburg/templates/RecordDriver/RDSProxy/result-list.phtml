@@ -103,8 +103,8 @@
                           <br /><?=$dataSource ?>
                         <? endif;?>
 
-                        <?  $desc = $this->rdsexport($this->driver, 'HTML')->getCore(); 
-                            $citLink = $desc['RDSProxy_CitationLinks'];
+                        <?  $desc = $this->rdsproxycore($this->driver)->getItems(); 
+                            $citLink = $desc['RDS_CitationLinks'];
                         ?>        
                         <?=$citLink?>
                         
