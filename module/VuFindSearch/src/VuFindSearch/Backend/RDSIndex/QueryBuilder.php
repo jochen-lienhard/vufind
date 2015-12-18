@@ -133,7 +133,6 @@ class QueryBuilder implements QueryBuilderInterface
                 $this->getLuceneHelper()->normalizeSearchString($query->getString())
             );
         }
-
         $string  = $query->getString() ?: '*:*';
 
         if ($handler = $this->getSearchHandler($query->getHandler(), $string)) {
@@ -168,9 +167,10 @@ class QueryBuilder implements QueryBuilderInterface
         }
 
         // remove filter query, if $string contains rn:
-        if (preg_match('/\(rn\:/',$string) || preg_match('/\ rn\:/',$string) || 
-            preg_match('/^rn\:/',$string) || preg_match('/\brn\:/',$string)) {
-           $params->set('fq', null);
+        if (preg_match('/\(rn\:/', $string) || preg_match('/\ rn\:/', $string)  
+            || preg_match('/^rn\:/', $string) || preg_match('/\brn\:/', $string)
+        ) {
+            $params->set('fq', null);
         } 
 
         $params->set('q', $string);
@@ -322,6 +322,10 @@ class QueryBuilder implements QueryBuilderInterface
         } else {
             $searchString  = $this->getLuceneHelper()
                 ->normalizeSearchString($component->getString());
+            // RDS if search field is au, manipulate the searchString
+            if ($component->getHandler() == 'au') {
+                $searchString = $this->filterAu($searchString);
+            }
             $searchHandler = $this->getSearchHandler(
                 $component->getHandler(),
                 $searchString
@@ -335,6 +339,44 @@ class QueryBuilder implements QueryBuilderInterface
     }
 
     /**
+     * Manipulates the search string for au search field.
+     *
+     * @param string $lookfor search string
+     *
+     * @return string
+     */
+    protected function filterAu($lookfor)
+    {
+        $filteredTerms = [];
+        $totalQuotationMarks = 0;
+        foreach (preg_split('/;/u', $lookfor) as $term) {
+            // trim separators (whitespace)
+            $term = preg_replace('/^\p{Z}+|\p{Z}+$/u', '', $term);
+
+            $quotationMarks = mb_substr_count($term, '"');
+            $totalQuotationMarks += $quotationMarks;
+
+            // only convert term to phrase if
+            // - no quotations marks included
+            // - even number of quotation marks before term = semicolon not within phrase
+            // - exactly one comma included
+            // - no wildcard included
+            if ($quotationMarks == 0 
+                && $totalQuotationMarks % 2 === 0 
+                && mb_substr_count($term, ',') == 1 
+                && mb_strpos($term, '*') === false
+            ) {
+                $filteredTerms[] = '"' . $term . '"';
+            } else {
+                $filteredTerms[] = $term;
+            }
+        }
+        $filtered = implode(' ', $filteredTerms);
+        return $filtered;
+    }
+
+
+        /**
      * Return search string based on input and handler.
      *
      * @param string        $string  Input search string
@@ -342,9 +384,9 @@ class QueryBuilder implements QueryBuilderInterface
      *
      * @return string
      */
-    protected function createSearchString($string, SearchHandler $handler = null)
-    {
-        $advanced = $this->getLuceneHelper()->containsAdvancedLuceneSyntax($string);
+        protected function createSearchString($string, SearchHandler $handler = null)
+        {
+            $advanced = $this->getLuceneHelper()->containsAdvancedLuceneSyntax($string);
 
         if ($advanced && $handler) {
             return $handler->createAdvancedQueryString($string);
@@ -353,9 +395,9 @@ class QueryBuilder implements QueryBuilderInterface
         } else {
             return $string;
         }
-    }
+        }
 
-    /**
+        /**
      * Return advanced inner search string based on input and handler.
      *
      * @param string        $string  Input search string
@@ -363,9 +405,9 @@ class QueryBuilder implements QueryBuilderInterface
      *
      * @return string
      */
-    protected function createAdvancedInnerSearchString($string,
-        SearchHandler $handler
-    ) {
+        protected function createAdvancedInnerSearchString($string,
+            SearchHandler $handler
+        ) {
         // Special case -- if the user wants all records but the current handler
         // has a filter query, apply the filter query:
         if (trim($string) === '*:*' && $handler && $handler->hasFilterQuery()) {
@@ -393,5 +435,5 @@ class QueryBuilder implements QueryBuilderInterface
 
         return $handler
             ? $handler->createAdvancedQueryString($string, false) : $string;
-    }
+        }
 }
