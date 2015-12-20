@@ -42,7 +42,6 @@ use VuFind\View\Helper\Bootstrap3\RDSHelper;
 class RDSProxyCore extends RDSHelper
 {
   protected $items = [
-       'AaBbCcDd',
        'Title',
        'TitleAlt',
        'Authors',
@@ -130,10 +129,7 @@ class RDSProxyCore extends RDSHelper
       $value = $this->driver->getPubYear();
       return $value;
     }
-    public function getDataSource() {
-      $value = $this->driver->getDataSource();
-      return $value;
-    }
+
     public function getCitationLinks() {
       //<a target="_blank" href="{$summCitationLinks[0].url}" onclick="userAction('click', 'RdsCitationLink', '{$ppn}');">&rarr;{translate text="Link zum Zitat"}</a>
       

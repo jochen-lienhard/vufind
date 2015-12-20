@@ -45,6 +45,7 @@ return array(
             'rdsindexdescription' => 'VuFind\View\Helper\Bootstrap3\RDSIndexDescription',
             'rdsindexcore' => 'VuFind\View\Helper\Bootstrap3\RDSIndexCore',
             'rdsproxycore' => 'VuFind\View\Helper\Bootstrap3\RDSProxyCore',
+            'rdsproxylist' => 'VuFind\View\Helper\Bootstrap3\RDSProxyList',
         )
     )
 );

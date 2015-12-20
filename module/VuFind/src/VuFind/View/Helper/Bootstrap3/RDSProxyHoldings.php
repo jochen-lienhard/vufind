@@ -39,13 +39,9 @@ use     VuFind\I18n\Translator\TranslatorAwareInterface;
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     http://vufind.org/wiki/vufind2:developer_manual Wiki
  */
-class RDSProxyHoldings extends RDSHelper
+class RDSProxyHoldings extends RDSProxyHelper
 {
     protected $items = ['Holdings'];
-    
-    public function __construct($linkresolver) {
-        $this->linkresolver = $linkresolver;
-    }
     
     public function getHoldings() {
         $output = "";
@@ -137,20 +133,6 @@ class RDSProxyHoldings extends RDSHelper
         $html .= '  </p>';
         $html .= '</div>';
         return $html;
-     }
-     
-     protected function getLoginLink() {
-        $followupUrl = $this->view->plugin('serverUrl')->__invoke() . $_SESSION['Search']['last'];
-        $target = $this->view->plugin('url')->__invoke('myresearch-home') . '?followupUrl=' . urlencode($followupUrl);
-  
-        $sessionInitiator = $this->authManager->getManager()->getSessionInitiator($target);
-        if ($sessionInitiator) {
-            $loginLink = $this->view->plugin('escapeHtmlAttr')->__invoke($sessionInitiator);
-        } else {
-            $loginLink = $this->view->plugin('url')->__invoke('myresearch-userlogin');
-        }
-        return $loginLink;
-     
      }
      
      protected function getLinkresolverEmbedded() {        
