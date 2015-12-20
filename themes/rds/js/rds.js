@@ -65,11 +65,18 @@ function updateCartStatus(selector) {
     var vufindId = $(val).data('id');
     var fullCartItems = getFullCartItems();
     if (fullCartItems.indexOf(vufindId) == -1) {
-      $(val).removeClass('fa-star');
-      $(val).addClass('fa-star-o');
+      $(val).html($(val).data('add'))
+      if ($(val).hasClass('fa-star')) {
+        $(val).removeClass('fa-star');
+        $(val).addClass('fa-star-o');
+      }
     } else {
-      $(val).removeClass('fa-star-o');
-      $(val).addClass('fa-star');
+      $(val).html($(val).data('remove'))
+      if ($(val).hasClass('fa-star-o')) {
+        $(val).removeClass('fa-star-o');
+        $(val).addClass('fa-star');
+      }
+
     }
   });
   return false;
