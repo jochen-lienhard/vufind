@@ -26,7 +26,16 @@
             <li><a href="<?=$this->url('home') ?><?=$this->searchClassId ?>/Advanced"><?=$this->transEsc('RDS_ADVANCED_SEARCH')?></li>
             <? endif;?>
             <li><a href="<?=$this->url('home') ?>Search/History"><?=$this->transEsc('RDS_RDSHistory')?></a></li>
-            <li><a href="<?=$this->url('home') ?>MyResearch"><?=$this->transEsc('RDS_RDSFavorites')?></a></li>
+            
+            <li>
+            <?if ($this->auth()->isLoggedIn()): ?>
+              <a href="<?=$this->url('myresearch-home') ?>?redirect=0"><?=$this->transEsc('RDS_RDSFavorites')?></a>
+            <?else: ?>
+              <? $cart = $this->cart(); if ($cart->isActive()): ?>
+                <a id="cartItems" class="modal-link" title="<?=$this->transEsc('RDS_RDSFavorites')?>" href="<?=$this->url('cart-home')?>"><?=$this->transEsc('RDS_RDSFavorites')?> (<strong><?=count($cart->getItems())?></strong>)</a>
+              <? endif; ?>
+            <?endif; ?>
+            </li>
         </ul>        
     </div>
   
