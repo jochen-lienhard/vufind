@@ -114,32 +114,6 @@ class RDSProxyList extends RDSProxyHelper
         return $html;
     }
     
-    public function getFavAction() {
-        $html = '';
-        
-        $actionUrl = $this->view->plugin('recordLink')->getActionUrl($this->driver, 'Save');
-        $uniqueId = $this->driver->getUniqueId();
-        $vufindId = $this->driver->getResourceSource() .'|'. $this->driver->getUniqueID();
-        
-        if ($this->authManager->isLoggedIn()) {
-            $html .=  '<a href="' . $actionUrl . '" class="save-record modal-link favActionAdd" id="'.$uniqueId.'" title="' . $this->translate("RDS_ADD_TO_MY_LIST") . '">&rarr; ' . $this->translate("RDS_ADD_TO_MY_LIST") . '</a>';
-        } else {
-            $html .= '<a href="' . $actionUrl . '"'; 
-            $html .=     ' class="cartAction" data-add="&rarr; ' . $this->translate("RDS_ADD_TO_MY_LIST") . '" data-remove="&rarr; ' . $this->translate("RDS_REMOVE_FROM_MY_LIST") . '" id="'.$uniqueId.'"'; 
-            $html .=     ' data-id="' . $vufindId . '"';
-            $html .= '></a>';
-        }
-        
-        return $html;
-    }
-  
-    public function getPrintAction() {
-        $vufindId = $this->driver->getResourceSource() .'|'. $this->driver->getUniqueID();
-        $html = '<a href="/Cart/doExport" class="doExportRecord" data-id="'. $vufindId .'">&rarr; ' . $this->translate("RDS_PRINT") . '</a>';
-        
-        return $html;
-    }
-    
     public function getFulltextLink() {
         $html = null;
         $fulltextLinks = $this->driver->getFulltextLinks();
