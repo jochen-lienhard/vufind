@@ -6,7 +6,13 @@
   <div id="result<?=$i++ ?>" class="row result clearfix">
     <div class="col-xs-1 hidden-print<? if ($showCheckboxes): ?> checkbox<? endif; ?>">
       <label>
-        <? if ($showCheckboxes): ?>
+      
+        <? if ($showCheckboxes && !isset($guestview)): ?>
+          <?
+            if ($current->getSourceIdentifier() === 'RDSProxy') {
+              $guestview = $this->RDSProxyList($current)->getGuestviewLoginLink();
+            } 
+            ?>
           <?=$this->record($current)->getCheckbox()?>
         <? endif; ?>
         <?=sprintf('%03d',$recordNumber)?>

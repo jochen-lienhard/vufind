@@ -12,6 +12,7 @@ return array(
     'helpers' => array(
         'invokables' => array(
             'rdsindexrecord' => 'VuFind\View\Helper\RDS\RDSIndexRecord',
+             'rdshelper' => 'VuFind\View\Helper\Bootstrap3\RDSHelper',
         )
     )
 
