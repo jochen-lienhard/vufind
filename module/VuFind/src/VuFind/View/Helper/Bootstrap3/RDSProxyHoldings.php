@@ -143,7 +143,11 @@ class RDSProxyHoldings extends RDSProxyHelper
             $openUrl = $this->driver->getOpenUrlExternal();
         }
         
-        $xmlResponse = $this->linkresolver->fetchLinks($openUrl);
+        if ($this->linkresolver) {
+            $xmlResponse = $this->linkresolver->fetchLinks($openUrl);
+        } else {
+            $xmlResponse = 'ERROR - linkresolver not available';
+        }
         $output = substr ($xmlResponse, strpos($xmlResponse,'<div id="services">'));
         $pos = strpos($output, '<div id="services_end">');
         $output = substr ($output, 0, $pos);
