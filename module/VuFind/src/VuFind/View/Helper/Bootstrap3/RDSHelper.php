@@ -48,13 +48,18 @@ class RDSHelper extends AbstractHelper
     protected $authManager = null;
     protected $linkresolver = null;
     
+    protected $escapeJs;
+    protected $escapeHtmlAttr;
+    
     protected $items = [];
-
+    
     public function __invoke($driver)
     {
-        $this->driver = $driver;
         $this->translator = $this->view->plugin('translate')->getTranslator();
         $this->authManager = $this->view->plugin('auth');
+        $this->escapeJs = $this->view->plugin('escapeJs');
+        $this->escapeHtmlAttr = $this->view->plugin('escapeHtmlAttr');
+        $this->driver = $driver;
         return $this;
     }
     
@@ -87,7 +92,26 @@ class RDSHelper extends AbstractHelper
             $html .=     ' data-id="' . $vufindId . '"';
             $html .= '></a>';
         }
-    
+        
+        $list_id = $this->view->list->id;
+        /* Use a different delete URL if we're removing from a specific list or the overall favorites: */
+        $deleteUrl = null === $list_id
+            ? $this->view->plugin('url')->__invoke('myresearch-favorites')
+            : $this->view->plugin('url')->__invoke('userList', array('id' => $list_id));
+        $deleteFavoriteConfirmation = null === $list_id
+            ? 'RDS_FAV_LIST_REMOVE_FORM_ALL_LISTS'
+            : 'RDS_FAV_LIST_REMOVE_FORM_CURRENT_LIST';
+        $deleteUrlGet = $deleteUrl . '?delete=' . urlencode($this->driver->getUniqueID()) . '&amp;source=' . urlencode($this->driver->getResourceSource());
+            $dLabel = 'delete-label-' . preg_replace('[\W]','-',$id);
+
+        $html .= '<span class="dropdown favActionDel hidden">';      
+        $html .= '  <a class="dropdown-toggle" id="'. $dLabel . '" role="button" data-toggle="dropdown" data-target="#" href="' . $deleteUrlGet .'">&rarr; ' . $this->translate('RDS_REMOVE_FROM_MY_LIST') . '</a>';
+        $html .= '  <ul class="dropdown-menu" role="menu" aria-labelledby="' . $dLabel . '">';
+        $html .= '        <li><a onClick="$.post(\'' .$deleteUrl . '\', {\'delete\':\'' .  $this->escapeJs($this->driver->getUniqueID()) . '\',\'source\':\'' . $this->escapeHtmlAttr($this->driver->getResourceSource()) . '\',\'confirm\':true},function(){location.reload(true)})" title="' . $this->translate('confirm_delete_brief') . '">' . $this->translate($deleteFavoriteConfirmation) . '</a></li>';
+        $html .= '        <li><a>' . $this->translate('RDS_FAV_LIST_CANCEL_DELETE') . '</a></li>';
+        $html .= '  </ul>';
+        $html .= '</span>';
+        
         $html .= '';
         
         return $html;
@@ -114,5 +138,13 @@ class RDSHelper extends AbstractHelper
     protected function getLocale() {
         $locale = ($this->translator) ? $this->translator->getLocale() : 'de';
         return $locale;
+    }
+    
+    protected function escapeJS($str) {
+        return $this->escapeJs->__invoke($str);
+    }
+    
+    protected function escapeHtmlAttr($str) {
+        return $this->escapeHtmlAttr->__invoke($str);
     }
 }
