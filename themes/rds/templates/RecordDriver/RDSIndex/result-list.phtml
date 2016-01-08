@@ -58,18 +58,6 @@
    	<? endif; ?>
    </div>
 
-
-<div>
-   <?=$rdsHelper->getFavAction() ?>
-   <?=$rdsHelper->getPrintAction() ?>
-     <?  /* TODO if 21 100 31 */ ?>
-     <? $shortLink = $this->driver->getShortLinks(); ?>
-     <? if (isset($shortLink) && !empty($shortLink)): ?>
-     	<a href="<?=$this->escapeHtml($shortLink) ?>" target="_blank"> &rarr; <?=$this->transEsc('RDS_FULLTEXT_LINK') ?> </a>
-     <? endif; ?>
-     <?  /* TODO End  if 21 100 31 */ ?>
-</div>
-
       <? if(!$this->driver->isCollection()): ?>
         <? if ($snippet = $this->driver->getHighlightedSnippet()): ?>
           <? if (!empty($snippet['caption'])): ?>
@@ -186,6 +174,17 @@
     </div>
   </div>
   <? if('full' != $dataView): ?>
+    </div>
+    
+    <div>
+      <?=$rdsHelper->getFavAction() ?>
+      <?=$rdsHelper->getPrintAction() ?>
+      <?  /* TODO if 21 100 31 */ ?>
+      <? $shortLink = $this->driver->getShortLinks(); ?>
+      <? if (isset($shortLink) && !empty($shortLink)): ?>
+        <a href="<?=$this->escapeHtml($shortLink) ?>" target="_blank"> &rarr; <?=$this->transEsc('RDS_FULLTEXT_LINK') ?> </a>
+      <? endif; ?>
+      <?  /* TODO End  if 21 100 31 */ ?>
     </div>
     <div class="long-view hidden"></div>
   <? endif; ?>

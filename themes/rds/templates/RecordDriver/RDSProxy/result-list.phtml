@@ -8,6 +8,14 @@
     $this->headScript()->appendFile("check_save_statuses.js");
     $source = $this->driver->getResourceSource();
     $ppn = $this->driver->getUniqueID();
+    $this->list;
+ if (isset($this->list) && is_object($this->list)) {
+    $list_id = $this->list->id;
+    $user_id = $this->list->user_id;
+  } else {
+    $list_id = null;
+    $user_id = $this->user ? $this->user->id : null;
+  }
   ?>
 
 <div class="<?=$this->driver->supportsAjaxStatus()?'ajaxItem ':''?>col-xs-11">
@@ -64,32 +72,6 @@
             } 
           ?>
           
-          <?=$rdsProxyHelper->getFavAction() ?>
-          
-          <? /* Use a different delete URL if we're removing from a specific list or the overall favorites: */
-              $deleteUrl = null === $list_id
-                  ? $this->url('myresearch-favorites')
-                  : $this->url('userList', array('id' => $list_id));
-              $deleteFavoriteConfirmation = null === $list_id
-                  ? 'RDS_FAV_LIST_REMOVE_FORM_ALL_LISTS'
-                  : 'RDS_FAV_LIST_REMOVE_FORM_CURRENT_LIST';
-              $deleteUrlGet = $deleteUrl . '?delete=' . urlencode($id) . '&amp;source=' . urlencode($source);
-                  $dLabel = 'delete-label-' . preg_replace('[\W]','-',$id);
-          ?>
-          <span class="dropdown favActionDel hidden">
-                  <a class="dropdown-toggle" id="<?=$dLabel ?>" role="button" data-toggle="dropdown" data-target="#" href="<?=$deleteUrlGet ?>">
-                    &rarr; <?=$this->transEsc('RDS_REMOVE_FROM_MY_LIST')?>
-                  </a>
-                  <ul class="dropdown-menu" role="menu" aria-labelledby="<?=$dLabel ?>">
-                    <li><a onClick="$.post('<?=$deleteUrl?>', {'delete':'<?=$this->escapeJs($ppn) ?>','source':'<?=$this->escapeHtmlAttr($source) ?>','confirm':true},function(){location.reload(true)})" title="<?=$this->transEsc('confirm_delete_brief')?>"><?=$this->transEsc($deleteFavoriteConfirmation)?></a></li>
-                    <li><a><?=$this->transEsc('RDS_FAV_LIST_CANCEL_DELETE')?></a></li>
-                  </ul>
-                </span>
-          
-          <?=$rdsProxyHelper->getPrintAction() ?>
-          <?=$rdsProxyHelper->getFulltextLink() ?>
-
-  
           <? /* ******* removed by RDS **********
           <? $journalTitle = $this->driver->getContainerTitle(); $summDate = $this->driver->getPublicationDates(); ?>
           <? if (!empty($journalTitle)): ?>
@@ -248,6 +230,13 @@
   </div>
   <? if('full' != $dataView): ?>
     </div>
+    
+    <div>
+      <?=$rdsProxyHelper->getFavAction() ?>
+      <?=$rdsProxyHelper->getPrintAction() ?>
+      <?=$rdsProxyHelper->getFulltextLink() ?>    
+    </div>
+    
     <div class="long-view hidden"></div>
   <? endif; ?>
   <? endif; ?>
