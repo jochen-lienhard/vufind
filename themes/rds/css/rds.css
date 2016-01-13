@@ -163,7 +163,7 @@ div.tg h2 {
 
 div.tg p {
   padding: 6px 0px 0px 0px;
-}]
+}
 
 div.tg img {
   vertical-align: middle;
@@ -175,7 +175,7 @@ div.tg div.t_text {
 
 .t_link a, .t_infolink a, button.t_link {
     background: none repeat scroll 0 0 #CCCCCC;
-    border-bottom: 1px solid #black;
+    border-bottom: 1px solid black;
     color: black;
     display: inline-block;
     font-weight: bold;
