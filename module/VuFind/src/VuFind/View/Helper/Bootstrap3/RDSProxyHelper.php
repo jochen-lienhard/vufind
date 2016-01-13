@@ -90,5 +90,44 @@ class RDSProxyHelper extends RDSHelper
       return $html;
     }
     
+    protected function getFulltextLinks() {
+        $fulltextLinks = $this->driver->getFulltextLinks();
+        $html = '';
+        
+        foreach ($fulltextLinks as $fulltextLink){
+            
+            if ($fulltextLink['indicator'] == 1) {
+              if ($this->authManager->isLoggedIn() === false) {
+                 $html .= '<span class="t_ezb_yellow"></span>';
+                 $html .= '<a style="text-decoration: none;" href=" ' . $this->getLoginLink() .  ' "; return false;">';
+                 $html .=     $this->translate("RDS_PROXY_HOLDINGS_PDF_FULLTEXT") . ' (via ' . $fulltextLink['provider'] . ') ' . $this->translate("RDS_PROXY_HOLDINGS_AUTHORIZED_USERS_ONLY_LOGIN");
+                 $html .= '</a>';
+              } elseif ($this->driver->getGuestView() == 'brief') {
+                  $html .= '<span class="t_ezb_yellow"></span>';
+                  $html .=    $this->translate("RDS_PROXY_HOLDINGS_PDF_FULLTEXT") . ' (via ' . $fulltextLink['provider'] . ') - ' . $this->translate("RDS_PROXY_AUTHORIZED_USERS_ONLY");
+              }
+            } elseif ($fulltextLink['indicator'] != 2) {  
+                $html .= '<div class="t_ezb_result">';
+                  $html .= '<p>';
+                      if ($fulltextLink['type'] == "pdf") {
+                        $html .= '<span class="t_ezb_yellow"></span>';
+                        $html .= $this->translate("RDS_PROXY_HOLDINGS_PDF_FULLTEXT") . ' (via ' . $fulltextLink['provider'] . ')';
+                      }
+                      if ($fulltextLink['type'] == "html") {
+                        $html .= '<span class="t_ezb_yellow"></span>';
+                        $html .= $this->translate("RDS_PROXY_HOLDINGS_HTML_FULLTEXT") . ' (via ' . $fulltextLink['provider'] . ')';
+                      }
+                      if ($fulltextLink['type'] == "external") {
+                        $html .= '<span class="t_ezb_{$fulltextLink.access}"></span>';
+                        $html .= $this->translate("RDS_PROXY_HOLDINGS_TO_THE_FULLTEXT") . ' (via ' . $fulltextLink['provider'] . ')';
+                      }
+                    $html .= '<span class="t_link"><a target="_blank" href="' . $fulltextLink['url'] . '">&#187;</a></span>';
+                  $html .= '</p>';
+                $html .= '</div>';
+            }
+        }
+        return $html;
+    }
+    
    
 }

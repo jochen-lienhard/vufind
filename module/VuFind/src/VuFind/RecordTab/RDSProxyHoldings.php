@@ -11,6 +11,6 @@ class RDSProxyHoldings extends AbstractBase
      */
     public function getDescription()
     {
-        return 'RDS_PROXY_HOLDINGS';
+        return 'Holdings';
     }
 }

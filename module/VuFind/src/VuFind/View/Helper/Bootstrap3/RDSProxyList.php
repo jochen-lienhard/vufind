@@ -27,7 +27,7 @@
  * @link     http://vufind.org/wiki/vufind2:developer_manual Wiki
  */
 namespace VuFind\View\Helper\Bootstrap3;
-use VuFind\View\Helper\Bootstrap3\RDSHelper;
+use VuFind\View\Helper\Bootstrap3\RDSProxyHelper;
 
 /**
  * Record driver view helper
@@ -117,11 +117,35 @@ class RDSProxyList extends RDSProxyHelper
     public function getFulltextLink() {
         $html = null;
         $fulltextLinks = $this->driver->getFulltextLinks();
-        if ($fulltextLinks[0]['url']) {
-            $html .= '<a target="_blank" href="' . $fulltextLinks[0]['url'] . '">&rarr; ' . $this->translate("RDS_FULLTEXT_LINK") . '</a>';
-            $html .= '<br />';
-        }
         
+        $dataview = $this->view->params->getOptions()->getListViewOption();
+        
+        if ($this->driver->showFulltextLinks()) {
+            if (!empty($fulltextLinks)) {
+                if ($fulltextLinks[0]['indicator'] == 1) {
+                    if ($this->driver->getGuestView() != 'brief' && $this->authManager->isLoggedIn() == true) {
+                        
+                        /*     <a target="_blank" href='<?=$path?>AJAX/JSON?method=getFulltextLink&source=RDSProxy&id=<?=$ppn?>' onclick="userAction('click', 'RdsFulltextLink', '<?=$ppn?>');">&rarr;<?=$this->transEsc("RDS_FULLTEXT_LINK") ?></a> */
+                        $html .= '<a target="_blank" href="' . $this->path . 'AJAX/JSON?method=getFulltextLink&source=RDSProxy&id=' . $this->uniqueId . '" onclick="userAction(\'click\', \'RdsFulltextLink\', \'' . $this->uniqueId . '\');">&rarr;' . $this->translate("RDS_FULLTEXT_LINK") . '</a>'; 
+                    } else {
+                        /* <a href="<?=$path?>RDSProxyrecord/<?=$ppn?>"{if $record_view != "flat"} data-view="<?=$dataView ?>" class="getFull" onclick="userAction('click', 'RdsFulltextAvailable', '<?=$ppn?>'); return false;"{/if}>&rarr;<?=$this->transEsc("RDS_FULLTEXT_AVAILABLE") ?></a> */
+                        $html .= '<a href="' . $this->path . 'RDSProxyrecord/' . $this->uniqueId . '"{if $record_view != "flat"} data-view="'. $dataview .'" class="getFull" onclick="userAction(\'click\', \'RdsFulltextAvailable\', \'' . $this->uniqueId . '\'); return false;"{/if}>&rarr;'.$this->translate("RDS_FULLTEXT_AVAILABLE").'</a>';
+                    }
+                
+                } else if ($fulltextLinks[0]['indicator'] == 2) {
+                    /* <a href="<?=$path?>RDSProxyrecord/<?=$ppn?>"{if $record_view != "flat"} data-view="<?=$dataView ?>" class="getFull" onclick="userAction('click', 'RdsFulltextAvailable', '<?=$ppn?>'); return false;"{/if}>&rarr;<?=$this->transEsc("RDS_FULLTEXT_AVAILABLE") ?></a>*/
+                    $html .= '<a href="' . $this->path . 'RDSProxyrecord/' . $this->uniqueId . '"{if $record_view != "flat"} data-view="'. $dataview .'" class="getFull" onclick="userAction(\'click\', \'RdsFulltextAvailable\', \'' . $this->uniqueId . '\'); return false;"{/if}>&rarr;'.$this->translate("RDS_FULLTEXT_AVAILABLE") .'</a>';
+                } else {
+                    /* <a target="_blank" href='<?=$fulltextLinks[0]['url']?>' onclick="userAction('click', 'RdsFulltextLink', '<?=$ppn?>');">&rarr;<?=$this->transEsc("RDS_FULLTEXT_LINK") ?></a>*/
+                    $html .= '<a target="_blank" href=\''. $fulltextLinks[0]['url'] .'\' onclick="userAction(\'click\', \'RdsFulltextLink\', \'' . $this->uniqueId . '\');">&rarr;'. $this->translate("RDS_FULLTEXT_LINK") .'</a>';
+                }
+            } else {
+                /*<a href="<?=$path?>RDSProxyRecord/<?=$ppn?>"{if $record_view != "flat"} data-view="<?=$dataView ?>" class="getFull" onclick="userAction('click', 'RdsCheckAvailability', '<?=$ppn?>'); return false;"{/if}>&rarr;<?=$this->transEsc("RDS_CHECK_AVIALABILITY") ?></a>*/
+                $html .= '<a href="' . $this->path . 'RDSProxyRecord/' . $this->uniqueId . '"{if $record_view != "flat"} data-view="'. $dataview .'" class="getFull" onclick="userAction(\'click\', \'RdsCheckAvailability\', \'' . $this->uniqueId . '\'); return false;"{/if}>&rarr;'.$this->translate("RDS_CHECK_AVIALABILITY").'</a>';
+            
+            
+            }
+        }
         return $html;
     }
     

@@ -45,6 +45,6 @@ class RDSProxyCore extends AbstractBase
      */
     public function getDescription()
     {
-        return 'Bibliographic Details';
+        return 'RDS_PROXY_CORE';
     }
 }

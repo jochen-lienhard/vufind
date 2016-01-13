@@ -45,6 +45,6 @@ class RDSProxyDescription extends AbstractBase
      */
     public function getDescription()
     {
-        return 'Description';
+        return 'RDS_PROXY_DESCRIPTION';
     }
 }

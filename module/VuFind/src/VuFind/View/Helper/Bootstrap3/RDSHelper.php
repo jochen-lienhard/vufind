@@ -47,6 +47,8 @@ class RDSHelper extends AbstractHelper
     protected $sourceIdentifier = '';
     protected $authManager = null;
     protected $linkresolver = null;
+    protected $path = '';
+    protected $uniqueId = null;
     
     protected $escapeJs;
     protected $escapeHtmlAttr;
@@ -60,6 +62,8 @@ class RDSHelper extends AbstractHelper
         $this->escapeJs = $this->view->plugin('escapeJs');
         $this->escapeHtmlAttr = $this->view->plugin('escapeHtmlAttr');
         $this->driver = $driver;
+        $this->path = $this->view->plugin('url')->__invoke('home');
+        $this->uniqueId = $this->driver->getUniqueId();
         return $this;
     }
     
