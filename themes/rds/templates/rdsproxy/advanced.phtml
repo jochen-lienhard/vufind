@@ -39,12 +39,6 @@
   $options = $this->searchOptions($this->searchClassId);
   $basicSearch = $options->getSearchAction();
   $advSearch = $options->getAdvancedSearchAction();
-
-  $this->layout()->renderSearchbox = true;
-  if (!isset($this->layout()->renderSearchbox) || $this->layout()->renderSearchbox != false) {
-    $this->layout()->searchbox = $this->render('search/searchbox.phtml');
-  }
-  
 ?>
 
 <div>

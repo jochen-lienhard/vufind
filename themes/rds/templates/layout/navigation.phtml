@@ -1,8 +1,8 @@
 <?
-  if (!isset($this->layout()->renderSearchbox) || $this->layout()->renderSearchbox != false) {
+  if ($this->searchType != 'advanced') {
     $this->layout()->searchbox = $this->render('search/searchbox.phtml');
   }
-?>
+    ?>
 
 <div>
 
