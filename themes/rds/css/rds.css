@@ -206,3 +206,17 @@ div.tg div.t_text {
 .expSearchBtn {
   display: inline-block;
 }
+
+.search input.form-control {
+  max-width: 99%;
+  display: inline-block;
+  margin-bottom: 2px;
+}
+
+.search input.rdsIndexInput {
+  padding-right: 48px;
+}
+
+.search span.index {
+  margin-left: -48px;
+}

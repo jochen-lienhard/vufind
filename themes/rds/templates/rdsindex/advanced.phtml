@@ -53,77 +53,68 @@
   <?=$this->layout()->navigation ?>
 
   <?=$this->flashmessages()?>
-    <div class="<?=$this->layoutClass('mainbody')?>">
+  <div class="<?=$this->layoutClass('mainbody')?>">
   <form role="search" name="searchForm" id="advSearchForm" method="get" action="<?=$this->url($this->options->getSearchAction())?>">
+    <div class="">
+      <a href="<?=$this->url($this->options->getAdvancedSearchAction())?>"><?=$this->transEsc("RDS_REMOVE_SEARCH_TERMS")?></a> 
+    </div>
+    <div class="advSearch"><?=$this->transEsc("RDS_ADVANCED_SEARCH")?></div>
 
-      <div class="">
-               <a href="<?=$this->url($this->options->getAdvancedSearchAction())?>"><?=$this->transEsc("RDS_REMOVE_SEARCH_TERMS")?></a> 
-        </div>
-      <div class="advSearch"><?=$this->transEsc("RDS_ADVANCED_SEARCH")?></div>
-
-      <div id="group0">
-	    <div class="col-md-12">
-      	   <? $counter = 0; ?>
-	       <?foreach ($this->options->getAdvancedHandlers() as $key => $value):?>
+    <div id="group0">
+      <div class="col-md-12">
+           <? $counter = 0; ?>
+           <?foreach ($this->options->getAdvancedHandlers() as $key => $value):?>
               <div class="search" id="search0_<?=$counter?>">
-        	     <div class="row">
-          		    <div class="col-md-4">
+                 <div class="row">
+                    <div class="col-md-4">
                             <?=$this->transEsc($value)?>
                             <input type="hidden" value="<?=$key?>" name="type0[]" />
-          	        </div>
- 			        <div class="col-md-8">
+                    </div>
+                  <div class="col-md-8">
                            <? if ($key=="au" || $key=="co" || $key=="ct"): ?>
                               <span>
-                               <input id="search_lookfor0_<?=$counter?>" onfocus="myhelp('<?=$this->transEsc("RDS_B_" . $key . "_help_head")?>','<?=$this->transEsc("RDS_B_" . $key . "_help_text")?>');" class="form-control" type="text" name="lookfor0[]" value="<? if(isset($searchTerms[$key])) {echo $searchTerms[$key];}?>">
+                               <input id="search_lookfor0_<?=$counter?>" onfocus="myhelp('<?=$this->transEsc("RDS_B_" . $key . "_help_head")?>','<?=$this->transEsc("RDS_B_" . $key . "_help_text")?>');" class="form-control rdsIndexInput" type="text" name="lookfor0[]" value="<? if(isset($searchTerms[$key])) {echo $searchTerms[$key];}?>">
                                <span class="index">
                                <a href="<?=$this->url('alphabrowse-home')?>?source=<?=$this->transEsc('register_' . $key)?>&amp;from=" onclick="this.href+=document.getElementById('search_lookfor0_<?=$counter?>').value"><span class="reg_button" title="Indexsuche">Index</span></a>
                                </span>
                               </span>
                           <? else: ?>
                              <span>
-        			   <input id="search_lookfor0_<?=$counter?>" class="form-control" onfocus="myhelp('<?=$this->transEsc("RDS_B_" . $key . "_help_head")?>','<?=$this->transEsc("RDS_B_" . $key . "_help_text")?>');" type="text" name="lookfor0[]" value="<? if(isset($searchTerms[$key])) {echo $searchTerms[$key];}?>">
+                               <input id="search_lookfor0_<?=$counter?>" class="form-control" onfocus="myhelp('<?=$this->transEsc("RDS_B_" . $key . "_help_head")?>','<?=$this->transEsc("RDS_B_" . $key . "_help_text")?>');" type="text" name="lookfor0[]" value="<? if(isset($searchTerms[$key])) {echo $searchTerms[$key];}?>">
                              </span>
                           <? endif; ?>
-          	         </div>
+                       </div>
                        <input type="hidden" name="join" value="AND">
                        <input type="hidden" name="bool0[]" value="AND">
                  </div>
-      		  </div>
+                </div>
              <? endforeach; ?>
-         </div>    				
+         </div>
          <input class="btn btn-primary" type="submit" value="<?= $this->transEsc('RDS_SEARCH')?>">
-      </div>
-</form>
+    </div>
+  </form>
 
-<form method="get" action="<?=$this->url($this->options->getSearchAction())?>" id="expadvSearchForm" name="exsearchForm" class="search">
+  <form method="get" action="<?=$this->url($this->options->getSearchAction())?>" id="expadvSearchForm" name="exsearchForm" class="search">
     <div class="expSearch">
        <?=$this->transEsc("RDS_EX")?>
        <a class="help" href="{translate text="RDS_EXPERT_SEARCH_HELP_URL"}">[?]</a>
     </div>
 
-             <input type="hidden" value="ex" name="type" />
-             <input id="search_lookfor_ex" type="text" 
-                    value="<? if(isset($searchTerms["ex"])) {echo $searchTerms["ex"];}?>" 
-                    onfocus="myhelp('<?=$this->transEsc("RDS_B_ex_help_head")?>','<?=$this->transEsc("RDS_B_ex_help_text")?>');"
-                    size="50" name="lookfor"/>
-              <input class="btn btn-primary expSearchBtn" type="submit" value="<?= $this->transEsc('RDS_SEARCH')?>">
+    <input type="hidden" value="ex" name="type" />
+    <input id="search_lookfor_ex" type="text" 
+           value="<? if(isset($searchTerms["ex"])) {echo $searchTerms["ex"];}?>" 
+           onfocus="myhelp('<?=$this->transEsc("RDS_B_ex_help_head")?>','<?=$this->transEsc("RDS_B_ex_help_text")?>');"
+           size="50" name="lookfor"/>
+    <input class="btn btn-primary expSearchBtn" type="submit" value="<?= $this->transEsc('RDS_SEARCH')?>">
   </form>
 </div>
 
-  <div class="<?=$this->layoutClass('sidebar')?>">
-
-    <div class="sidegroup">
-      <div id="searchTipps">
-        <div id="tippHeader"></div>
-        <div id="tippBody"></div>
-      </div>
+<div class="<?=$this->layoutClass('sidebar')?>">
+  <div class="sidegroup">
+    <div id="searchTipps">
+      <div id="tippHeader"></div>
+      <div id="tippBody"></div>
     </div>
   </div>
-
-	
-  
-
-
-
-
 </div>
+
