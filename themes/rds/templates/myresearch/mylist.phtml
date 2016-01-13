@@ -64,7 +64,7 @@
     <? if ($recordTotal > 0): ?>
       <div class="resulthead">
         <div class="pull-right flip">
-          <?=$this->render('search/controls/sort.phtml')?>
+          <?=$this->render('search/controls/limit.phtml')?>
         </div>
       </div>
       <form class="form-inline" method="post" name="bulkActionForm" action="<?=$this->url('cart-myresearchbulk')?>">
@@ -96,6 +96,9 @@
   </div>
 
   <div class="<?=$this->layoutClass('sidebar')?>">
+    <? if ($recordTotal > 0): ?>
+      <?=$this->render('search/controls/sort.phtml')?>
+    <? endif; ?>
     <?=$this->context($this)->renderInContext("myresearch/menu.phtml", array('active' => isset($list) ? 'list' . $list['id'] : 'favorites'))?>
     <? foreach ($this->results->getRecommendations('side') as $current): ?>
       <?=$this->recommend($current)?>

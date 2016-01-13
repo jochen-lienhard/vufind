@@ -93,13 +93,11 @@
       <? if ($recordTotal > 0): ?>
         <div class="col-sm-6 text-right">
           <?=$this->render('search/controls/limit.phtml')?>
-          <?=$this->render('search/controls/sort.phtml')?>
           <?=$this->render('search/controls/view.phtml')?>
         </div>
       <? endif; ?>
     </div>
     <? /* End Listing Options */ ?>
-
 
     <? if ($recordTotal < 1): ?>
       <p>
@@ -122,6 +120,7 @@
       <? endforeach; ?>
     <? else: ?>
       <form class="form-inline" method="post" name="bulkActionForm" action="<?=$this->url('cart-home')?>">
+        <?=$this->paginationControl($this->results->getPaginator(), 'Sliding', 'search/pagination.phtml', array('results' => $this->results))?>
         <?=$this->context($this)->renderInContext('search/bulk-action-buttons.phtml', array('idPrefix' => ''))?>
         <?=$this->render('search/list-' . $this->params->getView() . '.phtml')?>
         <?=$this->context($this)->renderInContext('search/bulk-action-buttons.phtml', array('idPrefix' => 'bottom_'))?>
@@ -150,6 +149,7 @@
 
   <? /* Narrow Search Options */ ?>
   <div class="<?=$this->layoutClass('sidebar')?>">
+    <?=$this->render('search/controls/sort.phtml')?>
     <? foreach ($this->results->getRecommendations('side') as $current): ?>
       <?=$this->recommend($current)?>
     <? endforeach; ?>
