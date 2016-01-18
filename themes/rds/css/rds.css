@@ -137,6 +137,7 @@ color: #b2b4b3;
     background: url("../images/ezb_rot.png") no-repeat center;
     width: 41px;
     height: 20px;
+    margin: 0px 6px -5px 0px;
 }
 
 .t_ezb_yellow {
@@ -144,6 +145,7 @@ color: #b2b4b3;
     background: url("../images/ezb_gelb.png") no-repeat center;
     width: 41px;
     height: 20px;
+    margin: 0px 6px -5px 0px;
 }
 
 .t_ezb_green {
@@ -151,14 +153,14 @@ color: #b2b4b3;
     background: url("../images/ezb_gruen.png") no-repeat center;
     width: 41px;
     height: 20px;
+    margin: 0px 6px -5px 0px;
 }
 
 div.tg h2 {
   font-size: 1em;
   font-weight: bold;
-  padding: 12px 0px 2px 0px;
   border-bottom: solid 2px darkgray;
-  
+  margin: 8px 0px 4px 0px;
 }
 
 div.tg p {
