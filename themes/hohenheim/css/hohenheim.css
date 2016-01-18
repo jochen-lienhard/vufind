@@ -1,0 +1,16 @@
+.template-name-mylist form .row.result {
+    border-top: 3px solid #E9EAED;
+    background-color: #fff;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    margin-left: 0;
+    margin-right: 0;
+}
+
+.redi_links_icon {
+   background: url('../images/redi_links.gif') no-repeat center;
+   width: 125px;
+   height: 19px;
+   display: inline-block;
+}
+
