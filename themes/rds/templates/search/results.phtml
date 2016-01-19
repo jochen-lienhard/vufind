@@ -63,7 +63,23 @@
     <?=$this->flashmessages()?>
     
     <div class="hidden-print search-controls row">
-      <div class="col-sm-6">
+      <div class="col-sm-12">
+          <strong><?=$this->transEsc('RDS_YOUR_SERACH_TERMS')?></strong>: '<?=$this->escapeHtml($lookfor)?>'
+           <? if ($this->searchType == 'advanced'): ?>
+          <p class="adv_search_links">
+              <a href="<?=$this->url($advSearch)?>?edit=<?=$this->escapeHtmlAttr($searchId)?>"><?=$this->transEsc("Edit this Advanced Search")?></a> |
+              <a href="<?=$this->url($advSearch)?>"><?=$this->transEsc("Start a new Advanced Search")?></a> |
+              <a href="<?=$this->url($searchHome)?>"><?=$this->transEsc("Start a new Basic Search")?></a>
+          </p>
+        <? endif; ?>
+      </div>
+      
+      <div class="col-sm-12">
+          <?=$this->paginationControl($this->results->getPaginator(), 'Sliding', 'search/pagination.phtml', array('results' => $this->results))?>
+      </div>
+      
+      
+      <div class="col-sm-6 rdsResultInfo">
         <? if ($recordTotal > 0): ?>
           <?=$this->transEsc("Showing")?>
           <strong><?=$this->localizedNumber($this->results->getStartRecord())?></strong> - <strong><?=$this->localizedNumber($this->results->getEndRecord())?></strong>
@@ -81,19 +97,12 @@
         <? else: ?>
           <p class="lead"><?=$this->transEsc('nohit_heading')?></p>
         <? endif; ?>
-        <? if ($this->searchType == 'advanced'): ?>
-        	<p class="adv_search_links">
-              <a href="<?=$this->url($advSearch)?>?edit=<?=$this->escapeHtmlAttr($searchId)?>"><?=$this->transEsc("Edit this Advanced Search")?></a> |
-              <a href="<?=$this->url($advSearch)?>"><?=$this->transEsc("Start a new Advanced Search")?></a> |
-              <a href="<?=$this->url($searchHome)?>"><?=$this->transEsc("Start a new Basic Search")?></a>
-        	</p>
-        <? endif; ?>
+       
       </div>
 
       <? if ($recordTotal > 0): ?>
-        <div class="col-sm-6 text-right">
+        <div class="col-sm-6 text-right rdsLimit">
           <?=$this->render('search/controls/limit.phtml')?>
-          <?=$this->render('search/controls/view.phtml')?>
         </div>
       <? endif; ?>
     </div>
@@ -120,27 +129,10 @@
       <? endforeach; ?>
     <? else: ?>
       <form class="form-inline" method="post" name="bulkActionForm" action="<?=$this->url('cart-home')?>">
-        <?=$this->paginationControl($this->results->getPaginator(), 'Sliding', 'search/pagination.phtml', array('results' => $this->results))?>
-        <?=$this->context($this)->renderInContext('search/bulk-action-buttons.phtml', array('idPrefix' => ''))?>
         <?=$this->render('search/list-' . $this->params->getView() . '.phtml')?>
-        <?=$this->context($this)->renderInContext('search/bulk-action-buttons.phtml', array('idPrefix' => 'bottom_'))?>
         <?=$this->paginationControl($this->results->getPaginator(), 'Sliding', 'search/pagination.phtml', array('results' => $this->results))?>
       </form>
 
-      <div class="searchtools hidden-print">
-        <strong><?=$this->transEsc('Search Tools')?>:</strong>
-        <i class="fa fa-bell"></i> <a href="<?=$this->results->getUrlQuery()->setViewParam('rss')?>"><?=$this->transEsc('Get RSS Feed')?></a>
-        &mdash;
-        <i class="fa fa-envelope"></i> <a href="<?=$this->url('search-email')?>" class="mailSearch modal-link" id="mailSearch<?=$this->escapeHtmlAttr($this->results->getSearchId())?>" title="<?=$this->transEsc('Email this Search')?>"><?=$this->transEsc('Email this Search')?></a>
-        &mdash;
-        <? if (is_numeric($this->results->getSearchId())): ?>
-          <? if ($this->results->isSavedSearch()): ?>
-            <i class="fa fa-remove"></i> <a href="<?=$this->url('myresearch-savesearch')?>?delete=<?=urlencode($this->results->getSearchId())?>"><?=$this->transEsc('save_search_remove')?></a>
-          <? else: ?>
-            <i class="fa fa-save"></i> <a href="<?=$this->url('myresearch-savesearch')?>?save=<?=urlencode($this->results->getSearchId())?>"><?=$this->transEsc('save_search')?></a>
-          <? endif; ?>
-        <? endif; ?>
-      </div>
     <? endif; ?>
 
         <?=$this->context($this)->renderInContext('search/hintbox.phtml')?>
@@ -149,7 +141,9 @@
 
   <? /* Narrow Search Options */ ?>
   <div class="<?=$this->layoutClass('sidebar')?>">
-    <?=$this->render('search/controls/sort.phtml')?>
+    <? if ($recordTotal > 0): ?>
+      <?=$this->render('search/controls/sort.phtml')?>
+    <? endif ?>  
     <? foreach ($this->results->getRecommendations('side') as $current): ?>
       <?=$this->recommend($current)?>
     <? endforeach; ?>

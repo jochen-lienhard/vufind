@@ -222,3 +222,29 @@ div.tg div.t_text {
 .search span.index {
   margin-left: -48px;
 }
+
+.sidebar label[for='sort_options_1'] {
+  width: 100%;
+  background-color: lightgray;
+  margin: 0px 0px -1px 0px;
+  padding: 6px 4px 6px 8px;
+  font-weight: bold;
+  font-size: 120%;
+}
+
+div.row .sidebar h4 {
+  background-color: lightgray;
+  padding: 10px 4px 10px 8px;
+  word-wrap: break-word;
+  font-weight: bold;
+  font-size: 120%;
+  margin-bottom: 0px;
+}
+
+#sort_options_1 {
+  width: 100%;
+}
+
+#result0 {
+  margin-top:8px;
+}
