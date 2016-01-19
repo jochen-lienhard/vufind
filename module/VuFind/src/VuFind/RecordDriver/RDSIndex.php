@@ -241,16 +241,14 @@ class RDSIndex extends SolrMarc
     }
 
     /**
-     * Get the call number associated with the record (empty string if none).
+     * Get all call numbers associated with the record (empty string if none).
      *
-     * @return string
+     * @return array
      */
-    public function getCallNumber()
+    public function getCallNumbers()
     {
-        // Use the callnumber-a field from the Solr index; the plain callnumber
-        // field is normalized to have no spaces, so it is unsuitable for display.
-        return isset($this->fields['si']) ?
-        $this->fields['si'] : '';
+        return isset($this->fields['si'])
+            ? $this->fields['si'] : [];
     }
 
     /**
@@ -2848,6 +2846,19 @@ class RDSIndex extends SolrMarc
 	    return 'offline';
     }
 
+    /**
+     * Returns true if the record supports real-time AJAX status lookups.
+     *
+     * @return bool
+     */
+    public function supportsAjaxStatus()
+    {
+	if ($this->getONLINE() == "offline") {
+            return true;
+        } else {
+            return false;
+        }
+    }
 
     /**
      * Get an array of all the formats associated with the record.

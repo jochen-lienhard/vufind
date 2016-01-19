@@ -174,6 +174,37 @@ class AjaxController extends AbstractBase
         return $filtered;
     }
 
+
+
+    /**
+     * Get Item Statuses
+     *
+     * This is responsible for printing the holdings information for a
+     * collection of records in JSON format.
+     *
+     * @return \Zend\Http\Response
+     * @author Chris Delis <cedelis@uillinois.edu>
+     * @author Tuan Nguyen <tuan@yorku.ca>
+     * @author Jochen Lienhard <lienhard@ub.uni-freiburg.de>
+     */
+    protected function getItemRDSStatusesAjax()
+    {
+        $this->writeSession();  // avoid session write timing bug
+        $catalog = $this->getILS();
+        $ids = $this->params()->fromQuery('id');
+
+        // In order to detect IDs missing from the status response, create an
+        // array with a key for every requested ID.  We will clear keys as we
+        // encounter IDs in the response -- anything left will be problems that
+        // need special handling.
+        $missingIds = array_flip($ids);
+
+$statuses[] = $results;
+
+        // Done
+        return $this->output($statuses, self::STATUS_OK);
+    }
+
     /**
      * Get Item Statuses
      *
@@ -239,11 +270,14 @@ class AjaxController extends AbstractBase
                         $record, $messages, $locationSetting, $callnumberSetting
                     );
                 }
+                // fix for MultiBackend
+                $current['id'] = preg_replace("/^\./","", $current['id']); 
                 // If a full status display has been requested, append the HTML:
                 if ($showFullStatus) {
                     $current['full_status'] = $renderer->render(
                         'ajax/status-full.phtml', ['statusItems' => $record]
                     );
+                    $current['raw'] = $record;
                 }
                 $current['record_number'] = array_search($current['id'], $ids);
                 $statuses[] = $current;
@@ -695,6 +729,38 @@ class AjaxController extends AbstractBase
     }
 
     /**
+     * Get record for integrated list view.
+     *
+     * @return \Zend\Http\Response
+     */
+    protected function getRecordDetailsAjax()
+    {
+        $driver = $this->getRecordLoader()->load(
+            $this->params()->fromQuery('id'),
+            $this->params()->fromQuery('source')
+        );
+        $viewtype = preg_replace(
+            '/\W/', '',
+            trim(strtolower($this->params()->fromQuery('type')))
+        );
+        $request = $this->getRequest();
+        $cfg = $this->getServiceLocator()->get('Config');
+        $allTabs = $this->getServiceLocator()
+            ->get('VuFind\RecordTabPluginManager')
+            ->getTabsForRecord(
+                $driver,
+                $cfg['vufind']['recorddriver_tabs'],
+                $request
+            );
+        $html = $this->getViewRenderer()
+            ->render(
+                "record/ajaxview-" . $viewtype . ".phtml",
+                ['driver' => $driver, 'tabs' => $allTabs]
+            );
+        return $this->output($html, self::STATUS_OK);
+    }
+
+    /**
      * Get map data on search results and output in JSON
      *
      * @param array $fields Solr fields to retrieve data from
@@ -1035,9 +1101,10 @@ class AjaxController extends AbstractBase
     {
         $format = $this->params()->fromPost('format');
         $export = $this->getServiceLocator()->get('VuFind\Export');
+        
         $url = $export->getBulkUrl(
             $this->getViewRenderer(), $format,
-            $this->params()->fromPost('ids', [])
+            $this->getIds(), $this->getCachePolicy()
         );
         $html = $this->getViewRenderer()->render(
             'ajax/export-favorites.phtml',
