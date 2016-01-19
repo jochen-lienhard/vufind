@@ -11,7 +11,7 @@
     <div class="loading hidden">
       <i class="fa fa-spin fa-spinner"></i> <?=$this->transEsc("Loading")?>...
     </div>
-    <div class="short-view<?=$this->driver->supportsAjaxStatus() ? ' ajaxItem' : '' ?>">
+    <div class="short-view">
   <? endif; ?>
   <div class="row">
     <div>
@@ -93,6 +93,7 @@
         </div>
       <? endif; ?>
 
+<? /* moved to other position for the flex box for Hohenheim 
       <div class="callnumAndLocation ajax-availability hidden">
         <? if ($this->driver->supportsAjaxStatus()): ?>
           <strong class="hideIfDetailed"><?=$this->transEsc('Call Number')?>:</strong>
@@ -110,6 +111,7 @@
           <? endif; ?>
         <? endif; ?>
       </div>
+*/ ?>
 
       <? /* We need to find out if we're supposed to display an OpenURL link ($openUrlActive),
             but even if we don't plan to display the link, we still want to get the $openUrl
@@ -176,15 +178,23 @@
   <? if('full' != $dataView): ?>
     </div>
     
-    <div>
+    <div class="row">
+      <div class="col-sm-6 left"> 
       <?=$rdsHelper->getFavAction() ?>
       <?=$rdsHelper->getPrintAction() ?>
+      </div>
       <?  /* TODO if 21 100 31 */ ?>
       <? $shortLink = $this->driver->getShortLinks(); ?>
       <? if (isset($shortLink) && !empty($shortLink)): ?>
+        <div clas"col-sm-2"
         <a href="<?=$this->escapeHtml($shortLink) ?>" target="_blank"> &rarr; <?=$this->transEsc('RDS_FULLTEXT_LINK') ?> </a>
+        </div>
       <? endif; ?>
       <?  /* TODO End  if 21 100 31 */ ?>
+      <? if ($this->driver->supportsAjaxStatus()): ?>
+         <div class="callnumAndLocation ajax-availability col-sm-2 right hidden"></div>
+      <? endif; ?>
+
     </div>
     <div class="long-view hidden"></div>
   <? endif; ?>
