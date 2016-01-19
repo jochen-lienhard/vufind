@@ -326,6 +326,10 @@ class QueryBuilder implements QueryBuilderInterface
             if ($component->getHandler() == 'au') {
                 $searchString = $this->filterAu($searchString);
             }
+            // RDS if search field is py, manipulate the searchString
+            if ($component->getHandler() == 'py') {
+                $searchString = $this->filterPy($searchString);
+            }
             $searchHandler = $this->getSearchHandler(
                 $component->getHandler(),
                 $searchString
@@ -375,8 +379,19 @@ class QueryBuilder implements QueryBuilderInterface
         return $filtered;
     }
 
+    /**
+     * Manipulates the search string for py search field.
+     *
+     * @param string $lookfor search string
+     *
+     * @return string
+     */
+    protected function filterPy($lookfor)
+    {
+        return ($lookfor);
+    }
 
-        /**
+    /**
      * Return search string based on input and handler.
      *
      * @param string        $string  Input search string
