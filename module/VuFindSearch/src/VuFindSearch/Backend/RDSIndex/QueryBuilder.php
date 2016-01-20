@@ -320,15 +320,16 @@ class QueryBuilder implements QueryBuilderInterface
                 '(%s)', implode(" {$component->getOperator()} ", $reduced)
             );
         } else {
-            $searchString  = $this->getLuceneHelper()
-                ->normalizeSearchString($component->getString());
+            // RDS if search field is py, manipulate the searchString
+            if ($component->getHandler() == 'py') {
+                $searchString = $this->filterPy($component->getString());
+            } else {
+                $searchString  = $this->getLuceneHelper()
+                   ->normalizeSearchString($component->getString());
+            }
             // RDS if search field is au, manipulate the searchString
             if ($component->getHandler() == 'au') {
                 $searchString = $this->filterAu($searchString);
-            }
-            // RDS if search field is py, manipulate the searchString
-            if ($component->getHandler() == 'py') {
-                $searchString = $this->filterPy($searchString);
             }
             $searchHandler = $this->getSearchHandler(
                 $component->getHandler(),
@@ -388,7 +389,22 @@ class QueryBuilder implements QueryBuilderInterface
      */
     protected function filterPy($lookfor)
     {
-        return ($lookfor);
+        $result_term = "";
+        // remove whitespace
+        $lookfor = preg_replace('/\p{Z}+/u', '', $lookfor);
+        // check if lookfor looks like 2000-2010
+        if (preg_match('/^[0-9]{1,4}(-[0-9]{1,4})?$/',$lookfor)) {
+            $result_term=preg_replace('/^([0-9]{1,4})-([0-9]{1,4})/','[$1 TO $2]',$lookfor);
+        } else {
+           // check if lookfor looks like 2000-
+           if (preg_match('/^[0-9]{1,4}-?$/',$lookfor)) {
+               $result_term=preg_replace('/^([0-9]{1,4})-/','[$1 TO *]',$lookfor);
+           } else {
+               // else delete ! at the end
+               $result_term = preg_replace('/\!$/u', '', $lookfor); 
+           }
+        }
+        return ($result_term);
     }
 
     /**
