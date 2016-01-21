@@ -100,6 +100,19 @@ class RDSIndexHolding extends \VuFind\View\Helper\Bootstrap3\RDSIndexHolding
     }
 
     /**
+     * Make the aDIS Location readable 
+     *
+     * @param string $adis_loc storage of an item based on adis
+     *
+     * @return string 
+     */
+    protected function createReadableLocation($adis_loc)
+    {
+        return $this->translate($adis_loc);
+    }
+
+
+    /**
      * Generates a string for bib_link based on local data set
      *
      * @param string $bib_sigel id of library
