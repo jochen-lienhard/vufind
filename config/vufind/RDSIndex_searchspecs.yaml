@@ -293,6 +293,8 @@ si:
     rds_si:
       - [preg_replace, '/[:]/', '\:']
       - [preg_replace, '/[ ]/', ""]
+      - [preg_replace, '/[(]/', "\\\("]
+      - [preg_replace, '/[)]/', "\\\)"]
   QueryFields:
     si:
       - [rds_si, ~]
