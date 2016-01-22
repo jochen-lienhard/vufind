@@ -270,8 +270,6 @@ $statuses[] = $results;
                         $record, $messages, $locationSetting, $callnumberSetting
                     );
                 }
-                // fix for MultiBackend
-                $current['id'] = preg_replace("/^\./","", $current['id']); 
                 // If a full status display has been requested, append the HTML:
                 if ($showFullStatus) {
                     $current['full_status'] = $renderer->render(
