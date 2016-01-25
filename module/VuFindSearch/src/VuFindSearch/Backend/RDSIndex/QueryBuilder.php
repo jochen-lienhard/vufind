@@ -171,7 +171,7 @@ class QueryBuilder implements QueryBuilderInterface
             || preg_match('/^rn\:/', $string) || preg_match('/\brn\:/', $string)
         ) {
             $params->set('fq', null);
-        } 
+        } else {$params->set('fq', 'mi:0'); }
 
         $params->set('q', $string);
 
