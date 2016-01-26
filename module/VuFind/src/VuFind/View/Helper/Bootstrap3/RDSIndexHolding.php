@@ -241,7 +241,7 @@ class RDSIndexHolding extends \Zend\View\Helper\AbstractHelper implements Transl
                                         break;
                                     case "order": $borrowable++; 
                                         break;
-                                    case "unknown": $unknown++; 
+                                    case "unknown": $lent++; 
                                         break;
                                     case "lent": $lent++; 
                                         break;
@@ -265,6 +265,8 @@ class RDSIndexHolding extends \Zend\View\Helper\AbstractHelper implements Transl
                     if ($unknown > 0) {
                         $lok_mergeResult["RDS_STATUS"] .= $unknown . " " . $this->translate("UNKOWN");
                     }
+                    // optional add some text or link
+                    $lok_mergeResult["RDS_STATUS"] .= $this->addSummaryComment();
                 } else {
                     // set RDS_LOCATION and RDS_STATUS based on daia
                     if (in_array($lok_set["bib_sigel"], $this->adis_clients)) {
@@ -345,6 +347,16 @@ class RDSIndexHolding extends \Zend\View\Helper\AbstractHelper implements Transl
             } 
         }
         return ($tempresult);
+    }
+
+    /**
+     * Creates a comment for the summary status 
+     *
+     * @return string
+     */
+    protected function addSummaryComment()
+    {
+        return "";
     }
 
     /**
