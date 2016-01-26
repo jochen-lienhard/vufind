@@ -271,7 +271,7 @@ class RDSIndexHolding extends \Zend\View\Helper\AbstractHelper implements Transl
                         foreach ($daia[$lok_set["bib_sigel"]] as $loc_daia) {
                             // ToDo eliminate PHP Warning
                             foreach ($loc_daia["items"] as $item) {
-                                if ($this->checkSignature($item["callnumber"], $lok_set["signatur"], $lok_set["bib_sigel"])) {
+                                if ($this->checkSignature($item["callnumber"], $this->checkLocSignature($lok_set), $lok_set["bib_sigel"])) {
                                     $lok_mergeResult["RDS_LOCATION"] = $this->createReadableLocation($item["location"]); 
                                     $localstatus = $this->createReadableStatus($item);
                                     $lok_mergeResult["RDS_STATUS"] = $localstatus;
@@ -358,6 +358,22 @@ class RDSIndexHolding extends \Zend\View\Helper\AbstractHelper implements Transl
     {
         if (isset($lok_set["praesenz"]) && $lok_set["praesenz"]=='p') {
             return "RDS_REF_STOCK";
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * create the signature based on lok_set for check
+     *
+     * @param array $lok_set 
+     *
+     * @return string
+     */
+    protected function checkLocSignature($lok_set)
+    {
+        if (isset($lok_set["signatur"])) {
+            return $lok_set["signatur"];
         } else {
             return null;
         }
