@@ -266,7 +266,9 @@ class RDSIndexHolding extends \Zend\View\Helper\AbstractHelper implements Transl
                         $lok_mergeResult["RDS_STATUS"] .= $unknown . " " . $this->translate("UNKOWN");
                     }
                     // optional add some text or link
-                    $lok_mergeResult["RDS_STATUS"] .= $this->addSummaryComment();
+                    if ($lent>0 && $borrowalbe == 0) {
+                        $lok_mergeResult["RDS_STATUS"] .= $this->addSummaryComment();
+                    }
                 } else {
                     // set RDS_LOCATION and RDS_STATUS based on daia
                     if (in_array($lok_set["bib_sigel"], $this->adis_clients)) {
