@@ -86,6 +86,17 @@ class RDSIndexHolding extends \VuFind\View\Helper\Bootstrap3\RDSIndexHolding
     }
 
     /**
+     * Creates a comment for the summary status 
+     *
+     * @return string
+     */
+    protected function addSummaryComment()
+    {
+        return "<a href=" . $this->getAdisLink(100) . ">" . $this->translate("RDS_RESERVATION") . "</a>";
+    }
+
+
+    /**
      * Creates the location depending on the data loc set
      *
      * @param array $lok_set 
@@ -110,7 +121,6 @@ class RDSIndexHolding extends \VuFind\View\Helper\Bootstrap3\RDSIndexHolding
     {
         return $this->translate($adis_loc);
     }
-
 
     /**
      * Generates a string for bib_link based on local data set

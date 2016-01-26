@@ -155,12 +155,33 @@
       <?=str_replace('class="', 'class="label label-info ', $this->record($this->driver)->getFormatList())?>
 */ ?>
 
+<? /* Area for MedienIcon-Text, Fulltext-Link and Available-Flexbox */ ?>
       <? if (!$openUrlActive && empty($urls) && $this->driver->supportsAjaxStatus()): ?>
         <span class="status ajax-availability hidden">
           <span class="label label-default"><?=$this->transEsc('Loading')?>...</span>
         </span>
       <? endif; ?>
       <?=$this->record($this->driver)->getPreviews()?>
+
+      <div class="col-sm-6 mediatype"><?=$this->transEsc($this->driver->getMedienicon())?>
+           <? $py = $this->driver->getPublishingYear(); ?>
+           <? $summpy = $this->driver->getPy(); ?>
+           <? if (isset($py) && !empty($py)): ?>
+                <? if ( !empty($summpy) && $summpy != '0' && $summpy != '9999'): ?>
+                     <?=$this->escapeHtml($py)?>
+                <? endif; ?>
+           <? endif; ?>
+      </div>
+      <? $shortLink = $this->driver->getShortLinks(); ?>
+      <? if (isset($shortLink) && !empty($shortLink)): ?> 
+           <div class="col-sm-3 rds_shortlink">
+               <a href="<?=$this->escapeHtml($shortLink) ?>" target="_blank" type="button" class="btn btn-primary btn-xs"><i class="fa fa-file-text-o"></i><span class="hidden-xs"> <?=$this->transEsc('RDS_FULLTEXT_LINK') ?></span></a>
+           </div>
+      <? endif; ?>
+
+      <? if ($this->driver->supportsAjaxStatus()): ?>
+          <div class="callnumAndLocation ajax-availability hidden col-sm-3"></div>
+      <? endif; ?>
     </div>
 
   <? if('full' != $dataView): ?>
@@ -242,7 +263,7 @@
 
       <?=$this->driver->supportsCoinsOpenUrl()?'<span class="Z3988" title="'.$this->escapeHtmlAttr($this->driver->getCoinsOpenUrl()).'"></span>':''?>
   </div>
-
+<? /*
 <div class="col-sm-6 mediatype"><?=$this->transEsc($this->driver->getMedienicon())?>
 <? $py = $this->driver->getPublishingYear(); ?>
                         <? $summpy = $this->driver->getPy(); ?>
@@ -252,18 +273,17 @@
                           <? endif; ?>
                         <? endif; ?>
 </div>
-                         <?  /* TODO if 21 100 31 */ ?>
                          <? $shortLink = $this->driver->getShortLinks(); ?>
                          <div class="col-sm-3 rds_shortlink">
                          <? if (isset($shortLink) && !empty($shortLink)): ?>
-                          <a href="<?=$this->escapeHtml($shortLink) ?>" target="_blank"> &rarr; <?=$this->transEsc('RDS_FULLTEXT_LINK') ?> </a>
+                          <a href="<?=$this->escapeHtml($shortLink) ?>" target="_blank" type="button" class="btn btn-primary btn-sm"><i class="fa fa-file-text-o"></i><span class="hidden-xs"> <?=$this->transEsc('RDS_FULLTEXT_LINK') ?></span></a>
                          <? endif; ?>
                          </div>
-                         <?  /* TODO End  if 21 100 31 */ ?>
 
         <? if ($this->driver->supportsAjaxStatus()): ?>
       <div class="callnumAndLocation ajax-availability hidden col-sm-2"></div>
         <? endif; ?>
+*/ ?>
 
 
 </div>
