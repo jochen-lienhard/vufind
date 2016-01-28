@@ -1,22 +1,31 @@
-<input type="hidden" name="cachePolicy" value="Favorite" />
-<? if (isset($list)): ?>
-  <input type="hidden" name="listID" value="<?=$this->escapeHtmlAttr($list->id)?>" />
-  <input type="hidden" name="listName" value="<?=$this->escapeHtmlAttr($list->title)?>" />
-<? endif; ?>
-<? $user = $this->auth()->isLoggedIn(); ?>
-<div class="checkbox">
-  <label>
-    <input type="checkbox" name="selectAll" class="checkbox-select-all"/>
-    <?=$this->transEsc('select_page')?> | <?=$this->transEsc('with_selected')?>:
-  </label>
-</div>
-<div class="btn-group">
-  <input class="btn btn-default" type="submit" name="email" value="<?=$this->transEsc('Email')?>" title="<?=$this->transEsc('email_selected')?>"/>
-  <? if ((!is_null($this->list) && $this->list->editAllowed($user)) || is_null($this->list) && $user): ?>
-    <input class="btn btn-default" id="<?=$this->idPrefix?>delete_list_items_<?=!is_null($this->list) ? $this->escapeHtmlAttr($this->list->id) : ''?>" type="submit" name="delete" value="<?=$this->transEsc('Delete')?>" title="<?=$this->transEsc('delete_selected')?>"/>
-  <? endif; ?>
-  <? $exportOptions = $this->export()->getBulkOptions(); if (count($exportOptions) > 0): ?>
-    <input class="btn btn-default" type="submit" name="export" value="<?=$this->transEsc('Export')?>" title="<?=$this->transEsc('export_selected')?>"/>
-  <? endif; ?>
-  <input class="btn btn-default" type="submit" name="doExport" value="<?=$this->transEsc('Print')?>" title="<?=$this->transEsc('print_selected')?>"/>
-</div>
+  <h4 class="fav-action-title"><?=$this->transEsc('RDS_FAVLIST_MANAGE_ITEMS')?></h4>
+  <div class="list-group">
+    <input type="hidden" name="cachePolicy" value="Favorite" />
+    <? if (isset($list)): ?>
+      <input type="hidden" name="listID" value="<?=$this->escapeHtmlAttr($list->id)?>" />
+      <input type="hidden" name="listName" value="<?=$this->escapeHtmlAttr($list->title)?>" />
+    <? endif; ?>
+    <? $user = $this->auth()->isLoggedIn(); ?>
+    <div class="list-group-item">
+        
+        <input type="checkbox" name="selectAll" class="checkbox-select-all"/>
+        <?=$this->transEsc('RDS_SELECT_ALL_ITEMS')?>
+    </div>
+    <div class="list-group-item">
+        <input class="rdsBulkAction" type="submit" name="email" value="&#xf003;&nbsp;&nbsp;<?=$this->transEsc('RDS_EMAIL_SELECTION')?>" title="<?=$this->transEsc('RDS_EMAIL_SELECTION')?>" />
+    </div>
+    
+    <div class="list-group-item">
+      <? if ((!is_null($this->list) && $this->list->editAllowed($user)) || is_null($this->list) && $user): ?>
+          <input class="rdsBulkAction" id="<?=$this->idPrefix?>delete_list_items_<?=!is_null($this->list) ? $this->escapeHtmlAttr($this->list->id) : ''?>" type="submit" name="delete" value="&#xf014;&nbsp;&nbsp;<?=$this->transEsc('RDS_DELETE_SELECTION')?>" title="<?=$this->transEsc('RDS_DELETE_SELECTION')?>"/>
+      <? endif; ?>
+      <? $exportOptions = $this->export()->getBulkOptions(); if (count($exportOptions) > 0): ?>
+    </div>
+    <div class="list-group-item">
+          <input class="rdsBulkAction" type="submit" name="export" value="&#xf08e;&nbsp;&nbsp;<?=$this->transEsc('RDS_EXPORT_SELECTION')?>" title="<?=$this->transEsc('RDS_EXPORT_SELECTION')?>"/>
+      <? endif; ?>
+    </div>
+    <div class="list-group-item">
+        <input class="rdsBulkAction" type="submit" name="doExport" value="&#xf02f;&nbsp;&nbsp;<?=$this->transEsc('RDS_PRINT_SELECTION')?>" title="<?=$this->transEsc('RDS_PRINT_SELECTION')?>"/>
+    </div>
+  </div>

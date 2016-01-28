@@ -1,0 +1,20 @@
+<? if ($this->userlist()->getMode() !== 'disabled' && $user = $this->auth()->isLoggedIn()): ?>
+  <? $lists = $user->getLists() ?>
+  <h4><?=$this->transEsc('RDS_FAVLIST_LISTS')?></h4>
+  <div class="list-group">
+    <? foreach ($lists as $list): ?>
+        <a href="<?=$this->url('userList', array('id' => $list['id']))?>" class="list-group-item<?=$this->active == 'list' . $list['id'] ? ' active' : ''?>">
+          <?=$this->escapeHtml($list['title'])?>
+          <span class="badge"><?=$list->cnt?></span>
+        </a>
+    <? endforeach; ?>
+  <a href="<?=$this->url('myresearch-favorites')?>" class="list-group-item<?=$this->active == 'favorites' ? ' active' : ''?>">
+    <?=$this->transEsc('RDS_FAVLIST_CUMMULATIVE_LIST')?>
+    <span class="pull-right flip"><i class="fa fa-fw fa-star"></i></span>
+  </a>
+  </div>
+  
+  <a id="newListLink" onclick="rdsEditList('NEW');return false;" href="<?=$this->url('editList', array('id'=>'NEW'))?>" title="<?=$this->transEsc('RDS_FAVLIST_NEW') ?>" class="btn btn-link">
+        <i class="fa fa-plus"></i> <?=$this->transEsc('RDS_FAVLIST_NEW') ?>
+    </a>
+<? endif ?>

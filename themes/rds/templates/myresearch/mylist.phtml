@@ -29,18 +29,18 @@
 <?=$this->flashmessages()?>
 
 <nav class="nav searchbox hidden-print">
-
-	<? $this->layout()->navigation = $this->render('layout/navigation.phtml');?>
+  <? $this->layout()->navigation = $this->render('layout/navigation.phtml');?>
   <?=$this->layout()->navigation ?>
 </nav>
+
 <div class="row">
-  <div class="<?=$this->layoutClass('mainbody')?>">
-    <div class="clearfix hidden-print">
-      <h2 class="pull-left flip"><?=$list ? $this->escapeHtml($list->title) : $this->transEsc("Your Favorites")?></h2>
-      <div class="pull-right flip">
-        <? if (isset($list)): ?>
+  <div class="col-xs-12 <?=$this->layoutClass('mainbody')?>">
+    <div class="hidden-print">
+      <h2 class="rdsFavListTitle flip"><?=$list ? $this->escapeHtml($list->title) : $this->transEsc("Your Favorites")?></h2>
+      <div class="rdsFavListActions">
+       <? if (isset($list)): ?>
           <? if ($list->editAllowed($account->isLoggedIn())): ?>
-            <a href="<?=$this->url('editList', array('id' => $list->id)) ?>" class="btn btn-link" title="<?=$this->transEsc("edit_list")?>"><i class="fa fa-edit"></i> <?=$this->transEsc("edit_list")?></a>
+            <a href="<?=$this->url('editList', array('id' => $list->id)) ?>" onclick="rdsEditList(<?=$list->id ?>);return false;" class="btn btn-link" title="<?=$this->transEsc("edit_list")?>"><i class="fa fa-edit"></i> <?=$this->transEsc("edit_list")?></a>
             <div class="btn-group">
               <a class="btn btn-link dropdown-toggle" data-toggle="dropdown" href="<?=$this->url('myresearch-deletelist') ?>?listID=<?=urlencode($list->id)?>">
                 <i class="fa fa-trash-o"></i> <?=$this->transEsc("delete_list")?>
@@ -51,55 +51,80 @@
               </ul>
             </div>
           <? endif; ?>
-        <? elseif ($recordTotal > 0): ?>
-          <?=$this->transEsc("Showing")?>
-          <strong><?=$this->localizedNumber($this->results->getStartRecord())?></strong> - <strong><?=$this->localizedNumber($this->results->getEndRecord())?></strong>
-          <?=$this->transEsc('of')?> <strong><?=$this->localizedNumber($recordTotal)?></strong>
         <? endif; ?>
       </div>
-    </div>
-  <? if ($list && !empty($list->description)): ?>
-    <p><?=$this->escapeHtml($list->description)?></p>
-  <? endif; ?>
-    <? if ($recordTotal > 0): ?>
-    
-      <div class="resulthead">
-        <div class="pull-right flip">
-          <?=$this->render('search/controls/limit.phtml')?>
-        </div>
-        <form class="form-inline" method="post" name="bulkActionForm" action="<?=$this->url('cart-myresearchbulk')?>">
-            <?=$this->context($this)->renderInContext('myresearch/bulk-action-buttons.phtml', array('idPrefix' => '', 'list' => isset($list) ? $list : null, 'account' => $this->account))?>
-                            <? if (!isset($this->indexStart)) $this->indexStart = 0; ?>
-                            <? $i = $this->indexStart; foreach ($this->results->getResults() as $current):
-                              $recordNumber = $this->results->getStartRecord()+$i-$this->indexStart; ?>
-                              <div id="result<?=$i++ ?>" class="row result clearfix">
-                                <div class="col-xs-1 hidden-print<? if ($showCheckboxes): ?> checkbox<? endif; ?>">
-                                  <label>
-                                    <?=$this->record($current)->getCheckbox()?>
-                                    <?=sprintf('%03d',$recordNumber)?>
-                                  </label>
-                                </div>
-                                <?=$this->record($current)->getListEntry($list, $user)?>
-                              </div>
-                            <? endforeach; ?>
-            <? /* foreach ($this->results->getResults() as $i=>$current): ?>
-              <?=$this->record($current)->getListEntry($list, $user)?>
-            <? endforeach; */ ?>
-        </form>
+      <? if ($list && !empty($list->description)): ?>
+        <p><?=$this->escapeHtml($list->description)?></p>
+      <? endif; ?>
+      <div class="hidden-print search-controls">
+          <? if ($recordTotal > 0): ?>
+            <div class = "rdsPageOptions row">
+                <div class="col-xs-9 col-md-9 rdsPager">
+                    <?=$this->paginationControl($this->results->getPaginator()->setPageRange(2), 'Sliding', 'search/pagination.phtml', array('results' => $this->results))?>
+                </div>
+                <div class="col-xs-3 col-md-3 rdsLimit">
+                  <?=$this->render('search/controls/limit.phtml')?>
+                </div>
+            </div>
+            <div class="row">
+              <div class="col-xs-7 rdsSearchInfo">
+                <?=$this->transEsc("Showing")?>
+                <strong><?=$this->localizedNumber($this->results->getStartRecord())?></strong> - <strong><?=$this->localizedNumber($this->results->getEndRecord())?></strong>
+                <? if (!isset($this->skipTotalCount)): ?>
+                  <?=$this->transEsc('of')?> <strong><?=$this->localizedNumber($recordTotal)?></strong>
+                <? endif; ?>
+                <? if (isset($this->overrideSearchHeading)): ?>
+                  <?=$this->overrideSearchHeading?>
+                <? endif; ?>
+                <? if ($qtime = $this->results->getQuerySpeed()): ?>
+                  <?=$this->transEsc('query time')?>: <?=$this->localizedNumber($qtime, 2).$this->transEsc('seconds_abbrev')?>
+                <? endif; ?>
+              </div>
+              <div class="col-xs-5 rdsSort">
+                <?=$this->render('search/controls/sort.phtml')?>
+              </div>
+            </div>
+          <? else: ?>
+            <p class="lead"><?=$this->transEsc('nohit_heading')?></p>
+          <? endif; ?>
       </div>
-      <?=$this->paginationControl($this->results->getPaginator(), 'Sliding', 'search/pagination.phtml', array('results' => $this->results))?>
-    <? else: ?>
-      <p><?=$this->transEsc('You do not have any saved resources')?></p>
-    <? endif; ?>
+    </div>
   </div>
-
-  <div class="<?=$this->layoutClass('sidebar')?>">
-    <? if ($recordTotal > 0): ?>
-      <?=$this->render('search/controls/sort.phtml')?>
-    <? endif; ?>
-    <?=$this->context($this)->renderInContext("myresearch/menu.phtml", array('active' => isset($list) ? 'list' . $list['id'] : 'favorites'))?>
-    <? foreach ($this->results->getRecommendations('side') as $current): ?>
-      <?=$this->recommend($current)?>
-    <? endforeach; ?>
-  </div>
+  
+  <form class="form-inline" method="post" name="bulkActionForm" action="<?=$this->url('cart-myresearchbulk')?>">
+    <div class="col-xs-12 <?=$this->layoutClass('mainbody')?>">
+      <? if ($recordTotal > 0): ?>
+        <? if (!isset($this->indexStart)) $this->indexStart = 0; ?>
+          <? $i = $this->indexStart; foreach ($this->results->getResults() as $current):
+            $recordNumber = $this->results->getStartRecord()+$i-$this->indexStart; ?>
+            <div id="result<?=$i++ ?>" class="row result clearfix">
+              <div class="col-xs-1 hidden-print<? if ($showCheckboxes): ?> checkbox<? endif; ?>">
+                <label>
+                  <?=$this->record($current)->getCheckbox()?>
+                  <?=sprintf('%03d',$recordNumber)?>
+                </label>
+              </div>
+              <?=$this->record($current)->getListEntry($list, $user)?>
+            </div>
+          <? endforeach; ?>
+          <? /* foreach ($this->results->getResults() as $i=>$current): ?>
+            <?=$this->record($current)->getListEntry($list, $user)?>
+          <? endforeach; */ ?> 
+        <?=$this->paginationControl($this->results->getPaginator(), 'Sliding', 'search/pagination.phtml', array('results' => $this->results))?>
+      <? else: ?>
+        <p><?=$this->transEsc('You do not have any saved resources')?></p>
+      <? endif; ?>
+    </div>
+    
+    <div class="<?=$this->layoutClass('sidebar')?> <?=$recordTotal >0 ? 'rdsSortOptionsSidebar' : '' ?> sidebar-fav-admin">
+      <? if ($recordTotal > 0): ?>
+        <div class="rdsSidebarFix hidden-xs"></div>
+        <?=$this->context($this)->renderInContext('myresearch/bulk-action-buttons.phtml', array('idPrefix' => '', 'list' => isset($list) ? $list : null, 'account' => $this->account))?>      
+      <? endif; ?>
+      <?=$this->context($this)->renderInContext("myresearch/menu.phtml", array('active' => isset($list) ? 'list' . $list['id'] : 'favorites'))?>
+      <? foreach ($this->results->getRecommendations('side') as $current): ?>
+        <?=$this->recommend($current)?>
+      <? endforeach; ?>
+    </div>
+  </form>
 </div>
