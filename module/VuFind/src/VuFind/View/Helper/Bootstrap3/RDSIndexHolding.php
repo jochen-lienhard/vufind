@@ -146,9 +146,6 @@ class RDSIndexHolding extends \Zend\View\Helper\AbstractHelper implements Transl
                 }
                 // set RDS_STATUS (default, may be modified by daia)
                 $lok_mergeResult["RDS_STATUS"] = $this->setLocStatus($lok_set);
-                if (isset($lok_set["praesenz"]) && $lok_set["praesenz"]=='p') {
-                    $lok_mergeResult["RDS_STATUS"] = "RDS_REF_STOCK";
-                }
                 // set RDS_LOCATION (may be modified by daia)
                 $lok_mergeResult["RDS_LOCATION"] = $this->setLocation($lok_set);
                 if (isset($lok_set["zusatz_standort"])) {
@@ -279,7 +276,7 @@ class RDSIndexHolding extends \Zend\View\Helper\AbstractHelper implements Transl
                             foreach ($loc_daia["items"] as $item) {
                                 if ($this->checkSignature($item["callnumber"], $this->checkLocSignature($lok_set), $lok_set["bib_sigel"])) {
                                     $lok_mergeResult["RDS_LOCATION"] = $this->createReadableLocation($item["location"], $lok_mergeResult["RDS_LOCATION"]); 
-                                    $localstatus = $this->createReadableStatus($item);
+                                    $localstatus = $this->createReadableStatus($item, $lok_set["status"]);
                                     $lok_mergeResult["RDS_STATUS"] = $localstatus;
                                 }
                             }
@@ -345,7 +342,7 @@ class RDSIndexHolding extends \Zend\View\Helper\AbstractHelper implements Transl
                 $lok_mergeResult = $this->mergeResult;
                 $lok_mergeResult["RDS_SIGNATURE"] = $item["callnumber"];
                 $lok_mergeResult["RDS_LOCATION"] = $this->createReadableLocation($item["location"],null);
-                $localstatus = $this->createReadableStatus($item);
+                $localstatus = $this->createReadableStatus($item, null);
                 $lok_mergeResult["RDS_STATUS"] = $localstatus;
                 $tempresult[] = $lok_mergeResult; 
             } 
@@ -375,7 +372,11 @@ class RDSIndexHolding extends \Zend\View\Helper\AbstractHelper implements Transl
         if (isset($lok_set["praesenz"]) && $lok_set["praesenz"]=='p') {
             return "RDS_REF_STOCK";
         } else {
-            return null;
+            if (isset($lok_set["status"]) && $lok_set["status"]=='n') {
+               return $this->translate("RDS_REF_STOCK_TEXT") . " (" . $this->translate("RDS_REF_STOCK") . ")";
+            } else {
+               return null;
+            }
         }
     }
 
@@ -459,10 +460,11 @@ class RDSIndexHolding extends \Zend\View\Helper\AbstractHelper implements Transl
      * Creates a readable status 
      *
      * @param array $item daia item 
+     * @param string $lok_set_status lok set status
      *
      * @return string
      */
-    protected function createReadableStatus($item) 
+    protected function createReadableStatus($item,$lok_set_status=null) 
     {
         $localstatus = "";
         switch ($item["status"]) {
@@ -494,10 +496,10 @@ class RDSIndexHolding extends \Zend\View\Helper\AbstractHelper implements Transl
             }
             break;
         case "present":
-            if ($lok_set["status"] == "p") {
+            if ($lok_set_status == "p") {
                 $localstatus = $this->translate("RDS_REF_STOCK_SPECIAL");
             } else {
-                $localstatus = $this->translate("RDS_REF_STOCK_TEXT");
+                $localstatus = $this->translate("RDS_REF_STOCK_TEXT") . " (" . $this->translate("RDS_REF_STOCK") . ")";
             }
             break;
         }
