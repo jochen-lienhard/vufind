@@ -228,6 +228,7 @@ class RDSIndexHolding extends \Zend\View\Helper\AbstractHelper implements Transl
                     $lent = 0;
                     $present = 0;
                     $unknown = 0;
+                    $temp_loc = "";
                     $lok_mergeResult["RDS_STATUS"] = "";
                     foreach ($daia[$lok_set["bib_sigel"]] as $loc_daia) {
                         // ToDo eliminate PHP Warning and replace location
@@ -248,11 +249,12 @@ class RDSIndexHolding extends \Zend\View\Helper\AbstractHelper implements Transl
                                     case "present": $present++; 
                                         break;
                                     }
-                                    $lok_mergeResult["RDS_LOCATION"] = $this->createReadableLocation($temp_loc);
+                                 //   $lok_mergeResult["RDS_LOCATION"] = $this->createReadableLBLocation($temp_loc, $lok_mergeResult["RDS_LOCATION"]);
                                 }
                             }
                         }
                     }
+                    $lok_mergeResult["RDS_LOCATION"] = $this->createReadableLBLocation($temp_loc, $lok_mergeResult["RDS_LOCATION"]);
                     if ($borrowable > 0) {
                         $lok_mergeResult["RDS_STATUS"] = $borrowable . " " . $this->translate("RDS_AVAIL") . " ";
                     }
@@ -276,7 +278,7 @@ class RDSIndexHolding extends \Zend\View\Helper\AbstractHelper implements Transl
                             // ToDo eliminate PHP Warning
                             foreach ($loc_daia["items"] as $item) {
                                 if ($this->checkSignature($item["callnumber"], $this->checkLocSignature($lok_set), $lok_set["bib_sigel"])) {
-                                    $lok_mergeResult["RDS_LOCATION"] = $this->createReadableLocation($item["location"]); 
+                                    $lok_mergeResult["RDS_LOCATION"] = $this->createReadableLocation($item["location"], $lok_mergeResult["RDS_LOCATION"]); 
                                     $localstatus = $this->createReadableStatus($item);
                                     $lok_mergeResult["RDS_STATUS"] = $localstatus;
                                 }
@@ -342,7 +344,7 @@ class RDSIndexHolding extends \Zend\View\Helper\AbstractHelper implements Transl
             foreach ($loc_daia["items"] as $item) {
                 $lok_mergeResult = $this->mergeResult;
                 $lok_mergeResult["RDS_SIGNATURE"] = $item["callnumber"];
-                $lok_mergeResult["RDS_LOCATION"] = $this->createReadableLocation($item["location"]);
+                $lok_mergeResult["RDS_LOCATION"] = $this->createReadableLocation($item["location"],null);
                 $localstatus = $this->createReadableStatus($item);
                 $lok_mergeResult["RDS_STATUS"] = $localstatus;
                 $tempresult[] = $lok_mergeResult; 
@@ -531,14 +533,32 @@ class RDSIndexHolding extends \Zend\View\Helper\AbstractHelper implements Transl
      * Make the aDIS Location readable 
      *
      * @param string $adis_loc storage of an item based on adis
+     * @param string $rds_loc location based on loc_set
      *
      * @return string 
      */
-    protected function createReadableLocation($adis_loc)
+    protected function createReadableLocation($adis_loc, $location=null)
     {
         if (strpos($adis_loc, '/')) {
                   return substr($adis_loc, 0, strpos($adis_loc, '/')); 
         } else { 
+            return $adis_loc;
+        }
+    }
+
+    /**
+     * Merge the aDIS Location with loc_set for LB 
+     *
+     * @param string $adis_loc storage of an item based on adis
+     * @param string $rds_loc location based on loc_set
+     *
+     * @return string 
+     */
+    protected function createReadableLBLocation($adis_loc, $rds_loc=null)
+    {
+        if (strpos($adis_loc, '/')) {
+                  return substr($adis_loc, 0, strpos($adis_loc, '/'));
+        } else {
             return $adis_loc;
         }
     }
