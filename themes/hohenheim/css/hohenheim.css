@@ -14,16 +14,11 @@
    display: inline-block;
 }
 
-div.row .sidebar h4, 
-.sidebar label[for='sort_options_1'] {
+div.row .sidebar h4 {
   background-color: #003F75;
   color: white;
 }
 
 .list-group-item.title {
   border-top: none;
-}
-
-.rdsLimit {
-  margin-top: -8px;
 }
