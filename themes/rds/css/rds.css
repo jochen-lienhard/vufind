@@ -241,10 +241,53 @@ div.row .sidebar h4 {
   margin-bottom: 0px;
 }
 
-#sort_options_1 {
-  width: 100%;
-}
-
 #result0 {
   margin-top:8px;
+}
+
+.rdsFavListTitle {
+  margin-top: 12px;
+  display: inline-block;
+}
+
+.rdsFavListActions {
+  display: inline-block;
+}
+
+.rdsSearchInfo {
+  margin: 8px 0px 16px 0px ;
+}
+
+.rdsPager .pagination {
+  margin: 0px;
+  padding: 0px;
+}
+
+.rdsLimit {
+  margin-bottom: 4px;
+   text-align: right;
+}
+
+.rdsSort {
+  text-align: right;
+}
+
+.rdsPageOptions {
+  margin-top: 12px;
+}
+
+.rdsSidebarFix {
+ margin-top: -92px;
+}
+
+.rdsBulkAction {
+  font-family: FontAwesome, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  color: #555;
+  background-color:transparent;
+  border:none;
+  cursor: pointer;
+  white-space: normal;
+  text-align: left;
+  padding: 0px;
 }
