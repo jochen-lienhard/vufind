@@ -131,6 +131,7 @@
             but even if we don't plan to display the link, we still want to get the $openUrl
             value for use in generating a COinS (Z3988) tag -- see bottom of file.
           */
+/*
         $openUrl = $this->openUrl($this->driver, 'results');
         $openUrlActive = $openUrl->isActive();
         // Account for replace_other_urls setting
@@ -148,8 +149,8 @@
               <a href="<?=$this->escapeHtmlAttr($this->proxyUrl($current['url']))?>" class="fulltext" target="new"><i class="fa fa-external-link"></i> <?=($current['url'] == $current['desc']) ? $this->transEsc('Get full text') : $this->escapeHtml($current['desc'])?></a><br/>
           <? endforeach; ?>
         <? endif; ?>
-*/ ?>
       <? endif; ?>
+*/ ?>
 
 <? /* should be replaced by medienIcon - Text 
       <?=str_replace('class="', 'class="label label-info ', $this->record($this->driver)->getFormatList())?>
