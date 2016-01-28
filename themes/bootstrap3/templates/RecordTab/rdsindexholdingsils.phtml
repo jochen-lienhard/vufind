@@ -71,7 +71,7 @@
       </td>
       </tr>
     <? endif; ?>
-    <? if ($bib_addon): ?>
+    <? if (isset($bib_addon)): ?>
       <tr>
       <td colspan="4" class="bibname">
         <?=$this->transEsc($bib_addon)?>
@@ -89,7 +89,9 @@
         </td>
       <? endif; ?>
     <? endforeach /* end foreach exemplar content sorted by order */ ?>
-<tr><td colspan="4">&nbsp;</td></tr>
+    <? if ($exemplar !== end($bibholding)):?>
+       <tr class="space"><td colspan="4">&nbsp;</td></tr>
+    <? endif; ?>
   <? endforeach /* end foreach exemplar block */ ?> 
   </table>
 <? endforeach; /* end foreach bib_sigel */ ?>
