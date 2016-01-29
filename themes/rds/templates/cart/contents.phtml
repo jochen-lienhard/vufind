@@ -6,8 +6,14 @@
       <div class="checkbox">
         <label>
           <?=$this->record($record)->getCheckbox('cart')?>
-          <a title="<?=$this->transEsc('View Record')?>" href="<?=$this->recordLink()->getUrl($record)?>"><?=$this->escapeHtml($record->getBreadcrumb())?></a>
+          <a title="<?=$this->transEsc('View Record')?>" href="<?=$this->recordLink()->getUrl($record)?>"><?=$this->escapeHtml($this->truncate($record->getBreadcrumb(),75))?></a> 
         </label>
+        <? $breadcrumbMore = $record->getBreadcrumbMore(); ?>
+        <? if (isset($breadcrumbMore)): ?>
+          <div class="breadcrumbmore">
+             <?=$breadcrumbMore?>
+          </div>
+        <? endif; ?>
       </div>
     </li>
   <? endforeach; ?>

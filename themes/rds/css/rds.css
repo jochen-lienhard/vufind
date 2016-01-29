@@ -291,3 +291,7 @@ div.row .sidebar h4 {
   text-align: left;
   padding: 0px;
 }
+
+.breadcrumbmore {
+  padding-left: 25px;
+}
