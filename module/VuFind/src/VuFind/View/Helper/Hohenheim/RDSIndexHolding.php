@@ -146,7 +146,11 @@ class RDSIndexHolding extends \VuFind\View\Helper\Bootstrap3\RDSIndexHolding
      */
     public function getBibLink($bib_sigel)
     {
-        return "HOH_LINK_" . $bib_sigel;
+        if ($bib_sigel === "LFER") {
+           return null;
+        } else {
+           return "HOH_LINK_" . $bib_sigel;
+        }
     }
 
     /**
