@@ -241,6 +241,56 @@ class RDSIndex extends SolrMarc
     }
 
     /**
+     * Get text that can be displayed to represent this record in
+     * breadcrumbs as additional info.
+     *
+     * @return string BreadcrumbMore text to represent this record.
+     */
+    public function getBreadcrumbMore()
+    {
+        $bc_more="";
+        $au_short = $this->getShortAuthors(); 
+        if (isset($au_short) && !empty($au_short)) {
+           $i = 0; 
+           foreach ($au_short as $field) { 
+              if ($i++ == 0) {
+                 $bc_more .= '';
+              } else {
+                 $bc_more .= ' ; ';
+              }
+              $bc_more .= $field;
+           }
+       } else {
+           $co_display = $this->getCoForList(); 
+           if (isset($co_display) && !empty($co_display)) {
+              $i = 0; 
+              foreach ($co_display as $field) {
+                 if ($i++ == 0) {
+                    $bc_more .= '';
+                 } else {
+                    $bc_more .= ' ; ';
+                 }
+                 $bc_more .= $field['link'];
+              }
+           } else {
+              $pp = $this->getPublisher();
+              if (isset($pp) && !empty($pp)) {
+                 $bc_more .= "[" . $pp . "]";
+              }
+           }
+      }
+      $py = $this->getPublishingYear(); 
+      $summpy = $this->getPy(); 
+      if (isset($py) && !empty($py)) {
+         if (!empty($summpy) && $summpy != '0' && $summpy != '9999') {
+            $bc_more .= " " . $py; 
+         }
+      }
+      return $bc_more;
+    }
+
+
+    /**
      * Get all call numbers associated with the record (empty string if none).
      *
      * @return array

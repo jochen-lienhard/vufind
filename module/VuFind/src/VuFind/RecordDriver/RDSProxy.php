@@ -268,6 +268,17 @@ class RDSProxy extends SolrDefault
     }
 
     /**
+     * Get text that can be displayed to represent this record in
+     * breadcrumbs as additional info.
+     *
+     * @return string BreadcrumbMore text to represent this record.
+     */
+    public function getBreadcrumbMore()
+    {
+        return "more infos about the RDSProxy title";
+    }
+
+    /**
      * Get the call number associated with the record (empty string if none).
      *
      * @return string
