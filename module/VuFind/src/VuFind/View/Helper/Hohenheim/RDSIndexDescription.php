@@ -51,10 +51,10 @@ class RDSIndexDescription extends  \VuFind\View\Helper\Bootstrap3\RDSIndexDescri
 	 * @array
 	 */
 	protected $items = [
-		"Abstract",
-		"Links",
+		"ABSTRACT",
+		"LINKS",
 		"SY",
-		"Ct",
+		"CT",
 		"LOC_CT"
 			];
 
@@ -64,7 +64,6 @@ class RDSIndexDescription extends  \VuFind\View\Helper\Bootstrap3\RDSIndexDescri
 		$html_result = "";
 		$lok_no = $this->driver->getLokNotation();
 		$rvk_no = $this->getNotation();
-
 		if ((!empty($rvk_no))){
 			$html_result  = $rvk_no;
 		}
@@ -74,6 +73,8 @@ class RDSIndexDescription extends  \VuFind\View\Helper\Bootstrap3\RDSIndexDescri
 				//$html_result .= "<a href=".$this->record($this->driver)->getLink('zr', $field.">".$field."</a>";
 				$html_result .= "<a href=".$this->view->render('/RecordDriver/RDSIndex/link-zr.phtml', ['lookfor' => $field]).">".$field."</a>";
 				$html_result .= " ".$this->translate('BB_'.$field);
+				if($links != $last_item )
+					$html_result .="<br /> " ;
 			}
 		}
 		return $html_result;

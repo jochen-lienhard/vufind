@@ -46,7 +46,7 @@ class RDSIndexCore extends  \VuFind\View\Helper\Bootstrap3\RDSIndexCore
 {
 	use \VuFind\I18n\Translator\TranslatorAwareTrait;
 	
-	protected $items = [
+/*	protected $items = [
 		"TITLE",
 		"COLL_TITLE", 
 		"TITLE_PART",
@@ -64,7 +64,7 @@ class RDSIndexCore extends  \VuFind\View\Helper\Bootstrap3\RDSIndexCore
 		"PUBLISH",
 		"CJK_PUBLISH",
 			];
-
+*/
 	protected $driver = null;
 
 	protected function getRegister(){

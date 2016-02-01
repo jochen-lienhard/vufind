@@ -46,7 +46,7 @@ class RDSIndexCore extends  \VuFind\View\Helper\Bootstrap3\RDSIndexCore
 {
 	use \VuFind\I18n\Translator\TranslatorAwareTrait;
 
-	protected $items = [
+/*	protected $items = [
 		"TITLE",
 		"COLL_TITLE",
 		"TITLE_PART",
@@ -69,9 +69,16 @@ class RDSIndexCore extends  \VuFind\View\Helper\Bootstrap3\RDSIndexCore
 		"CJK_SCOPE",
 		"ISBN",
 		"ISSN",
+		"Links",
+		"DESCR",
+		"STOCK",
+		"REFVALUE",
+		"MEDIUM",
+		"FN",
+		"ENTHWERK",
 		"BIBL_ZUS",
 		];
-
+*/
 	protected $driver = null;
 
 	protected function getTITLECUT(){
