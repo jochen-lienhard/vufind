@@ -21,20 +21,20 @@
 ?>
 <? if ($this->searchType == 'advanced'): ?>
   <div id="searchForm" class="navbar-form navbar-left">
-    <? if ($renderSearchTabs) $tabs = $this->render('search/searchTabs'); ?>
-    <? if (!empty($tabs)): ?><?=$tabs ?><div class="tab-content clearfix"><? endif; ?>
+    <? if ($renderSearchTabs) $searchTabs = $this->render('search/searchTabs') ?>
+    <? if (!empty($searchTabs)): ?><?=$searchTabs ?><div class="tab-content clearfix"><? endif; ?>
       <p class="adv_search_terms"><?=$this->transEsc("Your search terms")?> : "<strong><?=$this->escapeHtml($this->lookfor)?></strong>"</p>
       <p class="adv_search_links">
         <a href="<?=$this->url($advSearch)?>?edit=<?=$this->escapeHtmlAttr($this->searchId)?>"><?=$this->transEsc("Edit this Advanced Search")?></a> |
         <a href="<?=$this->url($advSearch)?>"><?=$this->transEsc("Start a new Advanced Search")?></a> |
         <a href="<?=$this->url($searchHome)?>"><?=$this->transEsc("Start a new Basic Search")?></a>
       </p>
-    <? if (!empty($tabs)): ?></div><? endif; ?>
+    <? if (!empty($searchTabs)): ?></div><? endif; ?>
   </div>
 <? else: ?>
   <form role="search" class="navbar-form navbar-left" method="get" action="<?=$this->url($basicSearch)?>" name="searchForm" id="searchForm" autocomplete="off">
-    <? if($renderSearchTabs) $tabs=$this->render('search/searchTabs'); ?>
-    <? if (!empty($tabs)): ?><?=$tabs ?><? endif; ?>
+    <? if($renderSearchTabs) $searchTabs=$this->render('search/searchTabs'); ?>
+    <? if (!empty($searchTabs)): ?><?=$searchTabs ?><? endif; ?>
     <input class="form-control search-query<? if($this->searchbox()->autocompleteEnabled($this->searchClassId)):?> autocomplete searcher:<?=$this->escapeHtmlAttr($this->searchClassId) ?><? endif ?>" id="searchForm_lookfor" type="text" name="lookfor" value="<?=$this->escapeHtmlAttr($this->lookfor)?>"/>
     <? if ($handlerCount > 1): ?>
       <select class="form-control" id="searchForm_type" name="type" data-native-menu="false">
