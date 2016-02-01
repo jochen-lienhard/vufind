@@ -45,7 +45,7 @@
     <? elseif ($handlerCount == 1): ?>
       <input type="hidden" name="type" value="<?=$this->escapeHtmlAttr($handlers[0]['value'])?>" />
     <? endif; ?>
-    <button type="submit" class="btn btn-primary"><i class="fa fa-search"></i> <?=$this->transEsc("Find")?></button>
+    <button type="submit" class="btn btn-primary"><i class="fa fa-search"></i><span class="hidden-xs"> <?=$this->transEsc("Find")?></span></button>
     <? if ($advSearch): ?>
       <a href="<?=$this->url($advSearch)?>" class="btn btn-link"><?=$this->transEsc("Advanced")?></a>
     <? endif; ?>

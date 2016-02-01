@@ -2,6 +2,24 @@
   if ($this->searchType != 'advanced') {
     $this->layout()->searchbox = $this->render('search/searchbox.phtml');
   }
+  
+  if ($this->createHomeTabs == true) {
+    $searchTabs = $this->searchtabs(null, null, null, null);
+  } else {
+    $searchTabs = $this->searchtabs($this->searchClassId, $this->lookfor, $this->searchIndex, $this->searchType);
+    foreach ($searchTabs as $id => $tab) {
+        if ($tab['selected'] && isset($this->results))
+            $searchTabs[$id]['resultCount'] = '(' . $this->results->getResultTotal() . ')';
+        else {
+            if (! empty($this->lookfor)) {
+                $searchTabs[$id]['resultCount'] = '<span class="resultCountAjax" data-searchClassId="' . $tab['class'] . '" data-lookfor="' . $this->lookfor . '"></span>';
+            }
+        }
+    }
+  }
+    $GLOBALS;
+    $isHistory=preg_match('/search\/history/', strtolower($this->url()));
+    $isFavorite=preg_match('/myresearch\/home/', strtolower($this->url()));
     ?>
 
 <div>
@@ -14,30 +32,66 @@
     </nav>
   </div>
 
-  <div class="rds_searchTabs">
-      <?= $this->render('search/searchTabs'); ?>
-  </div>
-
-  <div class="rds_subnav">
-        <ul>
-            <?if (isset($this->searchType) && $this->searchType == 'advanced'):?>
-            <li><a href="<?=$this->url('home') ?><?=$this->searchClassId ?>/Home"><?=$this->transEsc('RDS_BASIC_SEARCH')?></li>
-            <?else:?>
-            <li><a href="<?=$this->url('home') ?><?=$this->searchClassId ?>/Advanced"><?=$this->transEsc('RDS_ADVANCED_SEARCH')?></li>
-            <? endif;?>
-            <li><a href="<?=$this->url('home') ?>Search/History"><?=$this->transEsc('RDS_RDSHistory')?></a></li>
+  <nav class="navbar navbar-toogle rdsNavbar">
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
             
-            <li>
-            <?if ($this->auth()->isLoggedIn()): ?>
-              <a href="<?=$this->url('myresearch-home') ?>?redirect=0"><?=$this->transEsc('RDS_RDSFavorites')?></a>
-            <?else: ?>
-              <? $cart = $this->cart(); if ($cart->isActive()): ?>
-                <a id="cartItems" class="modal-link" title="<?=$this->transEsc('RDS_RDSFavorites')?>" href="<?=$this->url('cart-home')?>"><?=$this->transEsc('RDS_RDSFavorites')?> (<strong><?=count($cart->getItems())?></strong>)</a>
+            <div class="navbar-brand visible-xs">
+              <? foreach ($searchTabs as $tab): ?>
+                <? if($tab['selected']): ?>
+                  <div<?=$tab['selected'] ? ' class="active"' : ''?>>
+                    <a <?=$tab['selected'] ? '' : 'href="' . $this->escapeHtmlAttr($tab['url']) . '"' ?>>
+                      <?=$this->transEsc($tab['label']); ?> <?=$tab['resultCount']; ?>
+                    </a>
+                  </div>
+                <?endif; ?>
+              <? endforeach; ?>
+              
+              <? if($isHistory): ?>
+                <a href="<?=$this->url('home') ?>Search/History"><?=$this->transEsc('RDS_RDSHistory')?></a>
               <? endif; ?>
-            <?endif; ?>
-            </li>
-        </ul>        
-    </div>
+              
+              <? if($isFavorite): ?>
+              <?if ($this->auth()->isLoggedIn()): ?>
+                  <a href="<?=$this->url('myresearch-home') ?>?redirect=0"><?=$this->transEsc('RDS_RDSFavorites')?></a>
+                <?else: ?>
+                  <? $cart = $this->cart(); if ($cart->isActive()): ?>
+                    <a id="cartItems" class="modal-link" title="<?=$this->transEsc('RDS_RDSFavorites')?>" href="<?=$this->url('cart-home')?>"><?=$this->transEsc('RDS_RDSFavorites')?> (<strong><?=count($cart->getItems())?></strong>)</a>
+                  <? endif; ?>
+                <?endif; ?>
+              <?endif; ?>
+            </div>
+          </div>
+
+          <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <div class="rds_searchTabs">
+                <?= $this->render('search/searchTabs'); ?>
+            </div>
+            <div class="rds_subnav">
+            <ul class="nav navbar-nav">
+                <?if (isset($this->searchType) && $this->searchType == 'advanced'):?>
+                  <li><a href="<?=$this->url('home') ?><?=$this->searchClassId ?>/Home"><?=$this->transEsc('RDS_BASIC_SEARCH')?></a></li>
+                <?else:?>
+                  <li><a href="<?=$this->url('home') ?><?=$this->searchClassId ?>/Advanced"><?=$this->transEsc('RDS_ADVANCED_SEARCH')?></a></li>
+                <? endif;?>
+                <li><a href="<?=$this->url('home') ?>Search/History"><?=$this->transEsc('RDS_RDSHistory')?></a></li>
+                <li>
+                <?if ($this->auth()->isLoggedIn()): ?>
+                  <a href="<?=$this->url('myresearch-home') ?>?redirect=0"><?=$this->transEsc('RDS_RDSFavorites')?></a>
+                <?else: ?>
+                  <? $cart = $this->cart(); if ($cart->isActive()): ?>
+                    <a id="cartItems" class="modal-link" title="<?=$this->transEsc('RDS_RDSFavorites')?>" href="<?=$this->url('cart-home')?>"><?=$this->transEsc('RDS_RDSFavorites')?> (<strong><?=count($cart->getItems())?></strong>)</a>
+                  <? endif; ?>
+                <?endif; ?>
+                </li>
+            </ul>
+            </div>
+        </div>
+    </nav>
   
   
 </div>

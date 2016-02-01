@@ -105,6 +105,17 @@ color: #b2b4b3;
   padding: 0px 12px 0px 24px;
 }
 
+.rds_subnav ul li a, 
+.rds_subnav ul li a:hover {
+  padding: 0px;
+  background-color: transparent;
+}
+
+.rds_subnav ul li a:hover {
+  text-decoration: underline;
+}
+
+
 [class*="span"] {
   margin-left: 0px;
 } 
@@ -210,7 +221,7 @@ div.tg div.t_text {
 }
 
 .search input.form-control {
-  max-width: 99%;
+  max-width: 98%;
   display: inline-block;
   margin-bottom: 2px;
 }
@@ -298,3 +309,93 @@ div.row .sidebar h4 {
 tr.RDS_BIBLZUS th{
 	font-size: 95%;
 }
+
+/* styles for rds navigation */
+
+.rds_searchbox {
+  margin-bottom: 4px;
+}
+
+.rds_searchbox form a {
+  display: none;
+}
+
+.rds_searchbox form button {
+  margin: 1px 0px 0px 4px;
+}
+
+.rdsNavbar .collapse {
+  padding: 0px;
+}
+
+.rdsNavbar .collapse .rds_subnav ul {
+    float:none;
+  }
+
+@media (max-width: 767px) {
+  .rds_searchbox .navbar-form {
+     margin: 0px;
+  } 
+
+  .rds_searchbox .twitter-typeahead {
+    width: auto;
+  }
+  .rdsNavbar {
+    min-height: 38px;
+    background-color: #265680;
+  }
+  
+  .rdsNavbar .navbar-brand a {
+    margin-bottom: 2px;
+    color: white;
+  }
+  
+  .rdsNavbar .navbar-brand a:hover {
+    text-decoration: none;
+  }
+
+  .rdsNavbar .icon-bar {
+    background-color: white;
+    margin-top:2px;
+  }
+
+  .rdsNavbar .navbar-collapse {
+    padding: 0px;
+  }
+
+  .rdsNavbar .navbar-collapse ul {
+    margin: 0px;  
+  }
+  
+  .rdsNavbar .navbar-collapse li {
+    float: none;
+  }
+  
+  .rdsNavbar .rds_searchTabs {
+    margin:0px;
+    background-color: white;
+  }
+  
+  .rdsNavbar .navbar-brand, 
+  .rdsNavbar .navbar-toggle {
+    padding: 0px;
+    margin: 10px 4px 8px 8px;
+    height: auto;
+    float: left;
+  }
+  
+  .rdsNavbar .rds_subnav li{
+    padding: 0px;
+  }
+  
+  .rdsNavbar .rds_subnav li a,
+  .rdsNavbar .rds_subnav li a:hover {
+    padding: 6px 10px;
+  }
+  
+  .rdsNavbar .rds_searchTabs .active {
+    display: none;
+  }
+}
+
+/* end: styles for rds navigation */
