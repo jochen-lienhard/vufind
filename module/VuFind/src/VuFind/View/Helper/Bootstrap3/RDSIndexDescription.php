@@ -52,9 +52,9 @@ class RDSIndexDescription extends \Zend\View\Helper\AbstractHelper implements Tr
 	 * @array
 	 */
 	protected $items = [
-		"Abstract",
-		"Links",
-		"Notation", // not Hohenheim
+		"ABSTRACT",
+		"LINKS",
+		"NOTATION", // not Hohenheim
 		"CT",
 		"LokCT",
 		"CT_GENRE",
@@ -83,7 +83,7 @@ class RDSIndexDescription extends \Zend\View\Helper\AbstractHelper implements Tr
 	}
 
 
-		protected function getAbstract(){
+		protected function getABSTRACT(){
 			$html_result = "";
 			$abstract = $this->driver->getAbstract();
 			if($abstract != null){
@@ -98,7 +98,7 @@ class RDSIndexDescription extends \Zend\View\Helper\AbstractHelper implements Tr
 			return $html_result;
 		}
 
-		protected function getLinks() {
+		protected function getLINKS() {
 			$html_result = "";
 			$links = $this->driver->getLinks();
 			if($links != null){
@@ -136,9 +136,11 @@ class RDSIndexDescription extends \Zend\View\Helper\AbstractHelper implements Tr
 			if($links != null){
 				foreach ($links as $field){
 					$last_item = end($links);
+					if(!empty($field['url'])){
 					$html_result .= "<a href=".$this->view->render('/RecordDriver/RDSIndex/link-rvk.phtml', ['lookfor' => $field['url']]).">".$field['url']."</a>";
+					}
 					if (isset($field['txt']) && !empty($field['txt']))
-						($field['txt']);
+						$html_result .=	" (".$field['txt'].")";
 					if($links != $last_item )
 						$html_result .="<br /> " ;
 				}
@@ -147,7 +149,7 @@ class RDSIndexDescription extends \Zend\View\Helper\AbstractHelper implements Tr
 		}
 
 
-		protected function getCt(){
+		protected function getCT(){
 			$html_result = "";
 			$ct_display = $this->driver->getCT();
 			if (isset($ct_display) && !empty($ct_display)){

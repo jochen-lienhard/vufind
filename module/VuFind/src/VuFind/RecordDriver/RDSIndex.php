@@ -2322,7 +2322,7 @@ class RDSIndex extends SolrMarc
      */
     public function getEnthWerk() 
     {
-	    return isset($this->fields['enth_werke']) ? $this->fields['enth_werke'] : '';
+	    return isset($this->fields['enthWerke']) ? $this->fields['enthWerke'] : '';
     }
 
     /**
@@ -2410,14 +2410,21 @@ class RDSIndex extends SolrMarc
 						    $zs_array[$key]['id'] = $arr_link[0];
 						    $zs_array[$key]['text'] = $arr_link[2];
 					    }
-					    if ($arr_link[2] == "" && $arr_link[1] != "") {
+					    if ((isset($arr_link[2]) && $arr_link[2] == "") && $arr_link[1] != "") {
 						    $zs_array[$key] ['id'] = $arr_link[0];
 						    $zs_array[$key]['text'] = $arr_link[1];
 					    }
 				    } else {
-					    $zs_array[$key]['pre-text'] = $arr_link[1];
-					    if ($arr_link[2] != "") {
-						    $zs_array[$key]['text'] = $arr_link[2]; 
+					    if ((isset($arr_link[2]) && $arr_link[2] == "") && $arr_link[1] != "") {
+						    $zs_array[$key]['pre-text'] = $arr_link[1];
+						    $zs_array[$key]['text'] = $arr_link[2];
+					    }
+					    if(!isset($arr_link[2])){
+						    if($arr_link[0] != "")
+							    $zs_array[$key]['pre-text'] = $arr_link[0];
+						    if ($arr_link[1] != "") {
+							    $zs_array[$key]['text'] = $arr_link[1];
+						    }
 					    }
 				    }
 			    }
@@ -2830,7 +2837,7 @@ class RDSIndex extends SolrMarc
      */
     public function getCtGenre()
     {
-	   return isset($this->fields['ct_genre']) ? $this->fields['ct_genre'] : '';	
+	    return isset($this->fields['ct_genre']) ? $this->fields['ct_genre'] : '';	
     }
 
     /**
@@ -2903,11 +2910,11 @@ class RDSIndex extends SolrMarc
      */
     public function supportsAjaxStatus()
     {
-	if ($this->getONLINE() == "offline") {
-            return true;
-        } else {
-            return false;
-        }
+	    if ($this->getONLINE() == "offline") {
+		    return true;
+	    } else {
+		    return false;
+	    }
     }
 
     /**
