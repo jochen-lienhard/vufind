@@ -4,12 +4,12 @@
     $coreItems = $this->rdsindexcore($this->driver)->getItems();
 ?>
 <table class="table table-striped" summary="<?=$this->transEsc('Description')?>">
-  
+ <tbody> 
     <? foreach ($coreItems as $itemName => $itemValue): ?>
     <? $contentDisplayed = true; ?>
-    <tr>
+    <tr class="<?=$itemName?>">
       <th><?=$this->translate($itemName)?>: </th>
-      <td>
+      <td colspan="3">
           <?=$itemValue?><br/>
       </td>
     </tr>
@@ -18,4 +18,5 @@
   <? if (!isset($contentDisplayed) || !$contentDisplayed): // Avoid errors if there were no rows above ?>
     <tr><td><?=$this->transEsc('no_description')?></td></tr>
   <? endif; ?>
+ </tbody> 
 </table>

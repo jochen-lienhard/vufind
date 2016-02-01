@@ -6,16 +6,18 @@
     $isbn = $this->driver->getCleanISBN();
      $description = $this->RDSIndexDescription($this->driver)->getItems();
 ?>
-<? foreach ($description as $bib_key => $bibdescription): ?>
 
 	<table class="table table-striped" >
-		<tr>
+	<tbody>
+<? foreach ($description as $bib_key => $bibdescription): ?>
+		<tr class="<?=$bib_key?>">
 		<th><?= $this->translate($bib_key) ?> </th>
-		<td>
+		<td colspan="3">
 			<?= $bibdescription ?>
 		</td>
 		</tr>
-	</table>
 <? endforeach; /* end foreach description */ ?>
+	</tbody>
+	</table>
 
 
