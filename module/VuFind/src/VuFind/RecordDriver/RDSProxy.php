@@ -275,7 +275,27 @@ class RDSProxy extends SolrDefault
      */
     public function getBreadcrumbMore()
     {
-        return "more infos about the RDSProxy title";
+      $authorsEtAl = $this->getAuthorsEtAl();
+      if (!empty($authorsEtAl)) {
+          $html .= $authorsEtAl;
+          $html .= '<br />';
+      }
+
+      $sourceDisplay = $this->getSourceDisplay();
+      if (!empty($sourceDisplay)) {
+          $html .= $sourceDisplay;
+          $html .= '<br />';    
+      }
+
+      $dataSource = $this->getDataSource();
+      if (!empty($dataSource)) {
+          $html .= $this->translate('RDS_DATA_SOURCE') . ": ";
+          $html .= $dataSource;
+          $html .= ' ' . $this->getCitationLinks();
+          $html .= '<br />';
+      }
+      
+      return $html;
     }
 
     /**
