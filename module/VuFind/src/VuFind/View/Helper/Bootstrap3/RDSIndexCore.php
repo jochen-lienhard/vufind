@@ -77,7 +77,7 @@ class RDSIndexCore extends \Zend\View\Helper\AbstractHelper implements Translato
     "CJKSCOPE",
     "ISBN",
     "ISSN",
-    "Links",
+    "LINKS",
     "DESCR",
     "STOCK",
     "REFVALUE",
@@ -541,7 +541,7 @@ class RDSIndexCore extends \Zend\View\Helper\AbstractHelper implements Translato
             foreach ($result as $field) {
                 $last_item = end($result);
                 $html_result .= $this->translate($transEsc($field));
-                if ($titlePart!= $last_item ) {
+                if ($result!= $last_item ) {
                     $html_result .="<br /> " ; 
                 }
             }
@@ -654,7 +654,7 @@ class RDSIndexCore extends \Zend\View\Helper\AbstractHelper implements Translato
      *
      * @return html_result 
     */
-    protected function getLinks() 
+    protected function getLINKS() 
     {
         $html_result = "";
         if (strstr($this->getPpn(), "NL")) {

@@ -2143,8 +2143,8 @@ class RDSIndex extends SolrMarc
 				    $ebook_lnk[$key]['lnk_txt'] = $arr_link[1];
 				    $ebook_lnk[$key]['url'] = $arr_link[0];
 			    } else {
-				    $ebook_lnk[$key]['lnk_txt'] = link;
-				    $ebook_lnk[$key]['url'] = link;
+				    $ebook_lnk[$key]['lnk_txt'] = $link;
+				    $ebook_lnk[$key]['url'] = $link;
 			    }
 		    }
 	    }
