@@ -307,9 +307,21 @@ div.row .sidebar h4 {
   padding: 0px;
 }
 
+/* styles for rds bookbag */
 .breadcrumbmore {
-  padding-left: 25px;
+  padding: 0px 0px 4px 17px;
 }
+
+#modal .cart-controls .checkbox {
+  padding: 0px 12px;
+  background-color: #265680;
+  color: white;
+  margin: -4px 0px 0px 0px;
+  line-height: 34px;
+  
+}
+/* end: styles for rds bookbag */
+
 tr.RDS_BIBLZUS th{
 	font-size: 95%;
 }
