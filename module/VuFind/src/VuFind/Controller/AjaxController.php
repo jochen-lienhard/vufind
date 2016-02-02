@@ -199,7 +199,7 @@ class AjaxController extends AbstractBase
         // need special handling.
         $missingIds = array_flip($ids);
 
-$statuses[] = $results;
+        $statuses[] = $results;
 
         // Done
         return $this->output($statuses, self::STATUS_OK);
@@ -1424,7 +1424,8 @@ $statuses[] = $results;
      *
      * @return mixed
      */
-    public function getResultDetailsAjax() {
+    public function getResultDetailsAjax() 
+    {
         $searchClassId = $this->params()->fromQuery('searchClassId');
         try {
             $results = $this->getResultsManager()->get($searchClassId);
@@ -1433,13 +1434,13 @@ $statuses[] = $results;
             $results->performAndProcessSearch();
         } catch (\Exception $e) {
             return $this->output(
-                    'Search error: ' . $e->getMessage(), self::STATUS_ERROR
+                'Search error: ' . $e->getMessage(), self::STATUS_ERROR
             );
         }
         
         return $this->output(
-                ['resultCount' => '(' . $results->getResultTotal() . ')'],
-                self::STATUS_OK
+            ['resultCount' => '(' . $results->getResultTotal() . ')'],
+            self::STATUS_OK
         );
     }
     
@@ -1448,7 +1449,8 @@ $statuses[] = $results;
      *
      * @return mixed
      */
-    public function getFulltextLinkAjax() {
+    public function getFulltextLinkAjax() 
+    {
         $driver = $this->getRecordLoader()->load(
             $this->params()->fromQuery('id'),
             $this->params()->fromQuery('source')

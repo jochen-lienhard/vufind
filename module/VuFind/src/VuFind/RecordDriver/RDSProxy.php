@@ -1646,21 +1646,21 @@ class RDSProxy extends SolrDefault
 
 
 
-//     /**
-//      * Get an datasource.
-//      *
-//      * @return String
-//      */
-//     public function getDatasource()
-//     {
-//         $datasource = '';
-//         if (isset($this->fields['datasource'])) {
-//             $datasource = $this->translate('RDS_DATASOURCE');
-//             $datasource .=  ': ' . $this->fields['datasource'];   
-//         } 
+    //     /**
+    //      * Get an datasource.
+    //      *
+    //      * @return String
+    //      */
+    //     public function getDatasource()
+    //     {
+    //         $datasource = '';
+    //         if (isset($this->fields['datasource'])) {
+    //             $datasource = $this->translate('RDS_DATASOURCE');
+    //             $datasource .=  ': ' . $this->fields['datasource'];   
+    //         } 
         
-//         return $datasource;
-//     }
+    //         return $datasource;
+    //     }
 
     /**
      * Get an datasource.
@@ -1735,75 +1735,81 @@ class RDSProxy extends SolrDefault
     }
     
     
-    public function getFulltextLinks() {
+    public function getFulltextLinks() 
+    {
             $links = array_merge(
-            $this->getLinks(array('category' => 'fulltext', 'type' => 'pdf')),
-            $this->getLinks(array('category' => 'fulltext', 'type' => 'external', 'access' => 'yellow')),
-            $this->getLinks(array('category' => 'fulltext', 'type' => 'html')),
-            $this->getLinks(array('category' => 'fulltext', 'type' => 'external', 'access' => 'green')),
-            $this->getLinks(array('category' => 'openurl', 'indicator' => '2'))
-        );
+                $this->getLinks(array('category' => 'fulltext', 'type' => 'pdf')),
+                $this->getLinks(array('category' => 'fulltext', 'type' => 'external', 'access' => 'yellow')),
+                $this->getLinks(array('category' => 'fulltext', 'type' => 'html')),
+                $this->getLinks(array('category' => 'fulltext', 'type' => 'external', 'access' => 'green')),
+                $this->getLinks(array('category' => 'openurl', 'indicator' => '2'))
+            );
             
-        return (empty($links) ? '' : $links);
+            return (empty($links) ? '' : $links);
     }
     
-    public function getInfoLinks() {
+    public function getInfoLinks() 
+    {
          $links = $this->getLinks(array('category' => 'info', 'type' => 'external'));
         return (empty($links) ? '' : $links);
     }
     
-    public function showFulltextLinks() {
-      return ($this->recordConfig->showFulltextLinks == true);
+    public function showFulltextLinks() 
+    {
+        return ($this->recordConfig->showFulltextLinks == true);
     }
     
-    public function showCitationLinks() {
-      return ($this->recordConfig->showCitationLinks == true);
+    public function showCitationLinks() 
+    {
+        return ($this->recordConfig->showCitationLinks == true);
     }
     
-    public function getLinkresolverview() {
-      return ($this->recordConfig->linkresolverview == true);
+    public function getLinkresolverview() 
+    {
+        return ($this->recordConfig->linkresolverview == true);
     }
     
-    public function getFulltextview() {
-      return ($this->recordConfig->fulltextview == true);
+    public function getFulltextview() 
+    {
+        return ($this->recordConfig->fulltextview == true);
     }
     
     protected function getLinks($properties)
     {
         $links = array();
-      if(isset($this->fields['links'])) {
-        foreach($this->fields['links'] as $link) {
-          if(!is_array($link)) {
-            continue;
-          }
-          $match = true;
-          foreach($properties as $pKey => $pValue) {
-            if(!isset($link[$pKey]) || $link[$pKey] !== $pValue) {
-              $match = false;
-              break;
+        if(isset($this->fields['links'])) {
+            foreach($this->fields['links'] as $link) {
+                if(!is_array($link)) {
+                    continue;
+                }
+                $match = true;
+                foreach($properties as $pKey => $pValue) {
+                    if(!isset($link[$pKey]) || $link[$pKey] !== $pValue) {
+                        $match = false;
+                        break;
+                    }
+                }
+                if($match) {
+                    $links[] = $link;
+                }
             }
-          }
-          if($match) {
-            $links[] = $link;
-          }
         }
-      }
-      return $links;
+        return $links;
     }
     
     public function getOpenUrlEmbedded()
     {
-      $openUrl = $this->getLink(array('category' => 'openurl', 'type' => 'embedded'));
-      if($openUrl !== '') {
-        return $openUrl['url'];
-      }
+        $openUrl = $this->getLink(array('category' => 'openurl', 'type' => 'embedded'));
+        if($openUrl !== '') {
+            return $openUrl['url'];
+        }
     }
     public function getOpenUrlExternal()
     {
-    	$openUrl = $this->getLink(array('category' => 'openurl', 'type' => 'external'));
-    	if($openUrl !== '') {
-    		return $openUrl['url'];
-    	}
+        $openUrl = $this->getLink(array('category' => 'openurl', 'type' => 'external'));
+        if($openUrl !== '') {
+            return $openUrl['url'];
+        }
     }
     
     /** 
@@ -1813,21 +1819,21 @@ class RDSProxy extends SolrDefault
     protected function getLink($properties)
     {
         if(isset($this->fields['links'])) {
-                foreach($this->fields['links'] as $link) {
-                        if(!is_array($link)) {
-                                continue;
-                        }
-                        $match = true;
-                        foreach($properties as $pKey => $pValue) {
-                                if(!isset($link[$pKey]) || $link[$pKey] !== $pValue) {
-                                        $match = false;
-                                        break;
-                                }
-                        }
-                        if($match) {
-                                return $link;
-                        }
+            foreach($this->fields['links'] as $link) {
+                if(!is_array($link)) {
+                        continue;
                 }
+                    $match = true;
+                foreach($properties as $pKey => $pValue) {
+                    if(!isset($link[$pKey]) || $link[$pKey] !== $pValue) {
+                            $match = false;
+                            break;
+                    }
+                }
+                if($match) {
+                        return $link;
+                }
+            }
         }
         return '';
     }
@@ -1924,7 +1930,7 @@ class RDSProxy extends SolrDefault
     
     public function getTitleAlt()
     {
-    	return (isset($this->fields['titlealt']) ? $this->fields['titlealt'] : '');
+        return (isset($this->fields['titlealt']) ? $this->fields['titlealt'] : '');
     }
     
     /**
@@ -1946,20 +1952,20 @@ class RDSProxy extends SolrDefault
     
     public function getSource()
     {
-    	if(!isset($this->fields['source']) || !isset($this->fields['source']['display'])) {
-    		return '';
-    	}
-    	// TODO: use appropriate modifier instead of removing the tags
-    	return str_replace('&amp;', '&', strip_tags($this->fields['source']['display']));
+        if(!isset($this->fields['source']) || !isset($this->fields['source']['display'])) {
+            return '';
+        }
+        // TODO: use appropriate modifier instead of removing the tags
+        return str_replace('&amp;', '&', strip_tags($this->fields['source']['display']));
     }
     
     public function getSeriesTitle()
     {
-    	if(isset($this->fields['series']) && isset($this->fields['series']['title'])) {
-    		return $this->fields['series']['title'];
-    	} else {
-			return '';
-    	}
+        if(isset($this->fields['series']) && isset($this->fields['series']['title'])) {
+            return $this->fields['series']['title'];
+        } else {
+            return '';
+        }
     }
     
     public function getPmid()
@@ -2029,31 +2035,31 @@ class RDSProxy extends SolrDefault
     
     public function getPubYear()
     {
-    	if(isset($this->fields['dates'])) {
-    		$dates = $this->fields['dates'];
-    	} elseif(isset($this->fields['source']) && isset($this->fields['source']['dates'])) {
-    		$dates = $this->fields['source']['dates'];
-    	} else {
-    		return '';
-    	}
+        if(isset($this->fields['dates'])) {
+            $dates = $this->fields['dates'];
+        } elseif(isset($this->fields['source']) && isset($this->fields['source']['dates'])) {
+            $dates = $this->fields['source']['dates'];
+        } else {
+            return '';
+        }
 
-    	if(isset($dates['published'])) {
-    		return $dates['published']['year'];
-    	} else {
-    		return '';
-    	}
+        if(isset($dates['published'])) {
+            return $dates['published']['year'];
+        } else {
+            return '';
+        }
     }
     
     public function getDataSource()
     {
-    	return (isset($this->fields['datasource']) ? $this->fields['datasource'] : '');
+        return (isset($this->fields['datasource']) ? $this->fields['datasource'] : '');
     }
     
     public function getCitationLinks()
     {
         $links = array_merge(
             $this->getLinks(array('category' => 'citation', 'type' => 'external')),
-        	$this->getLinks(array('category' => 'citation', 'type' => 'ehost'))
+            $this->getLinks(array('category' => 'citation', 'type' => 'ehost'))
         );
         return (empty($links) ? '' : $links);
     }
@@ -2064,29 +2070,29 @@ class RDSProxy extends SolrDefault
     
     public function getSubjectsGeneral()
     {
-    	return $this->getSubjects('general');
+        return $this->getSubjects('general');
     }
     
     public function getAbstracts()
     {
-    	return (isset($this->fields['abstracts']) ? $this->fields['abstracts'] : '');
+        return (isset($this->fields['abstracts']) ? $this->fields['abstracts'] : '');
     }
     
     public function getReview()
     {
-    	return (isset($this->fields['review']) ? $this->fields['review'] : '');
+        return (isset($this->fields['review']) ? $this->fields['review'] : '');
     } 
     
     public function getReviewers()
     {
-    	$result = array();
-    	if(isset($this->fields['reviewers'])) {
-    		$result = $this->fields['reviewers'];
-    		for($i = 0; $i < count($result); $i++) {
-    			$result[$i] = preg_replace('| [0-9]+$|', '', $result[$i]);
-    		}
-    	}
-    	return implode(' ; ', $result);
+        $result = array();
+        if(isset($this->fields['reviewers'])) {
+            $result = $this->fields['reviewers'];
+            for($i = 0; $i < count($result); $i++) {
+                $result[$i] = preg_replace('| [0-9]+$|', '', $result[$i]);
+            }
+        }
+        return implode(' ; ', $result);
     }
     
 
@@ -2095,11 +2101,11 @@ class RDSProxy extends SolrDefault
     // *******************************************************************
     public function getSubjects($category)
     {
-    	if(isset($this->fields['subjects']) && isset($this->fields['subjects'][$category])) {
-    		return $this->fields['subjects'][$category];
-    	} else {
-    		return array();
-    	}
+        if(isset($this->fields['subjects']) && isset($this->fields['subjects'][$category])) {
+            return $this->fields['subjects'][$category];
+        } else {
+            return array();
+        }
     }
 }
 

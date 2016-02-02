@@ -43,7 +43,8 @@ class RDSProxyHoldings extends RDSProxyHelper
 {
     protected $items = ['Holdings'];
     
-    public function getHoldings() {
+    public function getHoldings() 
+    {
         $output = "";
         
         $fulltextLinks = $this->driver->getFulltextLinks();
@@ -72,37 +73,38 @@ class RDSProxyHoldings extends RDSProxyHelper
         return $output;
     }
     
-    protected function getFulltextLinks() {
+    protected function getFulltextLinks() 
+    {
         $fulltextLinks = $this->driver->getFulltextLinks();
         $html = '';
         
         foreach ($fulltextLinks as $fulltextLink){
             
             if ($fulltextLink['indicator'] == 1) {
-              if ($this->authManager->isLoggedIn() === false) {
-                 $html .= '<span class="t_ezb_yellow"></span>';
-                 $html .= '<a style="text-decoration: none;" href=" ' . $this->getLoginLink() .  ' "; return false;">';
-                 $html .=     $this->translate("RDS_PROXY_HOLDINGS_PDF_FULLTEXT") . ' (via ' . $fulltextLink['provider'] . ') ' . $this->translate("RDS_PROXY_HOLDINGS_AUTHORIZED_USERS_ONLY_LOGIN");
-                 $html .= '</a>';
-              } elseif ($this->driver->getGuestView() == 'brief') {
-                  $html .= '<span class="t_ezb_yellow"></span>';
-                  $html .=    $this->translate("RDS_PROXY_HOLDINGS_PDF_FULLTEXT") . ' (via ' . $fulltextLink['provider'] . ') - ' . $this->translate("RDS_PROXY_AUTHORIZED_USERS_ONLY");
-              }
+                if ($this->authManager->isLoggedIn() === false) {
+                    $html .= '<span class="t_ezb_yellow"></span>';
+                    $html .= '<a style="text-decoration: none;" href=" ' . $this->getLoginLink() .  ' "; return false;">';
+                    $html .=     $this->translate("RDS_PROXY_HOLDINGS_PDF_FULLTEXT") . ' (via ' . $fulltextLink['provider'] . ') ' . $this->translate("RDS_PROXY_HOLDINGS_AUTHORIZED_USERS_ONLY_LOGIN");
+                    $html .= '</a>';
+                } elseif ($this->driver->getGuestView() == 'brief') {
+                    $html .= '<span class="t_ezb_yellow"></span>';
+                    $html .=    $this->translate("RDS_PROXY_HOLDINGS_PDF_FULLTEXT") . ' (via ' . $fulltextLink['provider'] . ') - ' . $this->translate("RDS_PROXY_AUTHORIZED_USERS_ONLY");
+                }
             } elseif ($fulltextLink['indicator'] != 2) {  
                 $html .= '<div class="t_ezb_result">';
                   $html .= '<p>';
-                      if ($fulltextLink['type'] == "pdf") {
-                        $html .= '<span class="t_ezb_yellow"></span>';
-                        $html .= $this->translate("RDS_PROXY_HOLDINGS_PDF_FULLTEXT") . ' (via ' . $fulltextLink['provider'] . ')';
-                      }
-                      if ($fulltextLink['type'] == "html") {
-                        $html .= '<span class="t_ezb_yellow"></span>';
-                        $html .= $this->translate("RDS_PROXY_HOLDINGS_HTML_FULLTEXT") . ' (via ' . $fulltextLink['provider'] . ')';
-                      }
-                      if ($fulltextLink['type'] == "external") {
-                        $html .= '<span class="t_ezb_{$fulltextLink.access}"></span>';
-                        $html .= $this->translate("RDS_PROXY_HOLDINGS_TO_THE_FULLTEXT") . ' (via ' . $fulltextLink['provider'] . ')';
-                      }
+                if ($fulltextLink['type'] == "pdf") {
+                    $html .= '<span class="t_ezb_yellow"></span>';
+                    $html .= $this->translate("RDS_PROXY_HOLDINGS_PDF_FULLTEXT") . ' (via ' . $fulltextLink['provider'] . ')';
+                }
+                if ($fulltextLink['type'] == "html") {
+                    $html .= '<span class="t_ezb_yellow"></span>';
+                    $html .= $this->translate("RDS_PROXY_HOLDINGS_HTML_FULLTEXT") . ' (via ' . $fulltextLink['provider'] . ')';
+                }
+                if ($fulltextLink['type'] == "external") {
+                    $html .= '<span class="t_ezb_{$fulltextLink.access}"></span>';
+                    $html .= $this->translate("RDS_PROXY_HOLDINGS_TO_THE_FULLTEXT") . ' (via ' . $fulltextLink['provider'] . ')';
+                }
                     $html .= '<span class="t_link"><a target="_blank" href="' . $fulltextLink['url'] . '">&#187;</a></span>';
                   $html .= '</p>';
                 $html .= '</div>';
@@ -111,21 +113,23 @@ class RDSProxyHoldings extends RDSProxyHelper
         return $html;
     }
     
-    protected function getInfoLinks() {
+    protected function getInfoLinks() 
+    {
         $html = '';
         $infoLinks = $this->driver->getInfoLinks();
         foreach ($infoLinks as $infoLink) {
-          $html .= '<div class="t_ezb_result">';
-          $html .= '  <p>';
-          $html .= '    <span class="t_ezb_' . $infoLink['access']. '"></span>';
-          $html .=         $this->translate("RDS_LINKS_INFO_" . strtoupper($infoLink[info]));
-          $html .= '    <span class="t_link"><a target="_blank" href="' . $infoLink['url']. '">&#187;</a></span>';
-          $html .= '  </p>';
-          $html .= '</div>';
+            $html .= '<div class="t_ezb_result">';
+            $html .= '  <p>';
+            $html .= '    <span class="t_ezb_' . $infoLink['access']. '"></span>';
+            $html .=         $this->translate("RDS_LINKS_INFO_" . strtoupper($infoLink[info]));
+            $html .= '    <span class="t_link"><a target="_blank" href="' . $infoLink['url']. '">&#187;</a></span>';
+            $html .= '  </p>';
+            $html .= '</div>';
         }
     }
     
-    protected function getLinkresolverLink() {
+    protected function getLinkresolverLink() 
+    {
         $html = '<div class="tg">';
         $html .= '  <h2>' . $this->translate("RDS_PROXY_HOLDINGS_MORE_SOURCES") .' </h2>';
         $html .= '  <p>';
@@ -133,9 +137,10 @@ class RDSProxyHoldings extends RDSProxyHelper
         $html .= '  </p>';
         $html .= '</div>';
         return $html;
-     }
+    }
      
-     protected function getLinkresolverEmbedded() {        
+     protected function getLinkresolverEmbedded() 
+     {        
         $locale = $this->getLocale();
         if ($locale) { 
             $openUrl = $this->driver->getOpenUrlExternal() . "&rl_language=" . $locale; 
@@ -148,9 +153,9 @@ class RDSProxyHoldings extends RDSProxyHelper
         } else {
             $xmlResponse = 'ERROR - linkresolver not available';
         }
-        $output = substr ($xmlResponse, strpos($xmlResponse,'<div id="services">'));
+        $output = substr($xmlResponse, strpos($xmlResponse, '<div id="services">'));
         $pos = strpos($output, '<div id="services_end">');
-        $output = substr ($output, 0, $pos);
+        $output = substr($output, 0, $pos);
         return $output;
-    }
+     }
 }

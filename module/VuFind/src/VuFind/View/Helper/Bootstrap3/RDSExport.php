@@ -15,24 +15,26 @@ class RDSExport extends AbstractHelper
     protected $formatter = null;
     protected $linkresolver = null;
     
-    public function __construct($linkresolver) {
+    public function __construct($linkresolver) 
+    {
         $this->linkresolver = $linkresolver;
     }
     
-    public function __invoke($driver, $format) {
+    public function __invoke($driver, $format) 
+    {
         switch ($format) {
-            case 'HTML':
-                $formatter = new RDSToHTML($driver, $this->view, $this->linkresolver);
-                break;
-            case 'PRINT':
-                $formatter = new RDSToPrint($driver, $this->view, $this->linkresolver);
-                break;
-            case 'BibTeX':
-                $formatter = new RDSToBibTeX($driver);
-                break;
-            case 'RIS':
-                $formatter = new RDSToRIS($driver);
-                break;                
+        case 'HTML':
+            $formatter = new RDSToHTML($driver, $this->view, $this->linkresolver);
+            break;
+        case 'PRINT':
+            $formatter = new RDSToPrint($driver, $this->view, $this->linkresolver);
+            break;
+        case 'BibTeX':
+            $formatter = new RDSToBibTeX($driver);
+            break;
+        case 'RIS':
+            $formatter = new RDSToRIS($driver);
+            break;                
         }
         
         $this->formatter = $formatter;
@@ -40,19 +42,23 @@ class RDSExport extends AbstractHelper
         return $this;
     }
     
-    public function getRecord() {
+    public function getRecord() 
+    {
         return $this->formatter->getRecord();
     }
 
-    public function getCore() {
+    public function getCore() 
+    {
         return $this->formatter->getCore();
     }
     
-    public function getDescription() {
+    public function getDescription() 
+    {
         return $this->formatter->getDescription();
     }
     
-    public function getHoldings() {
+    public function getHoldings() 
+    {
         return $this->formatter->getHoldings();
     }
     

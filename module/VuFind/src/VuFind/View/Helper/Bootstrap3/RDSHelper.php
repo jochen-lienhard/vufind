@@ -67,7 +67,8 @@ class RDSHelper extends AbstractHelper
         return $this;
     }
     
-    public function getItems() {
+    public function getItems() 
+    {
         $results = [];
         foreach ($this->items as $item) {
             $function = [$this, 'get' . $item];
@@ -81,7 +82,8 @@ class RDSHelper extends AbstractHelper
         return $results;
     }
     
-    public function getFavAction() {
+    public function getFavAction() 
+    {
         $html = '';
         
         $actionUrl = $this->view->plugin('recordLink')->getActionUrl($this->driver, 'Save');
@@ -106,7 +108,7 @@ class RDSHelper extends AbstractHelper
             ? 'RDS_FAV_LIST_REMOVE_FORM_ALL_LISTS'
             : 'RDS_FAV_LIST_REMOVE_FORM_CURRENT_LIST';
         $deleteUrlGet = $deleteUrl . '?delete=' . urlencode($this->driver->getUniqueID()) . '&amp;source=' . urlencode($this->driver->getResourceSource());
-            $dLabel = 'delete-label-' . preg_replace('[\W]','-',$id);
+            $dLabel = 'delete-label-' . preg_replace('[\W]', '-', $id);
 
         $html .= '<span class="dropdown favActionDel hidden">';      
         $html .= '  <a class="dropdown-toggle" id="'. $dLabel . '" role="button" data-toggle="dropdown" data-target="#" href="' . $deleteUrlGet .'">&rarr; ' . $this->translate('RDS_REMOVE_FROM_MY_LIST') . '</a>';
@@ -123,32 +125,38 @@ class RDSHelper extends AbstractHelper
     
     
     
-    public function getPrintAction() {
+    public function getPrintAction() 
+    {
         $vufindId = $this->driver->getResourceSource() .'|'. $this->driver->getUniqueID();
         $html = '<a href="/Cart/doExport" class="doExportRecord" data-id="'. $vufindId .'">&rarr; ' . $this->translate("RDS_PRINT") . '</a>';
         
         return $html;
     }
     
-    protected function render($template) {
+    protected function render($template) 
+    {
         return $this->view->render($template);
     }
     
-    protected function translate($str) {
+    protected function translate($str) 
+    {
         $translation = ($this->translator) ? $this->translator->translate($str) : $str;
         return $translation;
     }
     
-    protected function getLocale() {
+    protected function getLocale() 
+    {
         $locale = ($this->translator) ? $this->translator->getLocale() : 'de';
         return $locale;
     }
     
-    protected function escapeJS($str) {
+    protected function escapeJS($str) 
+    {
         return $this->escapeJs->__invoke($str);
     }
     
-    protected function escapeHtmlAttr($str) {
+    protected function escapeHtmlAttr($str) 
+    {
         return $this->escapeHtmlAttr->__invoke($str);
     }
 }

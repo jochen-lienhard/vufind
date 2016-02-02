@@ -184,7 +184,8 @@ class Factory
      *
      * @return RDSProxyHoldings
      */
-    public static function getRDSProxyHoldings(ServiceManager $sm) {
+    public static function getRDSProxyHoldings(ServiceManager $sm) 
+    {
         
         return new RDSProxyHoldings();
     }

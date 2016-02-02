@@ -41,18 +41,19 @@ use VuFind\View\Helper\Bootstrap3\RDSProxyHelper;
  */
 class RDSProxyList extends RDSProxyHelper
 {
-  protected $items = [
+    protected $items = [
        'AuthorsEtAl',
        'SourceDisplay',
        'DataSource',
     ];  
     
   
-    public function getGuestviewBriefLink() {
+    public function getGuestviewBriefLink() 
+    {
         $html = '';
         if ($this->driver->getGuestView() == 'brief' 
-            && $this->authManager->isLoggedIn() === false)
-        {
+            && $this->authManager->isLoggedIn() === false
+        ) {
                 $html .= '<a href="' . $this->getLoginLink() .  '">';
                 $html .= $this->translate("RDS_MORE_INFO_FOR_AUTHORIZED_USERS"); //transEsc
                 $thml .= '</a>';
@@ -60,29 +61,31 @@ class RDSProxyList extends RDSProxyHelper
         return $html;
     }
   
-    public function getGuestviewLoginLink() {
+    public function getGuestviewLoginLink() 
+    {
         $html = null;
         if ($this->driver->getGuestView() == 'login') {
-          if ($this->authManager->isLoggedIn() === false) {
+            if ($this->authManager->isLoggedIn() === false) {
                 $html .= '<a href="' . $this->getLoginLink() . '">';
                 $html .= $this->translate("RDS_AUTHORIZED_USERS_ONLY"); //transEsc
                 $html .= '</a>';
-          } else {
-            $html .= $this->translate("RDS_USER_NOT_AUTHORIZED");
-          }
+            } else {
+                $html .= $this->translate("RDS_USER_NOT_AUTHORIZED");
+            }
         }
         return $html;
     
     }
     
-    public function getAuthorsEtAl() {
+    public function getAuthorsEtAl() 
+    {
       
-      $authorsEtAl = $this->driver->getAuthorsEtAl();
-      if (!empty($authorsEtAl)) {
-          $html .= $authorsEtAl;
-          $html .= '<br />';
-      }
-    	return $html;
+        $authorsEtAl = $this->driver->getAuthorsEtAl();
+        if (!empty($authorsEtAl)) {
+            $html .= $authorsEtAl;
+            $html .= '<br />';
+        }
+        return $html;
     }
     
 
@@ -101,7 +104,8 @@ class RDSProxyList extends RDSProxyHelper
         return $html;
     }
     
-    public function getDataSource() {
+    public function getDataSource() 
+    {
         $html = '';
         $dataSource = $this->driver->getDataSource();
         if (!empty($dataSource)) {
@@ -114,7 +118,8 @@ class RDSProxyList extends RDSProxyHelper
         return $html;
     }
     
-    public function getFulltextLink() {
+    public function getFulltextLink() 
+    {
         $html = null;
         $fulltextLinks = $this->driver->getFulltextLinks();
         

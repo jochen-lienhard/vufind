@@ -121,7 +121,7 @@ class Connector
      *
      * @var boolean 
      */
-    protected $hadPermission = false;
+    protected $hasPermission = false;
 
     /**
      * HTTP client adapter.

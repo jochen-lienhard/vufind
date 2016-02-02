@@ -88,7 +88,8 @@ class Factory
      *
      * @return RDSProxyHoldings
      */
-    public static function getRDSProxyHoldings(ServiceManager $sm) {
+    public static function getRDSProxyHoldings(ServiceManager $sm) 
+    {
         $serviceLocator = $sm->getServiceLocator();
         $config = $serviceLocator->get('VuFind\Config')->get('config');
         
@@ -103,7 +104,8 @@ class Factory
         return new RDSProxyHoldings($linkresolver);
     }
     
-    public static function getRDSProxyHoldingsPrint(ServiceManager $sm) {
+    public static function getRDSProxyHoldingsPrint(ServiceManager $sm) 
+    {
         $serviceLocator = $sm->getServiceLocator();
         $config = $serviceLocator->get('VuFind\Config')->get('config');
         
@@ -118,8 +120,9 @@ class Factory
         return new RDSProxyHoldingsPrint($linkresolver);
     }
     
-    public static function getRDSExport(ServiceManager $sm) {
-    $serviceLocator = $sm->getServiceLocator();
+    public static function getRDSExport(ServiceManager $sm) 
+    {
+        $serviceLocator = $sm->getServiceLocator();
         $config = $serviceLocator->get('VuFind\Config')->get('config');
         
         $linkresolver = null;

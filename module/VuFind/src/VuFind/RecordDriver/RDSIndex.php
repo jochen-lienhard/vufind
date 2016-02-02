@@ -251,42 +251,42 @@ class RDSIndex extends SolrMarc
         $bc_more="";
         $au_short = $this->getShortAuthors(); 
         if (isset($au_short) && !empty($au_short)) {
-           $i = 0; 
-           foreach ($au_short as $field) { 
-              if ($i++ == 0) {
-                 $bc_more .= '';
-              } else {
-                 $bc_more .= ' ; ';
-              }
-              $bc_more .= $field;
-           }
-       } else {
-           $co_display = $this->getCoForList(); 
-           if (isset($co_display) && !empty($co_display)) {
-              $i = 0; 
-              foreach ($co_display as $field) {
-                 if ($i++ == 0) {
+            $i = 0; 
+            foreach ($au_short as $field) { 
+                if ($i++ == 0) {
                     $bc_more .= '';
-                 } else {
+                } else {
                     $bc_more .= ' ; ';
-                 }
-                 $bc_more .= $field['link'];
-              }
-           } else {
-              $pp = $this->getPublisher();
-              if (isset($pp) && !empty($pp)) {
-                 $bc_more .= "[" . $pp . "]";
-              }
-           }
-      }
-      $py = $this->getPublishingYear(); 
-      $summpy = $this->getPy(); 
-      if (isset($py) && !empty($py)) {
-         if (!empty($summpy) && $summpy != '0' && $summpy != '9999') {
-            $bc_more .= " " . $py; 
-         }
-      }
-      return $bc_more;
+                }
+                $bc_more .= $field;
+            }
+        } else {
+            $co_display = $this->getCoForList(); 
+            if (isset($co_display) && !empty($co_display)) {
+                $i = 0; 
+                foreach ($co_display as $field) {
+                    if ($i++ == 0) {
+                        $bc_more .= '';
+                    } else {
+                        $bc_more .= ' ; ';
+                    }
+                    $bc_more .= $field['link'];
+                }
+            } else {
+                $pp = $this->getPublisher();
+                if (isset($pp) && !empty($pp)) {
+                    $bc_more .= "[" . $pp . "]";
+                }
+            }
+        }
+        $py = $this->getPublishingYear(); 
+        $summpy = $this->getPy(); 
+        if (isset($py) && !empty($py)) {
+            if (!empty($summpy) && $summpy != '0' && $summpy != '9999') {
+                $bc_more .= " " . $py; 
+            }
+        }
+        return $bc_more;
     }
 
 
@@ -1708,30 +1708,30 @@ class RDSIndex extends SolrMarc
      */
     public function getCorporation() 
     {
-	    $co_display = array();            
-	    if (isset($this->fields['co_display'])) {
-		    $arr_links = $this->fields['co_display'];
-		    foreach ($arr_links as $key => $link) {
-			    $gnd_ppn = "";
-			    $chk_link = $link;
-			    if (strstr($link, " ; ")) {
-				    $tmp = $link;
-				    $pos = strrpos($link, " ; ");
-				    $gnd_ppn = substr($tmp, $pos+3);
-				    $co_display[$key]["gnd"] = $gnd_ppn;
-				    $link = substr($link, '0', $pos);
-				    $link = str_replace('"', '\"', $link);
-				    if(strstr($link, "|")){
-					    $arr_link = explode(" | ", $link);
-					    $co_display[$key]["link"]=$arr_link[0];
-					    $co_display[$key]["link_text"]=$arr_link[1];
-				    } else {
-					    $co_display[$key]["link"]=$link;
-				    }
-			    }
-		    }
-	    }
-	    return $co_display;
+        $co_display = array();            
+        if (isset($this->fields['co_display'])) {
+            $arr_links = $this->fields['co_display'];
+            foreach ($arr_links as $key => $link) {
+                $gnd_ppn = "";
+                $chk_link = $link;
+                if (strstr($link, " ; ")) {
+                    $tmp = $link;
+                    $pos = strrpos($link, " ; ");
+                    $gnd_ppn = substr($tmp, $pos+3);
+                    $co_display[$key]["gnd"] = $gnd_ppn;
+                    $link = substr($link, '0', $pos);
+                    $link = str_replace('"', '\"', $link);
+                    if(strstr($link, "|")) {
+                        $arr_link = explode(" | ", $link);
+                        $co_display[$key]["link"]=$arr_link[0];
+                        $co_display[$key]["link_text"]=$arr_link[1];
+                    } else {
+                        $co_display[$key]["link"]=$link;
+                    }
+                }
+            }
+        }
+        return $co_display;
     }
 
     /**
@@ -1739,27 +1739,28 @@ class RDSIndex extends SolrMarc
      * RDS
      * @return array
      */
-    public function getCoForList(){
-	    $co_display_short = array();
-	    if(isset($this->fields['co_display'])){
-		    $arr_links = $this->fields['co_display'];
-		    foreach ($arr_links as $key => $link) {
-			    $chk_link = $link;
-			    if(strstr($link, " ; ")){
-				    $tmp = $link;
-				    $pos = strrpos($link, " ; ");
-				    $link = substr($link, '0', $pos);
-			    }
-			    if(strstr($link, " | ")){
-				    $arr_tmp = explode(" | ", $link);
-				    $co_display_short[$key]["link"] = $arr_tmp[0]." [".$arr_tmp[1]."]";
-			    }
-			    else {
-				    $co_display_short[$key]["link"] = $link;
-			    }
-		    }
-	    }
-	    return $co_display_short;
+    public function getCoForList()
+    {
+        $co_display_short = array();
+        if(isset($this->fields['co_display'])) {
+            $arr_links = $this->fields['co_display'];
+            foreach ($arr_links as $key => $link) {
+                $chk_link = $link;
+                if(strstr($link, " ; ")) {
+                    $tmp = $link;
+                    $pos = strrpos($link, " ; ");
+                    $link = substr($link, '0', $pos);
+                }
+                if(strstr($link, " | ")) {
+                    $arr_tmp = explode(" | ", $link);
+                    $co_display_short[$key]["link"] = $arr_tmp[0]." [".$arr_tmp[1]."]";
+                }
+                else {
+                    $co_display_short[$key]["link"] = $link;
+                }
+            }
+        }
+        return $co_display_short;
     }
 
 
@@ -1771,8 +1772,8 @@ class RDSIndex extends SolrMarc
      */
     public function getTitleShort()
     {
-	    return isset($this->fields['ti_short']) ?
-		    $this->fields['ti_short'] : '';
+        return isset($this->fields['ti_short']) ?
+        $this->fields['ti_short'] : '';
     }
 
     /**
@@ -1782,11 +1783,11 @@ class RDSIndex extends SolrMarc
      */
     public function getTitleSerie()
     {
-	    if (isset($_GET["lookfor0"])) {
-		    if (preg_match("/^rn/", $_GET["lookfor0"][0])) {
-			    $html_result = "rn";
-		    }
-	    }
+        if (isset($_GET["lookfor0"])) {
+            if (preg_match("/^rn/", $_GET["lookfor0"][0])) {
+                $html_result = "rn";
+            }
+        }
     }
 
     /**
@@ -1796,8 +1797,8 @@ class RDSIndex extends SolrMarc
      */
     public function getTitle()
     {
-	    return isset($this->fields['ti_long']) ?
-		    $this->fields['ti_long'] : '';
+        return isset($this->fields['ti_long']) ?
+        $this->fields['ti_long'] : '';
     }
 
     /**
@@ -1807,11 +1808,11 @@ class RDSIndex extends SolrMarc
      */
     public function getTitlePart()
     {
-	    $arr_link = "";
-	    if (isset($this->fields['ti_part'])) {
-		    $arr_link = explode(" ; ", $this->fields['ti_part']);
-	    }
-	    return $arr_link;
+        $arr_link = "";
+        if (isset($this->fields['ti_part'])) {
+            $arr_link = explode(" ; ", $this->fields['ti_part']);
+        }
+        return $arr_link;
     }
     /**
      * Get part of 'f-Satz' from series
@@ -1820,8 +1821,8 @@ class RDSIndex extends SolrMarc
      */
     public function getTitleLongf()
     {
-	    return isset($this->fields['ti_long_f']) ? 
-		    $this->fields['ti_long_f'] : '';
+        return isset($this->fields['ti_long_f']) ? 
+        $this->fields['ti_long_f'] : '';
     }
 
     /**
@@ -1831,7 +1832,7 @@ class RDSIndex extends SolrMarc
      */
     public function getTitleLongfsec()
     {
-	    return isset($this->fields['ti_long_f_second']) ? $this->fields['ti_long_f_second'] : '';
+        return isset($this->fields['ti_long_f_second']) ? $this->fields['ti_long_f_second'] : '';
     }
 
     /**
@@ -1841,7 +1842,7 @@ class RDSIndex extends SolrMarc
      */
     public function getTitleCut()
     {
-	    return isset($this->fields['ti_cut']) ? $this->fields['ti_cut'] : '';
+        return isset($this->fields['ti_cut']) ? $this->fields['ti_cut'] : '';
     }
     /**
      * Get main Title  
@@ -1850,7 +1851,7 @@ class RDSIndex extends SolrMarc
      */      
     public function getTitleMain()
     {
-	    return isset($this->fields['ht']) ? implode($this->fields['ht']) : '';
+        return isset($this->fields['ht']) ? implode($this->fields['ht']) : '';
     }
 
     /**
@@ -1860,8 +1861,8 @@ class RDSIndex extends SolrMarc
      */
     public function getIncludedWork()
     {
-	    return isset($this->fields['beig_werk']) ?
-		    $this->fields['beig_werk'] : '';
+        return isset($this->fields['beig_werk']) ?
+        $this->fields['beig_werk'] : '';
     }
 
 
@@ -1872,7 +1873,7 @@ class RDSIndex extends SolrMarc
      */
     public function getAst()
     {
-	    return isset($this->fields['ast']) ? implode($this->fields['ast']) : '';
+        return isset($this->fields['ast']) ? implode($this->fields['ast']) : '';
     }
 
 
@@ -1884,27 +1885,27 @@ class RDSIndex extends SolrMarc
     public function getCT()
     {
 
-	    $ct_display = array();
-	    if (isset($this->fields['ct_display'])) {
-		    $arr_ct = $this->fields['ct_display'];
-		    foreach ($arr_ct as $key_list => $ct_string) {
-			    $gnd_ppn = "";
-			    $ct_list = explode(" , ", $ct_string);
-			    foreach ($ct_list as $key => $value ) {                    
-				    if (strstr($value, " ; ")) {
-					    $tmp = $value;
-					    $pos = strrpos($value, " ; ");
-					    $gnd_ppn = substr($tmp, $pos+3);
-					    $ct_display[$key_list][$key]["gnd"] = $gnd_ppn;
-					    $link = substr($value, '0', $pos);
-					    $ct_display[$key_list][$key]["link"] = trim($link);
-				    } else {
-					    $ct_display[$key_list][$key]["link"] =  $value;
-				    }
-			    }
-		    }
-	    }
-	    return $ct_display;
+        $ct_display = array();
+        if (isset($this->fields['ct_display'])) {
+            $arr_ct = $this->fields['ct_display'];
+            foreach ($arr_ct as $key_list => $ct_string) {
+                $gnd_ppn = "";
+                $ct_list = explode(" , ", $ct_string);
+                foreach ($ct_list as $key => $value ) {                    
+                    if (strstr($value, " ; ")) {
+                        $tmp = $value;
+                        $pos = strrpos($value, " ; ");
+                        $gnd_ppn = substr($tmp, $pos+3);
+                        $ct_display[$key_list][$key]["gnd"] = $gnd_ppn;
+                        $link = substr($value, '0', $pos);
+                        $ct_display[$key_list][$key]["link"] = trim($link);
+                    } else {
+                        $ct_display[$key_list][$key]["link"] =  $value;
+                    }
+                }
+            }
+        }
+        return $ct_display;
     }
 
     /**
@@ -1914,7 +1915,7 @@ class RDSIndex extends SolrMarc
      */
     public function getLoc()
     {
-	    return isset($this->fields['loc']) ? ($this->fields['loc']) : '';
+        return isset($this->fields['loc']) ? ($this->fields['loc']) : '';
     }
 
     /**
@@ -1924,7 +1925,7 @@ class RDSIndex extends SolrMarc
      */
     public function getDdc()
     {
-	    return isset($this->fields['ddc']) ? ($this->fields['ddc']) : '';
+        return isset($this->fields['ddc']) ? ($this->fields['ddc']) : '';
     }
 
     /**
@@ -1934,7 +1935,7 @@ class RDSIndex extends SolrMarc
      */
     public function getMsh()
     {
-	    return isset($this->fields['mesh']) ? ($this->fields['mesh']) : '';
+        return isset($this->fields['mesh']) ? ($this->fields['mesh']) : '';
     }
 
 
@@ -1945,7 +1946,7 @@ class RDSIndex extends SolrMarc
      */
     public function getEditions()
     {
-	    return isset($this->fields['ausgabe']) ? implode($this->fields['ausgabe']) : '';
+        return isset($this->fields['ausgabe']) ? implode($this->fields['ausgabe']) : '';
     }
 
     /**
@@ -1955,7 +1956,7 @@ class RDSIndex extends SolrMarc
      */
     public function getUnterreihe()
     {
-	    return isset($this->fields['unterreihe']) ? $this->fields['unterreihe'] : '';
+        return isset($this->fields['unterreihe']) ? $this->fields['unterreihe'] : '';
     }
 
     /**
@@ -1965,7 +1966,7 @@ class RDSIndex extends SolrMarc
      */
     public function getPublishDisplay()
     {
-	    return isset($this->fields['pu_pp_display']) ? $this->fields['pu_pp_display'] : '';
+        return isset($this->fields['pu_pp_display']) ? $this->fields['pu_pp_display'] : '';
 
     }
 
@@ -1976,13 +1977,13 @@ class RDSIndex extends SolrMarc
      */
     public function getppNormDisplay()
     {
-	    $formats = isset($this->fields['medieninfo']) ? 
-		    $this->fields['medieninfo'] : array();
+        $formats = isset($this->fields['medieninfo']) ? 
+        $this->fields['medieninfo'] : array();
 
-	    if (!in_array('hs', $formats)) {
-		    return  isset($this->fields['pp_norm']) ? 
-			    $this->fields['pp_norm'] : '';
-	    }
+        if (!in_array('hs', $formats)) {
+            return  isset($this->fields['pp_norm']) ? 
+            $this->fields['pp_norm'] : '';
+        }
     }
 
     /**
@@ -1992,8 +1993,8 @@ class RDSIndex extends SolrMarc
      */    
     public function getPublishingYear() 
     {
-	    return isset($this->fields['py_display']) ? 
-		    implode("; ", $this->fields['py_display']) : '';
+        return isset($this->fields['py_display']) ? 
+        implode("; ", $this->fields['py_display']) : '';
     }
 
     /**
@@ -2004,7 +2005,7 @@ class RDSIndex extends SolrMarc
      */    
     public function getPY() 
     {
-	    return isset($this->fields['py']) ? $this->fields['py'] : '';
+        return isset($this->fields['py']) ? $this->fields['py'] : '';
     }
 
     /**
@@ -2015,11 +2016,11 @@ class RDSIndex extends SolrMarc
      */    
     public function getPublisher() 
     {
-	    if (isset($this->fields['pp_display'])) {
-		    $arr_links = $this->fields['pp_display'];
-		    $first_item = $arr_links[0];
-	    }
-	    return $first_item;
+        if (isset($this->fields['pp_display'])) {
+            $arr_links = $this->fields['pp_display'];
+            $first_item = $arr_links[0];
+        }
+        return $first_item;
     }
 
     /**
@@ -2029,8 +2030,8 @@ class RDSIndex extends SolrMarc
      */
     public function getFormat() 
     {
-	    return isset($this->fields['medieninfo']) ? 
-		    implode($this->fields['medieninfo']) : '';
+        return isset($this->fields['medieninfo']) ? 
+        implode($this->fields['medieninfo']) : '';
     }
 
     /**
@@ -2040,7 +2041,7 @@ class RDSIndex extends SolrMarc
      */
     public function getTz() 
     {
-	    return isset($this->fields['tz']) ? implode($this->fields['tz']) : '';
+        return isset($this->fields['tz']) ? implode($this->fields['tz']) : '';
     }
 
     /**
@@ -2050,7 +2051,7 @@ class RDSIndex extends SolrMarc
      */
     public function getScope() 
     {
-	    return isset($this->fields['umfang']) ? implode($this->fields['umfang']) : '';
+        return isset($this->fields['umfang']) ? implode($this->fields['umfang']) : '';
     }
 
     /**
@@ -2060,7 +2061,7 @@ class RDSIndex extends SolrMarc
      */
     public function getISSN() 
     {
-	    return isset($this->fields['issn_display']) ? $this->fields['issn_display'] : '';
+        return isset($this->fields['issn_display']) ? $this->fields['issn_display'] : '';
     }
 
     /**
@@ -2070,8 +2071,8 @@ class RDSIndex extends SolrMarc
      */
     public function getISSNPrint() 
     {
-	    return isset($this->fields['issn_display_print']) ? 
-		    implode($this->fields['issn_display_print']) : '';
+        return isset($this->fields['issn_display_print']) ? 
+        implode($this->fields['issn_display_print']) : '';
     }
 
     /**
@@ -2081,8 +2082,8 @@ class RDSIndex extends SolrMarc
      */
     public function getISSNOnline() 
     {
-	    return isset($this->fields['issn_display_online']) ? 
-		    implode($this->fields['issn_display_online']) : '';
+        return isset($this->fields['issn_display_online']) ? 
+        implode($this->fields['issn_display_online']) : '';
     }
 
     /**
@@ -2092,7 +2093,7 @@ class RDSIndex extends SolrMarc
      */
     public function getISBN() 
     {
-	    return isset($this->fields['isbn_display']) ? $this->fields['isbn_display'] : '';
+        return isset($this->fields['isbn_display']) ? $this->fields['isbn_display'] : '';
     }
 
     /**
@@ -2102,28 +2103,28 @@ class RDSIndex extends SolrMarc
      */
     public function getEst()
     {
-	    //return isset($this->fields['est']) ? implode($this->fields['est']) : '';
-	    $gnd_ppn = "";
-	    $est = array();
-	    if(isset($this->fields['est'])){
-		    $arr_links = $this->fields['est'];
-		    foreach ($arr_links as $key =>  $link) {
-			    $gnd_ppn = "";
-			    if(strstr($link, " ; ")){
-				    $tmp = $link;
-				    $pos = strrpos($link, " ; ");
-				    $gnd_ppn = substr($tmp, $pos+3);
-				    $link = substr($link, '0', $pos);
-				    $est[$key]['txt'] = $link;	
-				    $est[$key]['gnd'] = $gnd;
+        //return isset($this->fields['est']) ? implode($this->fields['est']) : '';
+        $gnd_ppn = "";
+        $est = array();
+        if(isset($this->fields['est'])) {
+            $arr_links = $this->fields['est'];
+            foreach ($arr_links as $key =>  $link) {
+                $gnd_ppn = "";
+                if(strstr($link, " ; ")) {
+                    $tmp = $link;
+                    $pos = strrpos($link, " ; ");
+                    $gnd_ppn = substr($tmp, $pos+3);
+                    $link = substr($link, '0', $pos);
+                    $est[$key]['txt'] = $link;    
+                    $est[$key]['gnd'] = $gnd;
 
-			    } else {
-			    	$est[$key]['txt'] = $link;
-			    }
+                } else {
+                    $est[$key]['txt'] = $link;
+                }
 
-		    }
-	    }
-	    return $est;
+            }
+        }
+        return $est;
     }
 
     /**
@@ -2133,22 +2134,22 @@ class RDSIndex extends SolrMarc
      */
     public function getEbookLink()
     {
-	    $ebook_lnk = array();
-	    if (isset($this->fields['ebook_url'])) {
-		    $arr_links = $this->fields['ebook_url'];
-		    foreach ($arr_links as $key => $link) {
-			    if (strstr($link, "|")) {
-				    $arr_link = explode(" | ", $link);
-				    $link_text = $arr_link[1];
-				    $ebook_lnk[$key]['lnk_txt'] = $arr_link[1];
-				    $ebook_lnk[$key]['url'] = $arr_link[0];
-			    } else {
-				    $ebook_lnk[$key]['lnk_txt'] = $link;
-				    $ebook_lnk[$key]['url'] = $link;
-			    }
-		    }
-	    }
-	    return $ebook_lnk;
+        $ebook_lnk = array();
+        if (isset($this->fields['ebook_url'])) {
+            $arr_links = $this->fields['ebook_url'];
+            foreach ($arr_links as $key => $link) {
+                if (strstr($link, "|")) {
+                    $arr_link = explode(" | ", $link);
+                    $link_text = $arr_link[1];
+                    $ebook_lnk[$key]['lnk_txt'] = $arr_link[1];
+                    $ebook_lnk[$key]['url'] = $arr_link[0];
+                } else {
+                    $ebook_lnk[$key]['lnk_txt'] = $link;
+                    $ebook_lnk[$key]['url'] = $link;
+                }
+            }
+        }
+        return $ebook_lnk;
     }
 
     /**
@@ -2158,23 +2159,23 @@ class RDSIndex extends SolrMarc
      */
     public function getHandwritingDesc()
     {
-	    $hand_desc = array(); 
-	    if (isset($this->fields['hand_desc'])) {
-		    $arr_desc = $this->fields['hand_desc'];
+        $hand_desc = array(); 
+        if (isset($this->fields['hand_desc'])) {
+            $arr_desc = $this->fields['hand_desc'];
 
-		    foreach ($arr_desc as $key => $txt) {
-			    $pos = strpos($txt, ":");
-			    if ($pos !== false) {
-				    $first = substr($txt, 0, $pos);
-				    $sec = substr($txt, $pos);
-				    $hand_desc[$key]['txt1'] = $first;
-				    $hand_desc[$key]['txt2'] = $sec;                                                        
-			    } else {
-				    $hand_desc[$key]['txt1']= $txt;
-			    }
-		    }
-	    }
-	    return $hand_desc;
+            foreach ($arr_desc as $key => $txt) {
+                $pos = strpos($txt, ":");
+                if ($pos !== false) {
+                    $first = substr($txt, 0, $pos);
+                    $sec = substr($txt, $pos);
+                    $hand_desc[$key]['txt1'] = $first;
+                    $hand_desc[$key]['txt2'] = $sec;                                                        
+                } else {
+                    $hand_desc[$key]['txt1']= $txt;
+                }
+            }
+        }
+        return $hand_desc;
     }
 
     /**
@@ -2184,48 +2185,48 @@ class RDSIndex extends SolrMarc
      */
     public function getHandwritingBase()
     {
-	    $hand_basedesc = array();
-	    if (isset($this->fields['hand_basedesc'])) {
-		    $arr_desc = $this->fields['hand_basedesc'];
-		    foreach ($arr_desc as $key =>  $txt) {
-			    $title = "Beschreibstoff";
-			    $hand_basedesc[$key]['title'] = $title;
-			    $hand_basedesc[$key]['text'] = $txt;
-		    }
-	    }
-	    if (isset($this->fields['hand_basecover'])) {
-		    $arr_desc = $this->fields['hand_basecover'];
-		    foreach ($arr_desc as $key => $txt) {
-			    $title = "Einband";
-			    $hand_basedesc[$key]['title'] = $title;                                    
-			    $hand_basedesc[$key]['text'] = $txt;
-		    }
-	    }    
-	    if (isset($this->fields['hand_baserest'])) {
-		    $arr_desc = $this->fields['hand_baserest'];
-		    foreach ($arr_desc as $key => $txt) {
-			    $title = "Restaurierungsmaßnahmen";
-			    $hand_basedesc[$key]['title'] = $title;
-			    $hand_basedesc[$key]['text'] = $txt;
-		    }
-	    }    
-	    if (isset($this->fields['hand_base_c'])) {
-		    $arr_desc = $this->fields['hand_base_c'];
-		    foreach ($arr_desc as $key => $txt) {
-			    $title = "Wasserzeichen";
-			    $hand_basedesc[$key]['title'] = $title;
-			    $hand_basedesc[$key]['text'] = $txt;
-		    }
-	    }    
-	    if (isset($this->fields['hand_base_d'])) {
-		    $arr_desc = $this->fields['hand_base_d'];
-		    foreach ($arr_desc as $key => $txt) {
-			    $title = "Erhaltungszustand";
-			    $hand_basedesc[$key]['title'] = $title;
-			    $hand_basedesc[$key]['text'] = $txt;
-		    }
-	    }    
-	    return $hand_basedesc;
+        $hand_basedesc = array();
+        if (isset($this->fields['hand_basedesc'])) {
+            $arr_desc = $this->fields['hand_basedesc'];
+            foreach ($arr_desc as $key =>  $txt) {
+                $title = "Beschreibstoff";
+                $hand_basedesc[$key]['title'] = $title;
+                $hand_basedesc[$key]['text'] = $txt;
+            }
+        }
+        if (isset($this->fields['hand_basecover'])) {
+            $arr_desc = $this->fields['hand_basecover'];
+            foreach ($arr_desc as $key => $txt) {
+                $title = "Einband";
+                $hand_basedesc[$key]['title'] = $title;                                    
+                $hand_basedesc[$key]['text'] = $txt;
+            }
+        }    
+        if (isset($this->fields['hand_baserest'])) {
+            $arr_desc = $this->fields['hand_baserest'];
+            foreach ($arr_desc as $key => $txt) {
+                $title = "Restaurierungsmaßnahmen";
+                $hand_basedesc[$key]['title'] = $title;
+                $hand_basedesc[$key]['text'] = $txt;
+            }
+        }    
+        if (isset($this->fields['hand_base_c'])) {
+            $arr_desc = $this->fields['hand_base_c'];
+            foreach ($arr_desc as $key => $txt) {
+                $title = "Wasserzeichen";
+                $hand_basedesc[$key]['title'] = $title;
+                $hand_basedesc[$key]['text'] = $txt;
+            }
+        }    
+        if (isset($this->fields['hand_base_d'])) {
+            $arr_desc = $this->fields['hand_base_d'];
+            foreach ($arr_desc as $key => $txt) {
+                $title = "Erhaltungszustand";
+                $hand_basedesc[$key]['title'] = $title;
+                $hand_basedesc[$key]['text'] = $txt;
+            }
+        }    
+        return $hand_basedesc;
     }
 
     /**
@@ -2235,17 +2236,17 @@ class RDSIndex extends SolrMarc
      */
     public function getMedium()
     {
-	    $result = "";
-	    if (isset($this->fields['medium'])) {
-		    $arr = $this->fields['medium'];
-		    foreach ($arr as $txt) {
-			    if ($tmp = strstr($txt, "handschr")) {
-				    $result = $tmp; 
-			    }
+        $result = "";
+        if (isset($this->fields['medium'])) {
+            $arr = $this->fields['medium'];
+            foreach ($arr as $txt) {
+                if ($tmp = strstr($txt, "handschr")) {
+                    $result = $tmp; 
+                }
 
-		    }
-	    }
-	    return $result;
+            }
+        }
+        return $result;
     }
     /**
      * Get an array of all the references of handwriting
@@ -2254,32 +2255,32 @@ class RDSIndex extends SolrMarc
      */
     public function getHandwritingRefValue()
     {
-	    $hand_ref = array();
-	    if (isset($this->fields['hand_refvalue'])) {
-		    $arr_desc = $this->fields['hand_refvalue'];
-		    asort($arr_desc);
-		    foreach ($arr_desc as $link) {
-			    $arr_link[] = explode(" | ", $link);
-		    }
-		    foreach ($arr_link as $key => $txt) {
-			    if ($tmp = strstr($txt[0], "1")) {
-				    $title = "Editionshinweise";
-				    $hand_ref[$key]['title'] = $title;
-				    $hand_ref[$key]['text'] = $txt[1];
-			    }
-			    if ($tmp = strstr($txt[0], "2")) {
-				    $title = "Literaturhinweise";
-				    $hand_ref[$key]['title'] = $title;
-				    $hand_ref[$key]['text'] = $txt[1];
-			    }
-			    if ($tmp = strstr($txt[0], "3")) {
-				    $title = "Sonstige Bezugswerke";
-				    $hand_ref[$key]['title'] = $title;
-				    $hand_ref[$key]['text'] = $txt[1];
-			    }
-		    }
-	    }
-	    return $hand_ref;
+        $hand_ref = array();
+        if (isset($this->fields['hand_refvalue'])) {
+            $arr_desc = $this->fields['hand_refvalue'];
+            asort($arr_desc);
+            foreach ($arr_desc as $link) {
+                $arr_link[] = explode(" | ", $link);
+            }
+            foreach ($arr_link as $key => $txt) {
+                if ($tmp = strstr($txt[0], "1")) {
+                    $title = "Editionshinweise";
+                    $hand_ref[$key]['title'] = $title;
+                    $hand_ref[$key]['text'] = $txt[1];
+                }
+                if ($tmp = strstr($txt[0], "2")) {
+                    $title = "Literaturhinweise";
+                    $hand_ref[$key]['title'] = $title;
+                    $hand_ref[$key]['text'] = $txt[1];
+                }
+                if ($tmp = strstr($txt[0], "3")) {
+                    $title = "Sonstige Bezugswerke";
+                    $hand_ref[$key]['title'] = $title;
+                    $hand_ref[$key]['text'] = $txt[1];
+                }
+            }
+        }
+        return $hand_ref;
     }
 
     /**
@@ -2289,20 +2290,20 @@ class RDSIndex extends SolrMarc
      */
     public function getFn() 
     {
-	    $fn_array = array();
-	    if (isset($this->fields['fn_display'])) {
-		    $arr_links = $this->fields['fn_display'];
-		    foreach ($arr_links as $key => $link) {
-			    if (strstr($link, "|")) {
-				    $arr_link = explode(" | ", $link);
-				    $fn_array[$key]['text'] = $arr_link[0];
-				    $fn_array[$key]['url'] = $arr_link[1];
-			    } else {
-				    $fn_array[$key]['text'] = $link;
-			    }
-		    }
-	    }
-	    return $fn_array;
+        $fn_array = array();
+        if (isset($this->fields['fn_display'])) {
+            $arr_links = $this->fields['fn_display'];
+            foreach ($arr_links as $key => $link) {
+                if (strstr($link, "|")) {
+                    $arr_link = explode(" | ", $link);
+                    $fn_array[$key]['text'] = $arr_link[0];
+                    $fn_array[$key]['url'] = $arr_link[1];
+                } else {
+                    $fn_array[$key]['text'] = $link;
+                }
+            }
+        }
+        return $fn_array;
     }
 
     /**
@@ -2312,7 +2313,7 @@ class RDSIndex extends SolrMarc
      */
     public function getFnAttWork() 
     {
-	    return isset($this->fields['fn_beigWerke']) ? $this->fields['fn_beigWerke'] : '';
+        return isset($this->fields['fn_beigWerke']) ? $this->fields['fn_beigWerke'] : '';
     }
 
     /**
@@ -2322,7 +2323,7 @@ class RDSIndex extends SolrMarc
      */
     public function getEnthWerk() 
     {
-	    return isset($this->fields['enthWerke']) ? $this->fields['enthWerke'] : '';
+        return isset($this->fields['enthWerke']) ? $this->fields['enthWerke'] : '';
     }
 
     /**
@@ -2332,7 +2333,7 @@ class RDSIndex extends SolrMarc
      */
     public function getFnEbook() 
     {
-	    return isset($this->fields['fn_ebooks']) ? $this->fields['fn_ebooks'] : '';
+        return isset($this->fields['fn_ebooks']) ? $this->fields['fn_ebooks'] : '';
     }
 
     /**
@@ -2342,8 +2343,8 @@ class RDSIndex extends SolrMarc
      */
     public function getSekundaer() 
     {
-	    return isset ($this->fields['sekundaer']) ? 
-		    $this->fields['sekundaer'] : array();
+        return isset ($this->fields['sekundaer']) ? 
+        $this->fields['sekundaer'] : array();
     }
     /**
      * Get an array of all 'rvk' notations associated with the record.
@@ -2352,20 +2353,20 @@ class RDSIndex extends SolrMarc
      */
     public function getNotation() 
     {
-	    $arr_not = array();
-	    if (isset($this->fields['rvk_display'])) {
-		    $arr_links = $this->fields['rvk_display'];
-		    foreach ($arr_links as $key => $link) {
-			    if (strstr($link, "|")) {
-				    $arr_link = explode(" | ", $link);
-				    $arr_not[$key]['url'] = $arr_link[0];
-				    $arr_not[$key]['txt'] = $arr_link[1];
-			    } else {
-				    $arr_not[$key]['url'] = $link;
-			    }
-		    }
-	    }
-	    return  $arr_not;
+        $arr_not = array();
+        if (isset($this->fields['rvk_display'])) {
+            $arr_links = $this->fields['rvk_display'];
+            foreach ($arr_links as $key => $link) {
+                if (strstr($link, "|")) {
+                    $arr_link = explode(" | ", $link);
+                    $arr_not[$key]['url'] = $arr_link[0];
+                    $arr_not[$key]['txt'] = $arr_link[1];
+                } else {
+                    $arr_not[$key]['url'] = $link;
+                }
+            }
+        }
+        return  $arr_not;
     }
 
 
@@ -2376,7 +2377,7 @@ class RDSIndex extends SolrMarc
      */
     public function getHss() 
     {
-	    return isset($this->fields['hss']) ? $this->fields['hss'] : '';
+        return isset($this->fields['hss']) ? $this->fields['hss'] : '';
     }
 
     /**
@@ -2386,7 +2387,7 @@ class RDSIndex extends SolrMarc
      */
     public function getFnInterpret() 
     {
-	    return isset($this->fields['fn_interpret']) ? $this->fields['fn_interpret'] : '';
+        return isset($this->fields['fn_interpret']) ? $this->fields['fn_interpret'] : '';
     }
 
     /**
@@ -2396,41 +2397,42 @@ class RDSIndex extends SolrMarc
      */
     public function getJournalInfo()
     { 
-	    $zs_array = array();
-	    $zdb_nr = $this->getZdbNr();
-	    if (isset($this->fields['zs_hinweis'])) {
-		    $arr_links = $this->fields['zs_hinweis'];
-		    foreach ($arr_links as $key => $link) {
+        $zs_array = array();
+        $zdb_nr = $this->getZdbNr();
+        if (isset($this->fields['zs_hinweis'])) {
+            $arr_links = $this->fields['zs_hinweis'];
+            foreach ($arr_links as $key => $link) {
 
-			    if (strstr($link, "|")) {
-				    $arr_link = explode(" | ", $link);
-				    if (substr_count($zdb_nr, $arr_link[0])> 0) {
-					    if ($arr_link[2] != "") {
-						    $zs_array[$key]['pre-text'] = $arr_link[1];
-						    $zs_array[$key]['id'] = $arr_link[0];
-						    $zs_array[$key]['text'] = $arr_link[2];
-					    }
-					    if ((isset($arr_link[2]) && $arr_link[2] == "") && $arr_link[1] != "") {
-						    $zs_array[$key] ['id'] = $arr_link[0];
-						    $zs_array[$key]['text'] = $arr_link[1];
-					    }
-				    } else {
-					    if ((isset($arr_link[2]) && $arr_link[2] == "") && $arr_link[1] != "") {
-						    $zs_array[$key]['pre-text'] = $arr_link[1];
-						    $zs_array[$key]['text'] = $arr_link[2];
-					    }
-					    if(!isset($arr_link[2])){
-						    if($arr_link[0] != "")
-							    $zs_array[$key]['pre-text'] = $arr_link[0];
-						    if ($arr_link[1] != "") {
-							    $zs_array[$key]['text'] = $arr_link[1];
-						    }
-					    }
-				    }
-			    }
-		    }
-	    }
-	    return $zs_array;
+                if (strstr($link, "|")) {
+                    $arr_link = explode(" | ", $link);
+                    if (substr_count($zdb_nr, $arr_link[0])> 0) {
+                        if ($arr_link[2] != "") {
+                            $zs_array[$key]['pre-text'] = $arr_link[1];
+                            $zs_array[$key]['id'] = $arr_link[0];
+                            $zs_array[$key]['text'] = $arr_link[2];
+                        }
+                        if ((isset($arr_link[2]) && $arr_link[2] == "") && $arr_link[1] != "") {
+                            $zs_array[$key] ['id'] = $arr_link[0];
+                            $zs_array[$key]['text'] = $arr_link[1];
+                        }
+                    } else {
+                        if ((isset($arr_link[2]) && $arr_link[2] == "") && $arr_link[1] != "") {
+                            $zs_array[$key]['pre-text'] = $arr_link[1];
+                            $zs_array[$key]['text'] = $arr_link[2];
+                        }
+                        if(!isset($arr_link[2])) {
+                            if($arr_link[0] != "") {
+                                $zs_array[$key]['pre-text'] = $arr_link[0]; 
+                            }
+                            if ($arr_link[1] != "") {
+                                $zs_array[$key]['text'] = $arr_link[1];
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return $zs_array;
     }
 
     /**
@@ -2440,7 +2442,7 @@ class RDSIndex extends SolrMarc
      */
     public function getZdbNr()
     {
-	    return isset($this->fields['zdb_nr']) ? $this->fields['zdb_nr'] : '';
+        return isset($this->fields['zdb_nr']) ? $this->fields['zdb_nr'] : '';
     }
 
     /**
@@ -2450,8 +2452,8 @@ class RDSIndex extends SolrMarc
      */
     public function getCjkTitle()
     {
-	    return isset($this->fields['orig_titel_display']) ? 
-		    implode($this->fields['orig_titel_display']) : '';
+        return isset($this->fields['orig_titel_display']) ? 
+        implode($this->fields['orig_titel_display']) : '';
     }
 
     /**
@@ -2461,8 +2463,8 @@ class RDSIndex extends SolrMarc
      */
     public function getCjkAut() 
     {
-	    return isset($this->fields['orig_aut_display']) ? 
-		    implode($this->fields['orig_aut_display']) : '';
+        return isset($this->fields['orig_aut_display']) ? 
+        implode($this->fields['orig_aut_display']) : '';
     }
     /**
      * Get corporation (cjk) 
@@ -2471,8 +2473,8 @@ class RDSIndex extends SolrMarc
      */
     public function getCjkCorp() 
     {
-	    return isset($this->fields['orig_koerp_display']) ? 
-		    implode($this->fields['orig_koerp_display']) : '';
+        return isset($this->fields['orig_koerp_display']) ? 
+        implode($this->fields['orig_koerp_display']) : '';
     }
     /**
      * Get publisher  (cjk)
@@ -2481,8 +2483,8 @@ class RDSIndex extends SolrMarc
      */
     public function getCjkPp() 
     {
-	    return isset($this->fields['orig_verlag_display']) ? 
-		    implode($this->fields['orig_verlag_display']) : '';
+        return isset($this->fields['orig_verlag_display']) ? 
+        implode($this->fields['orig_verlag_display']) : '';
     }
     /**
      * Get issue (cjk)
@@ -2491,8 +2493,8 @@ class RDSIndex extends SolrMarc
      */
     public function getCjkEdition() 
     {
-	    return isset($this->fields['orig_ausgabe_display']) ? 
-		    implode($this->fields['orig_ausgabe_display']) : '';
+        return isset($this->fields['orig_ausgabe_display']) ? 
+        implode($this->fields['orig_ausgabe_display']) : '';
     }
     /**
      * Get footnote (cjk)
@@ -2501,8 +2503,8 @@ class RDSIndex extends SolrMarc
      */
     public function getCjkFN() 
     {
-	    return isset($this->fields['orig_fussnote_display']) ? 
-		    implode($this->fields['orig_fussnote_display']) : '';
+        return isset($this->fields['orig_fussnote_display']) ? 
+        implode($this->fields['orig_fussnote_display']) : '';
     }
     /**
      * Get fn extended (cjk)
@@ -2511,8 +2513,8 @@ class RDSIndex extends SolrMarc
      */
     public function getCjkFNEnth() 
     {
-	    return isset($this->fields['orig_fn_enthaltene_display']) ? 
-		    $this->fields['orig_fn_enthaltene_display'] : '';
+        return isset($this->fields['orig_fn_enthaltene_display']) ? 
+        $this->fields['orig_fn_enthaltene_display'] : '';
     }
     /**
      * Get  volume (cjk)
@@ -2521,8 +2523,8 @@ class RDSIndex extends SolrMarc
      */
     public function getCjkScope() 
     {
-	    return isset($this->fields['orig_umfang_display']) ? 
-		    implode($this->fields['orig_umfang_display']) : '';
+        return isset($this->fields['orig_umfang_display']) ? 
+        implode($this->fields['orig_umfang_display']) : '';
     }
     /**
      * Get series (cjk)
@@ -2531,8 +2533,8 @@ class RDSIndex extends SolrMarc
      */
     public function getCjkReihe() 
     {
-	    return isset($this->fields['orig_reihe_display']) ? 
-		    $this->fields['orig_reihe_display'] : '';
+        return isset($this->fields['orig_reihe_display']) ? 
+        $this->fields['orig_reihe_display'] : '';
     }
 
     /**
@@ -2542,8 +2544,8 @@ class RDSIndex extends SolrMarc
      */
     public function getCjkUReihe() 
     {
-	    return isset($this->fields['orig_ureihe_display']) ? 
-		    implode($this->fields['orig_ureihe_display']) : '';
+        return isset($this->fields['orig_ureihe_display']) ? 
+        implode($this->fields['orig_ureihe_display']) : '';
     }
 
     /**
@@ -2553,8 +2555,8 @@ class RDSIndex extends SolrMarc
      */
     public function getCjkAst() 
     {
-	    return isset($this->fields['orig_ast_display']) ? 
-		    implode($this->fields['orig_ast_display']) : '';
+        return isset($this->fields['orig_ast_display']) ? 
+        implode($this->fields['orig_ast_display']) : '';
     }
 
 
@@ -2565,19 +2567,19 @@ class RDSIndex extends SolrMarc
      */
     public function getWerk()
     {
-	    $werk_lnk = array();
-	    if (isset($this->fields['band_werk'])) {
-		    $arr_links = $this->fields['band_werk'];
-		    foreach ($arr_links as $key => $link) {
-			    if (strstr($link, "|")) {
-				    $arr_link = explode(" | ", $link);
-				    $werk_lnk[$key]['lnk_txt'] = $arr_link[1];
-				    $werk_lnk[$key]['id'] = $arr_link[0];
-				    $werk_lnk[$key]['bnd'] = $arr_link[2];
-			    }
-		    }
-	    }
-	    return $werk_lnk;
+        $werk_lnk = array();
+        if (isset($this->fields['band_werk'])) {
+            $arr_links = $this->fields['band_werk'];
+            foreach ($arr_links as $key => $link) {
+                if (strstr($link, "|")) {
+                    $arr_link = explode(" | ", $link);
+                    $werk_lnk[$key]['lnk_txt'] = $arr_link[1];
+                    $werk_lnk[$key]['id'] = $arr_link[0];
+                    $werk_lnk[$key]['bnd'] = $arr_link[2];
+                }
+            }
+        }
+        return $werk_lnk;
     }
 
     /**
@@ -2587,7 +2589,7 @@ class RDSIndex extends SolrMarc
      */
     public function getArticleInfo()
     {
-	    return isset($this->fields['aufsatz']) ? $this->fields['aufsatz'] : '';
+        return isset($this->fields['aufsatz']) ? $this->fields['aufsatz'] : '';
     }
 
     /**
@@ -2597,7 +2599,7 @@ class RDSIndex extends SolrMarc
      */
     public function getUngezReihe() 
     {
-	    return isset($this->fields['ungez_reihe']) ? $this->fields['ungez_reihe'] : '';
+        return isset($this->fields['ungez_reihe']) ? $this->fields['ungez_reihe'] : '';
     }
 
     /**
@@ -2607,22 +2609,22 @@ class RDSIndex extends SolrMarc
      */
     public function getSeriesTit() 
     {
-	    $series_lnk = array();
-	    if (isset($this->fields['serie_tit'])) {
-		    $arr_links = $this->fields['serie_tit'];
-		    foreach ($arr_links as $key => $link) {
-			    if (strstr($link, "|")) {
-				    $arr_link = explode(" | ", $link);
-				    $series_lnk[$key]['id'] = $arr_link[0];
-				    $series_lnk[$key]['lnk_txt'] = $arr_link[1];
-				    $series_lnk[$key]['bnd'] = $arr_link[2];
-			    } else {
-				    $series_lnk[$key]['id'] = $link;
-				    $series_lnk[$key]['lnk_txt'] = $link;
-			    }
-		    }
-	    }
-	    return $series_lnk;
+        $series_lnk = array();
+        if (isset($this->fields['serie_tit'])) {
+            $arr_links = $this->fields['serie_tit'];
+            foreach ($arr_links as $key => $link) {
+                if (strstr($link, "|")) {
+                    $arr_link = explode(" | ", $link);
+                    $series_lnk[$key]['id'] = $arr_link[0];
+                    $series_lnk[$key]['lnk_txt'] = $arr_link[1];
+                    $series_lnk[$key]['bnd'] = $arr_link[2];
+                } else {
+                    $series_lnk[$key]['id'] = $link;
+                    $series_lnk[$key]['lnk_txt'] = $link;
+                }
+            }
+        }
+        return $series_lnk;
     }
 
     /**
@@ -2632,18 +2634,18 @@ class RDSIndex extends SolrMarc
      */
     public function getCjkSeriesTit() 
     {
-	    $series_lnk = array();
-	    if (isset($this->fields['orig_serie_tit'])) {
-		    $arr_links = $this->fields['orig_serie_tit'];
-		    foreach ($arr_links as $key => $link) {
-			    if (strstr($link, "|")) {
-				    $arr_link = explode(" | ", $link);
-				    $series_lnk[$key]['id'] = $arr_link[0];
-				    $series_lnk[$key]['lnk_txt'] = $arr_link[1];
-			    }
-		    }
-	    }
-	    return $series_lnk;
+        $series_lnk = array();
+        if (isset($this->fields['orig_serie_tit'])) {
+            $arr_links = $this->fields['orig_serie_tit'];
+            foreach ($arr_links as $key => $link) {
+                if (strstr($link, "|")) {
+                    $arr_link = explode(" | ", $link);
+                    $series_lnk[$key]['id'] = $arr_link[0];
+                    $series_lnk[$key]['lnk_txt'] = $arr_link[1];
+                }
+            }
+        }
+        return $series_lnk;
     }
 
     /**
@@ -2653,7 +2655,7 @@ class RDSIndex extends SolrMarc
      */
     public function getNatInfo()
     {
-	    return isset($this->fields['nat_info']) ? $this->fields['nat_info'] : '';
+        return isset($this->fields['nat_info']) ? $this->fields['nat_info'] : '';
     }
 
     /**
@@ -2663,7 +2665,7 @@ class RDSIndex extends SolrMarc
      */
     public function getAbstract() 
     {
-	    return isset($this->fields['abstract']) ? $this->fields['abstract'] : '';
+        return isset($this->fields['abstract']) ? $this->fields['abstract'] : '';
     }
 
     /**
@@ -2673,56 +2675,56 @@ class RDSIndex extends SolrMarc
      */
     public function getLinks() 
     {
-	    $link_array = array();
-	    $jahr = "";
-	    if (isset($this->fields['url_info'])) {
-		    $arr_links = $this->fields['url_info'];
-		    foreach ($arr_links as $key => $link) {
-			    $jahr = "";
-			    $link_text = "";
-			    if (strstr($link, "|")) {
-				    $arr_link = explode(" | ", $link);
-				    if (strstr($arr_link[1], " ; ")) {
-					    $arr_jahr = explode(" ; ", $arr_link[1]);
-					    $jahr = $arr_jahr[1];
-					    $link_text = $arr_jahr[0];
-					    $link_array[$key]['url']= $arr_link[0];
-				    } else {
-					    $link_text = $arr_link[1];
-					    $link_array[$key]['url']= $arr_link[0];
-				    }
+        $link_array = array();
+        $jahr = "";
+        if (isset($this->fields['url_info'])) {
+            $arr_links = $this->fields['url_info'];
+            foreach ($arr_links as $key => $link) {
+                $jahr = "";
+                $link_text = "";
+                if (strstr($link, "|")) {
+                    $arr_link = explode(" | ", $link);
+                    if (strstr($arr_link[1], " ; ")) {
+                        $arr_jahr = explode(" ; ", $arr_link[1]);
+                        $jahr = $arr_jahr[1];
+                        $link_text = $arr_jahr[0];
+                        $link_array[$key]['url']= $arr_link[0];
+                    } else {
+                        $link_text = $arr_link[1];
+                        $link_array[$key]['url']= $arr_link[0];
+                    }
 
-				    switch (trim($link_text)){
-					    case "R":
-						    $link_array[$key]['txt'] = "Elektronische Ressource: Zugang über Resolving-System";
-						    break;
-					    case "Digitalisierung":
-						    $link_array[$key]['txt'] = "Elektronische Ressource: Zugang zum Digitalisat";
-						    break;
-					    case "EZB":
-						    $link_array[$key]['txt'] = "Elektronische Ressource: Zugang EZB";
-						    break;
-					    case "DBIS":
-						    $link_array[$key]['txt'] = "Elektronische Ressource: Zugang über DBIS";
-						    break;
-					    default:
-						    $link_array[$key]['txt'] = $link_text;
-						    break;
-				    }
+                    switch (trim($link_text)){
+                    case "R":
+                        $link_array[$key]['txt'] = "Elektronische Ressource: Zugang über Resolving-System";
+                        break;
+                    case "Digitalisierung":
+                        $link_array[$key]['txt'] = "Elektronische Ressource: Zugang zum Digitalisat";
+                        break;
+                    case "EZB":
+                        $link_array[$key]['txt'] = "Elektronische Ressource: Zugang EZB";
+                        break;
+                    case "DBIS":
+                        $link_array[$key]['txt'] = "Elektronische Ressource: Zugang über DBIS";
+                        break;
+                    default:
+                        $link_array[$key]['txt'] = $link_text;
+                        break;
+                    }
 
-				    // Links fuer zeitschriften und co nur bei Bestandanzeige *** TODO didnt find any examples TODO ****
-				    if (preg_match("/Verlag/", $link) && (!preg_match("/DBIS/", $link) && !preg_match("/EZB/", $link))) {
-					    $link_array[$key]['txt'] = "Elektronische Ressource: Zugang beim Produzenten";
-					    $link_array[$key]['jahr'] = $jahr;
-				    }
-				    if (!preg_match("/Verlag/", $link) && !preg_match("/Nationalbibliothek/", $link)) {
-					    $link_array[$key]['jahr'] = $jahr;
-				    }
-			    }
-		    }
+                    // Links fuer zeitschriften und co nur bei Bestandanzeige *** TODO didnt find any examples TODO ****
+                    if (preg_match("/Verlag/", $link) && (!preg_match("/DBIS/", $link) && !preg_match("/EZB/", $link))) {
+                        $link_array[$key]['txt'] = "Elektronische Ressource: Zugang beim Produzenten";
+                        $link_array[$key]['jahr'] = $jahr;
+                    }
+                    if (!preg_match("/Verlag/", $link) && !preg_match("/Nationalbibliothek/", $link)) {
+                        $link_array[$key]['jahr'] = $jahr;
+                    }
+                }
+            }
 
-	    }
-	    return $link_array;
+        }
+        return $link_array;
     }
 
     /**
@@ -2732,11 +2734,11 @@ class RDSIndex extends SolrMarc
      */
     public function getShortLinks()
     {
-	    if (isset($this->fields['url_short'])) {
-		    return $this->fields['url_short'] ; 
-	    } else { 
-		    return ''; 
-	    }
+        if (isset($this->fields['url_short'])) {
+            return $this->fields['url_short'] ; 
+        } else { 
+            return ''; 
+        }
     }
 
     /**
@@ -2747,23 +2749,23 @@ class RDSIndex extends SolrMarc
      */
     public function getLongLinksTab2()
     {
-	    $link_array = array();
-	    $value = $this->getONLINE();
-	    if (strstr($value, "offline")) {
-		    if (isset($this->fields['url_long'])) {
-			    $arr_links = $this->fields['url_long'];                
-			    foreach ($arr_links as $key => $link) {
-				    if (strstr($link, "|")) {
-					    $arr_link = explode(" | ", $link);
-					    $link_array[$key]['url'] = $arr_link[0];
-					    $link_array[$key]['txt'] = $arr_link[1];
-				    } else {
-					    $link_array[$key]['url'] = $link;
-				    }
-			    }
-		    }
-	    }
-	    return $link_array;
+        $link_array = array();
+        $value = $this->getONLINE();
+        if (strstr($value, "offline")) {
+            if (isset($this->fields['url_long'])) {
+                $arr_links = $this->fields['url_long'];                
+                foreach ($arr_links as $key => $link) {
+                    if (strstr($link, "|")) {
+                        $arr_link = explode(" | ", $link);
+                        $link_array[$key]['url'] = $arr_link[0];
+                        $link_array[$key]['txt'] = $arr_link[1];
+                    } else {
+                        $link_array[$key]['url'] = $link;
+                    }
+                }
+            }
+        }
+        return $link_array;
     }
 
     /**
@@ -2774,23 +2776,23 @@ class RDSIndex extends SolrMarc
      */
     public function getLongLinksTab3()
     {
-	    $link_array = array();
-	    $value = $this->getONLINE();
-	    if (strstr($value, "online")) {
-		    if (isset($this->fields['url_long'])) {
-			    $arr_links = $this->fields['url_long'];
-			    foreach ($arr_links as $key => $link) {
-				    if (strstr($link, "|")) {
-					    $arr_link = explode(" | ", $link);
-					    $link_array[$key]['url'] = $arr_link[0];
-					    $link_array[$key]['txt'] = $arr_link[1];
-				    } else {
-					    $link_array[$key]['url'] = $link;
-				    }
-			    }
-		    }
-	    }
-	    return $link_array;
+        $link_array = array();
+        $value = $this->getONLINE();
+        if (strstr($value, "online")) {
+            if (isset($this->fields['url_long'])) {
+                $arr_links = $this->fields['url_long'];
+                foreach ($arr_links as $key => $link) {
+                    if (strstr($link, "|")) {
+                        $arr_link = explode(" | ", $link);
+                        $link_array[$key]['url'] = $arr_link[0];
+                        $link_array[$key]['txt'] = $arr_link[1];
+                    } else {
+                        $link_array[$key]['url'] = $link;
+                    }
+                }
+            }
+        }
+        return $link_array;
     }
 
     /**
@@ -2800,14 +2802,14 @@ class RDSIndex extends SolrMarc
      */
     public function getLok()
     {
-	    if (isset($this->fields['loksatz'])) {
-		    foreach ($this->fields['loksatz'] as $lok) {
-			    $obj[] = json_decode($lok, true);
-		    }
-		    return $obj;
-	    } else { 
-		    return ""; 
-	    }
+        if (isset($this->fields['loksatz'])) {
+            foreach ($this->fields['loksatz'] as $lok) {
+                $obj[] = json_decode($lok, true);
+            }
+            return $obj;
+        } else { 
+            return ""; 
+        }
     }
 
     /**
@@ -2817,7 +2819,7 @@ class RDSIndex extends SolrMarc
      */
     public function getLokNotation()
     {
-	    return isset($this->fields['zr']) ? $this->fields['zr'] : '';
+        return isset($this->fields['zr']) ? $this->fields['zr'] : '';
     }
 
     /**
@@ -2827,7 +2829,7 @@ class RDSIndex extends SolrMarc
      */
     public function getLokCt()
     {
-	    return isset($this->fields['zs']) ? $this->fields['zs'] : '';
+        return isset($this->fields['zs']) ? $this->fields['zs'] : '';
     }
 
     /**
@@ -2837,7 +2839,7 @@ class RDSIndex extends SolrMarc
      */
     public function getCtGenre()
     {
-	    return isset($this->fields['ct_genre']) ? $this->fields['ct_genre'] : '';	
+        return isset($this->fields['ct_genre']) ? $this->fields['ct_genre'] : '';    
     }
 
     /**
@@ -2847,7 +2849,7 @@ class RDSIndex extends SolrMarc
      */
     public function getZsVerlauf()
     {
-	    return isset($this->fields['zs_verlauf']) ? implode($this->fields['zs_verlauf']) : '';
+        return isset($this->fields['zs_verlauf']) ? implode($this->fields['zs_verlauf']) : '';
     }
 
     /**
@@ -2857,7 +2859,7 @@ class RDSIndex extends SolrMarc
      */
     public function getRegister()
     {
-	    return isset($this->fields['register']) ? implode($this->fields['register']) : '';
+        return isset($this->fields['register']) ? implode($this->fields['register']) : '';
     }
 
 
@@ -2868,39 +2870,39 @@ class RDSIndex extends SolrMarc
      */
     public function getONLINE() 
     {
-	    if (isset($this->fields['tz'])) {
-		    $zj_check = $this->fields['tz'];
-		    foreach ($zj_check as $zj_data) {
-			    if ($zj_data === 'ebook') {
-				    return 'online';
-			    }
-		    }
-	    }
-	    if (isset($this->fields['tz'])) {
-		    $zj_check = $this->fields['tz'];
-		    foreach ($zj_check as $zj_data) {
-			    if ($zj_data === 'cofz') {
-				    return 'online';
-			    }
-		    }
-	    }
-	    if (isset($this->fields['zj'])) {
-		    $zj_check = $this->fields['zj'];
-		    foreach ($zj_check as $zj_data) {
-			    if ($zj_data === 'LFER') {
-				    return 'online';
-			    }
-		    }
-	    }
-	    if (isset($this->fields['az'])) {
-		    $zj_check = $this->fields['az'];
-		    foreach ($zj_check as $zj_data) {
-			    if ($zj_data === 'ebok') {
-				    return 'online';
-			    }
-		    }
-	    }
-	    return 'offline';
+        if (isset($this->fields['tz'])) {
+            $zj_check = $this->fields['tz'];
+            foreach ($zj_check as $zj_data) {
+                if ($zj_data === 'ebook') {
+                    return 'online';
+                }
+            }
+        }
+        if (isset($this->fields['tz'])) {
+            $zj_check = $this->fields['tz'];
+            foreach ($zj_check as $zj_data) {
+                if ($zj_data === 'cofz') {
+                    return 'online';
+                }
+            }
+        }
+        if (isset($this->fields['zj'])) {
+            $zj_check = $this->fields['zj'];
+            foreach ($zj_check as $zj_data) {
+                if ($zj_data === 'LFER') {
+                    return 'online';
+                }
+            }
+        }
+        if (isset($this->fields['az'])) {
+            $zj_check = $this->fields['az'];
+            foreach ($zj_check as $zj_data) {
+                if ($zj_data === 'ebok') {
+                    return 'online';
+                }
+            }
+        }
+        return 'offline';
     }
 
     /**
@@ -2910,11 +2912,11 @@ class RDSIndex extends SolrMarc
      */
     public function supportsAjaxStatus()
     {
-	    if ($this->getONLINE() == "offline") {
-		    return true;
-	    } else {
-		    return false;
-	    }
+        if ($this->getONLINE() == "offline") {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     /**
@@ -2924,43 +2926,43 @@ class RDSIndex extends SolrMarc
      * @access protected
      */
     /*    public function getFormats()
-	  {
-	  $formats = isset($this->fields['medieninfo']) ? $this->fields['medieninfo'] : array();
+    {
+    $formats = isset($this->fields['medieninfo']) ? $this->fields['medieninfo'] : array();
 
-	  if (in_array('book', $formats)) {
-	  $formats[] = 'Book';
-	  }
+    if (in_array('book', $formats)) {
+    $formats[] = 'Book';
+    }
 
-	  if (in_array('article', $formats)) {
-	  $formats[] = 'Article';
-	  }
+    if (in_array('article', $formats)) {
+    $formats[] = 'Article';
+    }
 
-	  if (in_array('zeitschrift', $formats) || in_array('journal', $formats)) {
-	  $formats[] = 'Journal';
-	  }
+    if (in_array('zeitschrift', $formats) || in_array('journal', $formats)) {
+    $formats[] = 'Journal';
+    }
 
-	  return $formats;
-	  }
+    return $formats;
+    }
 
 
-	  protected function getAuthorsForCOinS() {
-	  global $configArray;
-	  $authors = array();
-	  if(isset($this->fields['au_display'])){
-	  $arr_links = $this->fields['au_display'];
-	  $last_item = end($arr_links);
-	  foreach ($arr_links as $link) {
-	  if(strstr($link, "|")){
-	  $arr_link = explode(" | ", $link);
-	  $authors[] = $arr_link[0];
-	  }
-	  else{
-	  $authors[] = $link;
-	  }
-	  }
-	  }
-	  return $authors;
-	  }
+    protected function getAuthorsForCOinS() {
+    global $configArray;
+    $authors = array();
+    if(isset($this->fields['au_display'])){
+    $arr_links = $this->fields['au_display'];
+    $last_item = end($arr_links);
+    foreach ($arr_links as $link) {
+    if(strstr($link, "|")){
+    $arr_link = explode(" | ", $link);
+    $authors[] = $arr_link[0];
+    }
+    else{
+    $authors[] = $link;
+    }
+    }
+    }
+    return $authors;
+    }
      */
     /**
      * Assign necessary Smarty variables and return a template name to
@@ -3095,73 +3097,73 @@ class RDSIndex extends SolrMarc
     $format = 'Book';
     } else if ( in_array('zeitschrift', $formats)) {
     $format = 'Journal';
-} else {
-	$format = $formats[0];
-}
-switch($format) {
-	case 'Book':
-		$params['rft_val_fmt'] = 'info:ofi/fmt:kev:mtx:book';
-		$params['rft.btitle']   = $this->getTitleMain();
+    } else {
+    $format = $formats[0];
+    }
+    switch($format) {
+    case 'Book':
+    $params['rft_val_fmt'] = 'info:ofi/fmt:kev:mtx:book';
+    $params['rft.btitle']   = $this->getTitleMain();
 
-		break;
-	case 'Journal':
-		$params['rft_val_fmt'] = 'info:ofi/fmt:kev:mtx:journal';
-		$params['rft.atitle'] = $this->getTitleMain();
-		$params['rft.genre'] = 'journal';
-		$params['rft.jtitle'] = $this->getTitleMain();
-		break;
-	default:
-		break;
-}
-$params['rft_id']=$this->getPersistentLink();
+    break;
+    case 'Journal':
+    $params['rft_val_fmt'] = 'info:ofi/fmt:kev:mtx:journal';
+    $params['rft.atitle'] = $this->getTitleMain();
+    $params['rft.genre'] = 'journal';
+    $params['rft.jtitle'] = $this->getTitleMain();
+    break;
+    default:
+    break;
+    }
+    $params['rft_id']=$this->getPersistentLink();
 
-$pages = $this->getUmfang();
-if (isset($pages)) {
-	$params['rft.tpages']=$this->getUmfang();
-}
+    $pages = $this->getUmfang();
+    if (isset($pages)) {
+    $params['rft.tpages']=$this->getUmfang();
+    }
 
-$series = $this->getSeries();
-if ($series != '') {
-	$params['rft.series']=$series;
-}
-
-
-// Assemble the URL:
-$parts = array();
-foreach ($params as $key => $value) {
-	$parts[] = $key . '=' . urlencode($value);
-}
-foreach ($authors as $author) {
-	$authorFields = explode(',', $author);
-	if (strpos($author, ',') !== false) {
-		$firstLastArr = explode(',', $author);
-		$parts[] = 'rft.aufirst=' . trim($firstLastArr[1]);
-		$parts[] = 'rft.aulast=' . trim($firstLastArr[0]);
-	}
-
-	$parts[] = 'rft.au=' . urlencode($author);
-}
+    $series = $this->getSeries();
+    if ($series != '') {
+    $params['rft.series']=$series;
+    }
 
 
-return implode('&', $parts);
-}
+    // Assemble the URL:
+    $parts = array();
+    foreach ($params as $key => $value) {
+    $parts[] = $key . '=' . urlencode($value);
+    }
+    foreach ($authors as $author) {
+    $authorFields = explode(',', $author);
+    if (strpos($author, ',') !== false) {
+    $firstLastArr = explode(',', $author);
+    $parts[] = 'rft.aufirst=' . trim($firstLastArr[1]);
+    $parts[] = 'rft.aulast=' . trim($firstLastArr[0]);
+    }
 
-public function getPersistentLink() {
-	$RDSCommonConfig = getExtraConfigArray('RDSCommon');
-	$persistentLinkUrl = (isset($RDSCommonConfig['Common']['persistent_link_url'])) ? $RDSCommonConfig['Common']['persistent_link_url'] : "http://" . $_SERVER['HTTP_HOST'] . "/persistentid:";
-	return $persistentLinkUrl . $this->getPPN();
-}
+    $parts[] = 'rft.au=' . urlencode($author);
+    }
 
-public function checkProv() {
-	if (isset($this->fields['az'])) {
-		$zj_check = $this->fields['az'];
-		foreach ($zj_check as $zj_data) {
-			if ($zj_data === 'prov') { return true; }
-		}
-	}
-	return false;
-}
 
-*/
+    return implode('&', $parts);
+    }
+
+    public function getPersistentLink() {
+    $RDSCommonConfig = getExtraConfigArray('RDSCommon');
+    $persistentLinkUrl = (isset($RDSCommonConfig['Common']['persistent_link_url'])) ? $RDSCommonConfig['Common']['persistent_link_url'] : "http://" . $_SERVER['HTTP_HOST'] . "/persistentid:";
+    return $persistentLinkUrl . $this->getPPN();
+    }
+
+    public function checkProv() {
+    if (isset($this->fields['az'])) {
+    $zj_check = $this->fields['az'];
+    foreach ($zj_check as $zj_data) {
+    if ($zj_data === 'prov') { return true; }
+    }
+    }
+    return false;
+    }
+
+    */
 
 }

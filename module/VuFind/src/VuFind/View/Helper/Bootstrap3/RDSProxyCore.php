@@ -41,7 +41,7 @@ use VuFind\View\Helper\Bootstrap3\RDSHelper;
  */
 class RDSProxyCore extends RDSHelper
 {
-  protected $items = [
+    protected $items = [
        'Title',
        'TitleAlt',
        'Authors',
@@ -56,92 +56,104 @@ class RDSProxyCore extends RDSHelper
        'CitationLinks',
     ];  
     
-    public function getTitle() {
-      $value = $this->driver->getTitle();
-      return $value;
+    public function getTitle() 
+    {
+        $value = $this->driver->getTitle();
+        return $value;
     }
-    public function getTitleAlt() {
-      $value = $this->driver->getTitleAlt();
-      return $value;
+    public function getTitleAlt() 
+    {
+        $value = $this->driver->getTitleAlt();
+        return $value;
     
     }
-    public function getAuthors() {
-      $value = $this->driver->getAuthors();
-      return $value;
+    public function getAuthors() 
+    {
+        $value = $this->driver->getAuthors();
+        return $value;
     }
-    public function getSource() {
-      $value = $this->driver->getSource();
-      return $value;
+    public function getSource() 
+    {
+        $value = $this->driver->getSource();
+        return $value;
     }
-    public function getSeriesTitle() {
-      $value = $this->driver->getSeriesTitle();
-      return $value;
+    public function getSeriesTitle() 
+    {
+        $value = $this->driver->getSeriesTitle();
+        return $value;
     }
-    public function getDoi() {
-      $value = '';
-      $doi = $this->driver->getDoi();
-      if ($doi) {
-          $value = '<a href="http://dx.doi.org/' . $doi . '" target="_blank">' . $doi . '</a>';
-      }
-      return $value;
+    public function getDoi() 
+    {
+        $value = '';
+        $doi = $this->driver->getDoi();
+        if ($doi) {
+            $value = '<a href="http://dx.doi.org/' . $doi . '" target="_blank">' . $doi . '</a>';
+        }
+        return $value;
     }
-    public function getPmid() {
-      $value = '';
-      $pmid = $this->driver->getPmid();
-      if ($pmid) 
-      {
-        $value = '<a href="http://www.ncbi.nlm.nih.gov/pubmed/' . $pmid . '" target="_blank">' . $pmid . '</a>';
-      } 
-      return $value;
+    public function getPmid() 
+    {
+        $value = '';
+        $pmid = $this->driver->getPmid();
+        if ($pmid) {
+            $value = '<a href="http://www.ncbi.nlm.nih.gov/pubmed/' . $pmid . '" target="_blank">' . $pmid . '</a>';
+        } 
+        return $value;
     }
-    public function getIsbns() {
-      // {foreach from=$summISBNs key=type item=isbn name=loop}{$isbn|escape} ({translate text="$type"}){if !$smarty.foreach.loop.last}<br/>{/if}{/foreach}
-      $value = $this->driver->getIsbns();
-      $value = implode('<br />', 
-                 array_map(
-                   function($v, $k) {
-                     return htmlspecialchars($v) . ' (' . $this->translate($k) . ')';
-                   }, 
-                   $value, 
-                   array_keys($value)
-                 )
-               );
+    public function getIsbns() 
+    {
+        // {foreach from=$summISBNs key=type item=isbn name=loop}{$isbn|escape} ({translate text="$type"}){if !$smarty.foreach.loop.last}<br/>{/if}{/foreach}
+        $value = $this->driver->getIsbns();
+        $value = implode(
+            '<br />', 
+            array_map(
+                function($v, $k) {
+                        return htmlspecialchars($v) . ' (' . $this->translate($k) . ')';
+                }, 
+                $value, 
+                array_keys($value)
+            )
+        );
       
       
-      return $value;
+        return $value;
     }
-    public function getIssns() {
-      //{foreach from=$summISSNs key=type item=issn name=loop}{$issn|escape} ({translate text="$type"}){if !$smarty.foreach.loop.last}<br/>{/if}{/foreach}
-      $value = $this->driver->getIssns();
-      $value = implode('<br />',
-                 array_map(
-                   function($v, $k) {
-                     return htmlspecialchars($v) . ' (' . $this->translate($k) . ')';
-                   }, 
-                   $value, 
-                   array_keys($value)
-                 )
-               );
-      return $value;
+    public function getIssns() 
+    {
+        //{foreach from=$summISSNs key=type item=issn name=loop}{$issn|escape} ({translate text="$type"}){if !$smarty.foreach.loop.last}<br/>{/if}{/foreach}
+        $value = $this->driver->getIssns();
+        $value = implode(
+            '<br />',
+            array_map(
+                function($v, $k) {
+                        return htmlspecialchars($v) . ' (' . $this->translate($k) . ')';
+                }, 
+                $value, 
+                array_keys($value)
+            )
+        );
+        return $value;
     }
     
-    public function getPubYear() {
-      $value = $this->driver->getPubYear();
-      return $value;
+    public function getPubYear() 
+    {
+        $value = $this->driver->getPubYear();
+        return $value;
     }
 
-    public function getCitationLinks() {
-      //<a target="_blank" href="{$summCitationLinks[0].url}" onclick="userAction('click', 'RdsCitationLink', '{$ppn}');">&rarr;{translate text="Link zum Zitat"}</a>
+    public function getCitationLinks() 
+    {
+        //<a target="_blank" href="{$summCitationLinks[0].url}" onclick="userAction('click', 'RdsCitationLink', '{$ppn}');">&rarr;{translate text="Link zum Zitat"}</a>
       
-      if ($this->driver->showCitationLinks() == false) {
-        return '';
-      };  
+        if ($this->driver->showCitationLinks() == false) {
+            return '';
+        };  
         
-      $html = '';
-      foreach ($this->driver->getCitationLinks() as $citationLink) {
-          $html .= '<a target="_blank" href="' . $citationLink[url] . '" onclick="userAction(\'click\', \'RdsCitationLink\', \'{$ppn}\');">&rarr; ' . $this->translate("Link zum Zitat") .'</a>';
-      }  
+        $html = '';
+        foreach ($this->driver->getCitationLinks() as $citationLink) {
+            $html .= '<a target="_blank" href="' . $citationLink[url] . '" onclick="userAction(\'click\', \'RdsCitationLink\', \'{$ppn}\');">&rarr; ' . $this->translate("Link zum Zitat") .'</a>';
+        }  
       
-      return $html;
+        return $html;
     }
 }

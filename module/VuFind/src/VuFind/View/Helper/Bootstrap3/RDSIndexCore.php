@@ -103,7 +103,9 @@ class RDSIndexCore extends \Zend\View\Helper\AbstractHelper implements Translato
 
     /**
     * Initial method
-    * @param $driver the driver
+    *
+    * @param string $driver the driver
+    *
     * @return driver
     */
     public function __invoke($driver) 
@@ -116,6 +118,7 @@ class RDSIndexCore extends \Zend\View\Helper\AbstractHelper implements Translato
 
     /**
     * Get Items for display
+    *
     * @return results 
     */
     public function getItems() 
@@ -946,7 +949,7 @@ class RDSIndexCore extends \Zend\View\Helper\AbstractHelper implements Translato
                 foreach ($info as $field) {
                     if (!empty($field['id'])) {
                         $html_result .= "<a href="
-			.$this->view->render('/RecordDriver/RDSIndex/link-id.phtml', ['lookfor' => $field['id']]).">"
+                        .$this->view->render('/RecordDriver/RDSIndex/link-id.phtml', ['lookfor' => $field['id']]).">"
                         .$transEsc($field['lnk_txt']);
                     }
                     if (!empty($field['bnd'])) {
