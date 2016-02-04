@@ -72,7 +72,7 @@ class RDSIndexCore extends \Zend\View\Helper\AbstractHelper implements Translato
     "LANGUAGES",
     "PUBRUN",
     "REGISTER", // only Ulm
-    "Language",
+    "LANGUAGE",
     "SCOPE",
     "CJKSCOPE",
     "ISBN",

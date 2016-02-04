@@ -56,8 +56,8 @@ class RDSIndexDescription extends \Zend\View\Helper\AbstractHelper implements Tr
     "LINKS",
     "NOTATION", // not Hohenheim
     "CT",
-    "LokCT",
-    "CT_GENRE",
+    "LOKCT",
+    "CTGENRE",
     ];
 
     protected $driver = null;
@@ -145,7 +145,7 @@ class RDSIndexDescription extends \Zend\View\Helper\AbstractHelper implements Tr
      *
      * @return string
      */
-    protected function getLongLinks() 
+    protected function getLONGLINKS() 
     {
         // TODO **** not for all bibs => tue, blb, ulm NOT tested *** TODO
         $html_result = "";
@@ -163,11 +163,11 @@ class RDSIndexDescription extends \Zend\View\Helper\AbstractHelper implements Tr
     }
 
     /**
-     * Get local notation 
+     * Get rvk notation 
      *
      * @return string
      */
-    protected function getNotation() 
+    protected function getNOTATION() 
     {
         // TODO **** not Hohenheim  *** TODO
         $html_result = "";
@@ -221,11 +221,11 @@ class RDSIndexDescription extends \Zend\View\Helper\AbstractHelper implements Tr
     }
        
     /**
-     * Get link with description in html format 
+     * Get local subjects with link in html format 
      *
      * @return string
      */ 
-    protected function getLokCt() 
+    protected function getLOKCT() 
     {
         $html_result = "";
         $links = $this->driver->getLokCt();
@@ -245,7 +245,7 @@ class RDSIndexDescription extends \Zend\View\Helper\AbstractHelper implements Tr
      *
      * @return string
      */
-    protected function getCT_GENRE ()
+    protected function getCTGENRE ()
     {
         $html_result = "";
         $result = $this->driver->getCtGenre();
