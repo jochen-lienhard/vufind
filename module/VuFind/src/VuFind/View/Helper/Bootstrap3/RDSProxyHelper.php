@@ -47,17 +47,34 @@ class RDSProxyHelper extends RDSHelper
     
     protected $items = [];
 
+    /**
+     * Dummy.
+     *
+     * @param string $linkresolver link resolver
+     */
     public function __construct($linkresolver) 
     {
         $this->linkresolver = $linkresolver;
     }
-    
+   
+    /**
+     * Dummy.
+     *
+     * @param string $driver driver 
+     *
+     * @return Mixed 
+     */
     public function __invoke($driver)
     {
         $this->authManager = $this->view->plugin('auth');
         return parent::__invoke($driver);
     }
-    
+   
+    /**
+     * Dummy.
+     *
+     * @return Mixed 
+     */ 
     protected function getLoginLink() 
     {
         $followupUrl = $this->view->plugin('serverUrl')->__invoke() . $_SESSION['Search']['last'];
@@ -71,13 +88,23 @@ class RDSProxyHelper extends RDSHelper
         }
          return $loginLink;
     }
-    
+   
+    /**
+     * Dummy.
+     *
+     * @return Mixed 
+     */ 
     public function getDataSource() 
     {
         $value = $this->driver->getDataSource();
         return $value;
     }
-    
+   
+    /**
+     * Dummy.
+     *
+     * @return Mixed 
+     */ 
     public function getCitationLinks() 
     {
         //<a target="_blank" href="{$summCitationLinks[0].url}" onclick="userAction('click', 'RdsCitationLink', '{$ppn}');">&rarr;{translate text="Link zum Zitat"}</a>
@@ -93,13 +120,18 @@ class RDSProxyHelper extends RDSHelper
       
         return $html;
     }
-    
+   
+    /**
+     * Dummy.
+     *
+     * @return Mixed 
+     */ 
     protected function getFulltextLinks() 
     {
         $fulltextLinks = $this->driver->getFulltextLinks();
         $html = '';
         
-        foreach ($fulltextLinks as $fulltextLink){
+        foreach ($fulltextLinks as $fulltextLink) {
             
             if ($fulltextLink['indicator'] == 1) {
                 if ($this->authManager->isLoggedIn() === false) {

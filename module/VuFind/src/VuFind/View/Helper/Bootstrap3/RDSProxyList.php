@@ -47,7 +47,11 @@ class RDSProxyList extends RDSProxyHelper
        'DataSource',
     ];  
     
-  
+    /**
+     * Dummy 
+     *
+     * @return string
+     */  
     public function getGuestviewBriefLink() 
     {
         $html = '';
@@ -60,7 +64,12 @@ class RDSProxyList extends RDSProxyHelper
         } 
         return $html;
     }
-  
+ 
+    /**
+     * Dummy 
+     *
+     * @return string
+     */ 
     public function getGuestviewLoginLink() 
     {
         $html = null;
@@ -76,7 +85,12 @@ class RDSProxyList extends RDSProxyHelper
         return $html;
     
     }
-    
+   
+    /**
+     * Dummy 
+     *
+     * @return string
+     */ 
     public function getAuthorsEtAl() 
     {
       
@@ -103,7 +117,12 @@ class RDSProxyList extends RDSProxyHelper
         }
         return $html;
     }
-    
+   
+    /**
+     * Dummy 
+     *
+     * @return string
+     */ 
     public function getDataSource() 
     {
         $html = '';
@@ -117,7 +136,12 @@ class RDSProxyList extends RDSProxyHelper
         
         return $html;
     }
-    
+   
+    /**
+     * Dummy 
+     *
+     * @return string
+     */ 
     public function getFulltextLink() 
     {
         $html = null;

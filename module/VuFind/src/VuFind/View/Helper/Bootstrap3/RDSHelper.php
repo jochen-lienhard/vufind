@@ -54,7 +54,14 @@ class RDSHelper extends AbstractHelper
     protected $escapeHtmlAttr;
     
     protected $items = [];
-    
+
+    /**
+     * Dummy 
+     *
+     * @param string $driver driver
+     *
+     * @return string
+     */
     public function __invoke($driver)
     {
         $this->translator = $this->view->plugin('translate')->getTranslator();
@@ -67,6 +74,11 @@ class RDSHelper extends AbstractHelper
         return $this;
     }
     
+    /**
+     * Dummy 
+     *
+     * @return string
+     */
     public function getItems() 
     {
         $results = [];
@@ -81,7 +93,12 @@ class RDSHelper extends AbstractHelper
         }
         return $results;
     }
-    
+   
+    /**
+     * Dummy 
+     *
+     * @return string
+     */
     public function getFavAction() 
     {
         $html = '';
@@ -123,8 +140,11 @@ class RDSHelper extends AbstractHelper
         return $html;
     }
     
-    
-    
+    /**
+     * Dummy 
+     *
+     * @return string
+     */
     public function getPrintAction() 
     {
         $vufindId = $this->driver->getResourceSource() .'|'. $this->driver->getUniqueID();
@@ -132,29 +152,62 @@ class RDSHelper extends AbstractHelper
         
         return $html;
     }
-    
+
+    /**
+     * Dummy 
+     *
+     * @param string $template name of the template that should be rendered
+     *
+     * @return string
+     */
     protected function render($template) 
     {
         return $this->view->render($template);
     }
-    
+   
+    /**
+     * Dummy 
+     *
+     * @param string $str string that must be translated
+     *
+     * @return string
+     */
     protected function translate($str) 
     {
         $translation = ($this->translator) ? $this->translator->translate($str) : $str;
         return $translation;
     }
-    
+   
+    /**
+     * Dummy 
+     *
+     * @return string
+     */
     protected function getLocale() 
     {
         $locale = ($this->translator) ? $this->translator->getLocale() : 'de';
         return $locale;
     }
-    
+   
+    /**
+     * Dummy 
+     *
+     * @param string $str string that must be escaped 
+     *
+     * @return string
+     */
     protected function escapeJS($str) 
     {
         return $this->escapeJs->__invoke($str);
     }
-    
+   
+    /**
+     * Dummy  
+     *
+     * @param string $str string that must be escaped 
+     *
+     * @return string
+     */ 
     protected function escapeHtmlAttr($str) 
     {
         return $this->escapeHtmlAttr->__invoke($str);

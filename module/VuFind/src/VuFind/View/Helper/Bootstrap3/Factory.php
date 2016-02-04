@@ -103,7 +103,14 @@ class Factory
         
         return new RDSProxyHoldings($linkresolver);
     }
-    
+
+     /**
+     * Construct the RDSProxyHoldings helper for print.
+     *
+     * @param ServiceManager $sm Service manager.
+     *
+     * @return RDSProxyHoldings
+     */
     public static function getRDSProxyHoldingsPrint(ServiceManager $sm) 
     {
         $serviceLocator = $sm->getServiceLocator();
@@ -119,7 +126,14 @@ class Factory
         
         return new RDSProxyHoldingsPrint($linkresolver);
     }
-    
+
+     /**
+     * Construct the RDSExport helper.
+     *
+     * @param ServiceManager $sm Service manager.
+     *
+     * @return RDSProxyHoldings
+     */
     public static function getRDSExport(ServiceManager $sm) 
     {
         $serviceLocator = $sm->getServiceLocator();

@@ -1,14 +1,59 @@
 <?php
+/** 
+ * RDSDataProviderIndex exporter for rds data
+ *
+ * PHP version 5
+ *  
+ * Copyright (C) Villanova University 2010.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2,
+ * as published by the Free Software Foundation.
+ *  
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ *
+ * @category VuFind2
+ * @package  View_Helpers
+ * @author   Demian Katz <demian.katz@villanova.edu>
+ * @author   Jochen Lienhard <lienhard@ub.uni-freiburg.de>
+ * @author   Markus Beh <markus.beh@ub.uni-freiburg.de>
+ * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
+ * @link     http://vufind.org/wiki/vufind2:developer_manual Wiki
+ */
 
 namespace VuFind\Export\DataProvider;
 use VuFind\Export\DataProvider\RDSDataProvider;
 
+/**
+ * RDSDataProviderIndex exporter for rds data
+ *
+ * @category VuFind2
+ * @package  View_Helpers
+ * @author   Demian Katz <demian.katz@villanova.edu>
+ * @author   Jochen Lienhard <lienhard@ub.uni-freiburg.de>
+ * @author   Markus Beh <markus.beh@ub.uni-freiburg.de>
+ * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
+ * @link     http://vufind.org/wiki/vufind2:developer_manual Wiki
+ */
 class RDSDataProviderIndex implements RDSDataProvider
 {
 
     protected $fields;
     protected $recordDriver;
 
+    /**
+     * Get.
+     *
+     * @param string $indexFields  fields of the index 
+     * @param string $recordDriver current driver
+     */
     public function __construct($indexFields, $recordDriver) 
     {
         $this->fields = $indexFields;
@@ -31,6 +76,11 @@ class RDSDataProviderIndex implements RDSDataProvider
         );
     }
 
+    /**
+     * Get.
+     *
+     * @return string
+     */
     public function getMediatype() 
     {
         $mediatypes = array('');
@@ -65,11 +115,23 @@ class RDSDataProviderIndex implements RDSDataProvider
         return $resultMediatype;
     }
 
+    /**
+     * Get.
+     *
+     * @return string
+     */
     public function getID() 
     {
         return isset($this->fields['ppn']) ? $this->fields['ppn'] : '&nbsp;';
     }
 
+    /**
+     * Get.
+     *
+     * @param string $type default title short
+     *
+     * @return string
+     */
     public function getTitle($type = RDSDataProvider::TITLE_SHORT) 
     {
 
@@ -85,6 +147,13 @@ class RDSDataProviderIndex implements RDSDataProvider
         }
     }
 
+    /**
+     * Get.
+     *
+     * @param string $type default author short
+     *
+     * @return string
+     */
     public function getAuthor($type = RDSDataProvider::AUTHORS_SHORT) 
     {
 
@@ -98,48 +167,83 @@ class RDSDataProviderIndex implements RDSDataProvider
         }
     }
 
+    /**
+     * Get.
+     *
+     * @return string
+     */
     public function getPublishingYear() 
     {
         return $this->getField('py_display');
     }
 
+    /**
+     * Get.
+     *
+     * @return string
+     */
     public function getISBNs()
     {
         $isbns = array();
 
-        foreach($this->getField('isbn_display') as $isbn) {
+        foreach ($this->getField('isbn_display') as $isbn) {
             $isbns[] = new ISBN_('', $isbn);
         }
 
         return $isbns;
     }
 
+    /**
+     * Get.
+     *
+     * @return string
+     */
     public function getISSNs() 
     {
         $issns = array();
 
-        foreach($this->getField('issn_display') as $issn) {
+        foreach ($this->getField('issn_display') as $issn) {
             $issns[] = new ISSN('', $issn);
         }
 
         return $issns;
     }
 
+    /**
+     * Get.
+     *
+     * @return string
+     */
     public function getLanguages() 
     {
         return $this->getField('la');
     }
 
+    /**
+     * Get.
+     *
+     * @return string
+     */
     public function getPublishingPlace() 
     {
         return $this->getField('pp_display');
     }
 
+    /**
+     * Get.
+     *
+     * @return string
+     */
     public function getPublisher() 
     {
         return $this->getField('pu');
     }
-    
+   
+    /**
+     * Get.
+     *
+     * @return string
+     */ 
     public function getPages() 
     {
         $resultPages = array();
@@ -160,6 +264,13 @@ class RDSDataProviderIndex implements RDSDataProvider
         return $resultPages;
     }
 
+    /**
+     * Get.
+     *
+     * @param string $type default title short
+     *
+     * @return string
+     */
     public function getFootnotes($type = RDSDataProvider::FOOTNOTES_ALL) 
     {
         $footnotes = array();
@@ -183,31 +294,56 @@ class RDSDataProviderIndex implements RDSDataProvider
         return $footnotes;
     }
 
+    /**
+     * Get.
+     *
+     * @return string
+     */
     public function getEdition() 
     {
         return $this->getField('ausgabe');
     }
 
+    /**
+     * Get.
+     *
+     * @return string
+     */
     public function getVolume() 
     {
         return $this->getField('bnd_display');
     }
 
+    /**
+     * Get.
+     *
+     * @return string
+     */
     public function getAbstract() 
     {
         return $this->getField('abstract');
     }
 
+    /**
+     * Get.
+     *
+     * @return string
+     */
     public function getSchool() 
     {
         return $this->getField('hss');
     }
 
+    /**
+     * Get.
+     *
+     * @return string
+     */
     public function getKeywords() 
     {
         $keywords = array();
 
-        if(isset($this->fields['ct_display'])) {
+        if (isset($this->fields['ct_display'])) {
             $arr_ct = $this->fields['ct_display'];
             foreach ($arr_ct as $ct_string) {
                 $keywords = array_merge($keywords, explode(" , ", $ct_string));
@@ -217,27 +353,51 @@ class RDSDataProviderIndex implements RDSDataProvider
         return $keywords;
     }
 
+    /**
+     * Get.
+     *
+     * @return string
+     */
     public function getPersistentLink() 
     {
         return $this->recordDriver->getPersistentLink();
     }
 
+    /**
+     * Get.
+     *
+     * @return string
+     */
     public function getDOI() 
     {
         return array();
     }
 
+    /**
+     * Get.
+     *
+     * @return string
+     */
     public function getDataSource() 
     {
         return array();
     }
 
+    /**
+     * Get.
+     *
+     * @return string
+     */
     public function getJournal() 
     {
         return array();
     }
 
-
+    /**
+     * Get.
+     *
+     * @return string
+     */
     public function getUebergeordneteWerke() 
     {
         $uebergeordneteWerke = $this->getField('band_werk');
@@ -245,6 +405,11 @@ class RDSDataProviderIndex implements RDSDataProvider
         return $this->getArrayOfArrays($uebergeordneteWerke);
     }
 
+    /**
+     * Get.
+     *
+     * @return string
+     */
     public function getSeries() 
     {
         $series = $this->getField('serie_tit');
@@ -255,20 +420,30 @@ class RDSDataProviderIndex implements RDSDataProvider
         return $this->getArrayOfArrays($series);
     }
 
-    
+    /**
+     * Get.
+     *
+     * @return string
+     */ 
     public function getFulltextLinks() 
     {
         return $this->getField('url_short');
     }
     
-    
+    /**
+     * Get.
+     *
+     * @param array $items items 
+     *
+     * @return string
+     */
     protected function getArrayOfArrays($items)
     {
         $result = array();
 
         if (!empty($items)) {
             foreach ($items as $item) {
-                if(strstr($item, "|")) {
+                if (strstr($item, "|")) {
                     $id_title_volume = explode(" | ", $item);
                     
                     $id = isset($id_title_volume[0]) ? $id_title_volume[0] : ''; 
@@ -280,8 +455,7 @@ class RDSDataProviderIndex implements RDSDataProvider
                     'title' => $title,
                     'volume' => $volume
                     );
-                }
-                else {
+                } else {
                     $result[] = array(
                     'id' => '',
                     'title' => $item,
@@ -294,18 +468,32 @@ class RDSDataProviderIndex implements RDSDataProvider
         return $result;
     }
 
+    /**
+     * Get.
+     *
+     * @return string
+     */
     public function getMARC() 
     {
         return $this->fields['fullrecord'];
     }
 
+    /**
+     * Get.
+     *
+     * @return string
+     */
     public function getIssue() 
     {
         return array();
     }
 
     /**
-     * always return an ARRAY of field values
+     * Get array of fields.
+     *
+     * @param string $fieldName name of the field
+     *
+     * @return string
      */
     protected function getField($fieldName) 
     {
@@ -327,10 +515,11 @@ class RDSDataProviderIndex implements RDSDataProvider
     }
 
 
-    // 
-    // Debug
-    // 
-
+    /**
+     * For debugging only.
+     *
+     * @return string
+     */
     public function getFields() 
     {
         $debug_out = "";
@@ -379,7 +568,12 @@ class RDSDataProviderIndex implements RDSDataProvider
 
         return $debug_out;
     }
-    
+   
+    /**
+     * Get raw data.
+     *
+     * @return string
+     */ 
     public function getRaw() 
     {
         return $this->recordDriver->getRawData();

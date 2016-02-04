@@ -1,7 +1,47 @@
 <?php
+/** 
+ * RDSDataProvider exporter for rds data
+ *
+ * PHP version 5
+ *  
+ * Copyright (C) Villanova University 2010.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2,
+ * as published by the Free Software Foundation.
+ *  
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ *
+ * @category VuFind2
+ * @package  View_Helpers
+ * @author   Demian Katz <demian.katz@villanova.edu>
+ * @author   Jochen Lienhard <lienhard@ub.uni-freiburg.de>
+ * @author   Markus Beh <markus.beh@ub.uni-freiburg.de>
+ * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
+ * @link     http://vufind.org/wiki/vufind2:developer_manual Wiki
+ */
+
 
 namespace VuFind\Export\DataProvider;
 
+/**
+ * RDSDataProvider exporter for rds data
+ *
+ * @category VuFind2
+ * @package  View_Helpers
+ * @author   Demian Katz <demian.katz@villanova.edu>
+ * @author   Jochen Lienhard <lienhard@ub.uni-freiburg.de>
+ * @author   Markus Beh <markus.beh@ub.uni-freiburg.de>
+ * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
+ * @link     http://vufind.org/wiki/vufind2:developer_manual Wiki
+ */
 interface RDSDataProvider
 {
 
@@ -39,68 +79,203 @@ interface RDSDataProvider
     const FOOTNOTES_EBOOKS = 4;
     const FOOTNOTES_INTERPRET = 8;
 
+    /**
+     * Get.
+     *
+     * @return void
+     */
     public function getMediatype();
 
+    /**
+     * Get.
+     *
+     * @return void
+     */
     public function getID();
 
+    /**
+     * Get.
+     *
+     * @return void
+     */
     public function getFields();
 
     // Methods to retrieve bibliographic data
 
+    /**
+     * Get.
+     *
+     * @param string $type type
+     *
+     * @return void
+     */
     public function getTitle($type);
 
+    /**
+     * Get.
+     *
+     * @param string $type type
+     *
+     * @return void
+     */
     public function getAuthor($type);
 
+    /**
+     * Get.
+     *
+     * @return void
+     */
     public function getPublisher();
 
+    /**
+     * Get.
+     *
+     * @return void
+     */
     public function getPublishingPlace();
 
+    /**
+     * Get.
+     *
+     * @return void
+     */
     public function getPublishingYear();
 
+    /**
+     * Get.
+     *
+     * @return void
+     */
     public function getLanguages();
 
+    /**
+     * Get.
+     *
+     * @return void
+     */
     public function getISBNs();
 
+    /**
+     * Get.
+     *
+     * @return void
+     */
     public function getISSNs();
 
+    /**
+     * Get.
+     *
+     * @return void
+     */
     public function getPages();
     
+    /**
+     * Get.
+     *
+     * @return void
+     */
     public function getEdition();
 
+    /**
+     * Get.
+     *
+     * @return void
+     */
     public function getAbstract();
 
-
     /**
-     * @return array of strings
+     * Get array of strings.
+     *
+     * @return void
      */
     public function getKeywords();
 
+    /**
+     * Get.
+     *
+     * @return void
+     */
     public function getSchool();
 
+    /**
+     * Get.
+     *
+     * @param string $type type
+     *
+     * @return void
+     */
     public function getFootnotes($type);
 
+    /**
+     * Get.
+     *
+     * @return void
+     */
     public function getPersistentLink();
 
+    /**
+     * Get.
+     *
+     * @return void
+     */
     public function getFulltextLinks();
 
     /**
-     * @return array(array('id'=> seriesId, 'title'=> seriesTitle, 'volume'=> seriesVolume), array(...), array(...), ...);
+     * Get array that should look like this: 
+     * array(array('id'=> seriesId, 'title'=> seriesTitle, 
+     *             'volume'=> seriesVolume), array(...), array(...), ...);
+     *
+     * @return void
      */
     public function getSeries();
 
+    /**
+     * Get.
+     *
+     * @return void
+     */
     public function getUebergeordneteWerke();
 
+    /**
+     * Get.
+     *
+     * @return void
+     */
     public function getJournal();
 
+    /**
+     * Get.
+     *
+     * @return void
+     */
     public function getIssue();
+
+    /**
+     * Get.
+     *
+     * @return void
+     */
     public function getVolume();
 
-
-
+    /**
+     * Get.
+     *
+     * @return void
+     */
     public function getDOI();
 
+    /**
+     * Get.
+     *
+     * @return void
+     */
     public function getDataSource();
 
+    /**
+     * Get.
+     *
+     * @return void
+     */
     public function getMARC();
 
 }

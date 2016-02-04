@@ -275,27 +275,27 @@ class RDSProxy extends SolrDefault
      */
     public function getBreadcrumbMore()
     {
-      $authorsEtAl = $this->getAuthorsEtAl();
-      if (!empty($authorsEtAl)) {
-          $html .= $authorsEtAl;
-          $html .= '<br />';
-      }
+        $authorsEtAl = $this->getAuthorsEtAl();
+        if (!empty($authorsEtAl)) {
+            $html .= $authorsEtAl;
+            $html .= '<br />';
+        }
 
-      $sourceDisplay = $this->getSourceDisplay();
-      if (!empty($sourceDisplay)) {
-          $html .= $sourceDisplay;
-          $html .= '<br />';    
-      }
+        $sourceDisplay = $this->getSourceDisplay();
+        if (!empty($sourceDisplay)) {
+            $html .= $sourceDisplay;
+            $html .= '<br />';    
+        }
 
-      $dataSource = $this->getDataSource();
-      if (!empty($dataSource)) {
-          $html .= $this->translate('RDS_DATA_SOURCE') . ": ";
-          $html .= $dataSource;
-          $html .= ' ' . $this->getCitationLinks();
-          $html .= '<br />';
-      }
+        $dataSource = $this->getDataSource();
+        if (!empty($dataSource)) {
+            $html .= $this->translate('RDS_DATA_SOURCE') . ": ";
+            $html .= $dataSource;
+            $html .= ' ' . $this->getCitationLinks();
+            $html .= '<br />';
+        }
       
-      return $html;
+        return $html;
     }
 
     /**
@@ -1754,7 +1754,11 @@ class RDSProxy extends SolrDefault
         }
     }
     
-    
+    /**
+     * Get rds data.
+     *
+     * @return Mixed 
+     */ 
     public function getFulltextLinks() 
     {
             $links = array_merge(
@@ -1768,66 +1772,109 @@ class RDSProxy extends SolrDefault
             return (empty($links) ? '' : $links);
     }
     
+    /**
+     * Get rds data.
+     *
+     * @return Mixed 
+     */
     public function getInfoLinks() 
     {
          $links = $this->getLinks(array('category' => 'info', 'type' => 'external'));
         return (empty($links) ? '' : $links);
     }
     
+    /**
+     * Get rds data.
+     *
+     * @return Mixed 
+     */
     public function showFulltextLinks() 
     {
         return ($this->recordConfig->showFulltextLinks == true);
     }
     
+    /**
+     * Get rds data.
+     *
+     * @return Mixed 
+     */
     public function showCitationLinks() 
     {
         return ($this->recordConfig->showCitationLinks == true);
     }
     
+    /**
+     * Get rds data.
+     *
+     * @return Mixed 
+     */
     public function getLinkresolverview() 
     {
         return ($this->recordConfig->linkresolverview == true);
     }
     
+    /**
+     * Get rds data.
+     *
+     * @return Mixed 
+     */
     public function getFulltextview() 
     {
         return ($this->recordConfig->fulltextview == true);
     }
     
+    /**
+     * Get rds data.
+     *
+     * @param array $properties properties
+     *
+     * @return Mixed 
+     */
     protected function getLinks($properties)
     {
         $links = array();
-        if(isset($this->fields['links'])) {
-            foreach($this->fields['links'] as $link) {
-                if(!is_array($link)) {
+        if (isset($this->fields['links'])) {
+            foreach ($this->fields['links'] as $link) {
+                if (!is_array($link)) {
                     continue;
                 }
                 $match = true;
-                foreach($properties as $pKey => $pValue) {
-                    if(!isset($link[$pKey]) || $link[$pKey] !== $pValue) {
+                foreach ($properties as $pKey => $pValue) {
+                    if (!isset($link[$pKey]) || $link[$pKey] !== $pValue) {
                         $match = false;
                         break;
                     }
                 }
-                if($match) {
+                if ($match) {
                     $links[] = $link;
                 }
             }
         }
         return $links;
     }
-    
+   
+    /**
+     * Get rds data.
+     *
+     * @return Mixed 
+     */ 
     public function getOpenUrlEmbedded()
     {
         $openUrl = $this->getLink(array('category' => 'openurl', 'type' => 'embedded'));
-        if($openUrl !== '') {
+        if ($openUrl !== '') {
             return $openUrl['url'];
         }
     }
+
+    /**
+     * Get rds data.
+     *
+     * @return Mixed 
+     */
     public function getOpenUrlExternal()
     {
         $openUrl = $this->getLink(array('category' => 'openurl', 'type' => 'external'));
-        if($openUrl !== '') {
+        if ($openUrl !== '') {
             return $openUrl['url'];
         }
     }
@@ -1836,21 +1883,28 @@ class RDSProxy extends SolrDefault
     * ToDO: these functions may be intergrated
     */
 
+    /**
+     * Get rds data.
+     *
+     * @param array $properties properties
+     *
+     * @return Mixed 
+     */
     protected function getLink($properties)
     {
-        if(isset($this->fields['links'])) {
-            foreach($this->fields['links'] as $link) {
-                if(!is_array($link)) {
+        if (isset($this->fields['links'])) {
+            foreach ($this->fields['links'] as $link) {
+                if (!is_array($link)) {
                         continue;
                 }
                     $match = true;
-                foreach($properties as $pKey => $pValue) {
-                    if(!isset($link[$pKey]) || $link[$pKey] !== $pValue) {
+                foreach ($properties as $pKey => $pValue) {
+                    if (!isset($link[$pKey]) || $link[$pKey] !== $pValue) {
                             $match = false;
                             break;
                     }
                 }
-                if($match) {
+                if ($match) {
                         return $link;
                 }
             }
@@ -1867,7 +1921,7 @@ class RDSProxy extends SolrDefault
     protected function getCover()
     {
         $cover = $this->getLink(array('category' => 'cover', 'type' => 'thumb'));
-        if($cover !== '') {
+        if ($cover !== '') {
                 return $cover['url'];
         }
     }
@@ -1881,14 +1935,14 @@ class RDSProxy extends SolrDefault
     public function getOpenUrl()
     {
         $openUrl = $this->getLink(array('category' => 'openurl', 'type' => 'embedded'));
-        if($openUrl !== '') {
+        if ($openUrl !== '') {
                 return $openUrl['url'];
         }
     }
     public function getOpenUrlExternal()
     {
         $openUrl = $this->getLink(array('category' => 'openurl', 'type' => 'external'));
-        if($openUrl !== '') {
+        if ($openUrl !== '') {
                 return $openUrl['url'];
         }
     }
@@ -1923,12 +1977,21 @@ class RDSProxy extends SolrDefault
     
 
 
-    
+    /**
+     * Get the persistent link.
+     *
+     * @return string
+     */ 
     public function getPersistentLink() 
     {
         return '';
     }
-    
+   
+    /**
+     * Get the related.
+     *
+     * @return boolean
+     */ 
     public function getRelated() 
     {
         return false;
@@ -1947,7 +2010,12 @@ class RDSProxy extends SolrDefault
         return isset($this->fields['title']) ?
             $this->fields['title'] : '';
     }
-    
+   
+    /**
+     * Get rds data.
+     *
+     * @return Mixed 
+     */ 
     public function getTitleAlt()
     {
         return (isset($this->fields['titlealt']) ? $this->fields['titlealt'] : '');
@@ -1969,25 +2037,40 @@ class RDSProxy extends SolrDefault
         }
         return implode(' ; ', $result);
     }
-    
+       
+    /**
+     * Get rds data.
+     *
+     * @return Mixed 
+     */ 
     public function getSource()
     {
-        if(!isset($this->fields['source']) || !isset($this->fields['source']['display'])) {
+        if (!isset($this->fields['source']) || !isset($this->fields['source']['display'])) {
             return '';
         }
         // TODO: use appropriate modifier instead of removing the tags
         return str_replace('&amp;', '&', strip_tags($this->fields['source']['display']));
     }
     
+    /**
+     * Get rds data.
+     *
+     * @return Mixed 
+     */
     public function getSeriesTitle()
     {
-        if(isset($this->fields['series']) && isset($this->fields['series']['title'])) {
+        if (isset($this->fields['series']) && isset($this->fields['series']['title'])) {
             return $this->fields['series']['title'];
         } else {
             return '';
         }
     }
     
+    /**
+     * Get rds data.
+     *
+     * @return Mixed 
+     */
     public function getPmid()
     {
         return (isset($this->fields['pmid']) ? $this->fields['pmid'] : '');
@@ -2053,28 +2136,43 @@ class RDSProxy extends SolrDefault
         return $issns;
     }
     
+    /**
+     * Get rds data.
+     *
+     * @return Mixed 
+     */
     public function getPubYear()
     {
-        if(isset($this->fields['dates'])) {
+        if (isset($this->fields['dates'])) {
             $dates = $this->fields['dates'];
-        } elseif(isset($this->fields['source']) && isset($this->fields['source']['dates'])) {
+        } elseif (isset($this->fields['source']) && isset($this->fields['source']['dates'])) {
             $dates = $this->fields['source']['dates'];
         } else {
             return '';
         }
 
-        if(isset($dates['published'])) {
+        if (isset($dates['published'])) {
             return $dates['published']['year'];
         } else {
             return '';
         }
     }
     
+    /**
+     * Get rds data.
+     *
+     * @return Mixed 
+     */
     public function getDataSource()
     {
         return (isset($this->fields['datasource']) ? $this->fields['datasource'] : '');
     }
     
+    /**
+     * Get rds data.
+     *
+     * @return Mixed 
+     */
     public function getCitationLinks()
     {
         $links = array_merge(
@@ -2088,27 +2186,47 @@ class RDSProxy extends SolrDefault
     // Description
     // *******************************************************************
     
+    /**
+     * Get rds data.
+     *
+     * @return Mixed 
+     */
     public function getSubjectsGeneral()
     {
         return $this->getSubjects('general');
     }
     
+    /**
+     * Get rds data.
+     *
+     * @return Mixed 
+     */
     public function getAbstracts()
     {
         return (isset($this->fields['abstracts']) ? $this->fields['abstracts'] : '');
     }
     
+    /**
+     * Get rds data.
+     *
+     * @return Mixed 
+     */
     public function getReview()
     {
         return (isset($this->fields['review']) ? $this->fields['review'] : '');
     } 
     
+    /**
+     * Get rds data.
+     *
+     * @return Mixed 
+     */
     public function getReviewers()
     {
         $result = array();
-        if(isset($this->fields['reviewers'])) {
+        if (isset($this->fields['reviewers'])) {
             $result = $this->fields['reviewers'];
-            for($i = 0; $i < count($result); $i++) {
+            for ($i = 0; $i < count($result); $i++) {
                 $result[$i] = preg_replace('| [0-9]+$|', '', $result[$i]);
             }
         }
@@ -2119,9 +2237,17 @@ class RDSProxy extends SolrDefault
     // *******************************************************************
     // Helper methods
     // *******************************************************************
+
+    /**
+     * Get rds data.
+     *
+     * @param string $category category
+     *
+     * @return Mixed 
+     */
     public function getSubjects($category)
     {
-        if(isset($this->fields['subjects']) && isset($this->fields['subjects'][$category])) {
+        if (isset($this->fields['subjects']) && isset($this->fields['subjects'][$category])) {
             return $this->fields['subjects'][$category];
         } else {
             return array();

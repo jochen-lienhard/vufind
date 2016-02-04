@@ -55,33 +55,68 @@ class RDSProxyCore extends RDSHelper
        'DataSource',
        'CitationLinks',
     ];  
-    
+
+    /**
+     * Dummy 
+     *
+     * @return string
+     */
     public function getTitle() 
     {
         $value = $this->driver->getTitle();
         return $value;
     }
+
+    /**
+     * Dummy 
+     *
+     * @return string
+     */
     public function getTitleAlt() 
     {
         $value = $this->driver->getTitleAlt();
         return $value;
     
     }
+
+    /**
+     * Dummy 
+     *
+     * @return string
+     */
     public function getAuthors() 
     {
         $value = $this->driver->getAuthors();
         return $value;
     }
+
+    /**
+     * Dummy 
+     *
+     * @return string
+     */
     public function getSource() 
     {
         $value = $this->driver->getSource();
         return $value;
     }
+
+    /**
+     * Dummy 
+     *
+     * @return string
+     */
     public function getSeriesTitle() 
     {
         $value = $this->driver->getSeriesTitle();
         return $value;
     }
+
+    /**
+     * Dummy 
+     *
+     * @return string
+     */
     public function getDoi() 
     {
         $value = '';
@@ -91,6 +126,12 @@ class RDSProxyCore extends RDSHelper
         }
         return $value;
     }
+
+    /**
+     * Dummy 
+     *
+     * @return string
+     */
     public function getPmid() 
     {
         $value = '';
@@ -100,6 +141,12 @@ class RDSProxyCore extends RDSHelper
         } 
         return $value;
     }
+
+    /**
+     * Dummy 
+     *
+     * @return string
+     */
     public function getIsbns() 
     {
         // {foreach from=$summISBNs key=type item=isbn name=loop}{$isbn|escape} ({translate text="$type"}){if !$smarty.foreach.loop.last}<br/>{/if}{/foreach}
@@ -118,6 +165,12 @@ class RDSProxyCore extends RDSHelper
       
         return $value;
     }
+
+    /**
+     * Dummy 
+     *
+     * @return string
+     */
     public function getIssns() 
     {
         //{foreach from=$summISSNs key=type item=issn name=loop}{$issn|escape} ({translate text="$type"}){if !$smarty.foreach.loop.last}<br/>{/if}{/foreach}
@@ -134,13 +187,23 @@ class RDSProxyCore extends RDSHelper
         );
         return $value;
     }
-    
+   
+    /**
+     * Dummy 
+     *
+     * @return string
+     */
     public function getPubYear() 
     {
         $value = $this->driver->getPubYear();
         return $value;
     }
 
+    /**
+     * Dummy 
+     *
+     * @return string
+     */
     public function getCitationLinks() 
     {
         //<a target="_blank" href="{$summCitationLinks[0].url}" onclick="userAction('click', 'RdsCitationLink', '{$ppn}');">&rarr;{translate text="Link zum Zitat"}</a>

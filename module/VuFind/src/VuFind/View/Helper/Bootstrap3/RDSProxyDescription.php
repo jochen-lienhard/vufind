@@ -47,7 +47,12 @@ class RDSProxyDescription extends RDSHelper
         'Review',
         'Reviewers'
     ];
-    
+
+    /**
+     * Dummy 
+     *
+     * @return string
+     */
     public function getSubjectsGeneral() 
     {
         foreach ($this->driver->getSubjectsGeneral() as $subjectGeneral) {
@@ -56,7 +61,12 @@ class RDSProxyDescription extends RDSHelper
         
         return $html;
     }
-    
+   
+    /**
+     * Dummy 
+     *
+     * @return string
+     */
     public function getAbstracts() 
     {
         foreach ($this->driver->getAbstracts() as $abstract) {
@@ -65,12 +75,22 @@ class RDSProxyDescription extends RDSHelper
         
         return $html;
     }
-    
+   
+    /**
+     * Dummy 
+     *
+     * @return string
+     */
     public function getReview() 
     {
         return $this->driver->getReview();
     }
-    
+   
+    /**
+     * Dummy 
+     *
+     * @return string
+     */
     public function getReviewers() 
     {
         return $this->driver->getReviewers();

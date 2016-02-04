@@ -42,7 +42,12 @@ use     VuFind\I18n\Translator\TranslatorAwareInterface;
 class RDSProxyHoldings extends RDSProxyHelper
 {
     protected $items = ['Holdings'];
-    
+  
+    /**
+     * Calculate the holdings info
+     *
+     * @return string 
+     */ 
     public function getHoldings() 
     {
         $output = "";
@@ -72,13 +77,18 @@ class RDSProxyHoldings extends RDSProxyHelper
         }
         return $output;
     }
-    
+   
+    /**
+     * Calculate the full text links
+     *
+     * @return string
+     */ 
     protected function getFulltextLinks() 
     {
         $fulltextLinks = $this->driver->getFulltextLinks();
         $html = '';
         
-        foreach ($fulltextLinks as $fulltextLink){
+        foreach ($fulltextLinks as $fulltextLink) {
             
             if ($fulltextLink['indicator'] == 1) {
                 if ($this->authManager->isLoggedIn() === false) {
@@ -105,14 +115,19 @@ class RDSProxyHoldings extends RDSProxyHelper
                     $html .= '<span class="t_ezb_{$fulltextLink.access}"></span>';
                     $html .= $this->translate("RDS_PROXY_HOLDINGS_TO_THE_FULLTEXT") . ' (via ' . $fulltextLink['provider'] . ')';
                 }
-                    $html .= '<span class="t_link"><a target="_blank" href="' . $fulltextLink['url'] . '">&#187;</a></span>';
-                  $html .= '</p>';
+                $html .= '<span class="t_link"><a target="_blank" href="' . $fulltextLink['url'] . '">&#187;</a></span>';
+                $html .= '</p>';
                 $html .= '</div>';
             }
         }
         return $html;
     }
-    
+   
+    /**
+     * Calculate the info links
+     *
+     * @return string
+     */ 
     protected function getInfoLinks() 
     {
         $html = '';
@@ -127,7 +142,12 @@ class RDSProxyHoldings extends RDSProxyHelper
             $html .= '</div>';
         }
     }
-    
+   
+    /**
+     * Calculate the link resolver link
+     *
+     * @return string
+     */ 
     protected function getLinkresolverLink() 
     {
         $html = '<div class="tg">';
@@ -138,7 +158,12 @@ class RDSProxyHoldings extends RDSProxyHelper
         $html .= '</div>';
         return $html;
     }
-     
+    
+    /**
+     * Build the embedded version of the link resolver info 
+     *
+     * @return string
+     */ 
      protected function getLinkresolverEmbedded() 
      {        
         $locale = $this->getLocale();
@@ -158,4 +183,5 @@ class RDSProxyHoldings extends RDSProxyHelper
         $output = substr($output, 0, $pos);
         return $output;
      }
+
 }

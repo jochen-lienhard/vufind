@@ -1721,7 +1721,7 @@ class RDSIndex extends SolrMarc
                     $co_display[$key]["gnd"] = $gnd_ppn;
                     $link = substr($link, '0', $pos);
                     $link = str_replace('"', '\"', $link);
-                    if(strstr($link, "|")) {
+                    if (strstr($link, "|")) {
                         $arr_link = explode(" | ", $link);
                         $co_display[$key]["link"]=$arr_link[0];
                         $co_display[$key]["link_text"]=$arr_link[1];
@@ -1742,20 +1742,19 @@ class RDSIndex extends SolrMarc
     public function getCoForList()
     {
         $co_display_short = array();
-        if(isset($this->fields['co_display'])) {
+        if (isset($this->fields['co_display'])) {
             $arr_links = $this->fields['co_display'];
             foreach ($arr_links as $key => $link) {
                 $chk_link = $link;
-                if(strstr($link, " ; ")) {
+                if (strstr($link, " ; ")) {
                     $tmp = $link;
                     $pos = strrpos($link, " ; ");
                     $link = substr($link, '0', $pos);
                 }
-                if(strstr($link, " | ")) {
+                if (strstr($link, " | ")) {
                     $arr_tmp = explode(" | ", $link);
                     $co_display_short[$key]["link"] = $arr_tmp[0]." [".$arr_tmp[1]."]";
-                }
-                else {
+                } else {
                     $co_display_short[$key]["link"] = $link;
                 }
             }
@@ -2106,11 +2105,11 @@ class RDSIndex extends SolrMarc
         //return isset($this->fields['est']) ? implode($this->fields['est']) : '';
         $gnd_ppn = "";
         $est = array();
-        if(isset($this->fields['est'])) {
+        if (isset($this->fields['est'])) {
             $arr_links = $this->fields['est'];
             foreach ($arr_links as $key =>  $link) {
                 $gnd_ppn = "";
-                if(strstr($link, " ; ")) {
+                if (strstr($link, " ; ")) {
                     $tmp = $link;
                     $pos = strrpos($link, " ; ");
                     $gnd_ppn = substr($tmp, $pos+3);
@@ -2420,8 +2419,8 @@ class RDSIndex extends SolrMarc
                             $zs_array[$key]['pre-text'] = $arr_link[1];
                             $zs_array[$key]['text'] = $arr_link[2];
                         }
-                        if(!isset($arr_link[2])) {
-                            if($arr_link[0] != "") {
+                        if (!isset($arr_link[2])) {
+                            if ($arr_link[0] != "") {
                                 $zs_array[$key]['pre-text'] = $arr_link[0]; 
                             }
                             if ($arr_link[1] != "") {
@@ -2973,7 +2972,8 @@ class RDSIndex extends SolrMarc
      * @return string        Name of Smarty template file to display.
      * @access public
      */
-    /* 
+
+    /*
        public function getExport($format) {
        global $interface;
        $exportTemplate = parent::getExport($format);
@@ -3019,13 +3019,15 @@ class RDSIndex extends SolrMarc
 
        return $exportTemplate;
        }
-     */
+    */
 
 
     /**
+     * Dummy
      * @return array Strings representing export formats.
      * @access public
      */
+
     /*public function getExportFormats()
       {
       global $configArray;
