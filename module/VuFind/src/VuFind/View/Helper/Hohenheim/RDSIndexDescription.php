@@ -55,8 +55,8 @@ class RDSIndexDescription extends  \VuFind\View\Helper\Bootstrap3\RDSIndexDescri
 		"LINKS",
 		"SY",
 		"CT",
-		"LOC_CT"
-			];
+		"LOCCT"
+	];
 
 
 
