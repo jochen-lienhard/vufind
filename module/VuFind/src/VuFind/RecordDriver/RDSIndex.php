@@ -1864,6 +1864,29 @@ class RDSIndex extends SolrMarc
         $this->fields['beig_werk'] : '';
     }
 
+    /**
+     * Get work part titel of the record.
+     * RDS
+     * @return string
+     */
+    public function getWorkPart()
+    {
+        $arr = array();
+        if (isset($this->fields['werk_titel'])) {
+            $arr_links = $this->fields['werk_titel'];
+            foreach ($arr_links as $key => $link) {
+                if (strstr($link, "|")) {
+                    $arr_link = explode(" | ", $link);
+                    $arr[$key]['gnd'] = $arr_link[0];
+                    $arr[$key]['txt'] = $arr_link[1];
+                } else {
+                    $arr[$key]['txt'] = $link;
+                }
+            }
+        }
+	return $arr;
+    }
+
 
     /**
      * Get main heading of title 
@@ -2323,6 +2346,16 @@ class RDSIndex extends SolrMarc
     public function getEnthWerk() 
     {
         return isset($this->fields['enthWerke']) ? $this->fields['enthWerke'] : '';
+    }
+
+    /**
+     * Get an array of all 
+     * RDS
+     * @return array
+     */
+    public function getBeigWerk() 
+    {
+        return isset($this->fields['beig_werk']) ? $this->fields['beig_werk'] : '';
     }
 
     /**

@@ -55,14 +55,14 @@ class RDSIndexCore extends \Zend\View\Helper\AbstractHelper implements Translato
     "TITLE",
     "COLLTITLE", 
     "TITLE_PART",
-    "EST",
     "CJKTITLE",
+    "EST",
+    "BEIGWERK",
     "TITLECUT", // only Hoh ??
     "UREIHE",
     "CJKUREIHE",
     "PERSON",
     "CJKAUT",
-    "BEIGWERK",
     "CORP",
     "CJKCO",
     "EDITION",
@@ -75,6 +75,7 @@ class RDSIndexCore extends \Zend\View\Helper\AbstractHelper implements Translato
     "LANGUAGE",
     "SCOPE",
     "CJKSCOPE",
+    "WORKPART",
     "ISBN",
     "ISSN",
     "LINKS",
@@ -228,7 +229,7 @@ class RDSIndexCore extends \Zend\View\Helper\AbstractHelper implements Translato
         return $html_result;
     }
 
-    /**
+    /*
      * Get title cut (hoh only)
      *
      * @return html_result 
@@ -250,6 +251,28 @@ class RDSIndexCore extends \Zend\View\Helper\AbstractHelper implements Translato
         return $html_result;
     }
 
+    /*
+     * GetBEIGWERK 
+     *
+     * @return html_result 
+    */
+  /*  protected function getBEIGWERK()
+    {
+        $html_result = "";
+        $transEsc = $this->getView()->plugin('escapeHtml');
+        $titlePart = $this->driver->getBeigWerk();
+        if (!empty($titlePart)) {
+            foreach ($titlePart as $field) {
+                $last_item = end($titlePart);
+                $html_result .= $transEsc($field);
+                if ($titlePart!= $last_item) {
+                    $html_result .="<br /> " ; 
+                }
+            }        
+        }
+        return $html_result;
+    }
+*/
     /**
      * Get unterreihe
      *
@@ -569,6 +592,33 @@ class RDSIndexCore extends \Zend\View\Helper\AbstractHelper implements Translato
     }
     
     /**
+     * Get parts of a work
+     *
+     * @return html_result 
+    */
+    protected function getWORKPART() 
+    {
+        $html_result = "";
+        $transEsc = $this->getView()->plugin('escapeHtml');
+        $result = $this->driver->getWorkPart();
+        if (!empty($result)) {
+            foreach ($result as $field) {
+                $last_item = end($result);
+                $html_result .= $transEsc($field['txt']);
+                if (isset($field['gnd']) && !empty($field['gnd'])) {
+                    $html_result .= " <a class='dnb' href="
+                    .$this->view->render('/RecordDriver/RDSIndex/link-gnd.phtml', ['lookfor' => $field['gnd']])." target ='_blank'"
+                    ."title='".$this->translate('RDS_CO_DNB')."'></a>";
+                }
+                    if ($result!= $last_item ) {
+                        $html_result .="<br /> " ; 
+                    }
+            }
+        }
+        return $html_result;
+    }
+    
+    /**
      * Get CjkScope 
      *
      * @return html_result 
@@ -647,6 +697,9 @@ class RDSIndexCore extends \Zend\View\Helper\AbstractHelper implements Translato
                     .$this->view->render('/RecordDriver/RDSIndex/link-gnd.phtml', ['lookfor' => $field['gnd']])." target ='_blank'"
                     ."title='".$this->translate('RDS_CO_DNB')."'></a>";
                 }
+                    if ($result!= $last_item ) {
+                        $html_result .="<br /> " ; 
+                    }
             }
         }
         return $html_result;
