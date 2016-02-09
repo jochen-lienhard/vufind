@@ -60,7 +60,7 @@ class RDSIndexRecord extends \VuFind\View\Helper\Root\Record
         $editions = $this->driver->tryMethod('getEditions');
         if (!empty($titleSerie)) {
             if (!empty($volume)) {
-                $title .= " " . $volume;
+                $title = $titleSerie . " " . $volume . " " . $title;
             }
         }
         // TODO Ende
