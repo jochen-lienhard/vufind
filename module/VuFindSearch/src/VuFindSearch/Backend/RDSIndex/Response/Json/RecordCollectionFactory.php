@@ -41,22 +41,10 @@ use VuFindSearch\Exception\InvalidArgumentException;
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     http://vufind.org
  */
-class RecordCollectionFactory implements RecordCollectionFactoryInterface
+class RecordCollectionFactory 
+                extends \VuFindSearch\Backend\Solr\Response\Json\RecordCollectionFactory 
+                implements RecordCollectionFactoryInterface
 {
-    /**
-     * Factory to turn data into a record object.
-     *
-     * @var Callable
-     */
-    protected $recordFactory;
-
-    /**
-     * Class of collection.
-     *
-     * @var string
-     */
-    protected $collectionClass;
-
     /**
      * Constructor.
      *
@@ -77,31 +65,4 @@ class RecordCollectionFactory implements RecordCollectionFactoryInterface
         }
         $this->collectionClass = $collectionClass;
     }
-
-    /**
-     * Return record collection.
-     *
-     * @param array $response Deserialized JSON response
-     *
-     * @return RecordCollection
-     */
-    public function factory($response)
-    {
-        if (!is_array($response)) {
-            throw new InvalidArgumentException(
-                sprintf(
-                    'Unexpected type of value: Expected array, got %s',
-                    gettype($response)
-                )
-            );
-        }
-        $collection = new $this->collectionClass($response);
-        if (isset($response['response']['docs'])) {
-            foreach ($response['response']['docs'] as $doc) {
-                $collection->add(call_user_func($this->recordFactory, $doc));
-            }
-        }
-        return $collection;
-    }
-
 }

@@ -47,68 +47,8 @@ use VuFindSearch\ParamBag;
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     http://vufind.org
  */
-class QueryBuilder implements QueryBuilderInterface
+class QueryBuilder extends \VuFindSearch\Backend\Solr\QueryBuilder implements QueryBuilderInterface
 {
-    /**
-     * Default dismax handler (if no DismaxHandler set in specs).
-     *
-     * @var string
-     */
-    protected $defaultDismaxHandler;
-
-    /**
-     * Search specs.
-     *
-     * @var array
-     */
-    protected $specs = [];
-
-    /**
-     * Search specs for exact searches.
-     *
-     * @var array
-     */
-    protected $exactSpecs = [];
-
-    /**
-     * Should we create the hl.q parameter when appropriate?
-     *
-     * @var bool
-     */
-    protected $createHighlightingQuery = false;
-
-    /**
-     * Should we create the spellcheck.q parameter when appropriate?
-     *
-     * @var bool
-     */
-    protected $createSpellingQuery = false;
-
-    /**
-     * Lucene syntax helper
-     *
-     * @var LuceneSyntaxHelper
-     */
-    protected $luceneHelper = null;
-
-    /**
-     * Constructor.
-     *
-     * @param array  $specs                Search handler specifications
-     * @param string $defaultDismaxHandler Default dismax handler (if no
-     * DismaxHandler set in specs).
-     *
-     * @return void
-     */
-    public function __construct(array $specs = [],
-        $defaultDismaxHandler = 'dismax'
-    ) {
-        $this->defaultDismaxHandler = $defaultDismaxHandler;
-        $this->setSpecs($specs);
-    }
-
-    /// Public API
-
     /**
      * Return SOLR search parameters based on a user query and params.
      *
@@ -171,131 +111,13 @@ class QueryBuilder implements QueryBuilderInterface
             || preg_match('/^rn\:/', $string) || preg_match('/\brn\:/', $string)
         ) {
             $params->set('fq', null);
-        } else {$params->set('fq', 'mi:0'); }
+        } else {
+            $params->set('fq', 'mi:0'); 
+        }
 
         $params->set('q', $string);
 
         return $params;
-    }
-
-    /**
-     * Control whether or not the QueryBuilder should create an hl.q parameter
-     * when the main query includes clauses that should not be factored into
-     * highlighting. (Turned off by default).
-     *
-     * @param bool $enable Should highlighting query generation be enabled?
-     *
-     * @return void
-     */
-    public function setCreateHighlightingQuery($enable)
-    {
-        $this->createHighlightingQuery = $enable;
-    }
-
-    /**
-     * Control whether or not the QueryBuilder should create a spellcheck.q
-     * parameter. (Turned off by default).
-     *
-     * @param bool $enable Should spelling query generation be enabled?
-     *
-     * @return void
-     */
-    public function setCreateSpellingQuery($enable)
-    {
-        $this->createSpellingQuery = $enable;
-    }
-
-    /**
-     * Set query builder search specs.
-     *
-     * @param array $specs Search specs
-     *
-     * @return void
-     */
-    public function setSpecs(array $specs)
-    {
-        foreach ($specs as $handler => $spec) {
-            if (isset($spec['ExactSettings'])) {
-                $this->exactSpecs[strtolower($handler)] = new SearchHandler(
-                    $spec['ExactSettings'], $this->defaultDismaxHandler
-                );
-                unset($spec['ExactSettings']);
-            }
-            $this->specs[strtolower($handler)]
-                = new SearchHandler($spec, $this->defaultDismaxHandler);
-        }
-    }
-
-    /**
-     * Get Lucene syntax helper
-     *
-     * @return LuceneSyntaxHelper
-     */
-    public function getLuceneHelper()
-    {
-        if (null === $this->luceneHelper) {
-            $this->luceneHelper = new LuceneSyntaxHelper();
-        }
-        return $this->luceneHelper;
-    }
-
-    /**
-     * Set Lucene syntax helper
-     *
-     * @param LuceneSyntaxHelper $helper Lucene syntax helper
-     *
-     * @return void
-     */
-    public function setLuceneHelper(LuceneSyntaxHelper $helper)
-    {
-        $this->luceneHelper = $helper;
-    }
-
-    /// Internal API
-
-    /**
-     * Return named search handler.
-     *
-     * @param string $handler      Search handler name
-     * @param string $searchString Search query
-     *
-     * @return SearchHandler|null
-     */
-    protected function getSearchHandler($handler, $searchString)
-    {
-        $handler = $handler ? strtolower($handler) : $handler;
-        if ($handler) {
-            // Since we will rarely have exactSpecs set, it is less expensive
-            // to check for a handler first before doing multiple string
-            // operations to determine eligibility for exact handling.
-            if (isset($this->exactSpecs[$handler])) {
-                $searchString = isset($searchString) ? trim($searchString) : '';
-                if (strlen($searchString) > 1
-                    && substr($searchString, 0, 1) == '"'
-                    && substr($searchString, -1, 1) == '"'
-                ) {
-                    return $this->exactSpecs[$handler];
-                }
-            }
-            if (isset($this->specs[$handler])) {
-                return $this->specs[$handler];
-            }
-        }
-        return null;
-    }
-
-    /**
-     * Reduce query group a single query.
-     *
-     * @param QueryGroup $group Query group to reduce
-     *
-     * @return Query
-     */
-    protected function reduceQueryGroup(QueryGroup $group)
-    {
-        $searchString  = $this->reduceQueryGroupComponents($group);
-        $searchHandler = $group->getReducedHandler();
-        return new Query($searchString, $searchHandler);
     }
 
     /**
@@ -325,7 +147,7 @@ class QueryBuilder implements QueryBuilderInterface
                 $searchString = $this->filterPy($component->getString());
             } else {
                 $searchString  = $this->getLuceneHelper()
-                   ->normalizeSearchString($component->getString());
+                    ->normalizeSearchString($component->getString());
             }
             // RDS if search field is au, manipulate the searchString
             if ($component->getHandler() == 'au') {
@@ -393,78 +215,17 @@ class QueryBuilder implements QueryBuilderInterface
         // remove whitespace
         $lookfor = preg_replace('/\p{Z}+/u', '', $lookfor);
         // check if lookfor looks like 2000-2010
-        if (preg_match('/^[0-9]{1,4}(-[0-9]{1,4})?$/',$lookfor)) {
-            $result_term=preg_replace('/^([0-9]{1,4})-([0-9]{1,4})/','[$1 TO $2]',$lookfor);
+        if (preg_match('/^[0-9]{1,4}(-[0-9]{1,4})?$/', $lookfor)) {
+            $result_term=preg_replace('/^([0-9]{1,4})-([0-9]{1,4})/', '[$1 TO $2]', $lookfor);
         } else {
-           // check if lookfor looks like 2000-
-           if (preg_match('/^[0-9]{1,4}-?$/',$lookfor)) {
-               $result_term=preg_replace('/^([0-9]{1,4})-/','[$1 TO *]',$lookfor);
-           } else {
-               // else delete ! at the end
-               $result_term = preg_replace('/\!$/u', '', $lookfor); 
-           }
+            // check if lookfor looks like 2000-
+            if (preg_match('/^[0-9]{1,4}-?$/', $lookfor)) {
+                $result_term=preg_replace('/^([0-9]{1,4})-/', '[$1 TO *]', $lookfor);
+            } else {
+                // else delete ! at the end
+                $result_term = preg_replace('/\!$/u', '', $lookfor); 
+            }
         }
         return ($result_term);
     }
-
-    /**
-     * Return search string based on input and handler.
-     *
-     * @param string        $string  Input search string
-     * @param SearchHandler $handler Search handler
-     *
-     * @return string
-     */
-        protected function createSearchString($string, SearchHandler $handler = null)
-        {
-            $advanced = $this->getLuceneHelper()->containsAdvancedLuceneSyntax($string);
-
-        if ($advanced && $handler) {
-            return $handler->createAdvancedQueryString($string);
-        } else if ($handler) {
-            return $handler->createSimpleQueryString($string);
-        } else {
-            return $string;
-        }
-        }
-
-        /**
-     * Return advanced inner search string based on input and handler.
-     *
-     * @param string        $string  Input search string
-     * @param SearchHandler $handler Search handler
-     *
-     * @return string
-     */
-        protected function createAdvancedInnerSearchString($string,
-            SearchHandler $handler
-        ) {
-        // Special case -- if the user wants all records but the current handler
-        // has a filter query, apply the filter query:
-        if (trim($string) === '*:*' && $handler && $handler->hasFilterQuery()) {
-            return $handler->getFilterQuery();
-        }
-
-        // If the query already includes field specifications, we can't easily
-        // apply it to other fields through our defined handlers, so we'll leave
-        // it as-is:
-        if (strstr($string, ':')) {
-            return $string;
-        }
-
-        // If the query ends in a non-escaped question mark, the user may not really
-        // intend to use the question mark as a wildcard -- let's account for that
-        // possibility
-        if (substr($string, -1) == '?' && substr($string, -2) != '\?') {
-            // Make sure all question marks are properly escaped (first unescape
-            // any that are already escaped to prevent double-escapes, then escape
-            // all of them):
-            $strippedQuery
-                = str_replace('?', '\?', str_replace('\?', '?', $string));
-            $string = "({$string}) OR (" . $strippedQuery . ")";
-        }
-
-        return $handler
-            ? $handler->createAdvancedQueryString($string, false) : $string;
-        }
 }

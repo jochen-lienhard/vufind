@@ -44,29 +44,6 @@ use Zend\EventManager\EventInterface;
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     http://vufind.org   Main Site
  */
-class ErrorListener extends AbstractErrorListener
+class ErrorListener extends \VuFind\Search\Solr\V3\ErrorListener
 {
-    /**
-     * VuFindSearch.error
-     *
-     * @param EventInterface $event Event
-     *
-     * @return EventInterface
-     */
-    public function onSearchError(EventInterface $event)
-    {
-        $backend = $event->getParam('backend_instance');
-        if ($this->listenForBackend($backend)) {
-            $error  = $event->getTarget();
-            if ($error instanceOf HttpErrorException) {
-                $reason = $error->getResponse()->getReasonPhrase();
-                if (stristr($reason, 'org.apache.lucene.queryParser.ParseException')
-                    || stristr($reason, 'undefined field')
-                ) {
-                    $error->addTag('VuFind\Search\ParserError');
-                }
-            }
-        }
-        return $event;
-    }
 }

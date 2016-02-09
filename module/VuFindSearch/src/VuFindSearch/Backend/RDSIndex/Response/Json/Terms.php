@@ -40,67 +40,6 @@ use IteratorAggregate;
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     http://vufind.org
  */
-class Terms implements IteratorAggregate
+class Terms extends \VuFindSearch\Backend\Solr\Response\Json\Terms implements IteratorAggregate
 {
-    /**
-     * Terms, indexed by field.
-     *
-     * @var ArrayObject
-     */
-    protected $terms;
-
-    /**
-     * Constructor.
-     *
-     * @param array $terms Term information
-     *
-     * @return void
-     */
-    public function __construct(array $terms)
-    {
-        $terms = array_replace(
-            ['responseHeader' => [], 'terms' => []], $terms
-        );
-        $this->terms = new ArrayObject();
-        foreach ($terms['terms'] as $field => $info) {
-            $this->terms->offsetSet($field, new NamedList($info));
-        }
-    }
-
-    /**
-     * Return aggregated iterator.
-     *
-     * @return ArrayIterator
-     */
-    public function getIterator()
-    {
-        return $this->terms->getIterator();
-    }
-
-    /**
-     * Get terms for the specified field
-     *
-     * @param string $field Field name
-     *
-     * @return array
-     */
-    public function getFieldTerms($field)
-    {
-        if ($this->hasFieldTerms($field)) {
-            return $this->terms->offsetGet($field);
-        }
-        return null;
-    }
-
-    /**
-     * Does the requested field exist?
-     *
-     * @param string $field Field name
-     *
-     * @return bool
-     */
-    public function hasFieldTerms($field)
-    {
-        return $this->terms->offsetExists($field);
-    }
 }

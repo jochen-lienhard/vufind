@@ -41,32 +41,4 @@ use Zend\Config\Config;
  */
 class SpellingProcessor extends \VuFind\Search\Solr\SpellingProcessor
 {
-    /**
-     * Get raw spelling suggestions for a query.
-     *
-     * @param Spellcheck    $spellcheck Complete spellcheck information
-     * @param AbstractQuery $query      Query for which info should be retrieved
-     *
-     * @return array
-     * @throws \Exception
-     */
-    public function getSuggestions(Spellcheck $spellcheck, AbstractQuery $query)
-    {
-        $allSuggestions = [];
-        foreach ($spellcheck as $term => $info) {
-            if (!$this->shouldSkipTerm($query, $term, false)
-                && ($suggestions = $this->formatAndFilterSuggestions($query, $info))
-            ) {
-                $allSuggestions[$term] = [
-                    'freq' => $info['origFreq'],
-                    'suggestions' => $suggestions
-                ];
-            }
-        }
-        // Fail over to secondary suggestions if primary failed:
-        if (empty($allSuggestions) && ($secondary = $spellcheck->getSecondary())) {
-            return $this->getSuggestions($secondary, $query);
-        }
-        return $allSuggestions;
-    }
 }
