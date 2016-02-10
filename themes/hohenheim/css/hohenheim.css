@@ -22,3 +22,7 @@ div.row .sidebar h4 {
 .list-group-item.title {
   border-top: none;
 }
+
+.hintbox {
+  background-color: white;
+}

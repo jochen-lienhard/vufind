@@ -309,16 +309,25 @@ div.row .sidebar h4 {
 
 /* styles for rds bookbag */
 .breadcrumbmore {
-  padding: 0px 0px 4px 17px;
+  padding: 0px 0px 4px 20px;
 }
 
-#modal .cart-controls .checkbox {
-  padding: 0px 12px;
+#modal .cart-controls .rdsCartCheckbox {
+  display:  inline-block;
   background-color: #265680;
   color: white;
-  margin: -4px 0px 0px 0px;
-  line-height: 34px;
-  
+  margin-bottom: 4px;
+  padding-top: 2px;
+}
+
+#modal .cart-controls .rdsCartCheckbox label {
+  padding: 6px 12px;
+  margin: 0px;
+  font-weight: normal;
+}
+
+#modal .cart-controls .rdsCartCheckbox input {
+  margin: 0px;
 }
 /* end: styles for rds bookbag */
 
@@ -415,3 +424,14 @@ tr.RDS_BIBLZUS th{
 }
 
 /* end: styles for rds navigation */
+
+.hintbox {
+  padding: 10px 14px;
+  border: solid 1px lightgray;
+}
+
+.hintbox_title {
+  font-weight: bold;
+  font-size: 14px;
+  padding-bottom: 4px;
+}
