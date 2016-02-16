@@ -300,8 +300,6 @@ si:
       - [rds_si, ~]
 
 ta:
-  DismaxFields:
-    - ta^100
   CustomMunge:
     rds_ta:
       - [preg_replace, '/[:]/', '\:']
