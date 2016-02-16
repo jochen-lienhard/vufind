@@ -240,8 +240,8 @@
                 </div>
           <?endif ?>
 
-          <div><a href="/Cart/doExport" class="fa fa-print doExportRecord" data-id="<?=$this->driver->getResourceSource()?>|<?=$this->driver->getUniqueID()?>"></a></div>
-          <div><a href="/link?id=<?=$this->driver->getUniqueID()?>" class="fa fa-bookmark"></a></div>
+          <div><a href="/Cart/doExport" class="fa fa-print doExportRecord" data-id="<?=$this->driver->getResourceSource()?>|<?=$this->driver->getUniqueID()?>" title="<?=$this->transEsc('Print')?>"></a></div>
+<? /*          <div><a href="/link?id=<?=$this->driver->getUniqueID()?>" class="fa fa-bookmark"></a></div> */ ?>
 
 
           <?if ($this->favorites): ?>
