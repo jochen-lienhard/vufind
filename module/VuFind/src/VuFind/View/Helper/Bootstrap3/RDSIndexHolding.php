@@ -154,7 +154,10 @@ class RDSIndexHolding extends \Zend\View\Helper\AbstractHelper implements Transl
                 // set RDS_URL
                 if (isset($lok_set["url"])) {
                     foreach ($lok_set["url"] as $single_url) {
-                        $lok_mergeResult["RDS_URL"] .= "<a href='$single_url' target='_blank'>'$single_url'</a>";
+                        $lok_mergeResult["RDS_URL"] .= "<a href='$single_url' target='_blank'>$single_url</a>";
+                        if ($single_url !== end($lok_set["url"])) {
+                           $lok_mergeResult["RDS_URL"] .= "</br>";
+                        }
                     }
                 }
                 // set RDS_HINT
