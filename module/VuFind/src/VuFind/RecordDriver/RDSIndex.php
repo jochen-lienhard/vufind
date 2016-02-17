@@ -2959,7 +2959,11 @@ class RDSIndex extends SolrMarc
      * @return string
      */
     public function getPersistentLink() {
-        $persistentLinkUrl = 'https://' . $_SERVER['HTTP_HOST'] . $_SERVER['CONTEXT_PREFIX'] . '/link?id=' . $this->getPPN(); 
+        preg_match('/\/[^\/]*/',$_SERVER['REQUEST_URI'],$matches);
+        $basePath = (isset($matches[0])) ? $matches[0] : '';
+
+        $persistentLinkUrl = 'https://' . $_SERVER['HTTP_HOST'] . $basePath . '/link?id=' . $this->getPPN(); 
+        
         return $persistentLinkUrl;
     }
     
