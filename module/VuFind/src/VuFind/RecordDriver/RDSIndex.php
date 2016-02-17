@@ -2954,6 +2954,17 @@ class RDSIndex extends SolrMarc
     }
 
     /**
+     * Returns a persistent link to the current record.
+     *
+     * @return string
+     */
+    public function getPersistentLink() {
+        $persistentLinkUrl = 'https://' . $_SERVER['HTTP_HOST'] . $_SERVER['CONTEXT_PREFIX'] . '/link?id=' . $this->getPPN(); 
+        return $persistentLinkUrl;
+    }
+    
+    
+    /**
      * Get an array of all the formats associated with the record.
      *
      * @return array
