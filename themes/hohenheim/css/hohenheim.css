@@ -26,3 +26,7 @@ div.row .sidebar h4 {
 .hintbox {
   background-color: white;
 }
+
+tr.RDS_SIGNATURE td {
+  font-weight: bold;
+}
