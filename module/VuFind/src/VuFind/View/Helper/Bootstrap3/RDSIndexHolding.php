@@ -268,7 +268,7 @@ class RDSIndexHolding extends \Zend\View\Helper\AbstractHelper implements Transl
                         $lok_mergeResult["RDS_STATUS"] .= $unknown . " " . $this->translate("UNKOWN");
                     }
                     // optional add some text or link
-                    if ($lent>0 && $borrowalbe == 0) {
+                    if ($lent>0 && $borrowable == 0) {
                         $lok_mergeResult["RDS_STATUS"] .= $this->addSummaryComment();
                     }
                 } else {
