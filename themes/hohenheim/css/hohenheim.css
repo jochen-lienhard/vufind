@@ -30,3 +30,11 @@ div.row .sidebar h4 {
 tr.RDS_SIGNATURE td {
   font-weight: bold;
 }
+
+span.available {
+  color: green;
+}
+
+span.checkedout {
+  color: red;
+}
