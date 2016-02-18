@@ -471,27 +471,27 @@ class RDSIndexHolding extends \Zend\View\Helper\AbstractHelper implements Transl
     {
         $localstatus = "";
         switch ($item["status"]) {
-        case "borrowable": $localstatus = $this->translate("RDS_AVAIL"); 
+        case "borrowable": $localstatus = '<span class="available">' . $this->translate("RDS_AVAIL") . '</span>'; 
             break;
-        case "order": $localstatus = $this->translate("RDS_ORDER"); 
+        case "order": $localstatus = '<span class="available">' . $this->translate("RDS_ORDER")  . '</span>'; 
             break;
         case "unknown": 
             if ($item["notes"] == "provided") {
-                $localstatus = $this->translate("RDS_WAITING");
+                $localstatus = '<span class="checkedout">' . $this->translate("RDS_WAITING") . '</span>';
             }
             if ($item["notes"] == "missing") {
-                $localstatus = $this->translate("RDS_MISSING");
+                $localstatus = '<span class="checkedout">' . $this->translate("RDS_MISSING") . '</span>';
             }
             break;
         case "lent": 
             switch ($item["notes"]) {
-            case "transaction": $localstatus = $this->translate("RDS_TRANSACTION"); 
+            case "transaction": $localstatus = '<span>' . $this->translate("RDS_TRANSACTION") . '</span>'; 
                 break;
-            case "ordered": $localstatus = $this->translate("RDS_STATUS_ORDERED"); 
+            case "ordered": $localstatus = '<span>' . $this->translate("RDS_STATUS_ORDERED") . '</span>'; 
                 break; 
-            case "not yet ordered": $localstatus = $this->translate("RDS_STATUS_MARKED"); 
+            case "not yet ordered": $localstatus = '<span>' . $this->translate("RDS_STATUS_MARKED") . '</span>'; 
                 break;
-            default: $localstatus = $this->translate("RDS_UNAVAILABLE") . " ";
+            default: $localstatus = '<span class="checkedout">' . $this->translate("RDS_UNAVAILABLE") . "</span> ";
                 if ($item["duedate"]) {
                     $localstatus .= $this->translate("RDS_AVAIL_EXPECTED") . " " . $item["duedate"];
                 }
