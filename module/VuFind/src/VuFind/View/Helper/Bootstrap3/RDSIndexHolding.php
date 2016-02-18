@@ -375,7 +375,7 @@ class RDSIndexHolding extends \Zend\View\Helper\AbstractHelper implements Transl
         if (isset($lok_set["praesenz"]) && $lok_set["praesenz"]=='p') {
             return "RDS_REF_STOCK";
         } else {
-            if (isset($lok_set["status"]) && (($lok_set["status"]=='n' && $lok_set["isil"] != "LFER") || ($lok_set["status"]=='p'))) {
+            if (isset($lok_set["status"]) && !isset($lok_set["url"]) && (($lok_set["status"]=='n' && $lok_set["isil"] != "LFER") || ($lok_set["status"]=='p'))) {
                 return $this->translate("RDS_REF_STOCK_TEXT") . " (" . $this->translate("RDS_REF_STOCK") . ")";
             } else {
                 return null;
