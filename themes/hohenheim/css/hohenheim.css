@@ -38,3 +38,8 @@ span.available {
 span.checkedout {
   color: red;
 }
+
+.biblink {
+  text-align: right;
+  font-size: 200%;
+}
