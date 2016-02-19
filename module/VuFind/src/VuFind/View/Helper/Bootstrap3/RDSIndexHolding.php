@@ -256,16 +256,25 @@ class RDSIndexHolding extends \Zend\View\Helper\AbstractHelper implements Transl
                     }
                     $lok_mergeResult["RDS_LOCATION"] = $this->createReadableLBLocation($temp_loc, $lok_mergeResult["RDS_LOCATION"]);
                     if ($borrowable > 0) {
-                        $lok_mergeResult["RDS_STATUS"] = $borrowable . " " . $this->translate("RDS_AVAIL") . " ";
+                        $lok_mergeResult["RDS_STATUS"] = '<span class="available">' . $borrowable . " " . $this->translate("RDS_AVAIL") . "</span>";
                     }
                     if ($lent > 0) {
-                        $lok_mergeResult["RDS_STATUS"] .= $lent . " " . $this->translate("RDS_UNAVAILABLE") . " ";
+                        if (isset($lok_mergeResult["RDS_STATUS"])) {
+                            $lok_mergeResult["RDS_STATUS"] .= ', ';
+                        }
+                        $lok_mergeResult["RDS_STATUS"] .= '<span class="checkedout">' . $lent . " " . $this->translate("RDS_UNAVAILABLE") . "</span>";
                     }
                     if ($present > 0) {
-                        $lok_mergeResult["RDS_STATUS"] .= $present . " " . $this->translate("RDS_REF_STOCK_TEXT") . " ";
+                        if (isset($lok_mergeResult["RDS_STATUS"])) {
+                            $lok_mergeResult["RDS_STATUS"] .= ', ';
+                        }
+                        $lok_mergeResult["RDS_STATUS"] .= '<span>' . $present . " " . $this->translate("RDS_REF_STOCK_TEXT") . "</span>";
                     }
                     if ($unknown > 0) {
-                        $lok_mergeResult["RDS_STATUS"] .= $unknown . " " . $this->translate("UNKOWN");
+                        if (isset($lok_mergeResult["RDS_STATUS"])) {
+                            $lok_mergeResult["RDS_STATUS"] .= ', ';
+                        }
+                        $lok_mergeResult["RDS_STATUS"] .= '<span>' . $unknown . " " . $this->translate("UNKOWN") . '</span>';
                     }
                     // optional add some text or link
                     if ($lent>0 && $borrowable == 0) {
