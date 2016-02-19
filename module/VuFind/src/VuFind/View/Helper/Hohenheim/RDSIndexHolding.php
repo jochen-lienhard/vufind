@@ -92,7 +92,7 @@ class RDSIndexHolding extends \VuFind\View\Helper\Bootstrap3\RDSIndexHolding
      */
     protected function addSummaryComment()
     {
-        return "<a href=" . $this->getAdisLink(100) . ">" . $this->translate("RDS_RESERVATION") . "</a>";
+        return "<a href=" . $this->getAdisLink(100) . " title='" . $this->translate("RDS_RESERVATION") . "'><i class='fa fa-shopping-cart'></i></a>";
     }
 
 
