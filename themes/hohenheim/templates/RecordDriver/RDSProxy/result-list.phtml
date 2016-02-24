@@ -21,17 +21,21 @@
 <div>
 
   <div class="col-xs-11 col-sm-11">
-  <div> 
   <? if($guestviewLoginLink): ?>
-    <?=$guestviewLoginLink ?><br />
+  <div>
+    <?=$guestviewLoginLink ?>
+  </div>
+  <div>
     <?=$listItems['RDS_DATA_SOURCE'] ?>
+  </div>
   <? else: ?>
-
-  <? if('full' != $dataView): ?>
+    <div>
     <a href="<?=$this->recordLink()->getUrl($this->driver)?>" class="title getFull" data-view="<?=$dataView ?>">
       <?=$this->record($this->driver)->getTitleHtml()?>
     </a>
-    <div class="loading hidden">
+    </div>
+  <? if('full' != $dataView): ?>
+    <div>
       <i class="fa fa-spin fa-spinner"></i> <?=$this->transEsc("Loading")?>...
     </div>
     <div class="short-view">
@@ -39,7 +43,7 @@
       <input type="hidden" value="<?=$this->escapeHtmlAttr($this->driver->getUniqueID())?>" class="hiddenId" />
       <input type="hidden" value="<?=$this->escapeHtmlAttr($this->driver->getResourceSource())?>" class="hiddenSource" />
     </div>
-    <? endif; ?>
+  <? endif; ?>
     <div>
         <? if($this->driver->isCollection()): ?>
           <?=implode('<br>', array_map(array($this, 'escapeHtml'), $this->driver->getSummary())); ?>
@@ -87,7 +91,7 @@
           <? endif; ?>
            /************** edn removed by RDS **************/ ?>
         <? endif; ?>
-      </div>
+    </div>
 
       <? if(!$this->driver->isCollection()): ?>
         <? if ($snippet = $this->driver->getHighlightedSnippet()): ?>
@@ -146,13 +150,13 @@
             but even if we don't plan to display the link, we still want to get the $openUrl
             value for use in generating a COinS (Z3988) tag -- see bottom of file.
           */
+/*
         $openUrl = $this->openUrl($this->driver, 'results');
         $openUrlActive = $openUrl->isActive();
         // Account for replace_other_urls setting
         $urls = $this->record($this->driver)->getLinkDetails($openUrlActive);
 
         if ($openUrlActive || !empty($urls)): ?>
-        <? /* ?>
         <? if ($openUrlActive): ?>
           <br/>
           <?=$openUrl->renderTemplate()?>
@@ -163,27 +167,33 @@
               <a href="<?=$this->escapeHtmlAttr($this->proxyUrl($current['url']))?>" class="fulltext" target="new"><i class="fa fa-external-link"></i> <?=($current['url'] == $current['desc']) ? $this->transEsc('Get full text') : $this->escapeHtml($current['desc'])?></a><br/>
           <? endforeach; ?>
         <? endif; ?>
-        <? */ ?>
       <? endif; ?>
+ */ ?>
 
+<? /*
       <?=str_replace('class="', 'class="label label-info ', $this->record($this->driver)->getFormatList())?>
+*/ ?>
 
+<? /*
       <? if (!$openUrlActive && empty($urls) && $this->driver->supportsAjaxStatus()): ?>
         <span class="status ajax-availability hidden">
           <span class="label label-default"><?=$this->transEsc('Loading')?>...</span>
         </span>
       <? endif; ?>
       <?=$this->record($this->driver)->getPreviews()?>
+*/ ?>
+
       <div class="col-sm-6 mediatype"></div>
       <div class="col-sm-4 rds_shortlink">
       <?=$rdsProxyHelper->getFulltextLink() ?>
       </div>
-    </div>
+
+  </div>
 
   <? if('full' != $dataView): ?>
     <div class="long-view hidden"></div>
     </div>
-</div>
+  <? endif; ?>
 
     <div class="col-xs-1 col-sm-1 right hidden-print">
       <? /* Display qrcode if appropriate: */ ?>
@@ -201,6 +211,8 @@
           </div><br/>
         </span>
       <? endif; ?>
+
+      <? if ($this->userlist()->getMode() !== 'disabled'): ?>
 
           <? /* Add to favorites */ ?>
           <? if($this->auth()->isLoggedIn()): ?>
@@ -256,6 +268,7 @@
       <? endif; ?>
 
       <?=$this->driver->supportsCoinsOpenUrl()?'<span class="Z3988" title="'.$this->escapeHtmlAttr($this->driver->getCoinsOpenUrl()).'"></span>':''?>
+<? endif; ?>
     </div>
 
 <? /*
@@ -275,6 +288,5 @@
     <div class="long-view hidden"></div>
   <? endif; ?>
 */ ?>
-  <? endif; ?>
-  <?=$listItems['RDS_GUESTVIEW_BRIEF_LINK'] ?> 
+  <?=$guestviewBriefLink ?> 
 </div>
