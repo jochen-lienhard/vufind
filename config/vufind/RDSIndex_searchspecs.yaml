@@ -149,7 +149,12 @@
 #
 # See the CallNumber search below for an example of custom munging in action.
 #-----------------------------------------------------------------------------------
-
+AllFields:
+  DismaxFields:
+    - allfields
+  QueryFields:
+    allfields:
+      - [or, ~]
 
 ti:
   DismaxFields:

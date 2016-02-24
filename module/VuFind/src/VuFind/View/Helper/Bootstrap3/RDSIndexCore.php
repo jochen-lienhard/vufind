@@ -407,16 +407,16 @@ class RDSIndexCore extends \Zend\View\Helper\AbstractHelper implements Translato
 
                 $last_item = end($co_long);
                 $html_result .= "<a href=".$this->view->render('/RecordDriver/RDSIndex/link-corporate.phtml', ['lookfor' => $field['link']]).">"
-                .$transEsc($field['link'])."</a>";
-                if (isset($field['link_text']) && !empty($field['link_text'])) {
-                    $html_result .= " [".$transEsc($field['link_text'])."]"; 
+                .$transEsc($field['text'])."</a>";
+                if (isset($field['zus_text']) && !empty($field['zus_text'])) {
+                    $html_result .= " [".$transEsc($field['zus_text'])."]"; 
                 }
                 if (isset($field['gnd']) && !empty($field['gnd'])) {
                     $html_result .= " <a class='dnb' href="
                     .$this->view->render('/RecordDriver/RDSIndex/link-gnd.phtml', ['lookfor' => $field['gnd']])
                     ." target ='_blank' title='".$this->translate('RDS_CO_DNB')."'></a>";
                 }
-                if ($authors_long != $last_item) {
+                if ($co_long != $last_item) {
                     $html_result .="<br /> " ; 
                 }
             }

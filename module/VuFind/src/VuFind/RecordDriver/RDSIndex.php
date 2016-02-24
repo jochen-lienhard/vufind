@@ -1724,9 +1724,11 @@ class RDSIndex extends SolrMarc
                     if (strstr($link, "|")) {
                         $arr_link = explode(" | ", $link);
                         $co_display[$key]["link"]=$arr_link[0];
-                        $co_display[$key]["link_text"]=$arr_link[1];
+                        $co_display[$key]["text"]=str_replace('\"', '"',$arr_link[0];
+			$co_display[$key]["zus_text"]=$arr_link[1];
                     } else {
                         $co_display[$key]["link"]=$link;
+                        $co_display[$key]["text"]=str_replace('\"', '"',$link);
                     }
                 }
             }
