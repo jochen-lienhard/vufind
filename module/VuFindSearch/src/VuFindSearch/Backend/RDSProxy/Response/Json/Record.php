@@ -43,66 +43,6 @@ use VuFindSearch\Response\RecordInterface;
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     http://vufind.org
  */
-class Record implements RecordInterface
+class Record extends \VuFindSearch\Backend\Solr\Response\Json\Record implements RecordInterface
 {
-
-    /**
-     * SOLR fields.
-     *
-     * @var array
-     */
-    protected $fields;
-
-    /**
-     * Source identifier.
-     *
-     * @var string
-     */
-    protected $source;
-
-    /**
-     * Constructor.
-     *
-     * @param array $fields SOLR document fields
-     *
-     * @return void
-     */
-    public function __construct(array $fields)
-    {
-        $this->fields = $fields;
-    }
-
-    /**
-     * Set the source backend identifier.
-     *
-     * @param string $identifier Backend identifier
-     *
-     * @return void
-     */
-    public function setSourceIdentifier($identifier)
-    {
-        $this->source = $identifier;
-    }
-
-    /**
-     * Return the source backend identifier.
-     *
-     * @return string
-     */
-    public function getSourceIdentifier()
-    {
-        return $this->source;
-    }
-
-    /**
-     * __get()
-     *
-     * @param string $name Field name
-     *
-     * @return mixed
-     */
-    public function __get($name)
-    {
-        return isset($this->fields[$name]) ? $this->fields[$name] : null;
-    }
 }
