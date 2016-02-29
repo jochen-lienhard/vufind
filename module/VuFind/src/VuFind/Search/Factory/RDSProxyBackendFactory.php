@@ -54,7 +54,8 @@ class RDSProxyBackendFactory extends AbstractRDSProxyBackendFactory
     {
         parent::__construct();
         $this->searchConfig = 'RDSProxy_searches';
-        $this->searchYaml = 'searchspecs.yaml';
+        $this->searchYaml = 'RDSProxy_searchspecs.yaml';
+        $this->facetConfig = 'RDSProxy_facets';
     }
 
     /**
@@ -83,7 +84,7 @@ class RDSProxyBackendFactory extends AbstractRDSProxyBackendFactory
         }
         $backend = parent::createBackend($connector);
         $manager = $this->serviceLocator->get('VuFind\RecordDriverPluginManager');
-        $factory = new RecordCollectionFactory(array($manager, 'getSolrRecord'));
+        $factory = new RecordCollectionFactory([$manager, 'getSolrRecord']);
         $backend->setRecordCollectionFactory($factory);
         return $backend;
     }
