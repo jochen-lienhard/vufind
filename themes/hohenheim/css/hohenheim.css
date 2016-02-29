@@ -43,3 +43,9 @@ span.checkedout {
   text-align: right;
   font-size: 200%;
 }
+
+.rdsCustomLink a {
+  color: #B45360;
+  padding-top: 8px;
+  font-weight: bold;
+}

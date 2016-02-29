@@ -24,7 +24,13 @@
 
 <div>
 
-  <div class="rds_title">Katalog plus </div>
+  <span class="rds_title">Katalog plus </span>
+  
+  <? if(trim($this->translate('RDS_CUSTOM_LINK_TEXT'))): ?>
+  <span class="rdsCustomLink">
+    <a href="<?=$this->translate('RDS_CUSTOM_LINK_URL')?>" title="<?=$this->translate('RDS_CUSTOM_LINK_TITLE')?>"><?=$this->translate('RDS_CUSTOM_LINK_TEXT')?></a>
+  </span>
+  <? endif; ?>
 
   <div class="rds_searchbox">
     <nav class="nav searchbox">

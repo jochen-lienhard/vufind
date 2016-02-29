@@ -435,3 +435,7 @@ tr.RDS_BIBLZUS th{
   font-size: 14px;
   padding-bottom: 4px;
 }
+
+.rdsCustomLink {
+  float: right;
+}
