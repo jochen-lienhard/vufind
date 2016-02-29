@@ -35,6 +35,7 @@ return array(
             'rdsproxyholdings' => 'VuFind\View\Helper\Bootstrap3\Factory::getRDSProxyHoldings',
             'rdsproxyholdingsprint' => 'VuFind\View\Helper\Bootstrap3\Factory::getRDSProxyHoldingsPrint',
             'rdsexport' => 'VuFind\View\Helper\Bootstrap3\Factory::getRDSExport',
+            'alphabrowse' => 'VuFind\View\Helper\Bootstrap3\Factory::getAlphaBrowse',
         ),
         'invokables' => array(
             'highlight' => 'VuFind\View\Helper\Bootstrap3\Highlight',

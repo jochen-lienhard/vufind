@@ -80,8 +80,20 @@ class Factory
         }
         return new LayoutClass($left, $offcanvas);
     }
+
+    /**
+     * Construct the AlphaBrowse helper.
+     *
+     * @param ServiceManager $sm Service manager.
+     *
+     * @return AlphaBrowse
+     */
+    public static function getAlphaBrowse(ServiceManager $sm)
+    {
+        return new AlphaBrowse($sm->get('url'));
+    }
     
-        /**
+    /**
      * Construct the RDSProxyHoldings helper.
      *
      * @param ServiceManager $sm Service manager.

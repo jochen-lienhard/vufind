@@ -25,8 +25,7 @@
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     http://vufind.org/wiki/vufind2:developer_manual Wiki
  */
-namespace VuFind\View\Helper\Root;
-use Zend\View\Helper\Url;
+namespace VuFind\View\Helper\Bootstrap3;
 
 /**
  * Authentication view helper
@@ -37,25 +36,8 @@ use Zend\View\Helper\Url;
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     http://vufind.org/wiki/vufind2:developer_manual Wiki
  */
-class AlphaBrowse extends \Zend\View\Helper\AbstractHelper
+class AlphaBrowse extends \VuFind\View\Helper\Root\AlphaBrowse
 {
-    /**
-     * URL helper
-     *
-     * @var Url
-     */
-    protected $url;
-
-    /**
-     * Constructor
-     *
-     * @param Url $helper URL helper
-     */
-    public function __construct(Url $helper)
-    {
-        $this->url = $helper;
-    }
-
     /**
      * Get link to browse results (or null if no valid URL available)
      *
@@ -72,30 +54,22 @@ class AlphaBrowse extends \Zend\View\Helper\AbstractHelper
 
         // Linking using bib ids is generally more reliable than doing searches for
         // headings, but headings give shorter queries and don't look as strange.
-        if ($item['count'] < 5) {
+        if ($item['count'] == 1) {
             $safeIds = array_map([$this, 'escapeForSolr'], $item['ids']);
-            $query = ['type' => 'ids', 'lookfor' => implode(' ', $safeIds)];
-            if ($item['count'] == 1) {
-                $query['jumpto'] = 1;
-            }
+            $query = ['type' => 'ex', 'lookfor' => 'id:' . implode(' ', $safeIds)];
+            //if ($item['count'] == 1) {
+            //    $query['jumpto'] = 1;
+            // }
         } else {
             $query = [
-                'type' => ucwords($source) . 'Browse',
-                'lookfor' => $this->escapeForSolr($item['heading']),
+                //'type' => ucwords($source) . 'Browse',
+                //'lookfor' => $this->escapeForSolr($item['heading']),
+                'type' => 'ex:',
+                'lookfor' => $source . '_browse:' . $this->escapeForSolr($item['heading']),
             ];
         }
-        return $this->url->__invoke('search-results', [], ['query' => $query]);
-    }
 
-    /**
-     * Escape a string for inclusion in a Solr query.
-     *
-     * @param type $str String to escape
-     *
-     * @return string
-     */
-    protected function escapeForSolr($str)
-    {
-        return '"' . addcslashes($str, '"') . '"';
+var_dump($this->url->__invoke('rdsindex-search', [], ['query' => $query]));
+        return $this->url->__invoke('rdsindex-search', [], ['query' => $query]);
     }
 }
