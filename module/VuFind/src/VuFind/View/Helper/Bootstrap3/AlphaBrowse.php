@@ -69,7 +69,6 @@ class AlphaBrowse extends \VuFind\View\Helper\Root\AlphaBrowse
             ];
         }
 
-var_dump($this->url->__invoke('rdsindex-search', [], ['query' => $query]));
         return $this->url->__invoke('rdsindex-search', [], ['query' => $query]);
     }
 }
