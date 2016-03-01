@@ -56,7 +56,7 @@ class AlphaBrowse extends \VuFind\View\Helper\Root\AlphaBrowse
         // headings, but headings give shorter queries and don't look as strange.
         if ($item['count'] == 1) {
             $safeIds = array_map([$this, 'escapeForSolr'], $item['ids']);
-            $query = ['type' => 'ex', 'lookfor' => 'id:' . implode(' ', $safeIds)];
+            $query = ['join' => 'AND', 'type0[]' => 'ex', 'lookfor0[]' => 'id:' . implode(' ', $safeIds), 'bool0[]' => 'AND'];
             //if ($item['count'] == 1) {
             //    $query['jumpto'] = 1;
             // }
@@ -64,8 +64,10 @@ class AlphaBrowse extends \VuFind\View\Helper\Root\AlphaBrowse
             $query = [
                 //'type' => ucwords($source) . 'Browse',
                 //'lookfor' => $this->escapeForSolr($item['heading']),
-                'type' => 'ex:',
-                'lookfor' => $source . '_browse:' . $this->escapeForSolr($item['heading']),
+                'join' => 'AND',
+                'type0[]' => 'ex',
+                'lookfor0[]' => $source . '_browse:' . $this->escapeForSolr($item['heading']),
+                'bool0[]' => 'AND',
             ];
         }
 
