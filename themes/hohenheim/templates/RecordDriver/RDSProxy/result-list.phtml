@@ -182,14 +182,16 @@
       <? endif; ?>
       <?=$this->record($this->driver)->getPreviews()?>
 */ ?>
-
-      <div class="col-sm-6 mediatype"></div>
-      <div class="col-sm-4 rds_shortlink">
-      <?=$rdsProxyHelper->getFulltextLink() ?>
+      <div class="col-sm-12">
+        <div class="col-sm-6 mediatype"></div>
+        <div class="col-sm-4 rds_shortlink">
+          <?=$rdsProxyHelper->getFulltextLink() ?>
+        </div>
       </div>
-
   </div>
 
+  <div><?=$guestviewBriefLink ?></div>
+  
   <? if('full' != $dataView): ?>
     <div class="long-view hidden"></div>
     </div>
@@ -271,24 +273,5 @@
 
 <? endif; ?>
     </div>
-
-<? /*
-  </div>
-  <? if('full' != $dataView): ?>
-    <div class="long-view hidden"></div>
-    </div>
-
-  <? endif; ?>
-    
-    <div>
-      <?=$rdsProxyHelper->getFavAction() ?>
-      <?=$rdsProxyHelper->getPrintAction() ?>
-      <?=$rdsProxyHelper->getFulltextLink() ?>    
-    </div>
-    
-    <div class="long-view hidden"></div>
-  <? endif; ?>
-*/ ?>
 </div>
 
-  <div class="col-xs-12 col-sm-12"><?=$guestviewBriefLink?></div>
