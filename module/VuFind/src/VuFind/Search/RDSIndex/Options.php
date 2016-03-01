@@ -77,4 +77,26 @@ class Options extends \VuFind\Search\Solr\Options
     {
         return 'rdsindex-advanced';
     }
+
+    /**
+     * Translate a field name to a displayable string for rendering a query in
+     * human-readable format:
+     *
+     * @param string $field Field name to display.
+     *
+     * @return string       Human-readable version of field name.
+     */
+    public function getHumanReadableFieldName($field)
+    {
+        if (isset($this->basicHandlers[$field])) {
+            return $this->translate($this->basicHandlers[$field]);
+        } else if (isset($this->advancedHandlers[$field])) {
+            return $this->translate($this->advancedHandlers[$field]);
+        } else if ($field === "ex") {
+            return $this->translate("RDS_EX");
+        } else {
+            return $field;
+        }
+    }
+
 }
