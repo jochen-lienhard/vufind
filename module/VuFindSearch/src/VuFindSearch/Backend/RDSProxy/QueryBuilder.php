@@ -49,4 +49,25 @@ use VuFindSearch\ParamBag;
  */
 class QueryBuilder extends \VuFindSearch\Backend\Solr\QueryBuilder implements QueryBuilderInterface
 {
+    /**
+     * Set query builder search specs.
+     *
+     * @param array $specs Search specs
+     *
+     * @return void
+     */
+    public function setSpecs(array $specs)
+    {
+        foreach ($specs as $handler => $spec) {
+            if (isset($spec['ExactSettings'])) {
+                $this->exactSpecs[strtolower($handler)] = new SearchHandler(
+                    $spec['ExactSettings'], $this->defaultDismaxHandler
+                );
+                unset($spec['ExactSettings']);
+            }
+            $this->specs[strtolower($handler)]
+                = new SearchHandler($spec, $this->defaultDismaxHandler);
+        }
+    }
+
 }

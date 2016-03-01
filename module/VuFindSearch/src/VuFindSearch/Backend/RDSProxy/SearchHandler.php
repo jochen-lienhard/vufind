@@ -46,4 +46,33 @@ namespace VuFindSearch\Backend\RDSProxy;
  */
 class SearchHandler extends \VuFindSearch\Backend\Solr\SearchHandler
 {
+    /**
+     * Return a Dismax subquery for specified search string.
+     *
+     * @param string $search Search string
+     *
+     * @return string
+     */
+    protected function dismaxSubquery($search)
+    {
+        $dismaxParams = [];
+        foreach ($this->specs['DismaxParams'] as $param) {
+            $dismaxParams[] = sprintf(
+                "%s='%s'", $param[0], addcslashes($param[1], "'")
+            );
+        }
+        foreach ($this->specs['DismaxFields'] as $field) {
+           $dismaxQuery .= sprintf(
+            '(%s:(%s)',
+            $field,
+            $search
+        );
+           if ($field !== end($this->specs['DismaxFields'])) {
+              $dismaxQuery = sprintf('%s) OR ', $dismaxQuery);
+           } else {
+              $dismaxQuery .= ")";
+           }
+        }
+        return sprintf("%s", $dismaxQuery);
+    }
 }

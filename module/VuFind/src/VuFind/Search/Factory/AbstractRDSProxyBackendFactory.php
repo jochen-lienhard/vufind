@@ -289,12 +289,11 @@ abstract class AbstractRDSProxyBackendFactory implements FactoryInterface
     protected function createQueryBuilder()
     {
     
-        //$specs   = $this->loadSpecs();
+        $specs   = $this->loadSpecs();
         $config = $this->config->get('config');
-        /*
         $defaultDismax = isset($config->Index->default_dismax_handler)
-            ? $config->Index->default_dismax_handler : 'dismax';*/
-        $builder = new QueryBuilder(); // $specs, $defaultDismax);
+            ? $config->Index->default_dismax_handler : 'dismax';
+        $builder = new QueryBuilder($specs, $defaultDismax);
 
         // Configure builder:
         $search = $this->config->get($this->searchConfig);
@@ -309,7 +308,6 @@ abstract class AbstractRDSProxyBackendFactory implements FactoryInterface
         );
         $builder->setLuceneHelper($helper);
 
-    
         return $builder;
     }
 
