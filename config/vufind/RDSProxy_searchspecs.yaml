@@ -1,3 +1,68 @@
+
+ti:
+  DismaxFields:
+    - ti
+  CustomMunge:
+    rds_ti:
+      - [preg_replace, '/[:]/', ' ']
+      - [preg_replace, '/[-]/', ' ']
+      - [preg_replace, '/[+]/', ' ']
+      - [preg_replace, '/[#]/', ' ']
+      - [preg_replace, '/[¬]/', ' ']
+      - [preg_replace, '/[!]/', '\!']
+      - [preg_replace, '/[\\\/]/', ' ']
+  QueryFields:
+    ti:
+      - [rds_ti, ~]
+
+au:
+  DismaxFields:
+    - au
+  CustomMunge:
+    rds_au:
+      - [preg_replace, "/[:]/", "\:"]
+      - [preg_replace, "/[;]/", " "]
+      - [preg_replace, "/[!]/", "\!"]
+      - [preg_replace, '/[\\\/]/', ' ']
+  QueryFields:
+    au:
+      - [rds_au, ~]
+
+ct:
+  DismaxFields:
+    - ct
+  CustomMunge:
+    rds_ct:
+      - [preg_replace, '/[:]/', ' ']
+      - [preg_replace, '/[-]/', ' ']
+      - [preg_replace, '/[+]/', ' ']
+      - [preg_replace, '/[#]/', ' ']
+      - [preg_replace, '/[!]/', '\!']
+      - [preg_replace, '/[\\\/]/', ' ']
+  QueryFields:
+    ct:
+      - [rds_ct, ~]
+
+sb:
+  DismaxFields:
+    - sb
+  CustomMunge:
+    rds_sb:
+      - [preg_replace, '/[:]/', ' ']
+  QueryFields:
+    sb:
+      - [rds_sb, ~]
+
+ss:
+  DismaxFields:
+    - ss
+  CustomMunge:
+    rds_ss:
+      - [preg_replace, '/[:]/', ' ']
+  QueryFields:
+    ss:
+      - [rds_ss, ~]
+
 isn:
   DismaxFields:
     - sb
@@ -9,3 +74,39 @@ isn:
     sb:
       - [and, 100]
       - [or, ~]
+
+py:
+  DismaxFields:
+    - py
+  CustomMunge:
+    rds_py:
+      - [preg_replace, '/[:]/', ' ']
+      - [preg_replace, '/[!]/', ' ']
+  QueryFields:
+    py:
+      - [rds_py, ~]
+
+so:
+  DismaxFields:
+    - si
+  CustomMunge:
+    rds_si:
+      - [preg_replace, '/[:]/', '\:']
+      - [preg_replace, '/[ ]/', ""]
+      - [preg_replace, '/[(]/', "\\\("]
+      - [preg_replace, '/[)]/', "\\\)"]
+  QueryFields:
+    so:
+      - [rds_so, ~]
+
+ab:
+  DismaxFields:
+    - ab 
+  CustomMunge:
+    rds_zr:
+      - [preg_replace, '/[:]/', '\:']
+      - [preg_replace, '/[!]/', '\!']
+  QueryFields:
+    ab:
+      - [rds_ab, ~]
+
