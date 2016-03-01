@@ -89,19 +89,22 @@
   </form>
 
   <form method="get" action="<?=$this->url($this->options->getSearchAction())?>" id="expadvSearchForm" name="exsearchForm" class="search">
+
     <div class="expSearch">
        <?=$this->transEsc("RDS_EX")?>
        <a class="help" href="{translate text="RDS_EXPERT_SEARCH_HELP_URL"}">[?]</a>
     </div>
 
-    <input type="hidden" value="ex" name="type" />
-    <input id="search_lookfor_ex" type="text" 
-           value="<? if(isset($searchTerms["ex"])) {echo $searchTerms["ex"];}?>" 
-           onfocus="myhelp('<?=$this->transEsc("RDS_B_ex_help_head")?>','<?=$this->transEsc("RDS_B_ex_help_text")?>');"
-           size="50" name="lookfor"/>
-    <input class="btn btn-primary expSearchBtn" type="submit" value="<?= $this->transEsc('RDS_SEARCH')?>">
+             <input type="hidden" name="join" value="AND">
+             <input type="hidden" value="ex" name="type0[]" />
+             <input id="search_lookfor_ex" type="text" 
+                    value="<? if(isset($searchTerms["ex"])) {echo htmlentities($searchTerms["ex"]);} ?>" 
+                    onfocus="myhelp('<?=$this->transEsc("RDS_B_ex_help_head")?>','<?=$this->transEsc("RDS_B_ex_help_text")?>');"
+                    size="50" name="lookfor0[]"/>
+              <input type="hidden" name="bool0[]" value="AND">
+              <input class="btn btn-primary expSearchBtn" type="submit" value="<?= $this->transEsc('RDS_SEARCH')?>">
   </form>
-</div>
+ </div>
 
 <div class="<?=$this->layoutClass('sidebar')?>">
   <div class="sidegroup">
