@@ -1784,7 +1784,7 @@ class RDSIndex extends SolrMarc
      */
     public function getTitleSerie()
     {
-        if (isset($_GET) && $_GET["type"] == "ex" && (preg_match("/^rn/", $_GET["lookfor"]))) {
+        if (isset($_GET) && $_GET["type0"][0] == "ex" && (preg_match("/^rn/", $_GET["lookfor0"][0]))) {
             if ($this->getMedienicon() == "beitrag") {
                 return "RDS_BEITRAG";
             } else {
