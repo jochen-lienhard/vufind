@@ -60,7 +60,7 @@ class RDSProxyList extends RDSProxyHelper
         ) {
                 $html .= '<a href="' . $this->getLoginLink() .  '">';
                 $html .= $this->translate("RDS_MORE_INFO_FOR_AUTHORIZED_USERS"); //transEsc
-                $thml .= '</a>';
+                $html .= '</a>';
         } 
         return $html;
     }
