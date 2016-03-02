@@ -98,6 +98,7 @@ class RDSIndexCore extends \Zend\View\Helper\AbstractHelper implements Translato
     ];
 
     protected $driver = null;
+    protected $baseUrl = '';
 
     //	protected $ppn = $this->driver->gettPPN();
 
@@ -109,10 +110,11 @@ class RDSIndexCore extends \Zend\View\Helper\AbstractHelper implements Translato
     *
     * @return driver
     */
-    public function __invoke($driver) 
+    public function __invoke($driver, $baseUrl = '') 
     {
         // Set up driver context:
         $this->driver = $driver;
+        $this->baseUrl = $baseUrl;
         return $this;
 
     }
@@ -331,7 +333,7 @@ class RDSIndexCore extends \Zend\View\Helper\AbstractHelper implements Translato
             foreach ($authors_long as $field) {
 
                 $last_item = end($authors_long);
-                $html_result .= "<a href=".$this->view->render('/RecordDriver/RDSIndex/link-author.phtml', ['lookfor' => $field['link']]).">"
+                $html_result .= "<a href=".$this->baseUrl.$this->view->render('/RecordDriver/RDSIndex/link-author.phtml', ['lookfor' => $field['link']]).">"
                 .$transEsc($field['link'])."</a>";
                 if (isset($field['link_text']) && !empty($field['link_text'])) {
                     $html_result .= $transEsc($field['link_text']); 
@@ -406,7 +408,7 @@ class RDSIndexCore extends \Zend\View\Helper\AbstractHelper implements Translato
             foreach ($co_long as $field) {
 
                 $last_item = end($co_long);
-                $html_result .= "<a href=".$this->view->render('/RecordDriver/RDSIndex/link-corporate.phtml', ['lookfor' => $field['link']]).">"
+                $html_result .= "<a href=".$this->baseUrl.$this->view->render('/RecordDriver/RDSIndex/link-corporate.phtml', ['lookfor' => $field['link']]).">"
                 .$transEsc($field['text'])."</a>";
                 if (isset($field['zus_text']) && !empty($field['zus_text'])) {
                     $html_result .= " [".$transEsc($field['zus_text'])."]"; 
@@ -972,7 +974,7 @@ class RDSIndexCore extends \Zend\View\Helper\AbstractHelper implements Translato
                     $html_result .=  $transEsc($field['pre-text']).": "; 
                 }
                 if (!empty($field['id'])) {
-                    $html_result .= "<a href=".$this->view->render('/RecordDriver/RDSIndex/link-id.phtml', ['lookfor' => $field['id']]).">"
+                    $html_result .= "<a href=".$this->baseUrl.$this->view->render('/RecordDriver/RDSIndex/link-id.phtml', ['lookfor' => $field['id']]).">"
                     .$transEsc($field['text'])."</a>";
                 } else {
                     if (!empty($field['text'])) {
@@ -1002,7 +1004,7 @@ class RDSIndexCore extends \Zend\View\Helper\AbstractHelper implements Translato
                 foreach ($info as $field) {
                     if (!empty($field['id'])) {
                         $html_result .= "<a href="
-                        .$this->view->render('/RecordDriver/RDSIndex/link-id.phtml', ['lookfor' => $field['id']]).">"
+                        .$this->baseUrl.$this->view->render('/RecordDriver/RDSIndex/link-id.phtml', ['lookfor' => $field['id']]).">"
                         .$transEsc($field['lnk_txt']);
                     }
                     if (!empty($field['bnd'])) {
@@ -1031,7 +1033,7 @@ class RDSIndexCore extends \Zend\View\Helper\AbstractHelper implements Translato
                 foreach ($info as $field) {
                     if (!empty($field['id'])) {
                         $html_result .= "<a href="
-                        .$this->view->render('/RecordDriver/RDSIndex/link-id.phtml', ['lookfor' => $field['id']]).">"
+                        .$this->baseUrl.$this->view->render('/RecordDriver/RDSIndex/link-id.phtml', ['lookfor' => $field['id']]).">"
                         .$transEsc($field['lnk_txt']);
                     }
                     if (!empty($field['bnd'])) {
@@ -1060,7 +1062,7 @@ class RDSIndexCore extends \Zend\View\Helper\AbstractHelper implements Translato
             foreach ($info as $field) {
                 if (!empty($field['id'])) {
                     $html_result .= "<a href="
-                     .$this->view->render('/RecordDriver/RDSIndex/link-id.phtml', ['lookfor' => $field['id']]).">"
+                    .$this->baseUrl.$this->view->render('/RecordDriver/RDSIndex/link-id.phtml', ['lookfor' => $field['id']]).">"
                     .$transEsc($field['lnk_txt']);
                 }
                 if (!empty($field['bnd'])) {
@@ -1092,7 +1094,7 @@ class RDSIndexCore extends \Zend\View\Helper\AbstractHelper implements Translato
             foreach ($result as $field) {
                 $last_item = end($result);
                 if (!empty($field['id'])) {
-                    $html_result .= "<a href=".$this->view->render('/RecordDriver/RDSIndex/link-id.phtml', ['lookfor' => $field['id']]).">"
+                    $html_result .= "<a href=".$this->baseUrl.$this->view->render('/RecordDriver/RDSIndex/link-id.phtml', ['lookfor' => $field['id']]).">"
                     .$transEsc($field['lnk_txt'])."</a><br/>";
                 }
                 if ($result!= $last_item) {

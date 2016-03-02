@@ -3,7 +3,7 @@
 
 <h2><?=$this->transEsc(RDS_TITLE) ?></h2>
 
-<? $coreItems = $this->rdsindexcore($this->driver)->getItems(); ?>
+<? $coreItems = $this->rdsindexcore($this->driver,  $this->serverUrl())->getItems(); ?>
 <table>
 <? foreach ($coreItems as $itemName => $itemValue): ?>
     <tr>
