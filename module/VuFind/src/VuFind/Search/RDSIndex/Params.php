@@ -93,4 +93,38 @@ class Params extends \VuFind\Search\Solr\Params
         }
         return true;
     }
+
+    /**
+     * Set the sorting value (note: sort will be set to default if an illegal
+     * or empty value is passed in).
+     *
+     * @param string $sort  New sort value (null for default)
+     * @param bool   $force Set sort value without validating it?
+     *
+     * @return void
+     */
+    public function setSort($sort, $force = false)
+    {
+        // Skip validation if requested:
+        if ($force) {
+            $this->sort = $sort;
+            return;
+        }
+
+        // Validate and assign the sort value:
+        $valid = array_keys($this->getOptions()->getSortOptions());
+        // fix to allow bnd asc sort
+        $valid[] = "bnd asc";
+        if (!empty($sort) && in_array($sort, $valid)) {
+            $this->sort = $sort;
+        } else {
+            $this->sort = $this->getDefaultSort();
+        }
+
+        // In RSS mode, we may want to adjust sort settings:
+        if (!$this->skipRssSort && $this->getView() == 'rss') {
+            $this->sort = $this->getOptions()->getRssSort($this->sort);
+        }
+    }
+
 }
