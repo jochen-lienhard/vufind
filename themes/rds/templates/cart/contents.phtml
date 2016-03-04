@@ -2,11 +2,15 @@
   <hr/>
   <ul class="list-unstyled">
   <? foreach ($records as $i => $record): ?>
+    <? $recordSearch = $this->url('home') . $record->getSourceIdentifier()
+                       . '/Search?join=AND&type0[]=ex&lookfor0[]=id:'
+                       . $record->getUniqueId() . '&bool0[]=AND'; ?>
+  
     <li>
       <div class="checkbox">
         <label>
           <?=$this->record($record)->getCheckbox('cart')?>
-          <a title="<?=$this->transEsc('View Record')?>" href="<?=$this->recordLink()->getUrl($record)?>"><?=$this->escapeHtml($this->truncate($record->getBreadcrumb(),75))?></a> 
+          <a title="<?=$this->transEsc('View Record')?>" href="<?=$recordSearch?>"><?=$this->escapeHtml($this->truncate($record->getBreadcrumb(),75))?></a> 
         </label>
         <? $breadcrumbMore = $record->getBreadcrumbMore(); ?>
         <? if (isset($breadcrumbMore)): ?>
