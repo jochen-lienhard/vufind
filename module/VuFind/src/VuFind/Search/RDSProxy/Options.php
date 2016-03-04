@@ -71,7 +71,21 @@ class Options extends \VuFind\Search\Solr\Options
         return 'rdsproxy-advanced';
     }
 
-
+    /**
+     * Translate a field name to a displayable string for rendering a query in
+     * human-readable format:
+     *
+     * @param string $field Field name to display.
+     *
+     * @return string       Human-readable version of field name.
+     */
+    public function getHumanReadableFieldName($field) {
+        
+        
+        if ($field === "ex") {
+            return $this->translate("RDS_EX");
+        } else {
+            return parent::getHumanReadableFieldName($field);
+        }
+    }
 }
-
-
