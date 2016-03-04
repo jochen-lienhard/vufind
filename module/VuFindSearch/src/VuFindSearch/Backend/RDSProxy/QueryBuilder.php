@@ -70,4 +70,45 @@ class QueryBuilder extends \VuFindSearch\Backend\Solr\QueryBuilder implements Qu
         }
     }
 
+    /**
+     * RDS: extended functionality - return expert query (handler='ex') if present.<br /> 
+     * Reduce query group a single query.
+     *
+     * @param QueryGroup $group Query group to reduce
+     *
+     * @return Query
+     */
+    protected function reduceQueryGroup(QueryGroup $group)
+    {
+        $expertSearchStr = $this->getExpertSearchStr($group);
+        if ($expertSearchStr) {
+            return new Query($expertSearchStr, 'ex');
+        }
+        
+        return parent::reduceQueryGroup($group);
+    }
+    
+    /**
+     * Scan for expert search string.
+     *
+     * @param QueryGroup $group Query group to scan
+     *
+     * @return string | null
+     */
+    
+    protected function getExpertSearchStr(AbstractQuery $component) {
+        $expertSearchStr = null;
+        
+        if ($component instanceof QueryGroup) {
+            $reduced = array_map(
+                [$this, 'getExpertSearchStr'], $component->getQueries()
+            );
+            $expertSearchStr = implode('', $reduced);
+            
+        } else if ($component->getHandler() == 'ex') {
+            $expertSearchStr = $component->getString();
+        }
+        
+        return $expertSearchStr;
+    }
 }
