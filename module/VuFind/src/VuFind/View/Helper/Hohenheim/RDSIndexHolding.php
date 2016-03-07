@@ -54,7 +54,6 @@ class RDSIndexHolding extends \VuFind\View\Helper\Bootstrap3\RDSIndexHolding
      * @array
      */
     protected $resultOrder = [
-       "RDS_LEA",
        "RDS_SIGNATURE",
        "RDS_STATUS",
        "RDS_LOCATION",
@@ -67,6 +66,27 @@ class RDSIndexHolding extends \VuFind\View\Helper\Bootstrap3\RDSIndexHolding
        "RDS_PROVENIENCE",
        "RDS_LOCAL_NOTATION",
     ];
+
+    /**
+     * Special string 
+     *
+     * @string
+     */
+    protected $special = null;
+
+    /**
+     * Generate an array based on local data set and DAIA result
+     *
+     * @param array $lok  local data set
+     * @param array $daia DAIA result
+     *
+     * @return array 
+     */
+    public function mergeData($lok, $daia)
+    {
+       $this->setSpecial($lok, $daia);
+       return parent::mergeData($lok, $daia);
+    }
 
     /**
      * Check if item is part of something special 
@@ -107,6 +127,37 @@ class RDSIndexHolding extends \VuFind\View\Helper\Bootstrap3\RDSIndexHolding
     {
         if (isset($lok_set["zusatz_standort"])) {
             return $lok_set["zusatz_standort"];
+        }
+    }
+
+   /**
+     * Returns the LEA link and text 
+     *
+     * @param string $bib_sigel id of library
+     *
+     * @return string 
+     */
+    public function setSpecial($lok, $daia)
+    {
+        foreach ($lok as $lokset) {
+          if (($lokset["bib_sigel"] == "100") && ($lokset["zusatz_standort"]!="11") && ($lokset["zusatz_standort"]!="31")) {
+	$this->special = $this->translate("RDS_LEA_TEXT") . ": <a href=' " . $this->translate("RDS_LEA_LINK") . $lokset["t_idn"] . "' target='LEA'>" . $this->translate('RDS_LEA_LINK_TEXT') . "</a>"; }
+        }
+    }
+
+   /**
+     * Returns the LEA link and text 
+     *
+     * @param string $bib_sigel id of library
+     *
+     * @return string 
+     */
+    public function getSpecial($bib_sigel)
+    {
+        if (isset($this->special)) {
+           return ($this->special);
+        } else {
+           return null;
         }
     }
 

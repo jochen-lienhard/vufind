@@ -41,10 +41,6 @@
     $bib_name=$this->RDSIndexHolding()->getBibName($bib_key);
     $bib_addon=$this->RDSIndexHolding()->getBibAddon($bib_key);
     $bib_link=$this->RDSIndexHolding()->getBibLink($bib_key); 
-    if ($this->isGranted("access.RDSIndexSpecial")) {
-       // means MyBib for Freiburg issn, ti necessary and format
-       $special = $this->RDSIndexHolding()->getSpecial($bib_key); 
-    }
     if ($this->driver->getONLINE() === "offline") {
        $adis_link=$this->RDSIndexHolding()->getAdisLink($bib_key);
     }
@@ -83,6 +79,15 @@
       </tr>
     <? endif; ?>
   <? endif; ?>
+  <? /* eventuell check via getTz, getFormats oder getFormat */ ?>
+  <? $special = $this->RDSIndexHolding()->getSpecial($bib_key); ?>
+  <? if (($this->driver->getFormat() == 'zeitschrift') && ($special != null) && $this->driver->getONLINE() === "offline"): ?>
+      <tr>
+      <td colspan="4" class="lea">
+          <?=$special?>
+      </td>
+      </tr>
+ <? endif; ?>
   <? foreach ($bibholding as $exemplar): ?>
     <? foreach ($order as $order_value): ?>
       <? if ($exemplar[$order_value]): ?> 
