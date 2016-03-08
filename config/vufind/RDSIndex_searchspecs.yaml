@@ -315,8 +315,6 @@ ta:
       - [onephrase, ~]
 
 sy:
-  DismaxFields:
-    - sy^100
   CustomMunge:
     rds_sy:
       - [preg_replace, '/[:]/', '\:']
@@ -327,8 +325,6 @@ sy:
       - [onephrase, ~]
 
 zr:
-  DismaxFields:
-    - zr^100
   CustomMunge:
     rds_zr:
       - [preg_replace, '/[:]/', '\:']
