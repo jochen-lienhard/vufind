@@ -20,7 +20,7 @@
 
 <div>
 
-  <div class="col-xs-11 col-sm-11">
+  <div class="col-xs-9 col-sm-10">
   <? if($guestviewLoginLink): ?>
   <div>
     <?=$guestviewLoginLink ?>
@@ -197,7 +197,7 @@
     </div>
   <? endif; ?>
 
-    <div class="col-xs-1 col-sm-1 right hidden-print">
+    <div class="col-xs-2 col-sm-1 hidden-print">
       <? /* Display qrcode if appropriate: */ ?>
       <? if ($QRCode = $this->record($this->driver)->getQRCode("results")): ?>
         <?
