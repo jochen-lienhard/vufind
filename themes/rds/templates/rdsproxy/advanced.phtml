@@ -66,7 +66,7 @@
                             </div>
                    <div class="col-md-8">
                                    <span>
-                          <input id="search_lookfor0_<?=$counter?>" class="form-control" onfocus="myhelp('<?=$this->transEsc("RDS_A_" . $key . "_help_head")?>','<?=$this->transEsc("RDS_A_" . $key . "_help_text")?>');" type="text" name="lookfor0[]" value="<? if(isset($searchTerms[$key])) {echo $searchTerms[$key];}?>">
+                          <input id="search_lookfor0_<?=$counter?>" class="form-control" onfocus="myhelp('<?=$this->transEsc("RDS_A_" . $key . "_help_head")?>','<?=$this->transEsc("RDS_A_" . $key . "_help_text")?>');" type="text" name="lookfor0[]" value="<? if(isset($searchTerms[$key])) {echo htmlspecialchars($searchTerms[$key]);}?>">
                                    </span>
                            </div>
                              <input type="hidden" name="join" value="AND">
