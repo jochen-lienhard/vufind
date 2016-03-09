@@ -81,7 +81,7 @@
   <? endif; ?>
   <? /* eventuell check via getTz, getFormats oder getFormat */ ?>
   <? $special = $this->RDSIndexHolding()->getSpecial($bib_key); ?>
-  <? if (($this->driver->getFormat() == 'zeitschrift') && ($special != null) && $this->driver->getONLINE() === "offline"): ?>
+  <? if ((in_array('zeitschrift',$this->driver->getFormats())) && ($bib_key == "100") && ($special != null) && $this->driver->getONLINE() === "offline"): ?>
       <tr>
       <td colspan="4" class="lea">
           <?=$special?>
