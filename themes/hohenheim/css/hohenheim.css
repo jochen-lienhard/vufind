@@ -49,3 +49,16 @@ span.checkedout {
   padding-top: 8px;
   font-weight: bold;
 }
+
+.rds_shortlink a {
+  float: right;
+}
+
+.callnumAndLocation a {
+  float: right;
+}
+
+.flexbox {
+  width: 60px;
+  height: 15px;
+}

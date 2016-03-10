@@ -159,12 +159,14 @@
 <? /* Area for MedienIcon-Text, Fulltext-Link and Available-Flexbox */ ?>
       <? if (!$openUrlActive && empty($urls) && $this->driver->supportsAjaxStatus()): ?>
         <span class="status ajax-availability hidden">
+<? /*
           <span class="label label-default"><?=$this->transEsc('Loading')?>...</span>
+  */ ?>
         </span>
       <? endif; ?>
       <?=$this->record($this->driver)->getPreviews()?>
 
-      <div class="col-sm-6 mediatype"><?=$this->transEsc($this->driver->getMedienicon())?>
+      <div class="col-xs-6 col-sm-6 mediatype"><?=$this->transEsc($this->driver->getMedienicon())?>
            <? $py = $this->driver->getPublishingYear(); ?>
            <? $summpy = $this->driver->getPy(); ?>
            <? if (isset($py) && !empty($py)): ?>
@@ -175,13 +177,13 @@
       </div>
       <? $shortLink = $this->driver->getShortLinks(); ?>
       <? if (isset($shortLink) && !empty($shortLink)): ?> 
-           <div class="col-sm-2 rds_shortlink">
-               <a href="<?=$this->escapeHtml($shortLink) ?>" target="_blank" type="button" class="btn btn-primary btn-xs"><i class="fa fa-file-text-o"></i><span class="hidden-xs"> <?=$this->transEsc('RDS_FULLTEXT_LINK') ?></span></a>
+           <div class="col-xs-6 col-sm-6 rds_shortlink">
+               <a href="<?=$this->escapeHtml($shortLink) ?>" target="_blank" type="button" class="btn btn-primary btn-xs"><i class="fa fa-file-text-o"></i><span> <?=$this->transEsc('RDS_FULLTEXT_LINK') ?></span></a>
            </div>
       <? endif; ?>
 
       <? if ($this->driver->supportsAjaxStatus()): ?>
-          <div class="callnumAndLocation ajax-availability hidden col-sm-2"></div>
+          <div class="callnumAndLocation ajax-availability hidden col-xs-6 col-sm-6"></div>
       <? endif; ?>
     </div>
 
