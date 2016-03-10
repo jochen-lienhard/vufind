@@ -194,7 +194,10 @@
     <div class="col-xs-1 col-sm-1 hidden-print">
       <? /* add aDIS Link for Stuttgart */ ?>
       <? $adis_link="https://stg.ibs-bw.de/aDISWeb/app?service=direct/0/Home/\$DirectLink&sp=S127.0.0.1:23002&sp=SAKSWB-IdNr".$ppn;?>
-      <div><a href="<?=$adis_link?>" class="fa fa-long-arrow-right" title="aDis"></a></div>
+      <? $adis_mlink="https://stg.ibs-bw.de/aDISWeb/app?service=direct/0/Home/\$DirectLink&sp=S127.0.0.1:23008&sp=SAKSWB-IdNr".$ppn;?>
+      <div><a href="<?=$adis_link?>" target="adis" class="fa fa-long-arrow-right" title="aDis"></a>
+      <a href="<?=$adis_mlink?>" target="adis" class="fa fa-mobile" title="MaDis"></a>
+      </div>
 
       <? /* Display qrcode if appropriate: */ ?>
       <? if ($QRCode = $this->record($this->driver)->getQRCode("results")): ?>
