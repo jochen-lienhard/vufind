@@ -439,3 +439,14 @@ tr.RDS_BIBLZUS th{
 .rdsCustomLink {
   float: right;
 }
+
+.checkboxFilter {
+  padding: 6px 0px;
+  margin-bottom: 20px;
+  border: 1px solid #ddd;
+}
+
+.checkboxFilter .checkbox {
+  margin: 0px;
+  padding: 4px 0px 2px 12px;
+}

@@ -62,3 +62,11 @@ span.checkedout {
   width: 60px;
   height: 15px;
 }
+.sidebar h4 {
+  background: #3670a1
+}
+
+.checkboxFilter {
+  background-color: #D3E3F0;
+}
+
