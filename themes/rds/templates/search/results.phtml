@@ -132,7 +132,7 @@
         <?=$this->paginationControl($this->results->getPaginator(), 'Sliding', 'search/pagination.phtml', array('results' => $this->results))?>
       </form>
     <? endif; ?>
-    <?=$this->context($this)->renderInContext('search/hintbox.phtml')?>
+    <?=$this->context($this)->renderInContext('search/hintbox.phtml', array())?>
   </div>
   <? /* End Main Listing */ ?>
 
