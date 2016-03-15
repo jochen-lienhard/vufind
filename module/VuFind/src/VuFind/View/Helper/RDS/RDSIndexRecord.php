@@ -51,6 +51,7 @@ class RDSIndexRecord extends \VuFind\View\Helper\Root\Record
      */
     public function getTitleHtml($maxLength = 180)
     {
+        $transEsc = $this->getView()->plugin('transEsc');
         $highlightedTitle = $this->driver->tryMethod('getHighlightedTitle');
         $ast = $this->driver->tryMethod('getAst');
         $title = trim($this->driver->tryMethod('getTitleShort'));
@@ -60,7 +61,7 @@ class RDSIndexRecord extends \VuFind\View\Helper\Root\Record
         $editions = $this->driver->tryMethod('getEditions');
         if (!empty($titleSerie)) {
             if (!empty($volume)) {
-                $title = $titleSerie . " " . $volume . " " . $title;
+                $title = $transEsc($titleSerie) . " " . $volume . " " . $title;
             }
         }
         // TODO Ende
@@ -81,7 +82,6 @@ class RDSIndexRecord extends \VuFind\View\Helper\Root\Record
             $truncate = $this->getView()->plugin('truncate');
             return $escapeHtml($truncate($title, $maxLength));
         }
-        $transEsc = $this->getView()->plugin('transEsc');
         return $transEsc('Title not available');
     }
 
