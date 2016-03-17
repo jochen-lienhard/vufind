@@ -73,7 +73,7 @@ class RDSIndexDescription extends  \VuFind\View\Helper\Bootstrap3\RDSIndexDescri
 				//$html_result .= "<a href=".$this->record($this->driver)->getLink('zr', $field.">".$field."</a>";
 				$html_result .= "<a href=".$this->view->render('/RecordDriver/RDSIndex/link-zr.phtml', ['lookfor' => $field]).">".$field."</a>";
 				$html_result .= " ".$this->translate('BB_'.$field);
-				if($links != $last_item )
+				if($lok_no != $last_item )
 					$html_result .="<br /> " ;
 			}
 		}
