@@ -211,9 +211,9 @@ class RDSIndexDescription extends \Zend\View\Helper\AbstractHelper implements Tr
                     if ($field != $last_item ) {
                         $html_result .=" / " ; 
                     }
-                }
-                if ($ct_display != $last_item ) {
+                if ($ct_field != $last_item ) {
                     $html_result .="<br /> " ; 
+                }
                 }
             }
         }

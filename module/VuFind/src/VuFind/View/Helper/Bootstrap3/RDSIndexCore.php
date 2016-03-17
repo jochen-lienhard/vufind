@@ -332,7 +332,7 @@ class RDSIndexCore extends \Zend\View\Helper\AbstractHelper implements Translato
         if (isset($authors_long) && !empty($authors_long)) {
             foreach ($authors_long as $field) {
 
-                $last_item = end($authors_long);
+                $last_item = end($field);
                 $html_result .= "<a href=".$this->baseUrl.$this->view->render('/RecordDriver/RDSIndex/link-author.phtml', ['lookfor' => $field['link']]).">"
                 .$transEsc($field['link'])."</a>";
                 if (isset($field['link_text']) && !empty($field['link_text'])) {
@@ -344,12 +344,12 @@ class RDSIndexCore extends \Zend\View\Helper\AbstractHelper implements Translato
                     ." target ='_blank' title='".$this->translate('RDS_PERS_DNB')."'></a>";
                     $myau = explode(",", $field['link']);
                     $mywiki = str_replace(' ', '_', trim($myau[1])) . "_" . $myau[0];
-                    $html_result .= " <a class='wikipedia' href="
-                    .$this->view->render('/RecordDriver/RDSIndex/link-wiki.phtml', ['lookfor' => $mywiki])
-                    ." target='_blank' title='".$this->translate('RDS_PERS_WIKI')."'</a>";
+		     $html_result .= " <a class='wikipedia' href="
+		     .$this->view->render('/RecordDriver/RDSIndex/link-wiki.phtml', ['lookfor' => $mywiki])
+		     ." target='_blank' title='".$this->translate('RDS_PERS_WIKI')."'></a>";
                 }
-                if ($authors_long != $last_item) {
-                    $html_result .="<br /> " ; 
+                if ($field != $last_item) {
+                    $html_result .="<br />" ; 
                 }
             }
         }
