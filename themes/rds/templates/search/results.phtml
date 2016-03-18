@@ -129,7 +129,7 @@
     <? else: ?>
       <form class="form-inline" method="post" name="bulkActionForm" action="<?=$this->url('cart-home')?>">
         <?=$this->render('search/list-' . $this->params->getView() . '.phtml')?>
-        <?=$this->paginationControl($this->results->getPaginator(), 'Sliding', 'search/pagination.phtml', array('results' => $this->results))?>
+        <?=$this->paginationControl($this->results->getPaginator()->setPageRange(2), 'Sliding', 'search/pagination.phtml', array('results' => $this->results))?>
       </form>
     <? endif; ?>
     <?=$this->context($this)->renderInContext('search/hintbox.phtml', array())?>

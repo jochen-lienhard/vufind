@@ -110,7 +110,7 @@
           <? /* foreach ($this->results->getResults() as $i=>$current): ?>
             <?=$this->record($current)->getListEntry($list, $user)?>
           <? endforeach; */ ?> 
-        <?=$this->paginationControl($this->results->getPaginator(), 'Sliding', 'search/pagination.phtml', array('results' => $this->results))?>
+        <?=$this->paginationControl($this->results->getPaginator()->setPageRange(2), 'Sliding', 'search/pagination.phtml', array('results' => $this->results))?>
       <? else: ?>
         <p><?=$this->transEsc('You do not have any saved resources')?></p>
       <? endif; ?>
