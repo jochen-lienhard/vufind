@@ -25,7 +25,12 @@
     <div class="col-xs-10 col-sm-10 left">
   <? endif ?>
     <div>
-      <a href="<?=$this->recordLink()->getUrl($this->driver)?>" class="title getFull" data-view="<?=$dataView ?>">
+      <a href="<?=$this->recordLink()->getUrl($this->driver)?>" 
+         class="title getFull" data-view="<?=$dataView ?>" 
+         <? if ($this->favorites) :?>
+           data-getParams='{"cachePolicy":"Favorite"}'
+         <?endif; ?>
+         >
         <?=$this->RDSIndexRecord($this->driver)->getTitleHtml()?>
       </a>
     </div>

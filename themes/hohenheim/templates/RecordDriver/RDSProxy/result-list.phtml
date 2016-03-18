@@ -30,7 +30,11 @@
   </div>
   <? else: ?>
     <div>
-    <a href="<?=$this->recordLink()->getUrl($this->driver)?>" class="title getFull" data-view="<?=$dataView ?>">
+    <a href="<?=$this->recordLink()->getUrl($this->driver)?>" class="title getFull" 
+       data-view="<?=$dataView ?>">
+       <? if ($this->favorites) :?>
+           data-getParams='{"cachePolicy":"Favorite"}'
+       <?endif; ?>
       <?=$this->record($this->driver)->getTitleHtml()?>
     </a>
     </div>
