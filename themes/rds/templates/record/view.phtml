@@ -116,6 +116,7 @@
   <? if (count($this->tabs) > 0): ?>
     <? foreach ($this->tabs as $tab => $obj): ?>
       <? if ($tab == 'HierarchyTree' || $tab == 'Similar' || $tab == 'Details') continue; ?>
+      <? if (!empty(trim($this->record($this->driver)->getTab($obj)))): ?>
       <div class="panel panel-default">
         <div class="panel-heading" data-toggle="collapse" data-parent="#accordion_<?=escapeJSAttr($this->driver->getUniqueId())?>" data-target="#<?=(strtolower($tab))?>-collapse_<?=escapeJSAttr($this->driver->getUniqueId())?>" style="cursor: pointer">
           <h4 class="panel-title">
@@ -130,6 +131,7 @@
           </div>
         </div>
       </div>
+      <? endif; ?>
     <? endforeach; ?>
   <? endif; ?>
 
