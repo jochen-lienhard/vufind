@@ -3,10 +3,10 @@
     $this->headTitle($this->translate('Description') . ': ' . $this->driver->getBreadcrumb());
     $descriptionItems = $this->rdsproxydescription($this->driver)->getItems();
 ?>
+<? if (!empty($descriptionItems)): ?>
 <table class="table table-striped" summary="<?=$this->transEsc('Description')?>">
   
     <? foreach ($descriptionItems as $itemName => $itemValue): ?>
-    <? $contentDisplayed = true; ?>
     <tr>
       <th><?=$this->transEsc($itemName)?>: </th>
       <td colspan="3">
@@ -15,7 +15,5 @@
     </tr>
     <? endforeach; ?>
   
-  <? if (!isset($contentDisplayed) || !$contentDisplayed): // Avoid errors if there were no rows above ?>
-    <tr><td><?=$this->transEsc('no_description')?></td></tr>
-  <? endif; ?>
 </table>
+<? endif; ?>

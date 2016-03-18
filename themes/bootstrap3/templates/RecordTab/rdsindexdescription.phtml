@@ -6,7 +6,7 @@
     $isbn = $this->driver->getCleanISBN();
      $description = $this->RDSIndexDescription($this->driver)->getItems();
 ?>
-
+<? if (!empty($description)): ?>
 	<table class="table table-striped" >
 	<tbody>
 <? foreach ($description as $bib_key => $bibdescription): ?>
@@ -19,5 +19,6 @@
 <? endforeach; /* end foreach description */ ?>
 	</tbody>
 	</table>
+<? endif; ?>
 
 
