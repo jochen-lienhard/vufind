@@ -425,6 +425,18 @@ tr.RDS_BIBLZUS th{
 
 /* end: styles for rds navigation */
 
+.headline {
+    width: 100%;
+    padding: 2px 0px;
+    margin-bottom: 16px;
+    border-bottom: 1px solid #CACAC8;
+}
+
+.text {
+    display: inline-block;
+    font-size: 160%;
+}
+
 .hintbox {
   padding: 10px 14px;
   border: solid 1px lightgray;

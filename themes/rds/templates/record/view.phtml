@@ -21,10 +21,17 @@
   $this->layout()->breadcrumbs = '<li>' . $this->getLastSearchLink($this->transEsc('Search'), '', '</li> ') .
     '<li class="active">' . $this->recordLink()->getBreadcrumb($this->driver) . '</li> ';
   $this->layout()->title = $this->driver->getShortTitle();
+
 ?>
 
 <? $this->layout()->navigation = $this->render('layout/navigation.phtml');?>
 <?=$this->layout()->navigation ?>
+
+<div class="hidden-print search-controls">
+   <div class="rdsSearchInfo">
+   <? echo($this->getLastSearchLink($this->transEsc('RDS_BACK_TO_RESULT_LIST'))); ?>
+  </div>
+</div>
 
 <? if (isset($this->scrollData) && ($this->scrollData['previousRecord'] || $this->scrollData['nextRecord'])): ?>
   <ul class="pager hidden-print">
@@ -46,10 +53,58 @@
   </ul>
 <? endif; ?>
 
-<? /*
+<?
+/*
 <?=$this->record($this->driver)->getToolbar()?>
 */ ?>
 
+<div class="row">
+  <div class="col-xs-10 col-sm-11">
+    <div class="headline text">
+     <?=$this->layout()->title?>
+    </div>
+  </div>
+  <div class="col-xs-2 col-sm-1 right">
+      <? if ($this->userlist()->getMode() !== 'disabled'): ?>
+
+          <? /* Add to favorites */ ?>
+          <? if($this->auth()->isLoggedIn()): ?>
+            <span><a href="<?=$this->recordLink()->getActionUrl($this->driver, 'Save')?>" class="fa fa-star save-record modal-link favActionAdd" id="<?=$this->driver->getUniqueId() ?>" title="<?=$this->transEsc('Add to favorites')?>"></a></span>
+          <?else: ?>
+            <span><a href="<?=$this->recordLink()->getActionUrl($this->driver, 'Save')?>" data-id="<?=$this->driver->getResourceSource()?>|<?=$this->driver->getUniqueID()?>" class="fa fa-star cartAction" id="<?=$this->driver->getUniqueId() ?>" title="<?=$this->transEsc('Add to favorites')?>"></a></span>
+          <?endif; ?>
+
+          <? if($this->auth()->isLoggedIn()): ?>
+            <? /* Use a different delete URL if we're removing from a specific list or the overall favorites: */
+                  $deleteUrl = null === $list_id
+                      ? $this->url('myresearch-favorites')
+                      : $this->url('userList', array('id' => $list_id));
+                  $deleteFavoriteConfirmation = null === $list_id
+                      ? 'RDS_FAV_LIST_REMOVE_FORM_ALL_LISTS'
+                      : 'RDS_FAV_LIST_REMOVE_FORM_CURRENT_LIST';
+
+                  $deleteUrlGet = $deleteUrl . '?delete=' . urlencode($id) . '&amp;source=' . urlencode($source);
+                  $dLabel = 'delete-label-' . preg_replace('[\W]','-',$id);
+                ?>
+                <span class="dropdown favActionDel hidden">
+                  <a class="dropdown-toggle" id="<?=$dLabel ?>" role="button" data-toggle="dropdown" data-target="#" href="<?=$deleteUrlGet ?>">
+                    <i class="fa fa-trash-o"></i>
+                  </a>
+                  <ul class="dropdown-menu" role="menu" aria-labelledby="<?=$dLabel ?>">
+                    <li><a onClick="$.post('<?=$deleteUrl?>', {'delete':'<?=$this->escapeJs($ppn) ?>','source':'<?=$this->escapeHtmlAttr($source) ?>','confirm':true},function(){location.reload(true)})" title="<?=$this->transEsc('confirm_delete_brief')?>"><?=$this->transEsc($deleteFavoriteConfirmation)?></a></li>
+                    <li><a><?=$this->transEsc('RDS_FAV_LIST_CANCEL_DELETE')?></a></li>
+                  </ul>
+                </span>
+          <?endif ?>
+
+          <span><a href="/Cart/doExport" class="fa fa-print doExportRecord" data-id="<?=$this->driver->getResourceSource()?>|<?=$this->driver->getUniqueID()?>" title="<?=$this->transEsc('Print')?>"></a></span>
+
+          <?if ($this->favorites): ?>
+             <span><?=$this->record($this->driver)->getCheckbox() ?></span>
+          <?endif; ?>
+      <? endif; ?>
+  </div>
+</div>
 <div class="row">
   <div class="col-sm-12">
     <div class="record recordId source<?=$this->escapeHtmlAttr($this->driver->getResourceSource())?>" id="record">
@@ -118,4 +173,5 @@
     <?=$this->driver->supportsCoinsOpenURL()?'<span class="Z3988" title="'.$this->escapeHtmlAttr($this->driver->getCoinsOpenURL()).'"></span>':''?>
   </div>
 
+  <? $this->headTitle($this->transEsc("RDS_SINGLE") . ": " . $this->layout()->title); ?>
 </div>
