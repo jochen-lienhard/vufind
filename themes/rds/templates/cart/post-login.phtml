@@ -7,7 +7,7 @@
   $this->layout()->breadcrumbs = '<li>' . $this->getLastSearchLink($this->transEsc('Search'), '', '</li> ')
     . '<li class="active">' . $this->transEsc('RDS_CART_PERSIST_AFTER_LOGIN') . '</li>';
   
-  $newList = $this->transEsc('RDS_CART_NEW_LIST_FROM') . ' ' . date('d.m.Y', time());
+  $newList = $this->transEsc('RDS_CART_COLLECTED_FAV_LIST');
 ?>
 
 <h2><?=$this->transEsc('RDS_CART_POST_LOGIN_DIALOG_TITLE')?></h2>
