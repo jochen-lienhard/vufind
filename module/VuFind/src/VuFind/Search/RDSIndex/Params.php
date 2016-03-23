@@ -42,6 +42,13 @@ use VuFindSearch\ParamBag;
 class Params extends \VuFind\Search\Solr\Params
 {
     /**
+     * Result limit
+     *
+     * @var int
+     */
+    protected $limit = 10;
+
+    /**
      * Constructor
      *
      * @param \VuFind\Search\Base\Options  $options      Options to use
