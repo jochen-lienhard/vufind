@@ -1,0 +1,10 @@
+<? $searchBase = $this->serverUrl($this->url('rdsindex-search')); ?>
+<?='<'?>?xml version="1.0"?<?='>'?>
+<OpenSearchDescription xmlns="http://a9.com/-/spec/opensearch/1.1/">
+  <ShortName><?=$this->escapeHtml($this->site->title)?></ShortName>
+  <Description><?=$this->transEsc('RDS_CATALOG_TITLE')?></Description>
+  <Image height="16" width="16" type="image/ico"><?=$this->serverUrl($this->imageLink('hohenheim-favicon.ico'))?></Image>
+  <Contact><?=$this->escapeHtml($this->site->email)?></Contact>
+  <Url type="text/html" method="get" template="<?=$searchBase?>?lookfor={searchTerms}&amp;page={startPage?}"/>
+  <Url type="application/rss+xml" method="get" template="<?=$searchBase?>?lookfor={searchTerms}&amp;view=rss"/>
+</OpenSearchDescription>
