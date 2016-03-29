@@ -19,10 +19,10 @@
     $searchFilters = $this->saved->getParams()->getFilterList();
 
     $searchTerms = [];
-  
-    $queries = $searchDetails->getQueries()[0]->getQueries();
-    foreach ($queries as $query) {
-      $searchTerms[$query->getHandler()] = $query->getString();
+    if (isset($groups[0])){
+      foreach ($groups[0]->getQueries() as $query) {
+        $searchTerms[$query->getHandler()] = $query->getString();
+      }
     }
   } else {
     $hasDefaultsApplied = $searchDetails = $searchFilters = $groups = false;
