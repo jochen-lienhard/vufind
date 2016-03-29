@@ -1,13 +1,14 @@
   <? $borrowable = 0;
      $lent = 0;
      $present = 0; 
+     $unknown = 0;
      $i = 0; foreach ($this->statusItems as $item): 
      switch ($item["status"]) {
         case "borrowable": $borrowable++;
              break;
         case "order": $borrowable++;
              break;
-        case "unknown": $lent++;
+        case "unknown": $unknown++;
              break;
         case "lent": $lent++;
              break;
