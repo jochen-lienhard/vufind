@@ -2454,7 +2454,7 @@ class RDSIndex extends SolrMarc
                             $zs_array[$key]['text'] = $arr_link[1];
                         }
                     } else {
-                        if ((isset($arr_link[2]) && $arr_link[2] == "") && $arr_link[1] != "") {
+                        if ((isset($arr_link[2]) && $arr_link[2] != "") && $arr_link[1] != "") {
                             $zs_array[$key]['pre-text'] = $arr_link[1];
                             $zs_array[$key]['text'] = $arr_link[2];
                         }
