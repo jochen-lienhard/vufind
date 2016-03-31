@@ -222,7 +222,8 @@ function jumptoQuery($jt) {
     }
   }
 
-  if ($jt['field'] == 'simple') {
+  // add expert as simple search
+  if ($jt['field'] == 'simple' || $jt['field'] == 'expert') {
     $p = array('lookfor=' . rawurlencode($jt['query']));
   } else {
     // Suchfeld ist eines aus der Advanced Liste
