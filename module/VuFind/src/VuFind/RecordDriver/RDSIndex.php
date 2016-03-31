@@ -1792,6 +1792,16 @@ class RDSIndex extends SolrMarc
                 return "RDS_BAND";
             }
         } 
+        // for rn search in simple search
+        // ToDo: add regular expression for ppn
+        if (isset($_GET) && (preg_match("/^rn:/", $_GET["lookfor"]))) {
+            if ($this->getMedienicon() == "beitrag") {
+                return "RDS_BEITRAG";
+            } else {
+                return "RDS_BAND";
+            }
+        }
+
     }
 
     /**
