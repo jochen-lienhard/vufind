@@ -8,7 +8,7 @@ if ($this->createHomeTabs == true) {
             $searchTabs[$id]['resultCount'] = '(' . $this->results->getResultTotal() . ')';
         else {
             if (! empty($this->lookfor)) {
-                $searchTabs[$id]['resultCount'] = '<span class="resultCountAjax" data-searchClassId="' . $tab['class'] . '" data-lookfor="' . $this->lookfor . '"></span>';
+                $searchTabs[$id]['resultCount'] = '<span class="resultCountAjax" data-searchClassId="' . $tab['class'] . '" data-lookfor="' . htmlspecialchars($this->lookfor) . '"></span>';
             }
         }
     }
