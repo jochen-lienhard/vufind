@@ -52,7 +52,7 @@ class RDSProxyHelper extends RDSHelper
      *
      * @param string $linkresolver link resolver
      */
-    public function __construct($linkresolver) 
+    public function __construct($linkresolver = null) 
     {
         $this->linkresolver = $linkresolver;
     }
@@ -114,7 +114,9 @@ class RDSProxyHelper extends RDSHelper
         };  
         
         $html = '';
-        foreach ($this->driver->getCitationLinks() as $citationLink) {
+        $citationLinks = (is_array($this->driver->getCitationLinks())) 
+            ? $this->driver->getCitationLinks() : [];
+        foreach ($citationLinks as $citationLink) {
             $html .= '<a target="_blank" href="' . $citationLink[url] . '" onclick="userAction(\'click\', \'RdsCitationLink\', \'{$ppn}\');">&rarr; ' . $this->translate("Link zum Zitat") .'</a>';
         }  
       
