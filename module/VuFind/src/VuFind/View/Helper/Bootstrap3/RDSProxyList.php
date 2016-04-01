@@ -93,7 +93,7 @@ class RDSProxyList extends RDSProxyHelper
      */ 
     public function getAuthorsEtAl() 
     {
-      
+        $html = '';      
         $authorsEtAl = $this->driver->getAuthorsEtAl();
         if (!empty($authorsEtAl)) {
             $html .= $authorsEtAl;
@@ -110,6 +110,7 @@ class RDSProxyList extends RDSProxyHelper
      */
     public function getSourceDisplay() 
     {   
+        $html = '';
         $sourceDisplay = $this->driver->getSourceDisplay();
         if (!empty($sourceDisplay)) {
             $html = $sourceDisplay;
