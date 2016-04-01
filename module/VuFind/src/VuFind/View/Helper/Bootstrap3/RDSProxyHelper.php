@@ -117,7 +117,7 @@ class RDSProxyHelper extends RDSHelper
         $citationLinks = (is_array($this->driver->getCitationLinks())) 
             ? $this->driver->getCitationLinks() : [];
         foreach ($citationLinks as $citationLink) {
-            $html .= '<a target="_blank" href="' . $citationLink[url] . '" onclick="userAction(\'click\', \'RdsCitationLink\', \'{$ppn}\');">&rarr; ' . $this->translate("Link zum Zitat") .'</a>';
+            $html .= '<a target="_blank" href="' . $citationLink['url'] . '" onclick="userAction(\'click\', \'RdsCitationLink\', \'{$ppn}\');">&rarr; ' . $this->translate("Link zum Zitat") .'</a>';
         }  
       
         return $html;
