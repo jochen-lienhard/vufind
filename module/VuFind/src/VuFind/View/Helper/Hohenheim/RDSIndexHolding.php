@@ -141,7 +141,7 @@ class RDSIndexHolding extends \VuFind\View\Helper\Bootstrap3\RDSIndexHolding
     public function setSpecial($lok, $daia)
     {
         foreach ($lok as $lokset) {
-            if (($lokset["bib_sigel"] == "100") && ($lokset["zusatz_standort"]!="11") && ($lokset["zusatz_standort"]!="31")) {
+            if (($lokset["bib_sigel"] == "100") && (isset($lokset["zusatz_standort"])) && ($lokset["zusatz_standort"]!="11") && ($lokset["zusatz_standort"]!="31")) {
                 $this->special = $this->translate("RDS_LEA_TEXT") . ": <a href=' " . $this->translate("RDS_LEA_LINK") . $lokset["t_idn"] . "' target='LEA'>" . $this->translate('RDS_LEA_LINK_TEXT') . "</a>"; 
             }
         }
@@ -216,6 +216,7 @@ class RDSIndexHolding extends \VuFind\View\Helper\Bootstrap3\RDSIndexHolding
     public function getAdisLink($bib_sigel)
     {
         $adisLink = null;
+        if ($this->daia === null) return null;
         foreach ($this->daia[$bib_sigel] as $loc_daia) {
             foreach ($loc_daia as $items) {
                 foreach ($items as $item) {
