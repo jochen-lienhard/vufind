@@ -216,7 +216,7 @@ class RDSIndexHolding extends \VuFind\View\Helper\Bootstrap3\RDSIndexHolding
     public function getAdisLink($bib_sigel)
     {
         $adisLink = null;
-        if ($this->daia === null) return null;
+        if ($this->daia === null || !in_array($bib_sigel,$this->adis_clients)) return null;
         foreach ($this->daia[$bib_sigel] as $loc_daia) {
             foreach ($loc_daia as $items) {
                 foreach ($items as $item) {
