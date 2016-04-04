@@ -5,6 +5,7 @@
 <? 
     // Set up convencience variables:
     $lok = $this->driver->getLok();
+    $daia = null;
     $adis_clients = $this->RDSIndexHolding()->getAdisClients();
     $order = $this->RDSIndexHolding()->getResultOrder();
     $institutions = $this->driver->tryMethod('getInstitutions');
@@ -41,6 +42,7 @@
     $bib_name=$this->RDSIndexHolding()->getBibName($bib_key);
     $bib_addon=$this->RDSIndexHolding()->getBibAddon($bib_key);
     $bib_link=$this->RDSIndexHolding()->getBibLink($bib_key); 
+    $adis_link = false;
     if ($this->driver->getONLINE() === "offline") {
        $adis_link=$this->RDSIndexHolding()->getAdisLink($bib_key);
     }

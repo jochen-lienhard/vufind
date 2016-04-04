@@ -84,8 +84,8 @@ class RDSIndexHolding extends \VuFind\View\Helper\Bootstrap3\RDSIndexHolding
      */
     public function mergeData($lok, $daia)
     {
-       $this->setSpecial($lok, $daia);
-       return parent::mergeData($lok, $daia);
+        $this->setSpecial($lok, $daia);
+        return parent::mergeData($lok, $daia);
     }
 
     /**
@@ -98,7 +98,7 @@ class RDSIndexHolding extends \VuFind\View\Helper\Bootstrap3\RDSIndexHolding
     protected function checkSummary($lok_set) 
     {
         // for Hohenheim
-        if ($lok_set["zusatz_standort"]=="10") {
+        if (isset($lok_set["zusatz_standort"]) && $lok_set["zusatz_standort"]=="10") {
             return true;
         } else {
             return false;
@@ -130,22 +130,24 @@ class RDSIndexHolding extends \VuFind\View\Helper\Bootstrap3\RDSIndexHolding
         }
     }
 
-   /**
+    /**
      * Returns the LEA link and text 
      *
-     * @param string $bib_sigel id of library
+     * @param string $lok  local sets
+     * @param string $daia daia sets
      *
      * @return string 
      */
     public function setSpecial($lok, $daia)
     {
         foreach ($lok as $lokset) {
-          if (($lokset["bib_sigel"] == "100") && ($lokset["zusatz_standort"]!="11") && ($lokset["zusatz_standort"]!="31")) {
-	$this->special = $this->translate("RDS_LEA_TEXT") . ": <a href=' " . $this->translate("RDS_LEA_LINK") . $lokset["t_idn"] . "' target='LEA'>" . $this->translate('RDS_LEA_LINK_TEXT') . "</a>"; }
+            if (($lokset["bib_sigel"] == "100") && ($lokset["zusatz_standort"]!="11") && ($lokset["zusatz_standort"]!="31")) {
+                $this->special = $this->translate("RDS_LEA_TEXT") . ": <a href=' " . $this->translate("RDS_LEA_LINK") . $lokset["t_idn"] . "' target='LEA'>" . $this->translate('RDS_LEA_LINK_TEXT') . "</a>"; 
+            }
         }
     }
 
-   /**
+    /**
      * Returns the LEA link and text 
      *
      * @param string $bib_sigel id of library
@@ -155,9 +157,9 @@ class RDSIndexHolding extends \VuFind\View\Helper\Bootstrap3\RDSIndexHolding
     public function getSpecial($bib_sigel)
     {
         if (isset($this->special)) {
-           return ($this->special);
+            return ($this->special);
         } else {
-           return null;
+            return null;
         }
     }
 
@@ -165,7 +167,7 @@ class RDSIndexHolding extends \VuFind\View\Helper\Bootstrap3\RDSIndexHolding
      * Make the aDIS Location readable 
      *
      * @param string $adis_loc storage of an item based on adis
-     * @param string $rds_loc location based on loc_set
+     * @param string $rds_loc  location based on loc_set
      *
      * @return string 
      */
@@ -178,7 +180,7 @@ class RDSIndexHolding extends \VuFind\View\Helper\Bootstrap3\RDSIndexHolding
      * Merge the aDIS Location with loc_set for LB 
      *
      * @param string $adis_loc storage of an item based on adis
-     * @param string $rds_loc location based on loc_set
+     * @param string $rds_loc  location based on loc_set
      *
      * @return string 
      */
@@ -198,9 +200,9 @@ class RDSIndexHolding extends \VuFind\View\Helper\Bootstrap3\RDSIndexHolding
     public function getBibLink($bib_sigel)
     {
         if ($bib_sigel === "LFER") {
-           return null;
+            return null;
         } else {
-           return "HOH_LINK_" . $bib_sigel;
+            return "HOH_LINK_" . $bib_sigel;
         }
     }
 
