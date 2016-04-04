@@ -106,7 +106,8 @@ class RDSIndexCore extends \Zend\View\Helper\AbstractHelper implements Translato
     /**
     * Initial method
     *
-    * @param string $driver the driver
+    * @param string $driver  the driver
+    * @param string $baseUrl url
     *
     * @return driver
     */
@@ -231,7 +232,7 @@ class RDSIndexCore extends \Zend\View\Helper\AbstractHelper implements Translato
         return $html_result;
     }
 
-    /*
+    /**
      * Get title cut (hoh only)
      *
      * @return html_result 
@@ -258,7 +259,7 @@ class RDSIndexCore extends \Zend\View\Helper\AbstractHelper implements Translato
      *
      * @return html_result 
     */
-  /*  protected function getBEIGWERK()
+    /*  protected function getBEIGWERK()
     {
         $html_result = "";
         $transEsc = $this->getView()->plugin('escapeHtml');
@@ -274,7 +275,7 @@ class RDSIndexCore extends \Zend\View\Helper\AbstractHelper implements Translato
         }
         return $html_result;
     }
-*/
+    */
     /**
      * Get unterreihe
      *
@@ -338,9 +339,9 @@ class RDSIndexCore extends \Zend\View\Helper\AbstractHelper implements Translato
                     ." target ='_blank' title='".$this->translate('RDS_PERS_DNB')."'></a>";
                     $myau = explode(",", $field['link']);
                     $mywiki = str_replace(' ', '_', trim($myau[1])) . "_" . $myau[0];
-		     $html_result .= " <a class='wikipedia' href="
-		     .$this->view->render('/RecordDriver/RDSIndex/link-wiki.phtml', ['lookfor' => $mywiki])
-		     ." target='_blank' title='".$this->translate('RDS_PERS_WIKI')."'></a>";
+                    $html_result .= " <a class='wikipedia' href="
+                    .$this->view->render('/RecordDriver/RDSIndex/link-wiki.phtml', ['lookfor' => $mywiki])
+                    ." target='_blank' title='".$this->translate('RDS_PERS_WIKI')."'></a>";
                 }
                 if ($field != $last_item) {
                     $html_result .="<br />" ; 
@@ -606,9 +607,9 @@ class RDSIndexCore extends \Zend\View\Helper\AbstractHelper implements Translato
                     .$this->view->render('/RecordDriver/RDSIndex/link-gnd.phtml', ['lookfor' => $field['gnd']])." target ='_blank'"
                     ."title='".$this->translate('RDS_CO_DNB')."'></a>";
                 }
-                    if ($result!= $last_item ) {
-                        $html_result .="<br /> " ; 
-                    }
+                if ($result!= $last_item ) {
+                    $html_result .="<br /> " ; 
+                }
             }
         }
         return $html_result;
@@ -693,9 +694,9 @@ class RDSIndexCore extends \Zend\View\Helper\AbstractHelper implements Translato
                     .$this->view->render('/RecordDriver/RDSIndex/link-gnd.phtml', ['lookfor' => $field['gnd']])." target ='_blank'"
                     ."title='".$this->translate('RDS_CO_DNB')."'></a>";
                 }
-                    if ($result!= $last_item ) {
-                        $html_result .="<br /> " ; 
-                    }
+                if ($result!= $last_item ) {
+                    $html_result .="<br /> " ; 
+                }
             }
         }
         return $html_result;
