@@ -55,7 +55,7 @@ class RDSIndexHolding extends \Zend\View\Helper\AbstractHelper implements Transl
      *
      * @array
      */
-    protected $daia_only_clients = null;
+    protected $daia_only_clients = [];
 
     /**
      * Result order
@@ -156,7 +156,7 @@ class RDSIndexHolding extends \Zend\View\Helper\AbstractHelper implements Transl
                     foreach ($lok_set["url"] as $single_url) {
                         $lok_mergeResult["RDS_URL"] .= "<a href='$single_url' target='_blank'>$single_url</a>";
                         if ($single_url !== end($lok_set["url"])) {
-                           $lok_mergeResult["RDS_URL"] .= "</br>";
+                            $lok_mergeResult["RDS_URL"] .= "</br>";
                         }
                     }
                 }
@@ -211,7 +211,7 @@ class RDSIndexHolding extends \Zend\View\Helper\AbstractHelper implements Transl
                 }
                 // set RDS_LEA /* only for Hohenheim, may similar for Freiburg mybib put it in own method */
                 // ToDo check offline and zeitschrift
-                if (($lok_set["bib_sigel"] == "100") && (($lok_set["zusatz_standort"]!="11") && ($lok_set["zusatz_standort"]!="31"))) {
+                if (($lok_set["bib_sigel"] == "100") && (isset($lok_set["zusatz_standort"])) && (($lok_set["zusatz_standort"]!="11") && ($lok_set["zusatz_standort"]!="31"))) {
                     $lok_mergeResult["RDS_LEA"] = $this->translate("RDS_LEA_TEXT") . ": <a href='" . $this->translate("RDS_LEA_LINK") . $lok_set["t_idn"] . "' target='LEA'>" . $this->translate("RDS_LEA_LINK_TEXT") . "</a>";
                 }
                 // set RDS_LOCATION (may be modified by daia)
@@ -288,7 +288,11 @@ class RDSIndexHolding extends \Zend\View\Helper\AbstractHelper implements Transl
                             foreach ($loc_daia["items"] as $item) {
                                 if ($this->checkSignature($item["callnumber"], $this->checkLocSignature($lok_set), $lok_set["bib_sigel"])) {
                                     $lok_mergeResult["RDS_LOCATION"] = $this->createReadableLocation($item["location"], $lok_mergeResult["RDS_LOCATION"]); 
-                                    $localstatus = $this->createReadableStatus($item, $lok_set["status"]);
+                                    if (isset($lok_set["status"])) {
+                                        $localstatus = $this->createReadableStatus($item, $lok_set["status"]);
+                                    } else {
+                                        $localstatus = $this->createReadableStatus($item, null);
+                                    }
                                     $lok_mergeResult["RDS_STATUS"] = $localstatus;
                                 }
                             }
