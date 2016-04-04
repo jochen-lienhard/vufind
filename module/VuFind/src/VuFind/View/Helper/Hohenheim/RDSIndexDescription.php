@@ -45,39 +45,45 @@ class RDSIndexDescription extends  \VuFind\View\Helper\Bootstrap3\RDSIndexDescri
 {
 
 
-	/**
-	 * Result structure  
-	 *
-	 * @array
-	 */
-	protected $items = [
-		"ABSTRACT",
-		"LINKS",
-		"SY",
-		"CT",
-		"LOCCT"
-	];
+    /**
+     * Result structure  
+     *
+     * @array
+     */
+    protected $items = [
+    "ABSTRACT",
+    "LINKS",
+    "SY",
+    "CT",
+    "LOCCT"
+    ];
 
 
-
-	protected function getSY(){
-		$html_result = "";
-		$lok_no = $this->driver->getLokNotation();
-		$rvk_no = $this->getNotation();
-		if ((!empty($rvk_no))){
-			$html_result  = $rvk_no;
-		}
-		if (!empty($lok_no)) {
-			foreach ($lok_no as $field){
-				$last_item = end($lok_no);
-				//$html_result .= "<a href=".$this->record($this->driver)->getLink('zr', $field.">".$field."</a>";
-				$html_result .= "<a href=".$this->view->render('/RecordDriver/RDSIndex/link-zr.phtml', ['lookfor' => $field]).">".$field."</a>";
-				$html_result .= " ".$this->translate('BB_'.$field);
-				if($lok_no != $last_item )
-					$html_result .="<br /> " ;
-			}
-		}
-		return $html_result;
-	}
+    /**
+     * Get SY 
+     *
+     * @return string 
+    */
+    protected function getSY()
+    {
+        $html_result = "";
+        $lok_no = $this->driver->getLokNotation();
+        $rvk_no = $this->getNotation();
+        if ((!empty($rvk_no))) {
+            $html_result  = $rvk_no;
+        }
+        if (!empty($lok_no)) {
+            foreach ($lok_no as $field) {
+                $last_item = end($lok_no);
+                //$html_result .= "<a href=".$this->record($this->driver)->getLink('zr', $field.">".$field."</a>";
+                $html_result .= "<a href=".$this->view->render('/RecordDriver/RDSIndex/link-zr.phtml', ['lookfor' => $field]).">".$field."</a>";
+                $html_result .= " ".$this->translate('BB_'.$field);
+                if ($lok_no != $last_item ) {
+                    $html_result .="<br /> " ; 
+                }
+            }
+        }
+        return $html_result;
+    }
 
 }

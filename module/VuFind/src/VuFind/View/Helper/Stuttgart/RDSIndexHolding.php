@@ -49,7 +49,7 @@ class RDSIndexHolding extends \VuFind\View\Helper\Bootstrap3\RDSIndexHolding
     protected $adis_clients = ["93"];
 
     /**
-     * calcule the signature based on lok_set for sigCheck
+     * Calcule the signature based on lok_set for sigCheck
      *
      * @param array $lok_set 
      *

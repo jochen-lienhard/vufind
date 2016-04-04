@@ -44,38 +44,44 @@ use Zend\View\Helper\EscapeHtml;
  */
 class RDSIndexCore extends  \VuFind\View\Helper\Bootstrap3\RDSIndexCore
 {
-	use \VuFind\I18n\Translator\TranslatorAwareTrait;
-	
-/*	protected $items = [
-		"TITLE",
-		"COLL_TITLE", 
-		"TITLE_PART",
-		"CJK_TITLE",
-		"TITLECUT", // only Hoh ??
-		"UREIHE",
-		"CJK_UREIHE",
-		"PERSON",
-		"CJK_AUT",
-		"BEIGWERK",
-		"CORP",
-		"CJK_CO",
-		"EDITION",
-		"CJK_EDITION",
-		"PUBLISH",
-		"CJK_PUBLISH",
-			];
-*/
-	protected $driver = null;
+    use \VuFind\I18n\Translator\TranslatorAwareTrait;
+    
+    /*	protected $items = [
+    "TITLE",
+    "COLL_TITLE", 
+    "TITLE_PART",
+    "CJK_TITLE",
+    "TITLECUT", // only Hoh ??
+    "UREIHE",
+    "CJK_UREIHE",
+    "PERSON",
+    "CJK_AUT",
+    "BEIGWERK",
+    "CORP",
+    "CJK_CO",
+    "EDITION",
+    "CJK_EDITION",
+    "PUBLISH",
+    "CJK_PUBLISH",
+    ];
+    */
+    protected $driver = null;
 
-	protected function getRegister(){
-		$html_result = "";
-		$transEsc = $this->getView()->plugin('escapeHtml');
-		$result = $this->driver->Register();
-		if (!empty($result)){
-			$html_result .= $transEsc($result);
-		}
-		return $html_result;
-	}
+    /**
+     * Get something special for Ulm 
+     *
+     * @return string
+     */
+    protected function getRegister()
+    {
+        $html_result = "";
+        $transEsc = $this->getView()->plugin('escapeHtml');
+        $result = $this->driver->Register();
+        if (!empty($result)) {
+            $html_result .= $transEsc($result);
+        }
+        return $html_result;
+    }
 
 
 }

@@ -45,64 +45,83 @@ class RDSIndexDescription extends  \VuFind\View\Helper\Bootstrap3\RDSIndexDescri
 {
 
 
-	/**
-	 * Result structure  
-	 *
-	 * @array
-	 */
-	protected $items = [
-		"Abstract",
-		"LongLinks",
-		"Notation", 
-		"Ct",
-		"LOC",
-		"DDC",
-		"MSH",
-		"LOC_CT"
-		];
+    /**
+     * Result structure  
+     *
+     * @array
+     */
+    protected $items = [
+    "Abstract",
+    "LongLinks",
+    "Notation", 
+    "Ct",
+    "LOC",
+    "DDC",
+    "MSH",
+    "LOC_CT"
+    ];
 
+    /**
+     * Get LOC 
+     *
+     * @return string
+     */
+    public function getLOC()
+    {
+        $html_result = "";
+        $links = $this->driver->getLOC();
+        if ($links != null) {
+            foreach ($links as $field) {
+                $last_item = end($links);
+                $html_result .= $field;
+                if ($links != $last_item ) {
+                    $html_result .="<br /> " ; 
+                }
+            }
+        }
+        return $html_result;
+    }
 
-	public function getLOC(){
-		$html_result = "";
-		$links = $this->driver->getLOC();
-		if($links != null){
-			foreach ($links as $field){
-				$last_item = end($links);
-				$html_result .= $field;
-				if($links != $last_item )
-					$html_result .="<br /> " ;
-			}
-		}
-		return $html_result;
-	}
+    /**
+     * Get DDC 
+     *
+     * @return string
+     */
+    protected function getDDC()
+    {
+        $html_result = "";
+        $links = $this->driver->getDDC();
+        if ($links != null) {
+            foreach ($links as $field) {
+                $last_item = end($links);
+                $html_result .= $field;
+                if ($links != $last_item ) {
+                    $html_result .="<br /> " ; 
+                }
+            }
+        }
+        return $html_result;
+    }
 
-
-	protected function getDDC(){
-		$html_result = "";
-		$links = $this->driver->getDDC();
-		if($links != null){
-			foreach ($links as $field){
-				$last_item = end($links);
-				$html_result .= $field;
-				if($links != $last_item )
-					$html_result .="<br /> " ;
-			}
-		}
-		return $html_result;
-	}
-
-	protected function getMSH(){
-		$html_result = "";
-		$links = $this->driver->getMSH();
-		if($links != null){
-			foreach ($links as $field){
-				$last_item = end($links);
-				$html_result .= $field;
-				if($links != $last_item )
-					$html_result .="<br /> " ;
-			}
-		}
-		return $html_result;
-	}
+    /**
+     * Get MSH 
+     *
+     * @return string
+     */
+    protected function getMSH()
+    {
+        $html_result = "";
+        $links = $this->driver->getMSH();
+        if ($links != null) {
+            foreach ($links as $field) {
+                $last_item = end($links);
+                $html_result .= $field;
+                if ($links != $last_item ) {
+                    $html_result .="<br /> " ; 
+                }
+            }
+        }
+        return $html_result;
+    }
 
 }

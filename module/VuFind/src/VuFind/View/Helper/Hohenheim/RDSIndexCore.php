@@ -44,79 +44,95 @@ use Zend\View\Helper\EscapeHtml;
  */
 class RDSIndexCore extends  \VuFind\View\Helper\Bootstrap3\RDSIndexCore
 {
-	use \VuFind\I18n\Translator\TranslatorAwareTrait;
+    use \VuFind\I18n\Translator\TranslatorAwareTrait;
 
-/*	protected $items = [
-		"TITLE",
-		"COLL_TITLE",
-		"TITLE_PART",
-		"CJK_TITLE",
-		"TITLECUT", // only Hoh ??
-		"UREIHE",
-		"CJK_UREIHE",
-		"PERSON",
-		"CJK_AUT",
-		"BEIGWERK",
-		"CORP",
-		"CJK_CO",
-		"EDITION",
-		"CJK_EDITION",
-		"PUBLISH",
-		"CJK_PUBLISH",
-		"PUB_RUN",
-		"Language",
-		"SCOPE",
-		"CJK_SCOPE",
-		"ISBN",
-		"ISSN",
-		"Links",
-		"DESCR",
-		"STOCK",
-		"REFVALUE",
-		"MEDIUM",
-		"FN",
-		"ENTHWERK",
-		"BIBL_ZUS",
-		];
-*/
-	protected $driver = null;
+    /*	protected $items = [
+    "TITLE",
+    "COLL_TITLE",
+    "TITLE_PART",
+    "CJK_TITLE",
+    "TITLECUT", // only Hoh ??
+    "UREIHE",
+    "CJK_UREIHE",
+    "PERSON",
+    "CJK_AUT",
+    "BEIGWERK",
+    "CORP",
+    "CJK_CO",
+    "EDITION",
+    "CJK_EDITION",
+    "PUBLISH",
+    "CJK_PUBLISH",
+    "PUB_RUN",
+    "Language",
+    "SCOPE",
+    "CJK_SCOPE",
+    "ISBN",
+    "ISSN",
+    "Links",
+    "DESCR",
+    "STOCK",
+    "REFVALUE",
+    "MEDIUM",
+    "FN",
+    "ENTHWERK",
+    "BIBL_ZUS",
+    ];
+    */
+    protected $driver = null;
 
-	protected function getTITLECUT(){
-		$html_result = "";
-		$transEsc = $this->getView()->plugin('escapeHtml');
-		$titlePart = $this->driver->getTitleCut();
-		if (!empty($titlePart)){
-			foreach($titlePart as $field){
-				$last_item = end($titlePart);
-				$html_result .= $transEsc($field);
-				if($titlePart!= $last_item )
-					$html_result .="<br /> " ;
-			}
-		}
-		return $html_result;
-	}
+    /**
+     * Get title cut 
+     *
+     * @return string
+     */
+    protected function getTITLECUT()
+    {
+        $html_result = "";
+        $transEsc = $this->getView()->plugin('escapeHtml');
+        $titlePart = $this->driver->getTitleCut();
+        if (!empty($titlePart)) {
+            foreach ($titlePart as $field) {
+                $last_item = end($titlePart);
+                $html_result .= $transEsc($field);
+                if ($titlePart!= $last_item ) {
+                    $html_result .="<br /> " ; 
+                }
+            }
+        }
+        return $html_result;
+    }
 
-	protected function getISSN() {
-		$html_result = "";
-		$transEsc = $this->getView()->plugin('escapeHtml');
-		$result = $this->driver->getISSN();
-		$issnprint =  $this->driver->getISSNPrint(); 
-		$issnonline =  $this->driver->getISSNOnline();
-		if (!empty($result)){
-			foreach($result as $field){
-				$last_item = end($result);
-				$html_result .= $transEsc($field);
-				if($result!= $last_item )
-					$html_result .="<br /> " ;
-			}
-		}
-		if (!empty($issnprint))
-			$html_result .= $this->translate('RDS_ISSNPRINT').": ".$transEsc($issnprint);
-		if (!empty($issnonline))
-			$html_result .= $this->translate('RDS_ISSNONLINE').": ".$transEsc($issnonline);
+    /**
+     * Get print and eletronic issn 
+     *
+     * @return string
+     */
+    protected function getISSN() 
+    {
+        $html_result = "";
+        $transEsc = $this->getView()->plugin('escapeHtml');
+        $result = $this->driver->getISSN();
+        $issnprint =  $this->driver->getISSNPrint(); 
+        $issnonline =  $this->driver->getISSNOnline();
+        if (!empty($result)) {
+            foreach ($result as $field) {
+                $last_item = end($result);
+                $html_result .= $transEsc($field);
+                if ($result!= $last_item ) {
+                    $html_result .="<br /> " ; 
+                }
+            }
+        }
+        if (!empty($issnprint)) {
+            $html_result .= $this->translate('RDS_ISSNPRINT').": ".$transEsc($issnprint); 
+        }
+        if (!empty($issnonline)) {
+            $html_result .= $this->translate('RDS_ISSNONLINE').": ".$transEsc($issnonline); 
+        }
 
-		return $html_result;
-	}
+        return $html_result;
+    }
 
 
 }
