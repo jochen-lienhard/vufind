@@ -1001,7 +1001,12 @@ class RDSIndexCore extends \Zend\View\Helper\AbstractHelper implements Translato
                         $html_result .= "<a href="
                         .$this->baseUrl.$this->view->render('/RecordDriver/RDSIndex/link-id.phtml', ['lookfor' => $field['id']]).">"
                         .$transEsc($field['lnk_txt']);
+                    } else {
+                        if (!empty($field['lnk_txt'])) {
+                            $html_result .= $transEsc($field['lnk_txt']);
+                        }
                     }
+
                     if (!empty($field['bnd'])) {
                         $html_result .= " ; ".$transEsc($field['bnd'])."</a><br/>"; 
                     } else {

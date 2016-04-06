@@ -1724,11 +1724,11 @@ class RDSIndex extends SolrMarc
                     if (strstr($link, "|")) {
                         $arr_link = explode(" | ", $link);
                         $co_display[$key]["link"]=$arr_link[0];
-                        $co_display[$key]["text"]=str_replace('\"', '"',$arr_link[0]);
-			$co_display[$key]["zus_text"]=$arr_link[1];
+                        $co_display[$key]["text"]=str_replace('\"', '"', $arr_link[0]);
+                        $co_display[$key]["zus_text"]=$arr_link[1];
                     } else {
                         $co_display[$key]["link"]=$link;
-                        $co_display[$key]["text"]=str_replace('\"', '"',$link);
+                        $co_display[$key]["text"]=str_replace('\"', '"', $link);
                     }
                 }
             }
@@ -1785,7 +1785,8 @@ class RDSIndex extends SolrMarc
     public function getTitleSerie()
     {
         if (isset($_GET) && isset($_GET["type0"]) && $_GET["type0"][0] == "ex" 
-             && (preg_match("/^rn/", $_GET["lookfor0"][0]))) {
+            && (preg_match("/^rn/", $_GET["lookfor0"][0]))
+        ) {
             if ($this->getMedienicon() == "beitrag") {
                 return "RDS_BEITRAG";
             } else {
@@ -2624,6 +2625,8 @@ class RDSIndex extends SolrMarc
                     $werk_lnk[$key]['lnk_txt'] = $arr_link[1];
                     $werk_lnk[$key]['id'] = $arr_link[0];
                     $werk_lnk[$key]['bnd'] = $arr_link[2];
+                } else {
+                    $werk_lnk[$key]['lnk_txt'] = $link;
                 }
             }
         }
@@ -2972,8 +2975,9 @@ class RDSIndex extends SolrMarc
      *
      * @return string
      */
-    public function getPersistentLink() {
-        preg_match('/\/[^\/]*/',$_SERVER['REQUEST_URI'],$matches);
+    public function getPersistentLink() 
+    {
+        preg_match('/\/[^\/]*/', $_SERVER['REQUEST_URI'], $matches);
         $basePath = (isset($matches[0])) ? $matches[0] : '';
 
         $persistentLinkUrl = 'https://' . $_SERVER['HTTP_HOST'] . $basePath . '/link?id=' . $this->getPPN(); 
