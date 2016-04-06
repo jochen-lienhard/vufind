@@ -462,3 +462,7 @@ tr.RDS_BIBLZUS th{
   margin: 0px;
   padding: 4px 0px 2px 12px;
 }
+
+.pager li > a, .pager li > span {
+  border-radius: 0;
+}
