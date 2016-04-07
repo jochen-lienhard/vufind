@@ -51,14 +51,14 @@ class RDSIndexDescription extends  \VuFind\View\Helper\Bootstrap3\RDSIndexDescri
      * @array
      */
     protected $items = [
-    "Abstract",
-    "LongLinks",
-    "Notation", 
-    "Ct",
+    "ABSTRACT",
+    "LONGLINKS",
+    "NOTATION", 
+    "CT",
     "LOC",
     "DDC",
     "MSH",
-    "LOC_CT"
+    "LOCCT"
     ];
 
     /**
