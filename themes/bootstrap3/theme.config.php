@@ -7,8 +7,12 @@ return array(
         //'bootstrap-custom.css',
         'compiled.css',
         'vendor/font-awesome.min.css',
+<<<<<<< HEAD
         'vendor/bootstrap-slider.css',
 	'rdsindex.css',
+=======
+        'vendor/bootstrap-slider.min.css',
+>>>>>>> release-3.0
         'print.css:print',
     ),
     'js' => array(
@@ -17,7 +21,7 @@ return array(
         'vendor/bootstrap.min.js',
         'vendor/bootstrap-accessibility.min.js',
         //'vendor/bootlint.min.js',
-        'vendor/typeahead.js',
+        'autocomplete.js',
         'vendor/validator.min.js',
         'vendor/rc4.js',
         'common.js',
@@ -36,6 +40,7 @@ return array(
             'rdsproxyholdingsprint' => 'VuFind\View\Helper\Bootstrap3\Factory::getRDSProxyHoldingsPrint',
             'rdsexport' => 'VuFind\View\Helper\Bootstrap3\Factory::getRDSExport',
             'alphabrowse' => 'VuFind\View\Helper\Bootstrap3\Factory::getAlphaBrowse',
+            'recaptcha' => 'VuFind\View\Helper\Bootstrap3\Factory::getRecaptcha',
         ),
         'invokables' => array(
             'highlight' => 'VuFind\View\Helper\Bootstrap3\Highlight',
