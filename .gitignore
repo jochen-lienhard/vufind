@@ -13,3 +13,4 @@ vendor/
 .vendor/bin/
 .vendor/phpunit/
 .vendor/sebastian/
+import/solrmarc.log
