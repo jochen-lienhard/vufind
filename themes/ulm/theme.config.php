@@ -2,6 +2,7 @@
 return array(
     'extends' => 'rds',
     'css' => array(
+         'ulm.css',
 		//'/css/bootstrap.min.css', // FIXME: We don't need to include it. Inherited from bootstrap theme
     ),
     'js' => array(

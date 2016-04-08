@@ -48,4 +48,49 @@ class RDSIndexHolding extends \VuFind\View\Helper\Bootstrap3\RDSIndexHolding
      */
     protected $adis_clients = ["289"];
 
+    /**
+     * Generates a string for bib_link based on local data set
+     *
+     * @param string $bib_sigel id of library
+     *
+     * @return string 
+     */
+    public function getBibLink($bib_sigel)
+    {
+        if ($bib_sigel === "LFER") {
+            return null;
+        } else {
+            return "ULM_LINK_" . $bib_sigel;
+        }
+    }
+
+    /**
+     * Creates the location depending on the data loc set
+     *
+     * @param array $lok_set 
+     *
+     * @return string
+     */
+    protected function setLocation($lok_set)
+    {
+        if (isset($lok_set["adis_sigel"])) {
+            return $this->translate("BIB_" . $lok_set["adis_sigel"]);
+        }
+    }
+
+    /**
+     * Make the aDIS Location readable 
+     *
+     * @param string $adis_loc storage of an item based on adis
+     * @param string $rds_loc  location based on loc_set
+     *
+     * @return string 
+     */
+    protected function createReadableLocation($adis_loc, $rds_loc=null)
+    {
+        return $rds_loc . " " . $adis_loc;
+    }
+
+
+
 }
