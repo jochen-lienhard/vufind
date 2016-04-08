@@ -7,12 +7,8 @@ return array(
         //'bootstrap-custom.css',
         'compiled.css',
         'vendor/font-awesome.min.css',
-<<<<<<< HEAD
         'vendor/bootstrap-slider.css',
 	'rdsindex.css',
-=======
-        'vendor/bootstrap-slider.min.css',
->>>>>>> release-3.0
         'print.css:print',
     ),
     'js' => array(
