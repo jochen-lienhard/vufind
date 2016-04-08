@@ -1,0 +1,27 @@
+  <? $borrowable = 0;
+     $lent = 0;
+     $present = 0; 
+     $unknown = 0;
+     $i = 0; foreach ($this->statusItems as $item): 
+     switch ($item["status"]) {
+        case "borrowable": $borrowable++;
+             break;
+        case "order": $borrowable++;
+             break;
+        case "unknown": $unknown++;
+             break;
+        case "lent": $lent++;
+             break;
+        case "present": $present++;
+             break;
+     }
+     $ppn = $item['id'];
+     endforeach; ?>
+<? /* =$this->transEsc('RDS_ADIS_LANG') */?>
+<a onclick='jQuery("input[value=<?=$ppn?>]").closest(".ajaxItem").find("a.getFull:first").trigger("click"); return false;' href="#">
+<div style='display: flex; display: -webkit-flex; display: -ms-flexbox;' title='<?=$borrowable?> <?=$this->transEsc('RDS_AVAIL') . "\n"?><?=$lent?> <?=$this->transEsc('RDS_UNAVAILABLE') . "\n"?><?=$present?> <?=$this->transEsc('RDS_REF_STOCK')?>' class='flexbox'>
+<div style='-webkit-flex:<?=$borrowable?>; -ms-flex:<?=$borrowable?>; flex:<?=$borrowable?>; background-color: #50EE50' class='borrowable'></div>
+<div style='-webkit-flex:<?=$lent?>; -ms-flex:<?=$lent?>; flex:<?=$lent?>; background-color: #EE5050' class='lent'></div>
+<div style='-webkit-flex:<?=$present?>; -ms-flex:<?=$present?>; flex:<?=$present?>; background-color: #505050' class='present'></div>
+</div>
+</a>
