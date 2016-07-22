@@ -72,6 +72,23 @@ class Factory
     }
 
     /**
+     * Factory for Interlending record driver.
+     *
+     * @param ServiceManager $sm Service manager.
+     *
+     * @return Interlending
+     */
+    public static function getInterlending(ServiceManager $sm)
+    {
+        $interlending = $sm->getServiceLocator()->get('VuFind\Config')->get('Interlending');
+        return new Interlending(
+            $sm->getServiceLocator()->get('VuFind\Config')->get('config'),
+            $interlending, $interlending
+        );
+    }
+
+
+    /**
      * Factory for Missing record driver.
      *
      * @param ServiceManager $sm Service manager.
