@@ -1160,4 +1160,76 @@ class Interlending extends SolrDefault
         }
         return null;
     }
+
+    /************************ NEW *********************************/
+
+    /**
+     * Get notes on finding aids related to the record.
+     *
+     * @return array
+     */
+    public function getHoldingsGlobal()
+    {
+        return $this->getFieldArray('924', ['b','g','k'], true, ' : ');
+    }
+
+    /**
+     * Get the publication dates of the record.  See also getDateSpan().
+     *
+     * @return array
+     */
+    public function getPublicationDates()
+    {
+        return $this->getPublicationInfo('c');
+    }
+
+    /**
+     * Get highlighted author data, if available.
+     *
+     * @return array
+     */
+    public function getRawAuthorHighlights()
+    {
+        // Don't check for highlighted values if highlighting is disabled:
+        return ($this->highlight && isset($this->highlightDetails['author']))
+            ? $this->highlightDetails['author'] : [];
+    }
+
+    /**
+     * Get primary author information with highlights applied (if applicable)
+     *
+     * @return array
+     */
+    public function getPrimaryAuthorsWithHighlighting()
+    {
+        $highlights = [];
+        // Create a map of de-highlighted valeus => highlighted values.
+        foreach ($this->getRawAuthorHighlights() as $current) {
+            $dehighlighted = str_replace(
+                ['{{{{START_HILITE}}}}', '{{{{END_HILITE}}}}'], '', $current
+            );
+            $highlights[$dehighlighted] = $current;
+        }
+
+        // replace unhighlighted authors with highlighted versions where
+        // applicable:
+        $authors = [];
+        foreach ($this->getPrimaryAuthors() as $author) {
+            $authors[] = isset($highlights[$author])
+                ? $highlights[$author] : $author;
+        }
+        return $authors;
+    }
+
+    /**
+     * Get the main authors of the record.
+     *
+     * @return array
+     */
+    public function getPrimaryAuthors()
+    {
+        // else 245c ?
+        return $this->getFieldArray('100', 'a', true);
+    }
+
 }

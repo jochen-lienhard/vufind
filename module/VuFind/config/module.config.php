@@ -492,6 +492,7 @@ $config = [
                 ],
                 'invokables' => [
                     'description' => 'VuFind\RecordTab\Description',
+                    'holdingsglobal' => 'VuFind\RecordTab\HoldingsGlobal',
                     'staffviewarray' => 'VuFind\RecordTab\StaffViewArray',
                     'staffviewmarc' => 'VuFind\RecordTab\StaffViewMARC',
                     'toc' => 'VuFind\RecordTab\TOC',
@@ -626,7 +627,7 @@ $config = [
             ],
             'VuFind\RecordDriver\Interlending' => [
                 'tabs' => [
-                    'Holdings' => 'HoldingsILS', 
+                    'Holdings' => 'HoldingsGlobal', 
                     'Description' => 'Description',
                     'Details' => 'StaffViewMARC',
                 ],

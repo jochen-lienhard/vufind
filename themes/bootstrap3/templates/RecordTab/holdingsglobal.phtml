@@ -1,0 +1,21 @@
+<?
+    // Set page title.
+    $this->headTitle($this->translate('Holdings Global') . ': ' . $this->driver->getBreadcrumb());
+
+    $holdingsglobal = $this->driver->getHoldingsGlobal();
+?>
+<? if (!empty($holdingsglobal)): ?>
+<div class="row">
+   <? foreach ($holdingsglobal as $itemName => $itemValue): ?>
+      <div class='col-xs-12 hg-list'>
+          <div class="hidden col-xs-12 col-md-5 col-lg-4 hg-panel <?=$itemName?>">
+             <?=$this->translate($itemName) ?>
+          </div>
+          <div class="col-xs-12 col-md-7 col-lg-8 hg-body">
+             <?= $itemValue ?>
+          </div>
+      </div>
+    <? endforeach; /* end foreach description */ ?>
+</div>
+<? endif; ?>
+
