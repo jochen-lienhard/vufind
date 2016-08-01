@@ -87,18 +87,4 @@ class Params extends \VuFind\Search\Solr\Params
         return parent::initFacetList($facetList, $facetSettings, $cfgFile);
     }
 
-    /**
-     * Initialize facet settings for the standard search screen.
-     *
-     * @return void
-     */
-    public function initBasicFacets()
-    {
-        $this->initFacetList('ResultsTop', 'Results_Settings');
-        $this->initFacetList('Results', 'Results_Settings');
-var_dump("BBBBBBBBBB");
-    }
-
-
-
 }
