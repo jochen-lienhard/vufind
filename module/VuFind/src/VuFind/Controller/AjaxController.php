@@ -165,6 +165,35 @@ class AjaxController extends AbstractBase
      * @return \Zend\Http\Response
      * @author Chris Delis <cedelis@uillinois.edu>
      * @author Tuan Nguyen <tuan@yorku.ca>
+     * @author Jochen Lienhard <lienhard@ub.uni-freiburg.de>
+     */
+    protected function getItemRDSStatusesAjax()
+    {
+        $this->writeSession();  // avoid session write timing bug
+        $catalog = $this->getILS();
+        $ids = $this->params()->fromQuery('id');
+
+        // In order to detect IDs missing from the status response, create an
+        // array with a key for every requested ID.  We will clear keys as we
+        // encounter IDs in the response -- anything left will be problems that
+        // need special handling.
+        $missingIds = array_flip($ids);
+
+        $statuses[] = $results;
+
+        // Done
+        return $this->output($statuses, self::STATUS_OK);
+    }
+
+    /**
+     * Get Item Statuses
+     *
+     * This is responsible for printing the holdings information for a
+     * collection of records in JSON format.
+     *
+     * @return \Zend\Http\Response
+     * @author Chris Delis <cedelis@uillinois.edu>
+     * @author Tuan Nguyen <tuan@yorku.ca>
      */
     protected function getItemStatusesAjax()
     {

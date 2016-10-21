@@ -28,10 +28,19 @@ return array(
         'factories' => array(
             'flashmessages' => 'VuFind\View\Helper\Bootstrap3\Factory::getFlashmessages',
             'layoutclass' => 'VuFind\View\Helper\Bootstrap3\Factory::getLayoutClass',
+            'rdsproxyholdings' => 'VuFind\View\Helper\Bootstrap3\Factory::getRDSProxyHoldings',
+            'rdsproxyholdingsprint' => 'VuFind\View\Helper\Bootstrap3\Factory::getRDSProxyHoldingsPrint',
+            'rdsexport' => 'VuFind\View\Helper\Bootstrap3\Factory::getRDSExport',
             'recaptcha' => 'VuFind\View\Helper\Bootstrap3\Factory::getRecaptcha',
         ),
         'invokables' => array(
             'highlight' => 'VuFind\View\Helper\Bootstrap3\Highlight',
+            'rdsindexholding' => 'VuFind\View\Helper\Bootstrap3\RDSIndexHolding',
+            'rdsproxydescription' => 'VuFind\View\Helper\Bootstrap3\RDSProxyDescription',
+            'rdsindexdescription' => 'VuFind\View\Helper\Bootstrap3\RDSIndexDescription',
+            'rdsindexcore' => 'VuFind\View\Helper\Bootstrap3\RDSIndexCore',
+            'rdsproxycore' => 'VuFind\View\Helper\Bootstrap3\RDSProxyCore',
+            'rdsproxylist' => 'VuFind\View\Helper\Bootstrap3\RDSProxyList',
             'search' => 'VuFind\View\Helper\Bootstrap3\Search'
         )
     )

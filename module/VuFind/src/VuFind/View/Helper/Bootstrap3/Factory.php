@@ -95,4 +95,76 @@ class Factory
             $sm->getServiceLocator()->get('VuFind\Config')->get('config')
         );
     }
+
+   /**
+     * Construct the RDSProxyHoldings helper.
+     *
+     * @param ServiceManager $sm Service manager.
+     *
+     * @return RDSProxyHoldings
+     */
+    public static function getRDSProxyHoldings(ServiceManager $sm)
+    {
+        $serviceLocator = $sm->getServiceLocator();
+        $config = $serviceLocator->get('VuFind\Config')->get('config');
+
+        $linkresolver = null;
+        if (isset($config->OpenURL) && isset($config->OpenURL->resolver)) {
+            $resolverDriverPluginManger= $serviceLocator
+                ->get('VuFind\ResolverDriverPluginManager');
+            $linkresolver = $resolverDriverPluginManger
+                ->get($config->OpenURL->resolver);
+        }
+
+        return new RDSProxyHoldings($linkresolver);
+    }
+
+     /**
+     * Construct the RDSProxyHoldings helper for print.
+     *
+     * @param ServiceManager $sm Service manager.
+     *
+     * @return RDSProxyHoldings
+     */
+    public static function getRDSProxyHoldingsPrint(ServiceManager $sm)
+    {
+        $serviceLocator = $sm->getServiceLocator();
+        $config = $serviceLocator->get('VuFind\Config')->get('config');
+
+        $linkresolver = null;
+        if (isset($config->OpenURL) && isset($config->OpenURL->resolver)) {
+            $resolverDriverPluginManger= $serviceLocator
+                ->get('VuFind\ResolverDriverPluginManager');
+            $linkresolver = $resolverDriverPluginManger
+                ->get($config->OpenURL->resolver);
+        }
+
+        return new RDSProxyHoldingsPrint($linkresolver);
+    }
+
+     /**
+     * Construct the RDSExport helper.
+     *
+     * @param ServiceManager $sm Service manager.
+     *
+     * @return RDSProxyHoldings
+     */
+    public static function getRDSExport(ServiceManager $sm)
+    {
+        $serviceLocator = $sm->getServiceLocator();
+        $config = $serviceLocator->get('VuFind\Config')->get('config');
+
+        $linkresolver = null;
+        if (isset($config->OpenURL) && isset($config->OpenURL->resolver)) {
+            $resolverDriverPluginManger= $serviceLocator
+                ->get('VuFind\ResolverDriverPluginManager');
+            $linkresolver = $resolverDriverPluginManger
+                ->get($config->OpenURL->resolver);
+        }
+
+        return new RDSExport($linkresolver);
+
+    }
+
+
 }

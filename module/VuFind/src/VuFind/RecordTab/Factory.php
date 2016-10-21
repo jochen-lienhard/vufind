@@ -155,6 +155,42 @@ class Factory
     }
 
     /**
+     * Factory for HoldingsILS tab plugin for RDSIndex.
+     *
+     * @param ServiceManager $sm Service manager.
+     *
+     * @return RDSIndexHoldingsILS
+     */
+    public static function getRDSIndexHoldingsILS(ServiceManager $sm)
+    {
+        // If VuFind is configured to suppress the holdings tab when the
+        // ILS driver specifies no holdings, we need to pass in a connection
+        // object:
+        $config = $sm->getServiceLocator()->get('VuFind\Config')->get('config');
+        if (isset($config->Site->hideHoldingsTabWhenEmpty)
+            && $config->Site->hideHoldingsTabWhenEmpty
+        ) {
+            $catalog = $sm->getServiceLocator()->get('VuFind\ILSConnection');
+        } else {
+            $catalog = false;
+        }
+        return new RDSIndexHoldingsILS($catalog);
+    }
+    
+    /**
+     * Factory for RDSProxyHoldings tab plugin for RDSProxy.
+     *
+     * @param ServiceManager $sm Service manager.
+     *
+     * @return RDSProxyHoldings
+     */
+    public static function getRDSProxyHoldings(ServiceManager $sm) 
+    {
+        
+        return new RDSProxyHoldings();
+    }
+
+    /**
      * Factory for HoldingsWorldCat tab plugin.
      *
      * @param ServiceManager $sm Service manager.
