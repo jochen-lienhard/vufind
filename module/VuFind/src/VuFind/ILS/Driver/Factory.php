@@ -77,6 +77,21 @@ class Factory
     }
 
     /**
+     * Factory for RDSDAIA driver.
+     *
+     * @param ServiceManager $sm Service manager.
+     *
+     * @return RDSDAIA
+     */
+    public static function getRDSDAIA(ServiceManager $sm)
+    {
+        return new RDSDAIA(
+            $sm->getServiceLocator()->get('VuFind\DateConverter')
+        );
+    }
+
+
+    /**
      * Factory for LBS4 driver.
      *
      * @param ServiceManager $sm Service manager.
