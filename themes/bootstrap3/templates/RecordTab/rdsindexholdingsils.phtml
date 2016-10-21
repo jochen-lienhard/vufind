@@ -1,0 +1,102 @@
+<? /*<br />****** Index - Lokalsatz **********<br />
+<?  var_dump($this->driver->getLok())  ?> 
+*/ ?>
+
+<? 
+    // Set up convencience variables:
+    $lok = $this->driver->getLok();
+    $adis_clients = $this->RDSIndexHolding()->getAdisClients();
+    $order = $this->RDSIndexHolding()->getResultOrder();
+    $institutions = $this->driver->tryMethod('getInstitutions');
+    foreach ($adis_clients as $client) {
+      if (in_array($client, $institutions)) {
+         $daia[$client] = $this->driver->getRealTimeHoldings("RDSDAIA" . $client . ".");
+      } 
+    }
+    // $daia = $this->driver->getRealTimeHoldings("RDSDAIA25.");
+    $holdings = $this->RDSIndexHolding()->mergeData($lok, $daia);
+?>
+<? /*
+<br />****** DAIA - Verfügbarkeit **********<br />
+<?  var_dump($daia)  ?>
+<br />****** gemergte Struktur **********<br />
+<? var_dump($holdings) ?> 
+<br />*****************<br />
+*/ ?>
+<?
+    // Show volume link
+    $medIcon = $this->driver->getMedienicon(); 
+    $ppn = $this->driver->getPPN(); 
+    $werk = $this->driver->getWerkInfo(); 
+?>
+<? if ($werk == '1' && $medIcon != 'zeitschr'): ?>
+    <div class="rds_volume_link">
+    <a href="<?=$this->record($this->driver)->getLink('rn', $ppn)?>"><?=$this->transEsc('RDS_BAND_LINK')?></a>
+    </div>
+<? endif; ?>
+
+<? foreach ($holdings as $bib_key => $bibholding): ?>
+  <table class="rds_holding_table table table-striped">
+  <? if (isset($bib_key)):  
+    $bib_name=$this->RDSIndexHolding()->getBibName($bib_key);
+    $bib_addon=$this->RDSIndexHolding()->getBibAddon($bib_key);
+    $bib_link=$this->RDSIndexHolding()->getBibLink($bib_key); 
+    if ($this->isGranted("access.RDSIndexSpecial")) {
+       // means MyBib for Freiburg issn, ti necessary and format
+       $special = $this->RDSIndexHolding()->getSpecial($bib_key); 
+    }
+    if ($this->driver->getONLINE() === "offline") {
+       $adis_link=$this->RDSIndexHolding()->getAdisLink($bib_key);
+    }
+    $array_from=['Frei','-'];
+    $array_to=['Frei ','/'];
+  ?>
+    <? if ($adis_link): /* colspan = 2 */ ?>
+      <tr>
+      <td colspan="3" class="bibname">
+      <? if (isset($bib_link)): ?>
+      <a href="<?=$this->transEsc($bib_link)?>" target="_blank"><?=str_replace($array_from,$array_to,$bib_key)?> <?=$this->transEsc($bib_name)?></a>
+      <? else: ?>
+      <?=$bib_key?> <?=$this->transEsc($bib_name)?>
+      <? endif; ?>
+      </td>
+      <td class="biblink">
+      <a href=<?=$adis_link?>><?=$this->transEsc('RDS_AUSLEIHE')?></a> 
+      </td>
+      </tr>
+    <? else: /* colspan=3 */ ?>
+      <tr>
+      <td colspan="4" class="bibname">
+      <? if (isset($bib_link)): ?>
+      <a href="<?=$this->transEsc($bib_link)?>" target="_blank"><?=str_replace($array_from,$array_to,$bib_key)?> <?=$this->transEsc($bib_name)?></a>
+      <? else: ?>
+      <?=$bib_key?> <?=$this->transEsc($bib_name)?>
+      <? endif; ?>
+      </td>
+      </tr>
+    <? endif; ?>
+    <? if (isset($bib_addon)): ?>
+      <tr>
+      <td colspan="4" class="bibname">
+        <?=$this->transEsc($bib_addon)?>
+      </td>
+      </tr>
+    <? endif; ?>
+  <? endif; ?>
+  <? foreach ($bibholding as $exemplar): ?>
+    <? foreach ($order as $order_value): ?>
+      <? if ($exemplar[$order_value]): ?> 
+        <tr class="<?=$order_value?>">
+        <th><?=$this->transEsc($order_value)?></th>
+        <td colspan="3"> 
+           <?=$exemplar[$order_value]?>
+        </td>
+      <? endif; ?>
+    <? endforeach /* end foreach exemplar content sorted by order */ ?>
+    <? if ($exemplar !== end($bibholding)):?>
+       <tr class="space"><td colspan="4">&nbsp;</td></tr>
+    <? endif; ?>
+  <? endforeach /* end foreach exemplar block */ ?> 
+  </table>
+<? endforeach; /* end foreach bib_sigel */ ?>
+

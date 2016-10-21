@@ -1,0 +1,24 @@
+<?
+    // Set page title.
+    $this->headTitle($this->translate('RDSIndexDescription') . ': ' . $this->driver->getBreadcrumb());
+
+    // Grab clean ISBN for convenience:
+    $isbn = $this->driver->getCleanISBN();
+     $description = $this->RDSIndexDescription($this->driver)->getItems();
+?>
+<? if (!empty($description)): ?>
+	<table class="table table-striped" >
+	<tbody>
+<? foreach ($description as $bib_key => $bibdescription): ?>
+		<tr class="<?=$bib_key?>">
+		<th><?= $this->translate($bib_key) ?> </th>
+		<td colspan="3">
+			<?= $bibdescription ?>
+		</td>
+		</tr>
+<? endforeach; /* end foreach description */ ?>
+	</tbody>
+	</table>
+<? endif; ?>
+
+

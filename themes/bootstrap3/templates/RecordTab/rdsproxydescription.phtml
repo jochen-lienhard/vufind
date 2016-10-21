@@ -1,0 +1,19 @@
+<?
+    // Set page title.
+    $this->headTitle($this->translate('Description') . ': ' . $this->driver->getBreadcrumb());
+    $descriptionItems = $this->rdsproxydescription($this->driver)->getItems();
+?>
+<? if (!empty($descriptionItems)): ?>
+<table class="table table-striped" summary="<?=$this->transEsc('Description')?>">
+  
+    <? foreach ($descriptionItems as $itemName => $itemValue): ?>
+    <tr>
+      <th><?=$this->transEsc($itemName)?>: </th>
+      <td colspan="3">
+          <?=$itemValue?>
+      </td>
+    </tr>
+    <? endforeach; ?>
+  
+</table>
+<? endif; ?>

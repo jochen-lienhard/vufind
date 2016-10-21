@@ -1,0 +1,17 @@
+<?
+    // Set page title.
+    $this->headTitle($this->translate('Holdings') . ': ' . $this->driver->getBreadcrumb());
+    $holdings = $this->RDSProxyHoldings($this->driver)->getItems();
+?>
+
+<table class="table table-striped" summary="<?=$this->transEsc('Holdings')?>">
+  
+    <? foreach ($holdings as $itemName => $itemValue): ?>
+    <? $contentDisplayed = true; ?>
+          <?=$itemValue?><br/>
+    <? endforeach; ?>
+  
+  <? if (!isset($contentDisplayed) || !$contentDisplayed): // Avoid errors if there were no rows above ?>
+    <tr><td><?=$this->transEsc('no_holdings')?></td></tr>
+  <? endif; ?>
+</table>

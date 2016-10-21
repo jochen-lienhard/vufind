@@ -1,0 +1,37 @@
+<div class="title">
+<? $locale = $this->plugin('translate')->getTranslator()->getLocale(); ?>
+
+<h2><?=$this->transEsc(RDS_TITLE) ?></h2>
+
+<? $coreItems = $this->rdsindexcore($this->driver,  $this->serverUrl())->getItems(); ?>
+<table>
+<? foreach ($coreItems as $itemName => $itemValue): ?>
+    <tr>
+      <th><?=$this->transEsc($itemName)?>: </th>
+      <td>
+          <?=$itemValue?><br/>
+      </td>
+    </tr>
+<? endforeach; ?>
+</table>
+
+<? $descriptionItems = $this->rdsindexdescription($this->driver)->getItems(); ?>
+<? if(!empty($descriptionItems)): ?>
+<h2><?=$this->transEsc(RDS_CONTENT_DETAILS) ?></h2>
+<table>
+<? foreach ($descriptionItems as $itemName => $itemValue): ?>
+    <tr>
+      <th><?=$this->transEsc($itemName)?></th>
+      <td>
+          <?=$itemValue?><br/>
+      </td>
+    </tr>
+<? endforeach; ?>
+</table>
+<?endif; ?>
+
+<? $holdings = $this->record($this->driver)->getTab(new VuFind\RecordTab\RDSIndexHoldingsILS()); // $this->rdsindexholding($this->driver)->getItems(); ?>
+<? if (!empty($holdings)): ?>
+  <h2><?=$this->transEsc(RDS_HOLDINGS_INFOS) ?></h2>
+  <?=$holdings ?>
+<? endif; ?>
