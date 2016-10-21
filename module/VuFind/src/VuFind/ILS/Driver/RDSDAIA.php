@@ -122,9 +122,9 @@ class RDSDAIA extends DAIA
                 // get callnumber
                 $result_item['callnumber'] = $this->getItemCallnumber($item);
                 // get location
-                $result_item['location'] = $this->getItemLocation($item);
+                $result_item['location'] = $this->getItemDepartment($item);
                 // get location link
-                $result_item['locationhref'] = $this->getItemLocationLink($item);
+                $result_item['locationhref'] = $this->getItemDepartmentLink($item);
                 // check if summary is neccessary
                 $check_key=false;
                 if (isset($item[$this->summaryKey])) {
@@ -140,7 +140,7 @@ class RDSDAIA extends DAIA
                 }
                 // status and availability will be calculated in own function
                 if ($check_key) {
-                    $result_item['summary'] = ["summary" => $number, "location" => $this->getItemLocation($item)]; 
+                    $result_item['summary'] = ["summary" => $number, "location" => $this->getItemDepartment($item)]; 
                 } 
                 // get callnumber
                 if (isset($item["label"])) {
