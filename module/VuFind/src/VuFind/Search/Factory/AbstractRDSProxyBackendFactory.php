@@ -235,7 +235,7 @@ abstract class AbstractRDSProxyBackendFactory implements FactoryInterface
         $search = $this->config->get($this->searchConfig);
 
         $handlers = array(
-            'search' => array(
+            'select' => array(
                 'fallback' => true,
                 'defaults' => array('fl' => '*,score'),
                 'appends'  => array('fq' => array()),
