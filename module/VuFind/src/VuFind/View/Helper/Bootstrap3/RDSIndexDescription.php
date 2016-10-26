@@ -251,7 +251,7 @@ class RDSIndexDescription extends \Zend\View\Helper\AbstractHelper implements Tr
         $result = $this->driver->getCtGenre();
         if ($result != null) {
             foreach ($result as $value) {
-                $last_item = end($abstract);
+                $last_item = end($result);
                 $html_result .= htmlspecialchars($value);
                 if ($result != $last_item ) {
                     $html_result .="<br /> " ; 
