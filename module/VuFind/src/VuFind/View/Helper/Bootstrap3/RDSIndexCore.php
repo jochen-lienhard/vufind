@@ -976,7 +976,7 @@ class RDSIndexCore extends \Zend\View\Helper\AbstractHelper implements Translato
         $result = $this->driver->getOtherTit();
         if (!empty($result)) {
             foreach ($result as $field) {
-                $last_item = end($field);
+                $last_item = end($result);
                 $html_result .= $transEsc($field);
                 if ($result!= $last_item) {
                     $html_result .="<br /> ";
