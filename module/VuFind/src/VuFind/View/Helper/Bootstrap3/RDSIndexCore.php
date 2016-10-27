@@ -342,7 +342,7 @@ class RDSIndexCore extends \Zend\View\Helper\AbstractHelper implements Translato
         if (isset($authors_long) && !empty($authors_long)) {
             foreach ($authors_long as $field) {
 
-                $last_item = end($field);
+                $last_item = end($authors_long);
                 $html_result .= "<a class='link-internal' href=".$this->baseUrl.$this->view->render('/RecordDriver/RDSIndex/link-author.phtml', ['lookfor' => $field['link']]).">"
                 .$transEsc($field['link'])."</a>";
                 if (isset($field['link_text']) && !empty($field['link_text'])) {
