@@ -293,7 +293,7 @@ class RDSIndexHolding extends \Zend\View\Helper\AbstractHelper implements Transl
                         }
                     }
                 } // end else checkSummary
-                if ((in_array($lok_set["bib_sigel"], $this->daia_only_clients)) && ($lok_set["type"] !== "y")) { 
+                if ((in_array($lok_set["bib_sigel"], $this->daia_only_clients)) && ($lok_set["type"] !== "y") && ($lok_set["url"] == null)) { 
                     if (($da_on_cl_ar[$lok_set["bib_sigel"]] == null)) {
                         $da_on_cl_ar[$lok_set["bib_sigel"]] = $this->getDAIAItems($daia[$lok_set["bib_sigel"]]);
                         $result[$lok_set["bib_sigel"]] = $this->getDAIAItems($daia[$lok_set["bib_sigel"]]);
