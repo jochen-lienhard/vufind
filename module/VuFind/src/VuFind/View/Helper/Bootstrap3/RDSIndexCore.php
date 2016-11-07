@@ -1154,7 +1154,13 @@ class RDSIndexCore extends \Zend\View\Helper\AbstractHelper implements Translato
         $transEsc = $this->getView()->plugin('escapeHtml');
         $result = $this->driver->getNatInfo();
         if (isset($result) && !empty($result)) {
-            $html_result .= $transEsc($result);
+            foreach ($result as $field) {
+                $last_item = end($result);
+                $html_result .= $transEsc($field);
+                if ($result!= $last_item) {
+                    $html_result .="<br /> " ;
+                }
+            }
         }
         return $html_result;
     }
