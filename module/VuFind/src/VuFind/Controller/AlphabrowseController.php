@@ -100,6 +100,9 @@ class AlphabrowseController extends AbstractBase
         // Process incoming parameters:
         $source = $this->params()->fromQuery('source', false);
         $from   = $this->params()->fromQuery('from', false);
+        if ($source == 'callnumber'){
+           $from = str_replace(" ", "", $from);
+        }
         $page   = intval($this->params()->fromQuery('page', 0));
 
         // Special case: highlighting is pointless if there's no user input:
