@@ -1138,8 +1138,16 @@ class RDSIndex extends SolrMarc
      */
     public function getRealTimeHoldings($patron = "")
     {
+	$daiaid = null;
+        $lppn = $this->getUniqueID();
+        if (preg_match("/_/",$lppn)) {
+            $slppn=explode('_',$lppn);
+            $daiaid=$slppn[0];
+        } else {
+            $daiaid=$lppn;
+        }
         return $this->hasILS() ? $this->holdLogic->getHoldings(
-            $patron . $this->getUniqueID(), $this->getConsortialIDs()
+            $patron . $daiaid, $this->getConsortialIDs()
         ) : [];
     }
 
