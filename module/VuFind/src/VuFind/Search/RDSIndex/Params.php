@@ -121,7 +121,14 @@ class Params extends \VuFind\Search\Solr\Params
         // Validate and assign the sort value:
         $valid = array_keys($this->getOptions()->getSortOptions());
         // fix to allow bnd asc sort
-        $valid[] = "bnd asc";
+        if ($this->query instanceof \VuFindSearch\Query\Query) {
+           $qstring=$this->query->getString();
+           if (preg_match('/\(rn\:/', $qstring) || preg_match('/\ rn\:/', $qstring)
+            || preg_match('/^rn\:/', $qstring) || preg_match('/\brn\:/', $qstring)
+        ) {
+              $valid[] = "bnd asc";
+           }
+        }
         if (!empty($sort) && in_array($sort, $valid)) {
             $this->sort = $sort;
         } else {
