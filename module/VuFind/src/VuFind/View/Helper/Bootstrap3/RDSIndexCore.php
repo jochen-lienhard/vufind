@@ -502,7 +502,7 @@ class RDSIndexCore extends \Zend\View\Helper\AbstractHelper implements Translato
                 }
             }
             if (isset($pp_norm_display) && !empty($pp_norm_display)) {
-                $html_result .= "<span class='handwriting'>".$this->translate('RDS_HAND_NORM')."</span>";
+                $html_result .= "<span class='handwriting'>".$this->translate('RDS_HAND_NORM').": </span>";
                 foreach ($pp_norm_display as $field) {
                     $last_item = end($pp_norm_display);
                     $html_result .= $transEsc($field);
