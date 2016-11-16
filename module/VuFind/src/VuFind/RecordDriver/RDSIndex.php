@@ -2215,6 +2215,17 @@ class RDSIndex extends SolrMarc
     }
 
     /**
+     * Get origin publish year for result-list 
+     * RDS
+     * @return array
+     */    
+    public function getOriginPublishingYear() 
+    {
+        return isset($this->fields['py_original']) ? 
+        implode("; ", $this->fields['py_original']) : '';
+    }
+
+    /**
      *Get publish year for function getOpenUrl() ??? TODO
      * RDS
      * @usedby getOpenUrl()

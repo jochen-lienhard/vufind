@@ -492,11 +492,14 @@ class RDSIndexCore extends \Zend\View\Helper\AbstractHelper implements Translato
         $html_result = "";
         $transEsc = $this->getView()->plugin('escapeHtml');
         $pu_pp_display = $this->driver->getPublishDisplay(); 
+        $py_orig = $this->driver->getOriginPublishingYear(); 
         $pp_norm_display = $this->driver->getppNormDisplay();
         if (isset($pu_pp_display) && !empty($pu_pp_display)) {
             foreach ($pu_pp_display as $field) {
                 $last_item = end($pu_pp_display);
                 $html_result .= $transEsc($field);
+		if(isset($py_orig) && !empty($py_orig))
+			$html_result .= " [Reprint] = ".$py_orig;
                 if ($pu_pp_display != $last_item ) {
                     $html_result .="<br /> " ; 
                 }
