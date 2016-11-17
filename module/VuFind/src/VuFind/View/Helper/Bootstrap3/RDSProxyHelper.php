@@ -75,25 +75,6 @@ class RDSProxyHelper extends RDSHelper
      *
      * @return Mixed 
      */ 
-    protected function getLoginLink() 
-    {
-        $followupUrl = $this->view->plugin('serverUrl')->__invoke() . $_SESSION['Search']['last'];
-        $target = $this->view->plugin('url')->__invoke('myresearch-home') . '?followupUrl=' . urlencode($followupUrl);
-  
-        $sessionInitiator = $this->authManager->getManager()->getSessionInitiator($target);
-        if ($sessionInitiator) {
-            $loginLink = $this->view->plugin('escapeHtmlAttr')->__invoke($sessionInitiator);
-        } else {
-            $loginLink = $this->view->plugin('url')->__invoke('myresearch-userlogin');
-        }
-         return $loginLink;
-    }
-   
-    /**
-     * Dummy.
-     *
-     * @return Mixed 
-     */ 
     public function getDataSource() 
     {
         $value = $this->driver->getDataSource();
