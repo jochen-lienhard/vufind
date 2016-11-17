@@ -218,7 +218,11 @@ class RDSHelper extends AbstractHelper
      */
     public function getLoginLink()
     {
-        $followupUrl = $this->view->plugin('serverUrl')->__invoke() . $_SESSION['Search']['last'];
+        if (isset($_SESSION['Search'])) {
+            $followupUrl = $this->view->plugin('serverUrl')->__invoke() . $_SESSION['Search']['last'];
+        } else {
+            $followupUrl = $this->view->plugin('serverUrl')->__invoke(true);
+        }
         $target = $this->view->plugin('url')->__invoke('myresearch-home') . '?followupUrl=' . urlencode($followupUrl);
     
         $sessionInitiator = $this->authManager->getManager()->getSessionInitiator($target);
