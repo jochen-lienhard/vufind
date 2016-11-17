@@ -519,7 +519,7 @@ class RDSDataProviderProxy implements RDSDataProvider
         $fieldNames = $args[1];
         $fieldName = array_shift($fieldNames);
 
-        $fieldValue = $array[$fieldName];
+        $fieldValue = (isset($array[$fieldName])) ? $array[$fieldName] : '';
         if (count($fieldNames) <= 0) {
             return $this->getArrayOf($fieldValue);
         } else {
