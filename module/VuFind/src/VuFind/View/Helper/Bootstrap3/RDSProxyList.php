@@ -156,22 +156,22 @@ class RDSProxyList extends RDSProxyHelper
           if ($this->driver->getGuestView() != 'brief' && $this->authManager->isLoggedIn() == true) {
 
             /*     <a target="_blank" href='<?=$path?>AJAX/JSON?method=getFulltextLink&source=RDSProxy&id=<?=$ppn?>' onclick="userAction('click', 'RdsFulltextLink', '<?=$ppn?>');">&rarr;<?=$this->transEsc("RDS_FULLTEXT_LINK") ?></a> */
-            $html .= '<a class="link-external" target="_blank" href="' . $this->path . 'AJAX/JSON?method=getFulltextLink&source=RDSProxy&id=' . $this->uniqueId . '" onclick="userAction(\'click\', \'RdsFulltextLink\', \'' . $this->uniqueId . '\');">' . $this->translate("RDS_FULLTEXT_LINK") . '</a>';
+            $html .= '<a class="link-external" target="_blank" href="' . $this->path . 'AJAX/JSON?method=getFulltextLink&source=RDSProxy&id=' . $this->driver->getUniqueId() . '" onclick="userAction(\'click\', \'RdsFulltextLink\', \'' . $this->driver->getUniqueId() . '\');">' . $this->translate("RDS_FULLTEXT_LINK") . '</a>';
           } else {
             /* <a href="<?=$path?>RDSProxyrecord/<?=$ppn?>"{if $record_view != "flat"} data-view="<?=$dataView ?>" class="getFull" onclick="userAction('click', 'RdsFulltextAvailable', '<?=$ppn?>'); return false;"{/if}>&rarr;<?=$this->transEsc("RDS_FULLTEXT_AVAILABLE") ?></a> */
-            $html .= '<a class="link-internal getFull" href="' . $this->path . 'RDSProxyrecord/' . $this->uniqueId . '" data-tab="Holdings" data-view="'. $dataview .'" onclick="userAction(\'click\', \'RdsFulltextAvailable\', \'' . $this->uniqueId . '\');">'.$this->translate("RDS_FULLTEXT_AVAILABLE").'</a>';
+            $html .= '<a class="link-internal getFull" href="' . $this->path . 'RDSProxyrecord/' . $this->driver->getUniqueId() . '" data-tab="Holdings" data-view="'. $dataview .'" onclick="userAction(\'click\', \'RdsFulltextAvailable\', \'' . $this->driver->getUniqueId() . '\');">'.$this->translate("RDS_FULLTEXT_AVAILABLE").'</a>';
           }
 
         } else if ($fulltextLinks[0]['indicator'] == 2) {
           /* <a href="<?=$path?>RDSProxyrecord/<?=$ppn?>"{if $record_view != "flat"} data-view="<?=$dataView ?>" class="getFull" onclick="userAction('click', 'RdsFulltextAvailable', '<?=$ppn?>'); return false;"{/if}>&rarr;<?=$this->transEsc("RDS_FULLTEXT_AVAILABLE") ?></a>*/
-          $html .= '<a class="link-internal getFull" href="' . $this->path . 'RDSProxyrecord/' . $this->uniqueId . '" data-tab="Holdings" data-view="'. $dataview .'" onclick="userAction(\'click\', \'RdsFulltextAvailable\', \'' . $this->uniqueId . '\');">'.$this->translate("RDS_FULLTEXT_AVAILABLE") .'</a>';
+          $html .= '<a class="link-internal getFull" href="' . $this->path . 'RDSProxyrecord/' . $this->driver->getUniqueId() . '" data-tab="Holdings" data-view="'. $dataview .'" onclick="userAction(\'click\', \'RdsFulltextAvailable\', \'' . $this->driver->getUniqueId() . '\');">'.$this->translate("RDS_FULLTEXT_AVAILABLE") .'</a>';
         } else {
           /* <a target="_blank" href='<?=$fulltextLinks[0]['url']?>' onclick="userAction('click', 'RdsFulltextLink', '<?=$ppn?>');">&rarr;<?=$this->transEsc("RDS_FULLTEXT_LINK") ?></a>*/
-          $html .= '<a class="link-external" target="_blank" href=\''. $fulltextLinks[0]['url'] .'\' onclick="userAction(\'click\', \'RdsFulltextLink\', \'' . $this->uniqueId . '\');">'. $this->translate("RDS_FULLTEXT_LINK") .'</a>';
+          $html .= '<a class="link-external" target="_blank" href=\''. $fulltextLinks[0]['url'] .'\' onclick="userAction(\'click\', \'RdsFulltextLink\', \'' . $this->driver->getUniqueId() . '\');">'. $this->translate("RDS_FULLTEXT_LINK") .'</a>';
         }
       } else {
         /*<a href="<?=$path?>RDSProxyRecord/<?=$ppn?>"{if $record_view != "flat"} data-view="<?=$dataView ?>" class="getFull" onclick="userAction('click', 'RdsCheckAvailability', '<?=$ppn?>'); return false;"{/if}>&rarr;<?=$this->transEsc("RDS_CHECK_AVIALABILITY") ?></a>*/
-        $html .= '<a class="link-internal getFull" href="' . $this->path . 'RDSProxyRecord/' . $this->uniqueId . '" data-tab="Holdings" data-view="'. $dataview .'" onclick="userAction(\'click\', \'RdsCheckAvailability\', \'' . $this->uniqueId . '\');">'.$this->translate("RDS_CHECK_AVIALABILITY").'</a>';
+        $html .= '<a class="link-internal getFull" href="' . $this->path . 'RDSProxyRecord/' . $this->driver->getUniqueId() . '" data-tab="Holdings" data-view="'. $dataview .'" onclick="userAction(\'click\', \'RdsCheckAvailability\', \'' . $this->driver->getUniqueId() . '\');">'.$this->translate("RDS_CHECK_AVIALABILITY").'</a>';
 
 
       }

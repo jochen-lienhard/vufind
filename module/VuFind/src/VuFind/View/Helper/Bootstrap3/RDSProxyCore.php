@@ -228,7 +228,7 @@ class RDSProxyCore extends RDSHelper
         
         $html = '';
         foreach ($this->driver->getCitationLinks() as $citationLink) {
-          $html .= '<a class="link-external" target="_blank" href="' . $citationLink['url'] . '" onclick="userAction(\'click\', \'RdsCitationLink\', \'' . $this->uniqueId . '\');"> ' . $this->translate("RDS_CITATION_LINK") .'</a>';
+          $html .= '<a class="link-external" target="_blank" href="' . $citationLink['url'] . '" onclick="userAction(\'click\', \'RdsCitationLink\', \'' . $this->driver->getUniqueId() . '\');"> ' . $this->translate("RDS_CITATION_LINK") .'</a>';
           
         }  
       

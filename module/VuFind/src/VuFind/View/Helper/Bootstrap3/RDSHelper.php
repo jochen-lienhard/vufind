@@ -48,7 +48,6 @@ class RDSHelper extends AbstractHelper
     protected $authManager = null;
     protected $linkresolver = null;
     protected $path = '';
-    protected $uniqueId = null;
     
     protected $escapeJs;
     protected $escapeHtmlAttr;
@@ -70,7 +69,6 @@ class RDSHelper extends AbstractHelper
         $this->escapeHtmlAttr = $this->view->plugin('escapeHtmlAttr');
         $this->driver = $driver;
         $this->path = $this->view->plugin('url')->__invoke('home');
-        $this->uniqueId = $this->driver->getUniqueId();
         return $this;
     }
     
@@ -211,5 +209,24 @@ class RDSHelper extends AbstractHelper
     protected function escapeHtmlAttr($str) 
     {
         return $this->escapeHtmlAttr->__invoke($str);
+    }
+    
+    /**
+     * Dummy.
+     *
+     * @return Mixed
+     */
+    public function getLoginLink()
+    {
+        $followupUrl = $this->view->plugin('serverUrl')->__invoke() . $_SESSION['Search']['last'];
+        $target = $this->view->plugin('url')->__invoke('myresearch-home') . '?followupUrl=' . urlencode($followupUrl);
+    
+        $sessionInitiator = $this->authManager->getManager()->getSessionInitiator($target);
+        if ($sessionInitiator) {
+            $loginLink = $this->view->plugin('escapeHtmlAttr')->__invoke($sessionInitiator);
+        } else {
+            $loginLink = $this->view->plugin('url')->__invoke('myresearch-userlogin');
+        }
+        return $loginLink;
     }
 }
