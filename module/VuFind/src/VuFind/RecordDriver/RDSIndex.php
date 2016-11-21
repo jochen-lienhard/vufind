@@ -897,7 +897,7 @@ class RDSIndex extends SolrMarc
         }
          
         $params['rft.title']   = $this->getTitleMain();
-        $params['rft.date']    = $this->getPY();
+        $params['rft.date']    = $this->getPy();
          
         $formats = $this->getFormats();
         if (in_array('book', $formats)) {
@@ -2231,7 +2231,7 @@ class RDSIndex extends SolrMarc
      * @usedby getOpenUrl()
      * @return String
      */    
-    public function getPY() 
+    public function getPy() 
     {
         return isset($this->fields['py']) ? $this->fields['py'] : '';
     }
