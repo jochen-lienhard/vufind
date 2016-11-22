@@ -65,7 +65,9 @@ class RDSProxyCore extends RDSHelper
      */
     public function getTitle() 
     {
-        $value = $this->driver->getTitle();
+        $record = $this->view->plugin('record')->__invoke($this->driver);
+        $value = $record->getTitleHtml(PHP_INT_MAX);
+        
         return $value;
     }
 
