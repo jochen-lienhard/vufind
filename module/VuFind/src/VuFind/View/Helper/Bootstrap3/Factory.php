@@ -107,16 +107,11 @@ class Factory
     {
         $serviceLocator = $sm->getServiceLocator();
         $config = $serviceLocator->get('VuFind\Config')->get('config');
-
-        $linkresolver = null;
-        if (isset($config->OpenURL) && isset($config->OpenURL->resolver)) {
-            $resolverDriverPluginManger= $serviceLocator
-                ->get('VuFind\ResolverDriverPluginManager');
-            $linkresolver = $resolverDriverPluginManger
-                ->get($config->OpenURL->resolver);
-        }
-
-        return new RDSProxyHoldings($linkresolver);
+        
+        $linkresolver = $linkresolver = Factory::getLinkresolver($sm);
+        $authzService = $serviceLocator->get('ZfcRbac\Service\AuthorizationService');
+        
+        return new RDSProxyHoldings($linkresolver, $authzService);
     }
 
      /**
@@ -129,17 +124,9 @@ class Factory
     public static function getRDSProxyHoldingsPrint(ServiceManager $sm)
     {
         $serviceLocator = $sm->getServiceLocator();
-        $config = $serviceLocator->get('VuFind\Config')->get('config');
-
-        $linkresolver = null;
-        if (isset($config->OpenURL) && isset($config->OpenURL->resolver)) {
-            $resolverDriverPluginManger= $serviceLocator
-                ->get('VuFind\ResolverDriverPluginManager');
-            $linkresolver = $resolverDriverPluginManger
-                ->get($config->OpenURL->resolver);
-        }
-
-        return new RDSProxyHoldingsPrint($linkresolver);
+        
+        $linkresolver = $linkresolver = Factory::getLinkresolver($sm);
+        $authzService = $serviceLocator->get('ZfcRbac\Service\AuthorizationService');
     }
 
      /**
@@ -153,18 +140,32 @@ class Factory
     {
         $serviceLocator = $sm->getServiceLocator();
         $config = $serviceLocator->get('VuFind\Config')->get('config');
+        $linkresolver = $linkresolver = Factory::getLinkresolver($sm);
+        
+        return new RDSExport($linkresolver);
+    }
 
+    public static function getRDSProxyList(ServiceManager $sm) {
+      $serviceLocator = $sm->getServiceLocator();
+      $linkresolver = Factory::getLinkresolver($sm);
+      $autzService = $serviceLocator->get('ZfcRbac\Service\AuthorizationService');
+      
+      
+      return new RDSProxyList($linkresolver, $autzService);
+    }
+    
+    private static function getLinkresolver(ServiceManager $sm) {
         $linkresolver = null;
+        $serviceLocator = $sm->getServiceLocator();
+        $config = $serviceLocator->get('VuFind\Config')->get('config');
         if (isset($config->OpenURL) && isset($config->OpenURL->resolver)) {
             $resolverDriverPluginManger= $serviceLocator
                 ->get('VuFind\ResolverDriverPluginManager');
             $linkresolver = $resolverDriverPluginManger
                 ->get($config->OpenURL->resolver);
         }
-
-        return new RDSExport($linkresolver);
-
+        
+        return $linkresolver;
     }
-
-
+    
 }

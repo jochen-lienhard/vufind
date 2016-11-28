@@ -29,6 +29,7 @@ return array(
             'flashmessages' => 'VuFind\View\Helper\Bootstrap3\Factory::getFlashmessages',
             'layoutclass' => 'VuFind\View\Helper\Bootstrap3\Factory::getLayoutClass',
             'rdsproxyholdings' => 'VuFind\View\Helper\Bootstrap3\Factory::getRDSProxyHoldings',
+            'rdsproxylist' => 'VuFind\View\Helper\Bootstrap3\Factory::getRDSProxyList',
             'rdsproxyholdingsprint' => 'VuFind\View\Helper\Bootstrap3\Factory::getRDSProxyHoldingsPrint',
             'rdsexport' => 'VuFind\View\Helper\Bootstrap3\Factory::getRDSExport',
             'recaptcha' => 'VuFind\View\Helper\Bootstrap3\Factory::getRecaptcha',
@@ -40,7 +41,6 @@ return array(
             'rdsindexdescription' => 'VuFind\View\Helper\Bootstrap3\RDSIndexDescription',
             'rdsindexcore' => 'VuFind\View\Helper\Bootstrap3\RDSIndexCore',
             'rdsproxycore' => 'VuFind\View\Helper\Bootstrap3\RDSProxyCore',
-            'rdsproxylist' => 'VuFind\View\Helper\Bootstrap3\RDSProxyList',
             'search' => 'VuFind\View\Helper\Bootstrap3\Search'
         )
     )

@@ -97,7 +97,7 @@ class RDSProxyBackendFactory extends AbstractRDSProxyBackendFactory
     protected function hasPermission()
     {
         return $this->serviceLocator->get('ZfcRbac\Service\AuthorizationService')
-            ->isGranted('access.RDSProxyModule');
+            ->isGranted('access.RDSRestrictedContent');
     }
 
 }
