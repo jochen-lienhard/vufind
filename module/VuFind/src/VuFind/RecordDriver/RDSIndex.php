@@ -2183,8 +2183,14 @@ class RDSIndex extends SolrMarc
      */
     public function getPublishDisplay()
     {
-        return isset($this->fields['pu_pp_display']) ? $this->fields['pu_pp_display'] : '';
-
+	$arr = "";
+        if (isset($this->fields['pu_pp_display'])) {
+		$arr_links = $this->fields['pu_pp_display'];
+		foreach ($arr_links as $key =>  $link) {
+			$arr = explode(" ; ", $link);
+		}
+	}
+	return $arr;
     }
 
     /**
@@ -2414,45 +2420,51 @@ class RDSIndex extends SolrMarc
      */
     public function getHandwritingBase()
     {
+    	$key = '0';
         $hand_basedesc = array();
         if (isset($this->fields['hand_basedesc'])) {
             $arr_desc = $this->fields['hand_basedesc'];
-            foreach ($arr_desc as $key =>  $txt) {
+            foreach ($arr_desc as $key1 =>  $txt) {
                 $title = "Beschreibstoff";
                 $hand_basedesc[$key]['title'] = $title;
                 $hand_basedesc[$key]['text'] = $txt;
+		$key++;
             }
         }
         if (isset($this->fields['hand_basecover'])) {
             $arr_desc = $this->fields['hand_basecover'];
-            foreach ($arr_desc as $key => $txt) {
+            foreach ($arr_desc as $key1 => $txt) {
                 $title = "Einband";
                 $hand_basedesc[$key]['title'] = $title;                                    
                 $hand_basedesc[$key]['text'] = $txt;
+		$key++;
             }
         }    
         if (isset($this->fields['hand_baserest'])) {
             $arr_desc = $this->fields['hand_baserest'];
-            foreach ($arr_desc as $key => $txt) {
+            foreach ($arr_desc as $key1 => $txt) {
                 $title = "Restaurierungsmaßnahmen";
                 $hand_basedesc[$key]['title'] = $title;
                 $hand_basedesc[$key]['text'] = $txt;
+		$key++;
             }
         }    
         if (isset($this->fields['hand_base_c'])) {
             $arr_desc = $this->fields['hand_base_c'];
-            foreach ($arr_desc as $key => $txt) {
+            foreach ($arr_desc as $key1 => $txt) {
                 $title = "Wasserzeichen";
                 $hand_basedesc[$key]['title'] = $title;
                 $hand_basedesc[$key]['text'] = $txt;
+		$key++;
             }
         }    
         if (isset($this->fields['hand_base_d'])) {
             $arr_desc = $this->fields['hand_base_d'];
-            foreach ($arr_desc as $key => $txt) {
+            foreach ($arr_desc as $key1 => $txt) {
                 $title = "Erhaltungszustand";
                 $hand_basedesc[$key]['title'] = $title;
                 $hand_basedesc[$key]['text'] = $txt;
+		$key++;
             }
         }    
         return $hand_basedesc;

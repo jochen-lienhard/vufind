@@ -780,8 +780,8 @@ class RDSIndexCore extends \Zend\View\Helper\AbstractHelper implements Translato
         if (isset($result) && !empty($result)) {
             foreach ($result as $field) {
                 $last_item = end($result);
-                $html_result .= "<span class='handwriting'>".$transEsc($field['title'])."</span>";
-                $html_result .= $transEsc($field['txt']);
+                $html_result .= "<span class='handwriting'>".$transEsc($field['title']).": </span>";
+                $html_result .= $transEsc($field['text']);
                 if ($result!= $last_item ) {
                     $html_result .="<br /> " ; 
                 }
@@ -803,8 +803,8 @@ class RDSIndexCore extends \Zend\View\Helper\AbstractHelper implements Translato
         if (isset($result) && !empty($result)) {
             foreach ($result as $field) {
                 $last_item = end($result);
-                $html_result .= "<span class='handwriting'>".$transEsc($field['title'])."</span>";
-                $html_result .= $transEsc($field['txt']);
+                $html_result .= "<span class='handwriting'>".$transEsc($field['title']).": </span>";
+                $html_result .= $transEsc($field['text']);
                 if ($result!= $last_item ) {
                     $html_result .="<br /> " ; 
                 }
@@ -824,7 +824,7 @@ class RDSIndexCore extends \Zend\View\Helper\AbstractHelper implements Translato
         $transEsc = $this->getView()->plugin('escapeHtml');
         $result = $this->driver->getMedium();
         if (isset($result) && !empty($result)) {
-            $html_result .= $transEsc($result);
+            $html_result .= $this->translate($transEsc($result));
         }
         return $html_result;
     }
