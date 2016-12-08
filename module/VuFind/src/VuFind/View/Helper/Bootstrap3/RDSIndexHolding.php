@@ -353,8 +353,12 @@ class RDSIndexHolding extends \Zend\View\Helper\AbstractHelper implements Transl
         foreach ($daia_items as $loc_daia) {
             foreach ($loc_daia["items"] as $item) {
                 $lok_mergeResult = $this->mergeResult;
-                $lok_mergeResult["RDS_SIGNATURE"] = $item["callnumber"];
-                $lok_mergeResult["RDS_LOCATION"] = $this->createReadableLocation($item["location"], null);
+                if ($item["callnumber"] != "Unknown") {
+                   $lok_mergeResult["RDS_SIGNATURE"] = $item["callnumber"];
+                }
+                if ($item["location"] != "Unknown") {
+                   $lok_mergeResult["RDS_LOCATION"] = $this->createReadableLocation($item["location"], null);
+                }
                 $localstatus = $this->createReadableStatus($item, null);
                 $lok_mergeResult["RDS_STATUS"] = $localstatus;
                 $tempresult[] = $lok_mergeResult; 
