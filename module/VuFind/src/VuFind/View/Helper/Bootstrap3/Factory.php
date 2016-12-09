@@ -127,6 +127,8 @@ class Factory
         
         $linkresolver = $linkresolver = Factory::getLinkresolver($sm);
         $authzService = $serviceLocator->get('ZfcRbac\Service\AuthorizationService');
+        
+        return new RDSProxyHoldings($linkresolver, $authzService);
     }
 
      /**
