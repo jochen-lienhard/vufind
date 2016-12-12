@@ -2730,7 +2730,7 @@ class RDSIndex extends SolrMarc
      */
     public function getJOPNr()
     {
-        return isset($this->fields['jop_nr']) ? $this->fields['jop_nr'] : '';
+        return isset($this->fields['jop']) ? $this->fields['jop'] : '';
     }
 
     /**

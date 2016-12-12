@@ -216,6 +216,66 @@ class OpenUrl extends \Zend\View\Helper\AbstractHelper
     }
 
     /**
+     * Public method to render the OpenURL template
+     *
+     * @param string $jopparams include the bibid, jopnr
+     * sid and genre 
+     *
+     * @return string
+     */
+    public function renderJOPTemplate($jopparams)
+    {
+        $imagebased = null;
+        $base = "http://services.dnb.de/fize-service/gvr/full.xml";
+
+        $embed = (isset($this->config->embed) && !empty($this->config->embed));
+
+        $embedAutoLoad = isset($this->config->embed_auto_load)
+            ? $this->config->embed_auto_load : false;
+        // ini values 'true'/'false' are provided via ini reader as 1/0
+        // only check embedAutoLoad for area if the current area passed checkContext
+        if (!($embedAutoLoad === "1" || $embedAutoLoad === "0")
+            && !empty($this->area)
+        ) {
+            // embedAutoLoad is neither true nor false, so check if it contains an
+            // area string defining where exactly to use autoloading
+            $embedAutoLoad = in_array(
+                strtolower($this->area),
+                array_map(
+                    'trim',
+                    array_map(
+                        'strtolower',
+                        explode(',', $embedAutoLoad)
+                    )
+                )
+            );
+        }
+
+        // Build parameters needed to display the control:
+        $params = [
+            'openUrl' => $jopparams,
+            'openUrlBase' => empty($base) ? false : $base,
+            'openUrlWindow' => empty($this->config->window_settings)
+                ? false : $this->config->window_settings,
+            'openUrlGraphic' => empty($this->config->graphic)
+                ? false : $this->config->graphic,
+            'openUrlGraphicWidth' => empty($this->config->graphic_width)
+                ? false : $this->config->graphic_width,
+            'openUrlGraphicHeight' => empty($this->config->graphic_height)
+                ? false : $this->config->graphic_height,
+            'openUrlEmbed' => $embed,
+            'openUrlEmbedAutoLoad' => $embedAutoLoad
+        ];
+        $this->addImageBasedParams($imagebased, $params);
+
+        // Render the subtemplate:
+        return $this->context->__invoke($this->getView())->renderInContext(
+            'Helpers/jopopenurl.phtml', $params
+        );
+    }
+
+
+    /**
      * Public method to check ImageBased Linking mode
      *
      * @return string|bool false if image based linking is not active,
