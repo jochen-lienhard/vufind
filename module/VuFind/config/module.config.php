@@ -658,9 +658,9 @@ $config = [
             ],
             'VuFind\RecordDriver\RDSIndex' => [
                 'tabs' => [
+                    'Holdings' => 'RDSIndexHoldingsILS',
                     'Core' => 'RDSIndexCore',
                     'Description' => 'RDSIndexDescription',
-                    'Holdings' => 'RDSIndexHoldingsILS', 
                     'Details' => 'StaffViewMARC',
                     'Similar' => 'SimilarItemsCarousel',
                  ],
@@ -668,9 +668,9 @@ $config = [
             ],
             'VuFind\RecordDriver\RDSProxy' => [
                 'tabs' => [
+                    'Holdings' => 'RDSProxyHoldings',
                     'Core' => 'RDSProxyCore',
                     'Description' => 'RDSProxyDescription',
-                    'Holdings' => 'RDSProxyHoldings',
                     'Details' => 'StaffViewArray',
                  ],
                  'defaultTab' => null,
