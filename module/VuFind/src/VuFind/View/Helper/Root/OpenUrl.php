@@ -226,7 +226,7 @@ class OpenUrl extends \Zend\View\Helper\AbstractHelper
     public function renderJOPTemplate($jopparams)
     {
         $imagebased = null;
-        $base = "http://services.dnb.de/fize-service/gvr/full.xml";
+        $base = "https://services.dnb.de/fize-service/gvr/full.xml";
 
         $embed = (isset($this->config->embed) && !empty($this->config->embed));
 

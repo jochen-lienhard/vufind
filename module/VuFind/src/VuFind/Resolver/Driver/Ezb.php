@@ -71,7 +71,7 @@ class Ezb implements DriverInterface
      */
     public function __construct($baseUrl, \Zend\Http\Client $httpClient)
     {
-        $this->baseUrl = "http://services.d-nb.de/fize-service/gvr/full.xml";
+        $this->baseUrl = "https://services.d-nb.de/fize-service/gvr/full.xml";
         $this->httpClient = $httpClient;
     }
 
