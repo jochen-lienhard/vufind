@@ -212,17 +212,24 @@ class RDSHelper extends AbstractHelper
     }
     
     /**
-     * Dummy.
+     * Helper method to get login link which performs a redirect to pre-login url.
      *
-     * @return Mixed
+     * @return loginLink
      */
     public function getLoginLink()
     {
-        if (isset($_SESSION['Search'])) {
-            $followupUrl = $this->view->plugin('serverUrl')->__invoke() . $_SESSION['Search']['last'];
+        $serverUrl = $this->view->plugin('serverUrl')->__invoke();
+        $currentUrl = $this->view->plugin('serverUrl')->__invoke(true);
+        $homeUrl = $serverUrl . $this->path;
+    
+        if ($currentUrl === $homeUrl) {
+            $followupUrl = $serverUrl . $this->view->plugin('url')->__invoke('rdsindex-home');
+        } elseif (isset($_SESSION['Search'])) {
+            $followupUrl = $serverUrl . $_SESSION['Search']['last'];
         } else {
-            $followupUrl = $this->view->plugin('serverUrl')->__invoke(true);
+            $followupUrl = $currentUrl;
         }
+    
         $target = $this->view->plugin('url')->__invoke('myresearch-home') . '?followupUrl=' . urlencode($followupUrl);
     
         $sessionInitiator = $this->authManager->getManager()->getSessionInitiator($target);
