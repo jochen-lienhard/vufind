@@ -3129,7 +3129,28 @@ class RDSIndex extends SolrMarc
      */
     public function getCtGenre()
     {
-        return isset($this->fields['ct_genre']) ? $this->fields['ct_genre'] : '';    
+        //return isset($this->fields['ct_genre']) ? $this->fields['ct_genre'] : '';    
+        $ct_display = array();
+        if (isset($this->fields['ct_genre'])) {
+            $arr_ct = $this->fields['ct_genre'];
+            foreach ($arr_ct as $key_list => $ct_string) {
+                $gnd_ppn = "";
+                $ct_list = explode(" , ", $ct_string);
+                foreach ($ct_list as $key => $value ) {                    
+                    if (strstr($value, " ; ")) {
+                        $tmp = $value;
+                        $pos = strrpos($value, " ; ");
+                        $gnd_ppn = substr($tmp, $pos+3);
+                        $ct_display[$key_list][$key]["gnd"] = $gnd_ppn;
+                        $link = substr($value, '0', $pos);
+                        $ct_display[$key_list][$key]["link"] = trim($link);
+                    } else {
+                        $ct_display[$key_list][$key]["link"] =  $value;
+                    }
+                }
+            }
+        }
+        return $ct_display;
     }
 
     /**
@@ -3222,7 +3243,6 @@ class RDSIndex extends SolrMarc
     {
         preg_match('/\/[^\/]*/', $_SERVER['REQUEST_URI'], $matches);
         $basePath = (isset($matches[0])) ? $matches[0] : '';
-        $basePath = str_replace('/opac', '', $basePath);
         $id = $this->getPPN();
         if (preg_match("/_/", $id)) {
             $id = substr($id, 0, 9);
