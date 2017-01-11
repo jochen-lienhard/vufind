@@ -1601,4 +1601,54 @@ class AjaxController extends AbstractBase
     {
         return $this->getServiceLocator()->get('VuFind\SearchResultsPluginManager');
     }
+
+    /**
+     * Method to get result details (i.e. total result count) via AJAX call
+     *
+     * @return mixed
+     */
+    public function getResultDetailsAjax() 
+    {
+        $searchClassId = $this->params()->fromQuery('searchClassId');
+        try {
+            $results = $this->getResultsManager()->get($searchClassId);
+            $params = $results->getParams();
+            $params->initFromRequest($this->getRequest()->getQuery());
+            $params->initBasicFacets();
+            $results->performAndProcessSearch();
+        } catch (\Exception $e) {
+            return $this->output(
+                'Search error: ' . $e->getMessage(), self::STATUS_ERROR
+            );
+        }
+        
+        return $this->output(
+            ['resultCount' => $results->getResultTotal()],
+            self::STATUS_OK
+        );
+    }
+    
+    /**
+     * Method to get fulltext link for RDSProxy via AJAX call
+     *
+     * @return mixed
+     */
+    public function getFulltextLinkAjax() 
+    {
+        $driver = $this->getRecordLoader()->load(
+            $this->params()->fromQuery('id'),
+            $this->params()->fromQuery('source')
+        );
+        
+        $fulltextLink = $driver->getFulltextLinks()[0]['url'];
+        
+        $response = $this->getResponse();
+        $headers = $response->getHeaders();
+        $headers->addHeaderLine('Content-type: text/html');
+        $headers->addHeaderLine('Cache-Control', 'no-cache, must-revalidate');
+        $headers->addHeaderLine('Expires', 'Mon, 26 Jul 1997 05:00:00 GMT');
+        $headers->addHeaderLine('Location', $fulltextLink);
+        $response->setStatusCode(302);
+        return $response;
+    }
 }
