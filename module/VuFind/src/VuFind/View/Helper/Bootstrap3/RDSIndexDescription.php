@@ -248,17 +248,27 @@ class RDSIndexDescription extends \Zend\View\Helper\AbstractHelper implements Tr
     protected function getCTGENRE ()
     {
         $html_result = "";
-        $result = $this->driver->getCtGenre();
-        if ($result != null) {
-            foreach ($result as $value) {
-                $last_item = end($result);
-                $html_result .= htmlspecialchars($value);
-                if ($result != $last_item ) {
+        $ct_display = $this->driver->getCtGenre();
+        if (isset($ct_display) && !empty($ct_display)) {
+            foreach ($ct_display as $ct_field) {
+                $last_item = end($ct_display);
+                foreach ($ct_field as $field) {
+                    $last_item = end($ct_field);
+                    $html_result .= "<a class='link-internal' href=".$this->view->render('/RecordDriver/RDSIndex/link-ct.phtml', ['lookfor' => $field['link']]).">".$field['link']."</a>";
+                    if (isset($field['gnd']) && !empty($field['gnd'])) {
+                        $html_result .= " <a class='dnb link-external' href=".$this->view->render('/RecordDriver/RDSIndex/link-gnd.phtml', ['lookfor' => $field['gnd']])." target ='_blank'"
+                        ."title='".$this->translate('RDS_CT_DNB')."'></a>";
+                    }
+                    if ($field != $last_item ) {
+                        $html_result .=" / " ; 
+                    }
+                }
+                if ($ct_display != $last_item ) {
                     $html_result .="<br /> " ; 
                 }
             }
         }
         return $html_result;
-    }
+	}
 
 }
