@@ -3243,6 +3243,7 @@ class RDSIndex extends SolrMarc
     {
         preg_match('/\/[^\/]*/', $_SERVER['REQUEST_URI'], $matches);
         $basePath = (isset($matches[0])) ? $matches[0] : '';
+        $basePath = str_replace('/opac', '', $basePath);
         $id = $this->getPPN();
         if (preg_match("/_/", $id)) {
             $id = substr($id, 0, 9);
