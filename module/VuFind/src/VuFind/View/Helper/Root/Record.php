@@ -488,11 +488,23 @@ class Record extends AbstractHelper
                     break;
                 }
             }
+        
+            // check if the current coverimages has a link field
+            // ToDo fix this dirty solution
+            // use ISBN 13 for Buchhandel link
+            if (isset($this->config->Buchhandel->link)) {
+                $isbn = is_callable([$this->driver, 'getISBNs'])
+                       ? $this->driver->getISBNs() : '';
+                if (isset($isbn[0])) {
+                    $details['link']=$this->config->Buchhandel->link . $isbn[0];
+                }
+            }
 
             $details['html'] = $this->contextHelper->renderInContext(
                 'record/cover.phtml', $details
             );
         }
+
         return $details;
     }
 
