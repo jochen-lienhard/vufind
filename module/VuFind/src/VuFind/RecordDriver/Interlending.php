@@ -24,13 +24,13 @@
  * @package  RecordDrivers
  * @author   Demian Katz <demian.katz@villanova.edu>
  * @author   Ere Maijala <ere.maijala@helsinki.fi>
+ * @author   Cornelius Amzar <cornelius.amzar@bsz-bw.de>
+ * @author   Jochen Lienhard <jochen.lienhard@ub.uni-freiburg.de>
+ * @author   Hannah Born <hannah.born@ub.uni-freiburg.de>
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://vufind.org/wiki/development:plugins:record_drivers Wiki
  */
 namespace VuFind\RecordDriver;
-use VuFind\Exception\ILS as ILSException,
-    VuFind\View\Helper\Root\RecordLink,
-    VuFind\XSLT\Processor as XSLTProcessor;
 
 /**
  * Model for MARC records in Solr.
@@ -39,48 +39,44 @@ use VuFind\Exception\ILS as ILSException,
  * @package  RecordDrivers
  * @author   Demian Katz <demian.katz@villanova.edu>
  * @author   Ere Maijala <ere.maijala@helsinki.fi>
+ * @author   Cornelius Amzar <cornelius.amzar@bsz-bw.de>
+ * @author   Jochen Lienhard <jochen.lienhard@ub.uni-freiburg.de>
+ * @author   Hannah Born <hannah.born@ub.uni-freiburg.de>
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://vufind.org/wiki/development:plugins:record_drivers Wiki
  */
-class Interlending extends SolrDefault
+class Interlending extends SolrMarc
 {
-    /**
-     * MARC record. Access only via getMarcRecord() as this is initialized lazily.
-     *
-     * @var \File_MARC_Record
-     */
-    protected $lazyMarcRecord = null;
+
+    use FullMarcTrait;
+
+    /**** notwendig für SWB - Fernleihe ****/
 
     /**
-     * ILS connection
      *
-     * @var \VuFind\ILS\Connection
+     * @var array;
      */
-    protected $ils = null;
+    protected $ppns = [];
 
     /**
-     * Hold logic
      *
-     * @var \VuFind\ILS\Logic\Holds
+     * @var array;
      */
-    protected $holdLogic;
+    protected $libraries = [];
 
     /**
-     * Title hold logic
      *
-     * @var \VuFind\ILS\Logic\TitleHolds
+     * @var bool 
      */
-    protected $titleHoldLogic;
+    protected $atCurrentLibrary = false;
 
     /**
-     * Get access restriction notes for the record.
      *
-     * @return array
+     * @var bool 
      */
-    public function getAccessRestrictions()
-    {
-        return $this->getFieldArray('506');
-    }
+    protected $holdings = null;
+
+    /************************ Overwritten *************************/
 
     /**
      * Get all subject headings associated with this record.  Each heading is
@@ -93,7 +89,8 @@ class Interlending extends SolrDefault
     {
         // These are the fields that may contain subject headings:
         $fields = [
-            '600', '610', '611', '630', '648', '650', '651', '653', '655', '656'
+            '600', '610', '611', '630', '648', '650', 
+            '651', '655', '656', '689'
         ];
 
         // This is all the collected data:
@@ -118,7 +115,7 @@ class Interlending extends SolrDefault
                     foreach ($subfields as $subfield) {
                         // Numeric subfields are for control purposes and should not
                         // be displayed:
-                        if (!is_numeric($subfield->getCode())) {
+                        if (!is_numeric($subfield->getCode()) && $subfield->getCode()==strtolower($subfield->getCode())) {
                             $current[] = $subfield->getData();
                         }
                     }
@@ -136,1032 +133,67 @@ class Interlending extends SolrDefault
         );
     }
 
-    /**
-     * Get award notes for the record.
-     *
-     * @return array
-     */
-    public function getAwards()
-    {
-        return $this->getFieldArray('586');
-    }
-
-    /**
-     * Get the bibliographic level of the current record.
-     *
-     * @return string
-     */
-    public function getBibliographicLevel()
-    {
-        $leader = $this->getMarcRecord()->getLeader();
-        $biblioLevel = strtoupper($leader[7]);
-
-        switch ($biblioLevel) {
-        case 'M': // Monograph
-            return "Monograph";
-        case 'S': // Serial
-            return "Serial";
-        case 'A': // Monograph Part
-            return "MonographPart";
-        case 'B': // Serial Part
-            return "SerialPart";
-        case 'C': // Collection
-            return "Collection";
-        case 'D': // Collection Part
-            return "CollectionPart";
-        default:
-            return "Unknown";
-        }
-    }
-
-    /**
-     * Get notes on bibliography content.
-     *
-     * @return array
-     */
-    public function getBibliographyNotes()
-    {
-        return $this->getFieldArray('504');
-    }
-
-    /**
-     * Return an array of all values extracted from the specified field/subfield
-     * combination.  If multiple subfields are specified and $concat is true, they
-     * will be concatenated together in the order listed -- each entry in the array
-     * will correspond with a single MARC field.  If $concat is false, the return
-     * array will contain separate entries for separate subfields.
-     *
-     * @param string $field     The MARC field number to read
-     * @param array  $subfields The MARC subfield codes to read
-     * @param bool   $concat    Should we concatenate subfields?
-     * @param string $separator Separator string (used only when $concat === true)
-     *
-     * @return array
-     */
-    protected function getFieldArray($field, $subfields = null, $concat = true,
-        $separator = ' '
-    ) {
-        // Default to subfield a if nothing is specified.
-        if (!is_array($subfields)) {
-            $subfields = ['a'];
-        }
-
-        // Initialize return array
-        $matches = [];
-
-        // Try to look up the specified field, return empty array if it doesn't
-        // exist.
-        $fields = $this->getMarcRecord()->getFields($field);
-        if (!is_array($fields)) {
-            return $matches;
-        }
-
-        // Extract all the requested subfields, if applicable.
-        foreach ($fields as $currentField) {
-            $next = $this
-                ->getSubfieldArray($currentField, $subfields, $concat, $separator);
-            $matches = array_merge($matches, $next);
-        }
-
-        return $matches;
-    }
-
-    /**
-     * Get notes on finding aids related to the record.
-     *
-     * @return array
-     */
-    public function getFindingAids()
-    {
-        return $this->getFieldArray('555');
-    }
-
-    /**
-     * Get the first value matching the specified MARC field and subfields.
-     * If multiple subfields are specified, they will be concatenated together.
-     *
-     * @param string $field     The MARC field to read
-     * @param array  $subfields The MARC subfield codes to read
-     *
-     * @return string
-     */
-    protected function getFirstFieldValue($field, $subfields = null)
-    {
-        $matches = $this->getFieldArray($field, $subfields);
-        return (is_array($matches) && count($matches) > 0) ?
-            $matches[0] : null;
-    }
-
-    /**
-     * Get general notes on the record.
-     *
-     * @return array
-     */
-    public function getGeneralNotes()
-    {
-        return $this->getFieldArray('500');
-    }
-
-    /**
-     * Get human readable publication dates for display purposes (may not be suitable
-     * for computer processing -- use getPublicationDates() for that).
-     *
-     * @return array
-     */
-    public function getHumanReadablePublicationDates()
-    {
-        return $this->getPublicationInfo('c');
-    }
-
-    /**
-     * Get an array of newer titles for the record.
-     *
-     * @return array
-     */
-    public function getNewerTitles()
-    {
-        // If the MARC links are being used, return blank array
-        $fieldsNames = isset($this->mainConfig->Record->marc_links)
-            ? array_map('trim', explode(',', $this->mainConfig->Record->marc_links))
-            : [];
-        return in_array('785', $fieldsNames) ? [] : parent::getNewerTitles();
-    }
-
-    /**
-     * Get the item's publication information
-     *
-     * @param string $subfield The subfield to retrieve ('a' = location, 'c' = date)
-     *
-     * @return array
-     */
-    protected function getPublicationInfo($subfield = 'a')
-    {
-        // Get string separator for publication information:
-        $separator = isset($this->mainConfig->Record->marcPublicationInfoSeparator)
-            ? $this->mainConfig->Record->marcPublicationInfoSeparator : ' ';
-
-        // First check old-style 260 field:
-        $results = $this->getFieldArray('260', [$subfield], true, $separator);
-
-        // Now track down relevant RDA-style 264 fields; we only care about
-        // copyright and publication places (and ignore copyright places if
-        // publication places are present).  This behavior is designed to be
-        // consistent with default SolrMarc handling of names/dates.
-        $pubResults = $copyResults = [];
-
-        $fields = $this->getMarcRecord()->getFields('264');
-        if (is_array($fields)) {
-            foreach ($fields as $currentField) {
-                $currentVal = $this
-                    ->getSubfieldArray($currentField, [$subfield], true, $separator);
-                if (!empty($currentVal)) {
-                    switch ($currentField->getIndicator('2')) {
-                    case '1':
-                        $pubResults = array_merge($pubResults, $currentVal);
-                        break;
-                    case '4':
-                        $copyResults = array_merge($copyResults, $currentVal);
-                        break;
-                    }
-                }
-            }
-        }
-        $replace260 = isset($this->mainConfig->Record->replaceMarc260)
-            ? $this->mainConfig->Record->replaceMarc260 : false;
-        if (count($pubResults) > 0) {
-            return $replace260 ? $pubResults : array_merge($results, $pubResults);
-        } else if (count($copyResults) > 0) {
-            return $replace260 ? $copyResults : array_merge($results, $copyResults);
-        }
-
-        return $results;
-    }
-
-    /**
-     * Get the item's places of publication.
-     *
-     * @return array
-     */
-    public function getPlacesOfPublication()
-    {
-        return $this->getPublicationInfo();
-    }
-
-    /**
-     * Get an array of playing times for the record (if applicable).
-     *
-     * @return array
-     */
-    public function getPlayingTimes()
-    {
-        $times = $this->getFieldArray('306', ['a'], false);
-
-        // Format the times to include colons ("HH:MM:SS" format).
-        for ($x = 0; $x < count($times); $x++) {
-            $times[$x] = substr($times[$x], 0, 2) . ':' .
-                substr($times[$x], 2, 2) . ':' .
-                substr($times[$x], 4, 2);
-        }
-
-        return $times;
-    }
-
-    /**
-     * Get an array of previous titles for the record.
-     *
-     * @return array
-     */
-    public function getPreviousTitles()
-    {
-        // If the MARC links are being used, return blank array
-        $fieldsNames = isset($this->mainConfig->Record->marc_links)
-            ? array_map('trim', explode(',', $this->mainConfig->Record->marc_links))
-            : [];
-        return in_array('780', $fieldsNames) ? [] : parent::getPreviousTitles();
-    }
-
-    /**
-     * Get credits of people involved in production of the item.
-     *
-     * @return array
-     */
-    public function getProductionCredits()
-    {
-        return $this->getFieldArray('508');
-    }
-
-    /**
-     * Get an array of publication frequency information.
-     *
-     * @return array
-     */
-    public function getPublicationFrequency()
-    {
-        return $this->getFieldArray('310', ['a', 'b']);
-    }
-
-    /**
-     * Get an array of strings describing relationships to other items.
-     *
-     * @return array
-     */
-    public function getRelationshipNotes()
-    {
-        return $this->getFieldArray('580');
-    }
-
-    /**
-     * Get an array of all series names containing the record.  Array entries may
-     * be either the name string, or an associative array with 'name' and 'number'
-     * keys.
-     *
-     * @return array
-     */
-    public function getSeries()
-    {
-        $matches = [];
-
-        // First check the 440, 800 and 830 fields for series information:
-        $primaryFields = [
-            '440' => ['a', 'p'],
-            '800' => ['a', 'b', 'c', 'd', 'f', 'p', 'q', 't'],
-            '830' => ['a', 'p']];
-        $matches = $this->getSeriesFromMARC($primaryFields);
-        if (!empty($matches)) {
-            return $matches;
-        }
-
-        // Now check 490 and display it only if 440/800/830 were empty:
-        $secondaryFields = ['490' => ['a']];
-        $matches = $this->getSeriesFromMARC($secondaryFields);
-        if (!empty($matches)) {
-            return $matches;
-        }
-
-        // Still no results found?  Resort to the Solr-based method just in case!
-        return parent::getSeries();
-    }
-
-    /**
-     * Support method for getSeries() -- given a field specification, look for
-     * series information in the MARC record.
-     *
-     * @param array $fieldInfo Associative array of field => subfield information
-     * (used to find series name)
-     *
-     * @return array
-     */
-    protected function getSeriesFromMARC($fieldInfo)
-    {
-        $matches = [];
-
-        // Loop through the field specification....
-        foreach ($fieldInfo as $field => $subfields) {
-            // Did we find any matching fields?
-            $series = $this->getMarcRecord()->getFields($field);
-            if (is_array($series)) {
-                foreach ($series as $currentField) {
-                    // Can we find a name using the specified subfield list?
-                    $name = $this->getSubfieldArray($currentField, $subfields);
-                    if (isset($name[0])) {
-                        $currentArray = ['name' => $name[0]];
-
-                        // Can we find a number in subfield v?  (Note that number is
-                        // always in subfield v regardless of whether we are dealing
-                        // with 440, 490, 800 or 830 -- hence the hard-coded array
-                        // rather than another parameter in $fieldInfo).
-                        $number
-                            = $this->getSubfieldArray($currentField, ['v']);
-                        if (isset($number[0])) {
-                            $currentArray['number'] = $number[0];
-                        }
-
-                        // Save the current match:
-                        $matches[] = $currentArray;
-                    }
-                }
-            }
-        }
-
-        return $matches;
-    }
-
-    /**
-     * Return an array of non-empty subfield values found in the provided MARC
-     * field.  If $concat is true, the array will contain either zero or one
-     * entries (empty array if no subfields found, subfield values concatenated
-     * together in specified order if found).  If concat is false, the array
-     * will contain a separate entry for each subfield value found.
-     *
-     * @param object $currentField Result from File_MARC::getFields.
-     * @param array  $subfields    The MARC subfield codes to read
-     * @param bool   $concat       Should we concatenate subfields?
-     * @param string $separator    Separator string (used only when $concat === true)
-     *
-     * @return array
-     */
-    protected function getSubfieldArray($currentField, $subfields, $concat = true,
-        $separator = ' '
-    ) {
-        // Start building a line of text for the current field
-        $matches = [];
-
-        // Loop through all subfields, collecting results that match the whitelist;
-        // note that it is important to retain the original MARC order here!
-        $allSubfields = $currentField->getSubfields();
-        if (count($allSubfields) > 0) {
-            foreach ($allSubfields as $currentSubfield) {
-                if (in_array($currentSubfield->getCode(), $subfields)) {
-                    // Grab the current subfield value and act on it if it is
-                    // non-empty:
-                    $data = trim($currentSubfield->getData());
-                    if (!empty($data)) {
-                        $matches[] = $data;
-                    }
-                }
-            }
-        }
-
-        // Send back the data in a different format depending on $concat mode:
-        return $concat ? [implode($separator, $matches)] : $matches;
-    }
-
-    /**
-     * Get an array of summary strings for the record.
-     *
-     * @return array
-     */
-    public function getSummary()
-    {
-        return $this->getFieldArray('520');
-    }
-
-    /**
-     * Get an array of technical details on the item represented by the record.
-     *
-     * @return array
-     */
-    public function getSystemDetails()
-    {
-        return $this->getFieldArray('538');
-    }
-
-    /**
-     * Get an array of note about the record's target audience.
-     *
-     * @return array
-     */
-    public function getTargetAudienceNotes()
-    {
-        return $this->getFieldArray('521');
-    }
-
-    /**
-     * Get the full title of the record.
-     *
-     * @return string
-     */
-    public function getTitle()
-    {
-        return $this->getFirstFieldValue('245', ['a']);
-    }
-
-
-    /**
-     * Get the text of the part/section portion of the title.
-     *
-     * @return string
-     */
-    public function getTitleSection()
-    {
-        return $this->getFirstFieldValue('245', ['n', 'p']);
-    }
-
-    /**
-     * Get the statement of responsibility that goes with the title (i.e. "by John
-     * Smith").
-     *
-     * @return string
-     */
-    public function getTitleStatement()
-    {
-        return $this->getFirstFieldValue('245', ['c']);
-    }
-
-    /**
-     * Get an array of lines from the table of contents.
-     *
-     * @return array
-     */
-    public function getTOC()
-    {
-        // Return empty array if we have no table of contents:
-        $fields = $this->getMarcRecord()->getFields('505');
-        if (!$fields) {
-            return [];
-        }
-
-        // If we got this far, we have a table -- collect it as a string:
-        $toc = [];
-        foreach ($fields as $field) {
-            $subfields = $field->getSubfields();
-            foreach ($subfields as $subfield) {
-                // Break the string into appropriate chunks, filtering empty strings,
-                // and merge them into return array:
-                $toc = array_merge(
-                    $toc,
-                    array_filter(explode('--', $subfield->getData()), 'trim')
-                );
-            }
-        }
-        return $toc;
-    }
-
-    /**
-     * Get hierarchical place names (MARC field 752)
-     *
-     * Returns an array of formatted hierarchical place names, consisting of all
-     * alpha-subfields, concatenated for display
-     *
-     * @return array
-     */
-    public function getHierarchicalPlaceNames()
-    {
-        $placeNames = [];
-        if ($fields = $this->getMarcRecord()->getFields('752')) {
-            foreach ($fields as $field) {
-                $subfields = $field->getSubfields();
-                $current = [];
-                foreach ($subfields as $subfield) {
-                    if (!is_numeric($subfield->getCode())) {
-                        $current[] = $subfield->getData();
-                    }
-                }
-                $placeNames[] = implode(' -- ', $current);
-            }
-        }
-        return $placeNames;
-    }
-
-    /**
-     * Return an array of associative URL arrays with one or more of the following
-     * keys:
-     *
-     * <li>
-     *   <ul>desc: URL description text to display (optional)</ul>
-     *   <ul>url: fully-formed URL (required if 'route' is absent)</ul>
-     *   <ul>route: VuFind route to build URL with (required if 'url' is absent)</ul>
-     *   <ul>routeParams: Parameters for route (optional)</ul>
-     *   <ul>queryString: Query params to append after building route (optional)</ul>
-     * </li>
-     *
-     * @return array
-     */
-    public function getURLs()
-    {
-        $retVal = [];
-
-        // Which fields/subfields should we check for URLs?
-        $fieldsToCheck = [
-            '856' => ['y', 'z', '3'],   // Standard URL
-            '555' => ['a']         // Cumulative index/finding aids
-        ];
-
-        foreach ($fieldsToCheck as $field => $subfields) {
-            $urls = $this->getMarcRecord()->getFields($field);
-            if ($urls) {
-                foreach ($urls as $url) {
-                    // Is there an address in the current field?
-                    $address = $url->getSubfield('u');
-                    if ($address) {
-                        $address = $address->getData();
-
-                        // Is there a description?  If not, just use the URL itself.
-                        foreach ($subfields as $current) {
-                            $desc = $url->getSubfield($current);
-                            if ($desc) {
-                                break;
-                            }
-                        }
-                        if ($desc) {
-                            $desc = $desc->getData();
-                        } else {
-                            $desc = $address;
-                        }
-
-                        $retVal[] = ['url' => $address, 'desc' => $desc];
-                    }
-                }
-            }
-        }
-
-        return $retVal;
-    }
-
-    /**
-     * Get all record links related to the current record. Each link is returned as
-     * array.
-     * Format:
-     * array(
-     *        array(
-     *               'title' => label_for_title
-     *               'value' => link_name
-     *               'link'  => link_URI
-     *        ),
-     *        ...
-     * )
-     *
-     * @return null|array
-     */
-    public function getAllRecordLinks()
-    {
-        // Load configurations:
-        $fieldsNames = isset($this->mainConfig->Record->marc_links)
-            ? explode(',', $this->mainConfig->Record->marc_links) : [];
-        $useVisibilityIndicator
-            = isset($this->mainConfig->Record->marc_links_use_visibility_indicator)
-            ? $this->mainConfig->Record->marc_links_use_visibility_indicator : true;
-
-        $retVal = [];
-        foreach ($fieldsNames as $value) {
-            $value = trim($value);
-            $fields = $this->getMarcRecord()->getFields($value);
-            if (!empty($fields)) {
-                foreach ($fields as $field) {
-                    // Check to see if we should display at all
-                    if ($useVisibilityIndicator) {
-                        $visibilityIndicator = $field->getIndicator('1');
-                        if ($visibilityIndicator == '1') {
-                            continue;
-                        }
-                    }
-
-                    // Get data for field
-                    $tmp = $this->getFieldData($field);
-                    if (is_array($tmp)) {
-                        $retVal[] = $tmp;
-                    }
-                }
-            }
-        }
-        return empty($retVal) ? null : $retVal;
-    }
-
-    /**
-     * Support method for getFieldData() -- factor the relationship indicator
-     * into the field number where relevant to generate a note to associate
-     * with a record link.
-     *
-     * @param File_MARC_Data_Field $field Field to examine
-     *
-     * @return string
-     */
-    protected function getRecordLinkNote($field)
-    {
-        // If set, use relationship information from subfield i
-        if ($subfieldI = $field->getSubfield('i')) {
-            $data = trim($subfieldI->getData());
-            if (!empty($data)) {
-                return $data;
-            }
-        }
-
-        // Normalize blank relationship indicator to 0:
-        $relationshipIndicator = $field->getIndicator('2');
-        if ($relationshipIndicator == ' ') {
-            $relationshipIndicator = '0';
-        }
-
-        // Assign notes based on the relationship type
-        $value = $field->getTag();
-        switch ($value) {
-        case '780':
-            if (in_array($relationshipIndicator, range('0', '7'))) {
-                $value .= '_' . $relationshipIndicator;
-            }
-            break;
-        case '785':
-            if (in_array($relationshipIndicator, range('0', '8'))) {
-                $value .= '_' . $relationshipIndicator;
-            }
-            break;
-        }
-
-        return 'note_' . $value;
-    }
-
-    /**
-     * Returns the array element for the 'getAllRecordLinks' method
-     *
-     * @param File_MARC_Data_Field $field Field to examine
-     *
-     * @return array|bool                 Array on success, boolean false if no
-     * valid link could be found in the data.
-     */
-    protected function getFieldData($field)
-    {
-        // Make sure that there is a t field to be displayed:
-        if ($title = $field->getSubfield('t')) {
-            $title = $title->getData();
-        } else {
-            return false;
-        }
-
-        $linkTypeSetting = isset($this->mainConfig->Record->marc_links_link_types)
-            ? $this->mainConfig->Record->marc_links_link_types
-            : 'id,oclc,dlc,isbn,issn,title';
-        $linkTypes = explode(',', $linkTypeSetting);
-        $linkFields = $field->getSubfields('w');
-
-        // Run through the link types specified in the config.
-        // For each type, check field for reference
-        // If reference found, exit loop and go straight to end
-        // If no reference found, check the next link type instead
-        foreach ($linkTypes as $linkType) {
-            switch (trim($linkType)){
-            case 'oclc':
-                foreach ($linkFields as $current) {
-                    if ($oclc = $this->getIdFromLinkingField($current, 'OCoLC')) {
-                        $link = ['type' => 'oclc', 'value' => $oclc];
-                    }
-                }
-                break;
-            case 'dlc':
-                foreach ($linkFields as $current) {
-                    if ($dlc = $this->getIdFromLinkingField($current, 'DLC', true)) {
-                        $link = ['type' => 'dlc', 'value' => $dlc];
-                    }
-                }
-                break;
-            case 'id':
-                foreach ($linkFields as $current) {
-                    if ($bibLink = $this->getIdFromLinkingField($current)) {
-                        $link = ['type' => 'bib', 'value' => $bibLink];
-                    }
-                }
-                break;
-            case 'isbn':
-                if ($isbn = $field->getSubfield('z')) {
-                    $link = [
-                        'type' => 'isn', 'value' => trim($isbn->getData()),
-                        'exclude' => $this->getUniqueId()
-                    ];
-                }
-                break;
-            case 'issn':
-                if ($issn = $field->getSubfield('x')) {
-                    $link = [
-                        'type' => 'isn', 'value' => trim($issn->getData()),
-                        'exclude' => $this->getUniqueId()
-                    ];
-                }
-                break;
-            case 'title':
-                $link = ['type' => 'title', 'value' => $title];
-                break;
-            }
-            // Exit loop if we have a link
-            if (isset($link)) {
-                break;
-            }
-        }
-        // Make sure we have something to display:
-        return !isset($link) ? false : [
-            'title' => $this->getRecordLinkNote($field),
-            'value' => $title,
-            'link'  => $link
-        ];
-    }
-
-    /**
-     * Returns an id extracted from the identifier subfield passed in
-     *
-     * @param \File_MARC_Subfield $idField MARC field containing id information
-     * @param string              $prefix  Prefix to search for in id field
-     * @param bool                $raw     Return raw match, or normalize?
-     *
-     * @return string|bool                 ID on success, false on failure
-     */
-    protected function getIdFromLinkingField($idField, $prefix = null, $raw = false)
-    {
-        $text = $idField->getData();
-        if (preg_match('/\(([^)]+)\)(.+)/', $text, $matches)) {
-            // If prefix matches, return ID:
-            if ($matches[1] == $prefix) {
-                // Special case -- LCCN should not be stripped:
-                return $raw
-                    ? $matches[2]
-                    : trim(str_replace(range('a', 'z'), '', ($matches[2])));
-            }
-        } else if ($prefix == null) {
-            // If no prefix was given or found, we presume it is a raw bib record
-            return $text;
-        }
-        return false;
-    }
-
-    /**
-     * Get Status/Holdings Information from the internally stored MARC Record
-     * (support method used by the NoILS driver).
-     *
-     * @param array $field The MARC Field to retrieve
-     * @param array $data  A keyed array of data to retrieve from subfields
-     *
-     * @return array
-     */
-    public function getFormattedMarcDetails($field, $data)
-    {
-        // Initialize return array
-        $matches = [];
-        $i = 0;
-
-        // Try to look up the specified field, return empty array if it doesn't
-        // exist.
-        $fields = $this->getMarcRecord()->getFields($field);
-        if (!is_array($fields)) {
-            return $matches;
-        }
-
-        // Extract all the requested subfields, if applicable.
-        foreach ($fields as $currentField) {
-            foreach ($data as $key => $info) {
-                $split = explode("|", $info);
-                if ($split[0] == "msg") {
-                    if ($split[1] == "true") {
-                        $result = true;
-                    } elseif ($split[1] == "false") {
-                        $result = false;
-                    } else {
-                        $result = $split[1];
-                    }
-                    $matches[$i][$key] = $result;
-                } else {
-                    // Default to subfield a if nothing is specified.
-                    if (count($split) < 2) {
-                        $subfields = ['a'];
-                    } else {
-                        $subfields = str_split($split[1]);
-                    }
-                    $result = $this->getSubfieldArray(
-                        $currentField, $subfields, true
-                    );
-                    $matches[$i][$key] = count($result) > 0
-                        ? (string)$result[0] : '';
-                }
-            }
-            $matches[$i]['id'] = $this->getUniqueID();
-            $i++;
-        }
-        return $matches;
-    }
-
-    /**
-     * Return an XML representation of the record using the specified format.
-     * Return false if the format is unsupported.
-     *
-     * @param string     $format     Name of format to use (corresponds with OAI-PMH
-     * metadataPrefix parameter).
-     * @param string     $baseUrl    Base URL of host containing VuFind (optional;
-     * may be used to inject record URLs into XML when appropriate).
-     * @param RecordLink $recordLink Record link helper (optional; may be used to
-     * inject record URLs into XML when appropriate).
-     *
-     * @return mixed         XML, or false if format unsupported.
-     */
-    public function getXML($format, $baseUrl = null, $recordLink = null)
-    {
-        // Special case for MARC:
-        if ($format == 'marc21') {
-            $xml = $this->getMarcRecord()->toXML();
-            $xml = str_replace(
-                [chr(27), chr(28), chr(29), chr(30), chr(31)], ' ', $xml
-            );
-            $xml = simplexml_load_string($xml);
-            if (!$xml || !isset($xml->record)) {
-                return false;
-            }
-
-            // Set up proper namespacing and extract just the <record> tag:
-            $xml->record->addAttribute('xmlns', "http://www.loc.gov/MARC21/slim");
-            $xml->record->addAttribute(
-                'xsi:schemaLocation',
-                'http://www.loc.gov/MARC21/slim ' .
-                'http://www.loc.gov/standards/marcxml/schema/MARC21slim.xsd',
-                'http://www.w3.org/2001/XMLSchema-instance'
-            );
-            $xml->record->addAttribute('type', 'Bibliographic');
-            return $xml->record->asXML();
-        }
-
-        // Try the parent method:
-        return parent::getXML($format, $baseUrl, $recordLink);
-    }
-
-    /**
-     * Attach an ILS connection and related logic to the driver
-     *
-     * @param \VuFind\ILS\Connection       $ils            ILS connection
-     * @param \VuFind\ILS\Logic\Holds      $holdLogic      Hold logic handler
-     * @param \VuFind\ILS\Logic\TitleHolds $titleHoldLogic Title hold logic handler
-     *
-     * @return void
-     */
-    public function attachILS(\VuFind\ILS\Connection $ils,
-        \VuFind\ILS\Logic\Holds $holdLogic,
-        \VuFind\ILS\Logic\TitleHolds $titleHoldLogic
-    ) {
-        $this->ils = $ils;
-        $this->holdLogic = $holdLogic;
-        $this->titleHoldLogic = $titleHoldLogic;
-    }
-
-    /**
-     * Do we have an attached ILS connection?
-     *
-     * @return bool
-     */
-    protected function hasILS()
-    {
-        return null !== $this->ils;
-    }
-
-    /**
-     * Get an array of information about record holdings, obtained in real-time
-     * from the ILS.
-     *
-     * @return array
-     */
-    public function getRealTimeHoldings()
-    {
-        return $this->hasILS() ? $this->holdLogic->getHoldings(
-            $this->getUniqueID(), $this->getConsortialIDs()
-        ) : [];
-    }
-
-    /**
-     * Get an array of information about record history, obtained in real-time
-     * from the ILS.
-     *
-     * @return array
-     */
-    public function getRealTimeHistory()
-    {
-        // Get Acquisitions Data
-        if (!$this->hasILS()) {
-            return [];
-        }
-        try {
-            return $this->ils->getPurchaseHistory($this->getUniqueID());
-        } catch (ILSException $e) {
-            return [];
-        }
-    }
-
-    /**
-     * Get a link for placing a title level hold.
-     *
-     * @return mixed A url if a hold is possible, boolean false if not
-     */
-    public function getRealTimeTitleHold()
-    {
-        if ($this->hasILS()) {
-            $biblioLevel = strtolower($this->getBibliographicLevel());
-            if ("monograph" == $biblioLevel || strstr($biblioLevel, "part")) {
-                if ($this->ils->getTitleHoldsMode() != "disabled") {
-                    return $this->titleHoldLogic->getHold($this->getUniqueID());
-                }
-            }
-        }
-
-        return false;
-    }
-
-    /**
-     * Returns true if the record supports real-time AJAX status lookups.
-     *
-     * @return bool
-     */
-    public function supportsAjaxStatus()
-    {
-        // as AJAX status lookups are done via the ILS AJAX status lookup support is
-        // only given if the ILS is available for this record
-        return $this->hasILS();
-    }
-
-    /**
-     * Get access to the raw File_MARC object.
-     *
-     * @return \File_MARCBASE
-     */
-    public function getMarcRecord()
-    {
-        if (null === $this->lazyMarcRecord) {
-            $marc = trim($this->fields['fullrecord']);
-
-            // check if we are dealing with MARCXML
-            if (substr($marc, 0, 1) == '<') {
-                $marc = new \File_MARCXML($marc, \File_MARCXML::SOURCE_STRING);
-            } else {
-                // When indexing over HTTP, SolrMarc may use entities instead of
-                // certain control characters; we should normalize these:
-                $marc = str_replace(
-                    ['#29;', '#30;', '#31;'], ["\x1D", "\x1E", "\x1F"], $marc
-                );
-                $marc = new \File_MARC($marc, \File_MARC::SOURCE_STRING);
-            }
-
-            $this->lazyMarcRecord = $marc->next();
-            if (!$this->lazyMarcRecord) {
-                throw new \File_MARC_Exception('Cannot Process MARC Record');
-            }
-        }
-
-        return $this->lazyMarcRecord;
-    }
-
-    /**
-     * Get an XML RDF representation of the data in this record.
-     *
-     * @return mixed XML RDF data (empty if unsupported or error).
-     */
-    public function getRDFXML()
-    {
-        return XSLTProcessor::process(
-            'record-rdf-mods.xsl', trim($this->getMarcRecord()->toXML())
-        );
-    }
-
-    /**
-     * Return the list of "source records" for this consortial record.
-     *
-     * @return array
-     */
-    public function getConsortialIDs()
-    {
-        return $this->getFieldArray('035', 'a', true);
-    }
-
-    /**
-     * Magic method for legacy compatibility with marcRecord property.
-     *
-     * @param string $key Key to access.
-     *
-     * @return mixed
-     */
-    public function __get($key)
-    {
-        if ($key === 'marcRecord') {
-            // property deprecated as of release 2.5.
-            trigger_error(
-                'marcRecord property is deprecated; use getMarcRecord()',
-                E_USER_DEPRECATED
-            );
-            return $this->getMarcRecord();
-        }
-        return null;
-    }
 
     /************************ NEW *********************************/
+
+    /**
+     * Get Content of 924 as array: isil => array of subfields
+     * 
+     * @param boolean $isilAsKey          uses ISILs as array keys - be carefull, 
+     * information is dropped
+     * @param boolean $recurringSubfields allow recurring subfields
+     * 
+     * @return array
+     * 
+     */
+    public function getField924($isilAsKey = true, $recurringSubfields = false)
+    {
+        $f924 = $this->getMarcRecord()->getFields('924');
+        $result = [];
+        foreach ($f924 as $field) {
+            $subfields = $field->getSubfields();
+            $tmpSubfields = [];
+            $isil = null;
+            foreach ($subfields as $subfield) {
+                if ($subfield->getCode() == 'b') {
+                    $isil = $subfield->getData();
+                        $tmpSubfields[$subfield->getCode()] = $isil;
+                } elseif ($subfield->getCode() == 'd') {
+                    $ill_status = '';
+                    switch ($subfield->getData()) {
+                        case 'a': $ill_status = 'ill_status_a';
+                            break;
+                        case 'b': $ill_status = 'ill_status_b';
+                            break;
+                        case 'c': $ill_status = 'ill_status_c';
+                            break;
+                        case 'd': $ill_status = 'ill_status_d';
+                            break;
+                        case 'e': $ill_status = 'ill_status_e';
+                            break;
+                        default: $ill_status = 'ill_status_d';
+                    }
+                    $tmpSubfields['d'] = $subfield->getData();
+                    $tmpSubfields['ill_status'] = $ill_status;
+                } elseif (!isset($tmpSubfields[$subfield->getCode()])) {
+                    // without $recurringSubfields, only the first occurence is 
+                    // included
+                    $tmpSubfields[$subfield->getCode()] = $subfield->getData();
+                } elseif ($recurringSubfields) {
+                    // with §recurringSubfields, all occurences are put together
+                    $tmpSubfields[$subfield->getCode()] .= ' | '.$subfield->getData();
+
+                }
+            }
+            if (isset($isil) && $isilAsKey) {
+                $result[$isil] = $tmpSubfields;
+            } else {
+                $result[] = $tmpSubfields;
+            }
+        }
+        return $result;
+    }
+
 
     /**
      * Get notes on finding aids related to the record.
@@ -1170,66 +202,849 @@ class Interlending extends SolrDefault
      */
     public function getHoldingsGlobal()
     {
-        return $this->getFieldArray('924', ['b','g','k'], true, ' : ');
+        $fields=$this->getMarcRecord()->getFields('924');
+        $result = [];
+        foreach ($fields as $field) {
+            $subfields = $field->getSubfields();
+            $tmpSubfields = [];
+            $isil = null;
+            foreach ($subfields as $subfield) {
+                if (!isset($tmpSubfields[$subfield->getCode()])) {
+                    $tmpSubfields[$subfield->getCode()] = $subfield->getData();
+                } else {
+                    $tmpSubfields[$subfield->getCode()] .= ' | '.$subfield->getData();
+
+                }
+            }
+            $result[] = $tmpSubfields;
+        }
+        return $result;
     }
 
     /**
-     * Get the publication dates of the record.  See also getDateSpan().
+     * Get notes on finding aids related to the record.
      *
-     * @return array
+     * @return boolean
      */
-    public function getPublicationDates()
-    {
-        return $this->getPublicationInfo('c');
+    public function checkHoldingsLocal()
+    {  
+        $local = false; 
+        $global = $this->getFieldArray('924', ['b'], true, ' : ');
+        $localIDs = $this->recordConfig->Interlending->isil->toArray(); 
+        foreach ($global as $value) {
+            if (in_array($value, $localIDs)) {
+                $local = true;
+            }
+        }
+        return $local;
     }
 
     /**
-     * Get highlighted author data, if available.
+     * Get isils from interlending config.
      *
      * @return array
      */
-    public function getRawAuthorHighlights()
+    public function getIsils()
     {
-        // Don't check for highlighted values if highlighting is disabled:
-        return ($this->highlight && isset($this->highlightDetails['author']))
-            ? $this->highlightDetails['author'] : [];
+        return $this->recordConfig->Interlending->isil->toArray();
+    }
+
+
+    /**
+     * Get consortial links.
+     *
+     * @return array 
+     */
+    public function getConsortiumLinks()
+    {
+        $consortium = $this->recordConfig->Interlending->consortium->toArray();
+        return $consortium;
     }
 
     /**
-     * Get primary author information with highlights applied (if applicable)
+     * Get link to consortium catalog.
      *
-     * @return array
+     * @return array 
      */
-    public function getPrimaryAuthorsWithHighlighting()
+    public function getConsortiumCatalog()
     {
-        $highlights = [];
-        // Create a map of de-highlighted valeus => highlighted values.
-        foreach ($this->getRawAuthorHighlights() as $current) {
-            $dehighlighted = str_replace(
-                ['{{{{START_HILITE}}}}', '{{{{END_HILITE}}}}'], '', $current
-            );
-            $highlights[$dehighlighted] = $current;
+	$data = [];
+        if (!empty($this->getLocalOPACLink())) {
+           $data[key($this->getControlNumberID())] = $this->getLocalOPACLink();
+        }
+        return $data;
+    }
+
+    /**
+     * Generate link to local OPAC via consortium
+     *
+     * @return string
+     */
+    public function getLocalOPACLink() 
+    {
+        $link = "";
+        $uid = $this->getControlNumberID();
+        $clinks = $this-> getConsortiumLinks();
+
+        if (array_key_exists(key($uid), $clinks)) {
+            $link = str_replace("{PPN}", $uid[key($uid)], $clinks[key($uid)]);
         }
 
-        // replace unhighlighted authors with highlighted versions where
-        // applicable:
-        $authors = [];
-        foreach ($this->getPrimaryAuthors() as $author) {
-            $authors[] = isset($highlights[$author])
-                ? $highlights[$author] : $author;
-        }
-        return $authors;
+        return $link;
     }
 
     /**
-     * Get the main authors of the record.
+     * Get local ppn.
+     *
+     * @return string 
+     */
+    public function getLocalPPN()
+    {
+        $controlNumberID=$this->recordConfig->Interlending->controlNumberID;
+
+        $ppn = false;
+        $split = explode(')', $this->getUniqueID());
+      
+        // check controlNumberID 
+        if (count($split) == 2) {
+            if ($split[0] === "(".$controlNumberID) {
+                $ppn = $split[1];
+            } 
+        }
+        
+        return $ppn;
+    }
+
+    /**
+     * Get ID and controlnumber.
+     *
+     * @return array 
+     */
+    public function getControlNumberID()
+    {
+        $cn = [];
+        $split = explode(')', $this->getUniqueID());
+
+        // check controlNumberID 
+        if (count($split) == 2) {
+            $cn[substr($split[0], 1)] = $split[1];
+        }
+        return $cn;
+    }
+
+    /**
+     * Get an array with RVK shortcut as key and description as value (array)
      *
      * @return array
      */
-    public function getPrimaryAuthors()
+    public function getRVKNotations()
     {
-        // else 245c ?
-        return $this->getFieldArray('100', 'a', true);
+        $notationList = [];
+        $replace = [
+            '"' => "'",
+        ];
+        foreach ($this->getMarcRecord()->getFields('936') as $field) {
+            $suba = $field->getSubField('a');
+            if ($suba) {
+                $title = [];
+                foreach ($field->getSubFields('k') as $item) {
+                    $title[] = htmlentities($item->getData());
+                }
+                $notationList[$suba->getData()] = $title;
+            }
+        }
+        return $notationList;
     }
+
+    /**
+     * Maps formats from formats.ini to icon file names
+     *
+     * @param string $formats that are avialable
+     *
+     * @return string
+     */
+    protected function mapIcon($formats) 
+    {
+
+        //this function uses simplifies formats as we can only show one icon
+        $formats = $this->simplify($formats);
+        foreach ($formats as $k => $format) {
+            $formats[$k] = strtolower($format);
+        }
+        $return = '';
+        if (is_array($formats)) {
+            if (in_array('electronicresource', $formats) && in_array('e-book', $formats)) {
+                $return = 'book-e';
+            } elseif (in_array('videodisc', $formats) && in_array('video', $formats)) {
+                $return = 'movie';
+            } elseif (in_array('electronicresource', $formats) && in_array('journal', $formats)) {
+                $return = 'journal-e';
+            } elseif (in_array('opticaldisc', $formats) && in_array('e-book', $formats)) {
+                $return = 'dvd';
+            } elseif (in_array('cd', $formats) && in_array('soundrecording', $formats)) {
+                $return = 'cdrom';
+            } elseif (in_array('book', $formats) && in_array('compilation', $formats)) {
+                $return = 'serie';
+            } elseif (in_array('musicalscore', $formats)) {
+                $return = 'sheet';
+            } elseif (in_array('atlas', $formats)) {
+                $return = 'map';
+            } elseif (in_array('serial', $formats)) {
+                $return = 'serie';
+            } elseif (in_array('journal', $formats)) {
+                $return = 'journal';
+            } elseif (in_array('conference proceeding', $formats)) {
+                $return = 'journal';
+            } elseif (in_array('e-journal', $formats)) {
+                $return = 'journal-e';
+            } elseif (in_array('text', $formats)) {
+                $return = 'article';
+            } elseif (in_array('pdf', $formats)) {
+                $return = 'article';
+            } elseif (in_array('book', $formats)) {
+                $return = 'book';
+            } elseif (in_array('book chapter', $formats)) {
+                $return = 'book';
+            } elseif (in_array('e-book', $formats)) {
+                $return = 'book-e';
+            } elseif (in_array('ebook', $formats)) {
+                $return = 'book-e';
+            } elseif (in_array('vhs', $formats)) {
+                $return = 'videocasette';
+            } elseif (in_array('video', $formats)) {
+                $return = 'video';
+            } elseif (in_array('microfilm', $formats)) {
+                $return = 'microfilm';
+            } elseif (in_array('platter', $formats)) {
+                $return = 'medi';
+            } elseif (in_array('dvd/bluray', $formats)) {
+                $return = 'dvd';
+            } elseif (in_array('music-cd', $formats)) {
+                $return = 'cdrom';
+            } elseif (in_array('cd-rom', $formats)) {
+                $return = 'cdrom';
+            } elseif (in_array('article', $formats)) {
+                $return = 'article';
+            } elseif (in_array('magazine article', $formats)) {
+                $return = 'article';
+            } elseif (in_array('journal article', $formats)) {
+                $return = 'article';
+            } elseif (in_array('band', $formats)) {
+                $return = 'book';
+            } elseif (in_array('cassette', $formats)) {
+                $return = 'mc';
+            } elseif (in_array('soundrecording', $formats)) {
+                $return = 'audio';
+            } elseif (in_array('norm', $formats)) {
+                $return = 'norm';
+            } elseif (in_array('thesis', $formats)) {
+                $return = 'book';
+            } elseif (in_array('proceedings', $formats)) {
+                $return = 'book';
+            } elseif (in_array('electronic', $formats)) {
+                $return = 'binary';
+            } else {
+                $return =  'article'; 
+            }
+        }
+        return $return;
+    }
+
+    /**
+     * General serial items. 
+     *
+     * @return boolean
+     */
+    public function isSerial()
+    {
+        $leader = $this->getMarcRecord()->getLeader();
+        $leader_7 = strtoupper($leader{7});
+        if ($leader_7 === 'S') {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Nach der Dokumentation des Fernleihportals
+     * 
+     * @return boolean
+     */
+    public function isArticle()
+    {
+        $leader = $this->getMarcRecord()->getLeader();
+        $leader_7 = strtoupper($leader{7});
+        // A = Aufsätze aus Monographien
+        // B = Aufsätze aus Zeitschriften (wird aber wohl nicht genutzt))
+        if ($leader_7 === 'A' || $leader_7 === 'B') {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Is this a Newspaper?
+     * 
+     * @return boolean
+     */
+    public function isNewspaper()
+    {
+        $f008 = null;
+        $f008_21 = '';
+        $f008 = $this->getMarcRecord()->getFields("008", false);
+
+        foreach ($f008 as $field) {
+            $data = strtoupper($field->getData());
+            if (strlen($data) >= 21) {
+                $f008_21 = $data{21};
+            }
+        }
+        if ($this->isSerial() && $f008_21 == 'N') {
+            return true;
+        }
+        return false;
+    }
+
+
+    /**
+     * is this a Journal, implies it's a serial
+     * 
+     * @return boolean
+     */
+    public function isJournal()
+    {
+        $f008 = null;
+        $f008_21 = '';
+        $f008 = $this->getMarcRecord()->getFields("008", false);
+
+        foreach ($f008 as $field) {
+            $data = strtoupper($field->getData());
+            if (strlen($data) >= 21) {
+                $f008_21 = $data{21};
+            }
+        }
+        if ($this->isSerial() && $f008_21 == 'P') {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Ist der Titel ein EBook? 
+     * Wertet die Felder 007/00, 007/01 und Leader 7 aus
+     * @return boolean
+     */
+    public function isEBook()
+    {
+        $f007 = $leader = null;
+        $f007_0 = $f007_1 = $leader_7 = '';
+        $f007 = $this->getMarcRecord()->getFields("007", false);
+        foreach ($f007 as $field) {
+            $data = strtoupper($field->getData());
+            if (strlen($data) > 0) {
+                $f007_0 = $data{0};
+            }
+            if (strlen($data) > 1) {
+                $f007_1 = $data{1};
+            }
+        }
+        $leader = $this->getMarcRecord()->getLeader();
+        $leader_7 = strtoupper($leader{7});
+        if ($leader_7 == 'M') {
+            if ($f007_0 == 'C' && $f007_1 == 'R') {
+                return true;
+            }
+        }
+        return false;
+    }
+
+   /**
+    * Check if free available.
+    *
+    * @return boolean
+    */
+    public function isFree()
+    {
+        $status = false;
+        $f856 = $this->getFieldArray([856 => 'z']);
+        foreach ($f856 as $field) {
+            if (strpos(strtolower($field), 'kostenfrei') !== FALSE) {
+                $status = true;
+            }
+        }
+        return $status;
+    }
+
+    /**
+     * Returns German library network shortcut. 
+     * @param bool $outputIsil 
+     * @return string
+     */
+    public function getNetwork($outputIsil = false)
+    {
+        $raw = trim($this->getUniqueID());
+
+        preg_match('/\((.*?)\)/', $raw, $matches);
+        $isil = $matches[1];
+        if ($outputIsil) {
+            return $isil;
+        } else {
+            return $this->translate($isil);
+        }
+    }
+
+    /**
+     * Feturn found SWB IDs
+     * 
+     * @return array
+     */
+    public function getSwbId()
+    {
+        return array_unique($this->ppns);
+    }
+
+   /**
+     * Do we have a SWB PPN
+     * 
+     * @return boolean
+     */
+    public function hasSwbId()
+    {
+        return count($this->ppns) > 0;
+    }
+
+    /**
+     * Determin if an item is available locally
+     * 
+     * @param $webservice = false
+     * 
+     * @return boolean
+     */
+    public function isAtCurrentLibrary($webservice = false)
+    {
+        $status = false;
+
+            // if we have local holdings, item can't be ordered
+            if ($this->checkHoldingsLocal()) {
+                $status = true;
+            } elseif ($webservice && $this->getNetwork() == 'SWB'
+                 && $this->hasParallelEditions()
+            ) {
+	        // ToDo replace this check by own method
+                // Parallel Ausgaben suchen
+                $status = true;
+            } elseif ($webservice && $this->getNetwork() !== 'SWB'
+                && $this->queryWebservice()
+            ) {
+                // ToDo replace this check by own method
+                // Suche ob im localen Katalog vorhanden
+                $status = true;
+            }
+
+        // we dont't want to do the query twice, so we save the status
+        $this->atCurrentLibrary = $status;
+        return $status;
+
+    }
+
+    /**
+     * Quer< solr for parallel Editions available at local libraries
+     * Save the found PPNs in global array
+     * 
+     * @return boolean
+     */
+    protected function hasParallelEditions()
+    {
+        $ppns = [];
+        $related = $this->tryMethod('getRelatedEditions');
+        $hasParallel = false;
+
+        foreach ($related as $rel) {
+            $ppns[] = $rel['id'];
+        }
+        return $hasParallel;
+
+        $parallel = [];
+        if (count($ppns) > 0) {
+            $parallel = $this->holding->getParallelEditions($ppns, $this->client->getIsilAvailability());         
+
+            // check the found records for local available isils            
+            $isils = [];
+            foreach ($parallel->getResults() as $record) {
+                $f924 = $this->getField924(true);
+                $recordIsils = array_keys($f924);
+                $isils = array_merge($isils, $recordIsils);
+            }
+            foreach ($isils as $isil) {
+                if (in_array($isil, $this->getIsils())) {
+                    $hasParallel = true;
+                    $this->ppns[] = $this->getUniqueId();
+                }
+            }
+        }
+        return $hasParallel;
+    }
+
+    public function getRelatedEditions()
+    {
+        $related = [];
+        $f775 = $this->getMarcRecord()->getFields('775');
+        foreach ($f775 as $field) {
+            $tmp = [];
+            $subfields = $field->getSubfields();
+            foreach ($subfields as $subfield) {
+                switch ($subfield->getCode()) {
+                    case 'i': $label = 'description';
+                        break;
+                    case 't': $label = 'title';
+                        break;
+                    case 'w' : $label = 'id';
+                        break;
+                    case 'a' : $label = 'author';
+                        break;
+                    default: $label = 'unknown_field';
+                }
+                if (!array_key_exists($label, $tmp)) {
+                    $tmp[$label] = $subfield->getData();
+                }
+                if (!array_key_exists('description', $tmp)) {
+                       $tmp['description'] = 'Parallelausgabe';
+                }
+            }
+            // exclude DNB records
+            if (isset($tmp['id']) && strpos($tmp['id'], 'DE-600') === FALSE) {
+                $related[] = $tmp;
+            }
+
+        }
+        return $related;
+    }
+
+
+    /**
+     * Get ILLContent.
+     *
+     * @return string 
+     */
+    public function getILLContent()
+    {
+return null;
+      if ($this->isFree()) {
+          return "keine Fernleihe, frei verfügbar";
+      } else {
+      return "<span class='checkedout'><a class='external-link' target='_blank' href='https://fernleihe.boss2.bsz-bw.de/InterlendingRecord/". $this->getUniqueID() . "?isil[]=DE-25'>Fernleihbutton</a></span>";
+      }
+    }
+
+    /**
+     * Get ILLContent.
+     *
+     * @return string 
+     */
+    public function getILLLink()
+    {
+         return "https://fernleihe.boss2.bsz-bw.de/InterlendingRecord/". $this->getUniqueID() . "/ILLForm?isil[]=DE-25";
+         // return "https://fernleihe.boss2.bsz-bw.de/Shibboleth.sso/Login?entityID=https://mylogin.uni-freiburg.de/shibboleth&target=https://fernleihe.boss2.bsz-bw.de/InterlendingRecord/". $this->getUniqueID() . "/ILLForm?isil[]=DE-25";
+
+    }
+
+    /**
+     * Get Query for holdings based on isn, author, title, year .. 
+     *
+     * @return string 
+     */
+    public function getHoldingsQuery()
+    {
+
+       // Regel um die Query zu bauen 
+       /*
+        if ($this->driver->isArticle() || $this->driver->isJournal()
+                || $this->driver->isNewspaper()
+            ) {
+            // prefer ZDB ID
+            if (!empty($zdb)) {
+                $this->holding->setZdbId($zdb);
+            } else {
+                $this->holding->setIsxns($this->driver->getCleanISSN());
+            }
+            // use ISSN and year
+        } elseif (!empty($isbn)) {
+            // use ISBN and year            
+            $this->holding->setIsxns($isbn)
+                            ->setYear($year);
+        } else {
+            // use title and author and year
+            $this->holding->setTitle($this->driver->getTitle())
+                          ->setAuthor($this->driver->getPrimaryAuthor())
+                          ->setYear($year);
+        }
+
+       */
+       $query = null;
+
+       // build query for ISBN or ISSN 
+       $isbn = $this->getCleanISBN();
+       if (!is_array($isbn)) {
+           $isbn = (array)$isbn;
+       }
+       $issn = $this->getCleanISSN();
+       if (!is_array($issn)) {
+           $issn = (array)$issn;
+       }
+       $temp = array_merge($isbn,$issn);
+       foreach ($temp as $isxn) {
+          // strip non numeric chars
+          $isxn = preg_replace('/[^0-9]/', '', $isxn);
+          if (strlen($isxn) > 0 && is_numeric($isxn)) {
+              $isxns[] = $isxn;
+          }
+       }
+       $isxns = array_unique($isxns);
+       $year = $this->getPublicationDates();
+       $primauthor = $this->getPrimaryAuthor();
+       $shortTitle = $this->getFirstFieldValue('245', array('a'), false);
+       // remove sorting char 
+       if (strpos($shortTitle, '@') !== false) {
+           $occurrence = strpos($shortTitle, '@');
+           $shortTitle = substr_replace($shortTitle, '', $occurrence, 1);
+       }
+       $zdbid = $this->getZdbId();
+
+       if ($this->isArticle() || $this->isJournal()
+                || $this->isNewspaper()
+            ) {
+            // prefer ZDB ID
+            if (isset($zdbid)) {
+                $query[] = new \VuFindSearch\Query\Query($zdbid,'zdb_id');
+            } else {
+                if (isset($isxns)) {
+                   $params2 = implode(' OR ',$isxns);
+                   $query[] = new \VuFindSearch\Query\Query($params2,'isn');
+                } 
+            }
+       } elseif (isset($isxns)) {
+            $params2 = implode(' OR ',$isxns);
+            $query[] = new \VuFindSearch\Query\Query($params2,'isn');
+            if (isset($year)) {
+                $params2 = implode(' OR ',$year);
+                $query[] = new \VuFindSearch\Query\Query($year,'publish_date');
+            }
+       } else {
+            if (isset($primauthor)) {
+                $query[] = new \VuFindSearch\Query\Query($primauthor,'author');
+            }
+            if (isset($shortTitle)) {
+                $query[] = new \VuFindSearch\Query\Query($shortTitle,'title');
+            }
+            if (isset($year)) {
+                $params2 = implode(' OR ',$year);
+                $query[] = new \VuFindSearch\Query\Query($year,'publish_date');
+            }
+       }
+
+       // group queries
+       $search = new \VuFindSearch\Query\QueryGroup('AND',$query);
+
+       return ($search);
+    }
+
+    /**
+     * Get Query for holdings based on isn, author, title, year .. 
+     * @param $holdings extrated holdings
+     *
+     * @return void 
+     */
+    public function setHoldings($holdings)
+    {
+       $this->holdings = $holdings;
+    }
+
+    /**
+     * Query webservice to get SWB hits with the same
+     * <ul>
+     * <li>ISSN or ISBN (preferred)</li>
+     * <li>Title, author and year (optional)</li>
+     * </ul>
+     * Found PPNs are added to ppns array and can be accessed by other methods. 
+     *  
+     * @return boolean
+     */
+    protected function queryWebservice()
+    {
+        if (isset($this->holdings)) {
+                // search for local available PPNs
+                foreach ($this->holdings as $ppn => $holding) {
+                    foreach ($holding as $entry) {
+                        if (isset($entry['isil']) && in_array($entry['isil'], $this->getIsils())) {
+                            // save PPN
+                            $this->ppns[] = $ppn;
+                            $this->libraries[] = $entry['isil'];
+                        }
+
+                    }
+                }
+            }
+            // if no locally available ppn found, just take the first one
+            if (count($this->ppns) < 1 && isset($this->holdings)) {
+                reset($this->holdings);
+                $this->ppns[] = key($this->holdings);
+            }
+
+
+        // check if any of the isils from webservic matches local isils
+        if (is_array($this->libraries) && count($this->libraries) > 0) {
+            return true;
+        }
+        return false;
+
+
+return $this->checkHoldingsLocal();
+// ToDo fix
+
+
+        // set up query params
+        $isbns = $this->getCleanISBN();
+        $years = $this->getPublicationDates();
+        $zdb = $this->tryMethod('getZdbId');
+        $year = array_shift($years);
+
+
+
+        if ($this->isArticle() || $this->isJournal()
+                || $this->isNewspaper()
+            ) {
+            // prefer ZDB ID
+            if (!empty($zdb)) {
+                $this->holding->setZdbId($zdb);
+            } else {
+                $this->holding->setIsxns($this->driver->getCleanISSN());
+            }
+            // use ISSN and year
+        } elseif (is_array($isbns) && count($isbns) > 0) {
+            // use ISBN and year            
+            $this->holding->setIsxns($isbns)
+                            ->setYear($year);
+        } else {
+            // use title and author and year
+            $this->holding->setTitle($this->driver->getTitle())
+                          ->setAuthor($this->driver->getPrimaryAuthor())
+                          ->setYear($year);
+        }
+        // check query and fire
+        if ($this->holding->checkQuery()) {
+            $result = $this->holding->query();
+            // check if any ppn is available locally
+
+            if (isset($result['holdings'])) {
+                // search for local available PPNs
+                foreach ($result['holdings'] as $ppn => $holding) {
+                    foreach ($holding as $entry) {
+                        if (isset($entry['isil']) && in_array($entry['isil'], $this->getIsils())) {
+                            // save PPN
+                            $this->ppns[] = '(DE-576)'.$ppn;
+                            $this->libraries[] = $entry['isil'];
+                        }
+
+                    }
+                }
+            }
+            // if no locally available ppn found, just take the first one
+            if (count($this->ppns) < 1 && isset($result['holdings'])) {
+                reset($result['holdings']);
+                $this->ppns[] = '(DE-576)'.key($result['holdings']);
+            }
+
+        }
+
+        // check if any of the isils from webservic matches local isils
+        if (is_array($this->libraries) && count($this->libraries) > 0) {
+            return true;
+        }
+        return false;
+    }
+
+
+    /**
+     * Check if the item should have an ill button
+     * @return boolean
+     */
+    public function isAvailableForInterlending()
+    {
+        // items marked as free
+        $f856 = $this->getFieldArray([856 => 'z']);
+        if ($this->isFree()) {
+            return false;
+        }
+        //Missed (stolen) books can be Ordered even if they are available at current library
+        if ($this->atCurrentLibrary) {
+            $f924 = $this->tryMethod('getField924');
+            // missed books can always be ordered, even if available locally. 
+            if (count($f924) > 0) {
+                // for each of the local isils
+                foreach ($this->getIsils() as $isil) {
+                    if (array_key_exists($isil, $f924) && isset($f924[$isil]['9']) && ($f924[$isil]['9'] == 'e' || $f924[$isil]['9'] == 'v')) {
+                        // library has marked this item as missed
+                        return true;
+                    }
+                }
+            }
+        }
+        // printed journals - show hint
+        else if ($this->isArticle() || $this->isJournal()) {
+            return true;
+        }
+        // ebooks - always available
+        else if ($this->isEBook() && $this->getNetwork() == 'SWB') {
+            // evaluate ill indicator
+            $f924 = $this->tryMethod('getField924');
+            foreach ($f924 as $field) {
+                if (isset($field['d']) && ($field['d'] == 'e'
+                       || $field['d'] == 'b'
+                       // k is deprecated but might still be used
+                       || $field['d'] == 'k') ) {
+                    return true;
+                }
+            }
+            // eBooks from other networks do not have 924 and can't be ordered. 
+            return false;
+        }
+        // Books - always available 
+        else if (!$this->isAtCurrentLibrary(true) && !$this->isArticle() && !$this->isEBook()) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Get ZDB ID if available
+     * 
+     * @return string
+     */
+    public function getZdbId()
+    {
+        $zdb = '';
+        $consortial = $this->getConsortialIDs();
+        foreach ($consortial as $id) {
+            if (($pos = strpos($id, 'ZDB')) !== FALSE) {
+                $zdb = substr($id, $pos+3);
+            }
+        }
+        // Pull ZDB ID out of recurring field 016
+        foreach ($this->getMarcRecord()->getFields('016') as $field) {
+            $isil = $data = '';
+            foreach ($field->getSubfields() as $subfield) {
+                if ($subfield->getCode() == 'a') {
+                    $data = $subfield ->getData();
+                } elseif($subfield->getCode() == '2') {
+                    $isil = $subfield->getData();
+                }
+            }
+            if ($isil == 'DE-600') {
+                $zdb = $data;
+            }
+        }
+        return $zdb;
+    }
+
 
 }

@@ -156,44 +156,20 @@ Author:
     - author^100
     - author_fuller^50
     - author2
-    - author2_fuller
     - author_additional
-    - author_corporate
-    - author_variant
-    - author2_variant
   QueryFields:
     author:
       - [onephrase, 350]
       - [and, 200]
-      - [or, 100]
     author_fuller:
       - [onephrase, 200]
       - [and, 100]
-      - [or, 50]
     author2:
       - [onephrase, 100]
       - [and, 50]
-      - [or, ~]
-    author2_fuller:
-      - [onephrase, 100]
-      - [and, 50]
-      - [or, ~]
     author_additional:
       - [onephrase, 100]
       - [and, 50]
-      - [or, ~]
-    author_corporate:
-      - [onephrase, 100]
-      - [and, 50]
-      - [or, ~]
-    author_variant:
-      - [onephrase, 100]
-      - [and, 50]
-      - [or, ~]
-    author2_variant:
-      - [onephrase, 100]
-      - [and, 50]
-      - [or, ~]
 
 ISN:
   DismaxFields:
@@ -202,38 +178,28 @@ ISN:
   QueryFields:
     issn:
       - [and, 100]
-      - [or, ~]
     isbn:
       - [and, 100]
-      - [or, ~]
 
 Subject:
   DismaxFields:
-    - topic_unstemmed^150
-    - topic^100
-    - geographic^50
-    - genre^50
-    - era
+    - subject_all_unstemmed^150
+    - subject_all_norm_unstemmed^100
+    - rvk^50
+    - ddc^50
   QueryFields:
-    topic_unstemmed:
+    subject_all_unstemmed:
       - [onephrase, 350]
       - [and, 150]
-      - [or, ~]
-    topic:
+    subject_all_norm_unstemmed:
       - [onephrase, 300]
       - [and, 100]
-      - [or, ~]
-    geographic:
+    rvk:
       - [onephrase, 300]
       - [and, 100]
-      - [or, ~]
-    genre:
+    ddc:
       - [onephrase, 300]
       - [and, 100]
-      - [or, ~]
-    era:
-      - [and, 100]
-      - [or, ~]
 #  ExactSettings:
 #    DismaxFields:
 #      - topic_unstemmed^150
@@ -346,11 +312,9 @@ Series:
     series:
       - [onephrase, 500]
       - [and, 200]
-      - [or, 100]
     series2:
       - [onephrase, 50]
       - [and, 50]
-      - [or, ~]
 
 AllFields:
   DismaxFields:
@@ -363,15 +327,17 @@ AllFields:
     - series^50
     - series2^30
     - author^300
+    - author2^100
     - author_fuller^150
+    - publisher^20
     - contents^10
     - topic_unstemmed^550
     - topic^500
     - geographic^300
     - genre^300
+    - spelling
     - allfields_unstemmed^10
     - fulltext_unstemmed^10
-    - allfields
     - fulltext
     - description
     - isbn
@@ -409,27 +375,27 @@ AllFields:
       - [and, 50]
     author_additional:
       - [and, 50]
+    publisher:
+      - [and, 20]      
     contents:
       - [and, 10]
     topic_unstemmed:
       - [onephrase, 550]
       - [and, 500]
-    topic:
-      - [onephrase, 500]
     geographic:
       - [onephrase, 300]
     genre:
       - [onephrase, 300]
+    spelling:
+      - [and, 10]
     allfields_unstemmed:
-      - [or, 10]
+      - [and, 10]
     fulltext_unstemmed:
-      - [or, 10]
-    allfields:
-      - [or, ~]
+      - [and, 10]
     fulltext:
-      - [or, ~]
+      - [and, ~]
     description:
-      - [or, ~]
+      - [and, ~]
     isbn:
       - [onephrase, ~]
     issn:
@@ -473,7 +439,7 @@ ParentID:
 ids:
   QueryFields:
     id:
-      - [or, ~]
+      - [and, ~]
 
 TopicBrowse:
   QueryFields:
@@ -507,20 +473,20 @@ CallNumber:
   CustomMunge:
     callnumber_exact:
       # Strip whitespace and quotes:
-      - [preg_replace, '/[ "]/', '']
+      - [preg_replace, '/[ "]/', ""]
       # Escape colons (unescape first to avoid double-escapes):
-      - [preg_replace, '/(\\:)/', ':']
+      - [preg_replace, "/(\\\:)/", ':']
       - [preg_replace, '/:/', '\:']
       # Strip pre-existing trailing asterisks:
-      - [preg_replace, '/\*+$/', '']
+      - [preg_replace, "/\*+$/", ""]
     callnumber_fuzzy:
       # Strip whitespace and quotes:
-      - [preg_replace, '/[ "]/', '']
+      - [preg_replace, '/[ "]/', ""]
       # Escape colons (unescape first to avoid double-escapes):
-      - [preg_replace, '/(\\:)/', ':']
+      - [preg_replace, "/(\\\:)/", ':']
       - [preg_replace, '/:/', '\:']
       # Strip pre-existing trailing asterisks, then add a new one:
-      - [preg_replace, '/\*+$/', '']
+      - [preg_replace, "/\*+$/", ""]
       - [append, "*"]
   QueryFields:
     callnumber-search:
@@ -536,15 +502,16 @@ publisher:
   QueryFields:
     publisher:
       - [and, 100]
-      - [or, ~]
 
 year:
   DismaxFields:
     - publishDate^100
+    - publish_date^100
   QueryFields:
     publishDate:
       - [and, 100]
-      - [or, ~]
+    publish_date:
+      - [and, 100]
 
 language:
   QueryFields:
@@ -553,11 +520,10 @@ language:
 
 toc:
   DismaxFields:
-    - contents^100
+    - summary^100
   QueryFields:
-    contents:
+    summary:
       - [and, 100]
-      - [or, ~]
 
 topic:
   QueryFields:
@@ -594,3 +560,9 @@ oclc_num:
   QueryFields:
     oclc_num:
       - [oclc_num, ~]
+
+Institute:
+  QueryFields:
+    institute:
+      - [onephrase, ~]
+
