@@ -17,7 +17,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  *
  * @category VuFind
  * @package  ILS_Drivers
@@ -589,11 +589,9 @@ class Virtua extends AbstractBase implements \VuFindHttp\HttpServiceAwareInterfa
                         ) {
                             // ... can this user borrow on loan items at this
                             // location?
-                            if (in_array(
+                            $can_req = in_array(
                                 $location, $unavailable_locs[$item_loc_code]
-                            )) {
-                                $can_req = true;
-                            }
+                            );
                         }
                     } else {
                         // The item is NOT on loan ...
@@ -601,9 +599,8 @@ class Virtua extends AbstractBase implements \VuFindHttp\HttpServiceAwareInterfa
                         // ... and has a requestable status ...
                         if (in_array($item_stat_code, $status_list)) {
                             // ... can the user borrow status items at this location?
-                            if (in_array($location, $status_locs[$item_loc_code])) {
-                                $can_req = true;
-                            }
+                            $can_req
+                                = in_array($location, $status_locs[$item_loc_code]);
                         } else {
                             // ... and DOESN'T have a requestable status ...
                             if ($item_stat_code !== null) {
@@ -611,11 +608,9 @@ class Virtua extends AbstractBase implements \VuFindHttp\HttpServiceAwareInterfa
                             } else {
                                 // ... can the user borrow available items at this
                                 // location?
-                                if (in_array(
+                                $can_req = in_array(
                                     $location, $available_locs[$item_loc_code]
-                                )) {
-                                    $can_req = true;
-                                }
+                                );
                             }
                         }
                     }

@@ -17,7 +17,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  *
  * @category VuFind
  * @package  Search_Tags
@@ -26,7 +26,10 @@
  * @link     https://vufind.org Main Site
  */
 namespace VuFind\Search\Tags;
+use VuFind\Db\Table\Tags as TagsTable;
+use VuFind\Record\Loader;
 use VuFind\Search\Base\Results as BaseResults;
+use VuFindSearch\Service as SearchService;
 
 /**
  * Search Tags Results
@@ -40,13 +43,36 @@ use VuFind\Search\Base\Results as BaseResults;
 class Results extends BaseResults
 {
     /**
+     * Tags table
+     *
+     * @var TagsTable
+     */
+    protected $tagsTable;
+
+    /**
+     * Constructor
+     *
+     * @param \VuFind\Search\Base\Params $params        Object representing user
+     * search parameters.
+     * @param SearchService              $searchService Search service
+     * @param Loader                     $recordLoader  Record loader
+     * @param TagsTable                  $tagsTable     Resource table
+     */
+    public function __construct(\VuFind\Search\Base\Params $params,
+        SearchService $searchService, Loader $recordLoader, TagsTable $tagsTable
+    ) {
+        parent::__construct($params, $searchService, $recordLoader);
+        $this->tagsTable = $tagsTable;
+    }
+
+    /**
      * Process a fuzzy tag query.
      *
      * @param string $q Raw query
      *
      * @return string
      */
-    protected function formatTagQuery($q)
+    protected function formatFuzzyQuery($q)
     {
         // Change unescaped asterisks to percent signs to translate more common
         // wildcard character into format used by database.
@@ -54,16 +80,19 @@ class Results extends BaseResults
     }
 
     /**
-     * Return resources associated with the user tag query, using fuzzy matching.
+     * Return resources associated with the user tag query.
+     *
+     * @param bool $fuzzy Is this a fuzzy query or an exact match?
      *
      * @return array
      */
-    protected function performFuzzyTagSearch()
+    protected function performTagSearch($fuzzy)
     {
-        $table = $this->getTable('Tags');
-        $query = $this->formatTagQuery($this->getParams()->getDisplayQuery());
-        $rawResults = $table->fuzzyResourceSearch(
-            $query, null, $this->getParams()->getSort()
+        $query = $fuzzy
+            ? $this->formatFuzzyQuery($this->getParams()->getDisplayQuery())
+            : $this->getParams()->getDisplayQuery();
+        $rawResults = $this->tagsTable->resourceSearch(
+            $query, null, $this->getParams()->getSort(), 0, null, $fuzzy
         );
 
         // How many results were there?
@@ -72,39 +101,9 @@ class Results extends BaseResults
         // Apply offset and limit if necessary!
         $limit = $this->getParams()->getLimit();
         if ($this->resultTotal > $limit) {
-            $rawResults = $table->fuzzyResourceSearch(
+            $rawResults = $this->tagsTable->resourceSearch(
                 $query, null, $this->getParams()->getSort(),
-                $this->getStartRecord() - 1, $limit
-            );
-        }
-
-        return $rawResults->toArray();
-    }
-
-    /**
-     * Return resources associated with the user tag query, using exact matching.
-     *
-     * @return array
-     */
-    protected function performExactTagSearch()
-    {
-        $table = $this->getTable('Tags');
-        $tag = $table->getByText($this->getParams()->getDisplayQuery(), false);
-        if (empty($tag)) {
-            $this->resultTotal = 0;
-            return [];
-        }
-        $rawResults = $tag->getResources(null, $this->getParams()->getSort());
-
-        // How many results were there?
-        $this->resultTotal = count($rawResults);
-
-        // Apply offset and limit if necessary!
-        $limit = $this->getParams()->getLimit();
-        if ($this->resultTotal > $limit) {
-            $rawResults = $tag->getResources(
-                null, $this->getParams()->getSort(), $this->getStartRecord() - 1,
-                $limit
+                $this->getStartRecord() - 1, $limit, $fuzzy
             );
         }
 
@@ -123,16 +122,14 @@ class Results extends BaseResults
         // we are coming in from a search, in which case we want to do a fuzzy
         // search that supports wildcards, or else we are coming in from a tag
         // link, in which case we want to do an exact match.
-        $rawResults = $this->getParams()->isFuzzyTagSearch()
-            ? $this->performFuzzyTagSearch()
-            : $this->performExactTagSearch();
+        $results = $this->performTagSearch($this->getParams()->isFuzzyTagSearch());
 
         // Retrieve record drivers for the selected items.
         $callback = function ($row) {
             return ['id' => $row['record_id'], 'source' => $row['source']];
         };
-        $this->results = $this->getServiceLocator()->get('VuFind\RecordLoader')
-            ->loadBatch(array_map($callback, $rawResults));
+        $this->results = $this->recordLoader
+            ->loadBatch(array_map($callback, $results));
     }
 
     /**

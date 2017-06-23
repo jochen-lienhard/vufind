@@ -17,7 +17,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  *
  * @category VuFind
  * @package  Authentication
@@ -227,7 +227,16 @@ class ILS extends AbstractBase
         }
 
         // Check to see if we already have an account for this user:
-        $user = $this->getUserTable()->getByUsername($info[$usernameField]);
+        $userTable = $this->getUserTable();
+        if (!empty($info['id'])) {
+            $user = $userTable->getByCatalogId($info['id']);
+            if (empty($user)) {
+                $user = $userTable->getByUsername($info[$usernameField]);
+                $user->saveCatalogId($info['id']);
+            }
+        } else {
+            $user = $userTable->getByUsername($info[$usernameField]);
+        }
 
         // No need to store the ILS password in VuFind's main password field:
         $user->password = '';

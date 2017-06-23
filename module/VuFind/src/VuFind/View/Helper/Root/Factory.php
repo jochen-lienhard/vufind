@@ -17,7 +17,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  *
  * @category VuFind
  * @package  View_Helpers
@@ -203,6 +203,21 @@ class Factory
     }
 
     /**
+     * Construct the GeoCoords helper.
+     *
+     * @param ServiceManager $sm Service manager.
+     *
+     * @return GeoCoords
+     */
+    public static function getGeoCoords(ServiceManager $sm)
+    {
+        $config = $sm->getServiceLocator()->get('VuFind\Config')->get('searches');
+        $coords = isset($config->MapSelection->default_coordinates)
+            ? $config->MapSelection->default_coordinates : false;
+        return new GeoCoords($coords);
+    }
+
+    /**
      * Construct the GoogleAnalytics helper.
      *
      * @param ServiceManager $sm Service manager.
@@ -324,9 +339,12 @@ class Factory
             ),
             true
         );
+        $resolverPluginManager = $sm->getServiceLocator()
+            ->get('VuFind\ResolverDriverPluginManager');
         return new OpenUrl(
             $sm->get('context'),
             $openUrlRules,
+            $resolverPluginManager,
             isset($config->OpenURL) ? $config->OpenURL : null
         );
     }
@@ -429,9 +447,12 @@ class Factory
     public static function getSearchBox(ServiceManager $sm)
     {
         $config = $sm->getServiceLocator()->get('VuFind\Config');
+        $mainConfig = $config->get('config');
         return new SearchBox(
             $sm->getServiceLocator()->get('VuFind\SearchOptionsPluginManager'),
-            $config->get('searchbox')->toArray()
+            $config->get('searchbox')->toArray(),
+            isset($mainConfig->SearchPlaceholder)
+                ? $mainConfig->SearchPlaceholder->toArray() : []
         );
     }
 

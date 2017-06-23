@@ -17,7 +17,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  *
  * @category VuFind
  * @package  Authentication
@@ -158,9 +158,11 @@ class LDAP extends AbstractBase
         }
 
         // if the host parameter is not specified as ldaps://
-        // then we need to initiate TLS so we
+        // then (unless TLS is disabled) we need to initiate TLS so we
         // can have a secure connection over the standard LDAP port.
-        if (stripos($host, 'ldaps://') === false) {
+        $disableTls = isset($this->config->LDAP->disable_tls)
+            && $this->config->LDAP->disable_tls;
+        if (stripos($host, 'ldaps://') === false && !$disableTls) {
             $this->debug('Starting TLS');
             if (!@ldap_start_tls($connection)) {
                 $this->debug('TLS failed');

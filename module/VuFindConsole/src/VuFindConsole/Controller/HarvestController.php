@@ -17,7 +17,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  *
  * @category VuFind
  * @package  Controller
@@ -81,7 +81,7 @@ class HarvestController extends AbstractBase
         }
 
         // Get the default VuFind HTTP client:
-        $client = $this->getServiceLocator()->get('VuFind\Http')->createClient();
+        $client = $this->serviceLocator->get('VuFind\Http')->createClient();
 
         // Run the job!
         $runner = new HarvesterConsoleRunner(
@@ -101,10 +101,12 @@ class HarvestController extends AbstractBase
     {
         $this->checkLocalSetting();
 
-        $argv = $this->consoleOpts->getRemainingArgs();
-        $dir = isset($argv[0]) ? rtrim($argv[0], '/') : '';
+        $dir = rtrim($this->getRequest()->getParam('dir', ''), '/');
         if (empty($dir)) {
             $scriptName = $this->getRequest()->getScriptName();
+            if (substr($scriptName, -9) === 'index.php') {
+                $scriptName .= ' harvest merge-marc';
+            }
             Console::writeLine('Merge MARC XML files into a single <collection>;');
             Console::writeLine('writes to stdout.');
             Console::writeLine('');

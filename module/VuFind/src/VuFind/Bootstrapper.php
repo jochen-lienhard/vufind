@@ -17,7 +17,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  *
  * @category VuFind
  * @package  Bootstrap
@@ -201,8 +201,8 @@ class Bootstrapper
     {
         $callback = function ($event) {
             $serviceManager = $event->getApplication()->getServiceManager();
-            $renderer = $serviceManager->get('viewmanager')->getRenderer();
-            $headTitle = $renderer->plugin('headtitle');
+            $helperManager = $serviceManager->get('ViewHelperManager');
+            $headTitle = $helperManager->get('headtitle');
             $headTitle->setDefaultAttachOrder(
                 \Zend\View\Helper\Placeholder\Container\AbstractContainer::SET
             );

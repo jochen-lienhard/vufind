@@ -17,7 +17,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  *
  * @category VuFind2
  * @package  Tests
@@ -74,7 +74,7 @@ class ListViewsTest extends \VuFindTest\Unit\MinkTestCase
         $session = $this->getMinkSession();
         $session->visit($this->getVuFindUrl() . '/Search/Home');
         $page = $session->getPage();
-        $this->findCss($page, '.searchForm [name="lookfor"]')
+        $this->findCss($page, '#searchForm_lookfor')
             ->setValue('id:testdeweybrowse');
         $this->findCss($page, '.btn.btn-primary')->click();
         $this->snooze();
@@ -192,7 +192,7 @@ class ListViewsTest extends \VuFindTest\Unit\MinkTestCase
         // Search for anything else
         $session->visit($this->getVuFindUrl() . '/Search/Home');
         $page = $session->getPage();
-        $this->findCss($page, '.searchForm [name="lookfor"]')
+        $this->findCss($page, '#searchForm_lookfor')
             ->setValue('anything else');
         $this->findCss($page, '.btn.btn-primary')->click();
         // Come back

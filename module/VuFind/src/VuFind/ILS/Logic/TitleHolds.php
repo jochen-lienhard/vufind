@@ -17,7 +17,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  *
  * @category VuFind
  * @package  ILS_Logic
@@ -120,13 +120,13 @@ class TitleHolds
             } else if ($mode == 'driver') {
                 try {
                     $patron = $this->ilsAuth->storedCatalogLogin();
+                    if (!$patron) {
+                        return false;
+                    }
+                    return $this->driverHold($id, $patron);
                 } catch (ILSException $e) {
                     return false;
                 }
-                if (!$patron) {
-                    return false;
-                }
-                return $this->driverHold($id, $patron);
             } else {
                 try {
                     $patron = $this->ilsAuth->storedCatalogLogin();
@@ -211,8 +211,10 @@ class TitleHolds
         ];
 
         if ($checkHolds != false) {
-            $valid = $this->catalog->checkRequestIsValid($id, $data, $patron);
-            if ($valid) {
+            $result = $this->catalog->checkRequestIsValid($id, $data, $patron);
+            if ((is_array($result) && $result['valid'])
+                || (is_bool($result) && $result)
+            ) {
                 return $this->getHoldDetails($data, $checkHolds['HMACKeys']);
             }
         }
