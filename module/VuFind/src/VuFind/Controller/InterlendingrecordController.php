@@ -26,6 +26,7 @@
  * @link     https://vufind.org Main Site
  */
 namespace VuFind\Controller;
+use Zend\ServiceManager\ServiceLocatorInterface;
 
 /**
  * Record Controller
@@ -40,14 +41,15 @@ class InterlendingrecordController extends AbstractRecord
 {
     /**
      * Constructor
+     *
+     * @param ServiceLocatorInterface $sm Service locator
      */
-    public function __construct()
+    public function __construct(ServiceLocatorInterface $sm)
     {
-
         // Override some defaults:
         $this->searchClassId = 'Interlending';
-  
+ 
         // Call standard record controller initialization:
-        parent::__construct();
+        parent::__construct($sm); 
     }
 }
