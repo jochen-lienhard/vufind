@@ -155,6 +155,22 @@ class Factory
     }
 
     /**
+     * Factory for HoldingsGlobal tab plugin.
+     *
+     * @param ServiceManager $sm Service manager.
+     *
+     * @return HoldingsGlobal
+     */
+    public static function getHoldingsGlobal(ServiceManager $sm)
+    {
+        return new HoldingsGlobal(
+            $sm->getServiceLocator()->get('VuFind\Search'),
+            $sm->getServiceLocator()->get('VuFind\Http')->createClient(),
+            $sm->getServiceLocator()->get('VuFind\CacheManager')
+        );
+    }
+
+    /**
      * Factory for HoldingsWorldCat tab plugin.
      *
      * @param ServiceManager $sm Service manager.
@@ -180,7 +196,9 @@ class Factory
         $mapType = isset($config->Content->recordMap)
             ? $config->Content->recordMap : null;
         $options = [];
-        $optionFields = ['displayCoords', 'mapLabels'];
+        $optionFields = [
+            'displayCoords', 'mapLabels', 'googleMapApiKey'
+        ];
         foreach ($optionFields as $field) {
             if (isset($config->Content->$field)) {
                 $options[$field] = $config->Content->$field;

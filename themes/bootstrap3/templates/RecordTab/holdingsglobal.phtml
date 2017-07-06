@@ -4,17 +4,198 @@
 
     $holdingsglobal = $this->driver->getHoldingsGlobal();
 ?>
+<? //$result = $this->tab->getResultsByISBN($this->driver->getCleanISBN()); ?>
+<? // echo($this->HoldingsGlobal()->getStatus("data")); ?>
+<? 
+
+   // das könnte in den Helper ausgelagert werden, result übergeben, holding array zurück
+   $result = $this->tab->getResults($this->driver->getHoldingsQuery());
+   $isil_names = $this->tab->getIsilNames($this->driver->getIsilHoldingsGlobal());
+   if ($result->getTotal() > 0) {
+      foreach ($result->getRecords() as $record) {
+          $libraries = [];
+                $record instanceof RecordDriver\Interlending;
+                $ppn = $record->getUniqueId();
+                $f924 = $record->getField924(true, true);
+
+                // iterate through all found 924 entries
+                // ISILs are unified here - information is being dropped! 
+                foreach ($f924 as $isil => $field) {
+                    $libraries[] = [
+                        'isil' => $isil,
+                        'callnumber' => isset($field['g']) ? $field['g'] : '',
+                        'issue' => isset($field['z']) ? $field['z'] : ''
+                    ];
+                }
+
+                //Catch Errors in parsing
+                if ($libraries === null) {
+                    continue;
+                }
+                $return['holdings'][$ppn] = $libraries;
+            }
+            $return['numppn'] = count($return['holdings']);
+            $return['numfound'] = count($libraries);
+
+        }
+        else {
+            $return['numfound'] = 0;
+        }
+
+   $this->driver->setHoldings($return['holdings']);
+
+?>
+
+     <? /* Consortium Catalog Link */ ?>
+     <? if (!empty($this->driver->getConsortiumCatalogLink())): ?>
+<div>
+         <a class="link-external" href="<?=$this->driver->getConsortiumCatalogLink()?>" target=_blank>zum OPAC beim Verbund <?=$this->transEsc(key($this->driver->getControlNumberID()))?></a>
+</div>
+     <? endif; ?>
+
+     <? /* Fernleih-Button oder alternativ Link zum Bücher & mehr Tab */?>
+     <? if (!empty($this->driver->getILLContent())): ?>
+         <div>
+            <?=$this->driver->getILLContent() ?>
+         </div>
+     <? endif; ?>
+
+<? /* illbutton.phtml von boss2 */?>
+<div>
+<?
+// is this item available at current library
+$current = $this->driver->isAtCurrentLibrary(true);
+// is this item available for interlending
+$available = $this->driver->isAvailableForInterlending();
+// for SWB hits this is an ID of a parallel edition
+// for not-SWB hits, this is an id of a similar item in SWB. 
+$swb = $this->driver->getSwbId();
+$url = $this->driver->getILLLink(); 
+?>
+
+        <? // vorhanden in lokaler Bibliothek - kein Artikel ?>
+        <? if ($current && !$available && !$this->driver->isSerial()): ?>
+            <? if ($this->driver->getNetwork() == 'SWB'): ?>
+                <strong>
+                    <? if (count($swb) > 0): ?>                    
+                        <?= $this->transEsc('parallel_editions_available') ?>
+                        <ul>                    
+                        <? foreach ($swb as $id): ?>
+                            <li><a class="link-internal" href="<?=$this->url('interlending-search')?>?lookfor=id%3A<?=preg_quote($id)?>&amp;type=allfields"><?= $this->transEsc('to_parallel_edition') ?></a></li>                
+                        <? endforeach; ?>
+                        </ul>
+                    <? else: ?>
+                        <?= $this->transEsc('available_at_current_library') ?>
+         <?=$this->transEsc('local holdings')?> in <a class="link-internal" href="<?=$this->url('rdsindex-search')?>?lookfor=id%3A<?=$this->driver->getLocalID() ?>&amp;type=allfields"><?=$this->transEsc('RDSIndex')?></a>
+                    <? endif; ?>
+                </strong>
+            <? else: ?>
+                <strong>
+                    <?= $this->transEsc('available_at_current_library') ?>
+                    <? if (count($swb) > 0): ?>                    
+                        <ul>                    
+                        <? foreach ($swb as $id): ?>
+                            <li><a class="link-internal" href="<?=$this->url('interlending-search')?>?lookfor=id%3A<?=preg_quote($id)?>&amp;type=allfields"><?= $this->transEsc('to_local_hit') ?></a></li>                
+                        <? endforeach; ?>
+                        </ul>
+                    <? endif; ?>
+                </strong>
+            <? endif; ?>
+
+        <? // Artikel - vorhanden in lokaler Bibliothek ?>
+        <? elseif($current && ($this->driver->isSerial())): ?>
+                <? // es gibt SWB Treffer - diese werden verlinkt ?>
+                <? if ($this->driver->getNetwork() !== 'SWB' && count($swb) > 0): ?>
+                    <strong>
+                        <?= $this->transEsc('available_at_current_library') ?>
+                        <ul>                    
+                        <? foreach ($swb as $id): ?>
+                            <li><a class="link-internal" href="<?=$this->url('interlending-search')?>?lookfor=id%3A<?=preg_quote($id)?>&amp;type=allfields"><?= $this->transEsc('to_local_hit') ?></a></li>                
+                        <? endforeach; ?>
+                        </ul>
+                    </strong>
+                <? else: // Titel ist lokal verfügbar, aber trotzdem bestellbar, da wir die Bestandsangaben nicht prüfen können ?>
+                <div class="col-sm-12" style="padding-left: 0;">
+                    <span <? if (strpos($class, 'login-required') !== false): ?>
+                       data-toggle="popover"
+                       data-trigger="focus"
+                       role="button"
+                       tabindex
+                       data-content="<?=$this->transEsc('shib_login_required')?>"
+                       data-title="<?=$this->transEsc('shib_login_required_title')?>"            
+                        <? endif; ?>>
+                        <a title="<?= $this->transEsc('Interlibrary Loan') ?>" target="_blank" 
+                           accesskey="" href="<?= $url ?>" 
+                           id="illform" class="<?=$this->escapeHtmlAttr($class)?> btn btn-success btn-sm <? if($this->customUrl):?>external hasicon<? endif; ?>"><?= $this->transEsc('Recall as Interlibrary Loan') ?></a>
+                    </span>
+                </div>
+                <div class="col-sm-12">
+                    <span class="help-text">
+                        <?= $this->transEsc('ill_article_local') ?><br/>
+<?=$this->transEsc('local holdings')?> in <a class="link-internal" href="<?=$this->url('rdsindex-search')?>?lookfor=id%3A<?=$this->driver->getLocalID() ?>&amp;type=allfields"><?=$this->transEsc('RDSIndex')?></a>
+                    </span>
+                </div>
+                <? endif; ?>
+
+        <? // nicht in lokaler Bibliothek, für die Fernleihe verfügbar ?>
+        <? elseif($available): ?>
+          <? if ($this->driver->getNetwork() !== 'DNB'): ?>
+        <span <? if (strpos($class, 'login-required') !== false): ?>
+           data-toggle="popover"
+           data-trigger="focus"
+           role="button"
+           tabindex
+           data-content="<?=$this->transEsc('shib_login_required')?>"
+           data-title="<?=$this->transEsc('shib_login_required_title')?>"            
+            <? endif; ?>>
+            <a title="<?= $this->transEsc('Interlibrary Loan') ?>" 
+               href="<?= $url ?>"                
+               id="illform" target="_blank" class="<?=$this->escapeHtmlAttr($class)?> btn btn-success btn-sm <? if($this->customUrl):?>external hasicon<? endif; ?>"><?= $this->transEsc('Recall as Interlibrary Loan') ?></a></span>
+          <? else: ?>
+            Über die DNB nur ausleihbar, falls ...
+          <? endif; ?>
+
+        <? // Nicht per Fernleihe ausleihbar ?>
+        <? else: ?>
+            <? if ($this->driver->isFree()): ?>
+                <strong><?= $this->transEsc('not_available_for_ill_free') ?></strong>
+            <? else: ?>
+                <strong><?= $this->transEsc('not_available_for_ill') ?></strong>
+                <? // Show link to SWB hit even if its not available ?>
+                <? if ($this->driver->getNetwork() !== 'SWB' && $this->driver->hasSwbId() && $this->driver->getSwbId() != $this->driver->getUniqueId()): ?>
+                    <ul>
+                    <? foreach ($swb as $id): ?>
+                        <li><a class="link-internal" href="<?=$this->url('interlending-search')?>?lookfor=id%3A<?=preg_quote($id)?>&amp;type=allfields"><?= $this->transEsc('to_local_hit') ?>"</a></li> 
+                    <? endforeach; ?>
+                    </ul>
+            <? endif; ?>
+
+            <? endif; ?>
+        <? endif; ?>
+
+
+</div>
+<? /* ende illbutton.phtml von boss2 */?>
+
 <? if (!empty($holdingsglobal)): ?>
 <div class="row">
-   <? foreach ($holdingsglobal as $itemName => $itemValue): ?>
+   <? foreach ($holdingsglobal as $holdingValue): ?>
+      <? foreach ($holdingValue as $itemName => $itemValue): ?>
       <div class='col-xs-12 hg-list'>
-          <div class="hidden col-xs-12 col-md-5 col-lg-4 hg-panel <?=$itemName?>">
-             <?=$this->translate($itemName) ?>
-          </div>
-          <div class="col-xs-12 col-md-7 col-lg-8 hg-body">
-             <?= $itemValue ?>
-          </div>
+          <? switch ($itemName) {
+             case "b": $translateditemValue = $isil_names[$itemValue]; 
+                       if ($translateditemValue == str_replace('-','',$itemValue)) $translateditemValue = "";
+                       echo("<div class='col-xs-12 col-md-12 col-lg-12 hg-panel'><a class='link-external' target='_blank' href='http://lobid.org/organisation/$itemValue'>$itemValue $translateditemValue</a></div>");
+                  break;
+             case "g": echo("<div class='col-xs-12 col-md-5 col-lg-4 hg-panel'>Signatur</div><div class='col-xs-12 col-md-7 col-lg-8 hg-body'>$itemValue</div>");
+                  break;
+             case "k": echo("<div class='col-xs-12 col-md-5 col-lg-4 hg-panel'>Url</div><div class='col-xs-12 col-md-7 col-lg-8 hg-body'>$itemValue</div>");
+                  break;
+             case "z": echo("<div class='col-xs-12 col-md-5 col-lg-4 hg-panel'>Bestand</div><div class='col-xs-12 col-md-7 col-lg-8 hg-body'>$itemValue</div>");
+                  break;
+             } ?>
       </div>
+      <? endforeach; /* end foreach description */ ?>
     <? endforeach; /* end foreach description */ ?>
 </div>
 <? endif; ?>

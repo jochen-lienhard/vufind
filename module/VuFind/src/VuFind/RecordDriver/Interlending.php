@@ -139,7 +139,7 @@ class Interlending extends SolrMarc
     /**
      * Get Content of 924 as array: isil => array of subfields
      * 
-     * @param boolean $isilAsKey          uses ISILs as array keys - be carefull, 
+     * @param boolean $isilAsKey uses ISILs as array keys - be carefull, 
      * information is dropped
      * @param boolean $recurringSubfields allow recurring subfields
      * 
@@ -196,7 +196,7 @@ class Interlending extends SolrMarc
 
 
     /**
-     * Get notes on finding aids related to the record.
+     * Extract the holding information like isil, callnumber from field 924 
      *
      * @return array
      */
@@ -221,8 +221,21 @@ class Interlending extends SolrMarc
         return $result;
     }
 
+   /**
+     * Extract the holding information like isil, callnumber from field 924 
+     *
+     * @return array
+     */
+    public function getIsilHoldingsGlobal()
+    {
+        $global = $this->getFieldArray('924', ['b'], true, ' : ');
+        return $global;
+    }
+
+
     /**
-     * Get notes on finding aids related to the record.
+     * Checks if the isil from field 924 b can be found in the 
+     * interlending isil config 
      *
      * @return boolean
      */
@@ -230,7 +243,7 @@ class Interlending extends SolrMarc
     {  
         $local = false; 
         $global = $this->getFieldArray('924', ['b'], true, ' : ');
-        $localIDs = $this->recordConfig->Interlending->isil->toArray(); 
+        $localIDs = $this->getIsils(); 
         foreach ($global as $value) {
             if (in_array($value, $localIDs)) {
                 $local = true;
@@ -244,7 +257,7 @@ class Interlending extends SolrMarc
      *
      * @return array
      */
-    public function getIsils()
+    protected function getIsils()
     {
         return $this->recordConfig->Interlending->isil->toArray();
     }
@@ -255,50 +268,36 @@ class Interlending extends SolrMarc
      *
      * @return array 
      */
-    public function getConsortiumLinks()
+    protected function getConsortiumLinks()
     {
         $consortium = $this->recordConfig->Interlending->consortium->toArray();
         return $consortium;
     }
 
+    // das könnte in den Helper, dann aber die Methoden wieder public
     /**
-     * Get link to consortium catalog.
-     *
-     * @return array 
-     */
-    public function getConsortiumCatalog()
-    {
-	$data = [];
-        if (!empty($this->getLocalOPACLink())) {
-           $data[key($this->getControlNumberID())] = $this->getLocalOPACLink();
-        }
-        return $data;
-    }
-
-    /**
-     * Generate link to local OPAC via consortium
+     * Generate link to the consortium catalog 
      *
      * @return string
      */
-    public function getLocalOPACLink() 
+    public function getConsortiumCatalogLink()
     {
         $link = "";
         $uid = $this->getControlNumberID();
-        $clinks = $this-> getConsortiumLinks();
+        $clinks = $this->getConsortiumLinks();
 
         if (array_key_exists(key($uid), $clinks)) {
             $link = str_replace("{PPN}", $uid[key($uid)], $clinks[key($uid)]);
         }
-
         return $link;
     }
 
     /**
-     * Get local ppn.
+     * Get local id, extracted from interlending id.
      *
      * @return string 
      */
-    public function getLocalPPN()
+    public function getLocalID()
     {
         $controlNumberID=$this->recordConfig->Interlending->controlNumberID;
 
@@ -316,7 +315,7 @@ class Interlending extends SolrMarc
     }
 
     /**
-     * Get ID and controlnumber.
+     * Splits the interlending id in an associative array 
      *
      * @return array 
      */
@@ -594,7 +593,7 @@ class Interlending extends SolrMarc
     }
 
     /**
-     * Feturn found SWB IDs
+     * Return found SWB IDs
      * 
      * @return array
      */
@@ -603,8 +602,8 @@ class Interlending extends SolrMarc
         return array_unique($this->ppns);
     }
 
-   /**
-     * Do we have a SWB PPN
+    /**
+     * Do we have a SWB IDs 
      * 
      * @return boolean
      */
@@ -613,6 +612,7 @@ class Interlending extends SolrMarc
         return count($this->ppns) > 0;
     }
 
+    // KÖnnte auch in den Helper
     /**
      * Determin if an item is available locally
      * 
@@ -647,8 +647,9 @@ class Interlending extends SolrMarc
 
     }
 
+    // Auslagern , Prüfen 
     /**
-     * Quer< solr for parallel Editions available at local libraries
+     * Query solr for parallel Editions available at local libraries
      * Save the found PPNs in global array
      * 
      * @return boolean
@@ -661,26 +662,6 @@ class Interlending extends SolrMarc
 
         foreach ($related as $rel) {
             $ppns[] = $rel['id'];
-        }
-        return $hasParallel;
-
-        $parallel = [];
-        if (count($ppns) > 0) {
-            $parallel = $this->holding->getParallelEditions($ppns, $this->client->getIsilAvailability());         
-
-            // check the found records for local available isils            
-            $isils = [];
-            foreach ($parallel->getResults() as $record) {
-                $f924 = $this->getField924(true);
-                $recordIsils = array_keys($f924);
-                $isils = array_merge($isils, $recordIsils);
-            }
-            foreach ($isils as $isil) {
-                if (in_array($isil, $this->getIsils())) {
-                    $hasParallel = true;
-                    $this->ppns[] = $this->getUniqueId();
-                }
-            }
         }
         return $hasParallel;
     }
@@ -736,8 +717,9 @@ return null;
       }
     }
 
+    // Konfigurierbar machen
     /**
-     * Get ILLContent.
+     * Get ILLLink.
      *
      * @return string 
      */
@@ -755,31 +737,6 @@ return null;
      */
     public function getHoldingsQuery()
     {
-
-       // Regel um die Query zu bauen 
-       /*
-        if ($this->driver->isArticle() || $this->driver->isJournal()
-                || $this->driver->isNewspaper()
-            ) {
-            // prefer ZDB ID
-            if (!empty($zdb)) {
-                $this->holding->setZdbId($zdb);
-            } else {
-                $this->holding->setIsxns($this->driver->getCleanISSN());
-            }
-            // use ISSN and year
-        } elseif (!empty($isbn)) {
-            // use ISBN and year            
-            $this->holding->setIsxns($isbn)
-                            ->setYear($year);
-        } else {
-            // use title and author and year
-            $this->holding->setTitle($this->driver->getTitle())
-                          ->setAuthor($this->driver->getPrimaryAuthor())
-                          ->setYear($year);
-        }
-
-       */
        $query = null;
 
        // build query for ISBN or ISSN 
@@ -809,6 +766,8 @@ return null;
            $shortTitle = substr_replace($shortTitle, '', $occurrence, 1);
        }
        $zdbid = $this->getZdbId();
+
+       $query[] = new \VuFindSearch\Query\Query('DE-576','consortium');
 
        if ($this->isArticle() || $this->isJournal()
                 || $this->isNewspaper()
@@ -889,72 +848,6 @@ return null;
                 reset($this->holdings);
                 $this->ppns[] = key($this->holdings);
             }
-
-
-        // check if any of the isils from webservic matches local isils
-        if (is_array($this->libraries) && count($this->libraries) > 0) {
-            return true;
-        }
-        return false;
-
-
-return $this->checkHoldingsLocal();
-// ToDo fix
-
-
-        // set up query params
-        $isbns = $this->getCleanISBN();
-        $years = $this->getPublicationDates();
-        $zdb = $this->tryMethod('getZdbId');
-        $year = array_shift($years);
-
-
-
-        if ($this->isArticle() || $this->isJournal()
-                || $this->isNewspaper()
-            ) {
-            // prefer ZDB ID
-            if (!empty($zdb)) {
-                $this->holding->setZdbId($zdb);
-            } else {
-                $this->holding->setIsxns($this->driver->getCleanISSN());
-            }
-            // use ISSN and year
-        } elseif (is_array($isbns) && count($isbns) > 0) {
-            // use ISBN and year            
-            $this->holding->setIsxns($isbns)
-                            ->setYear($year);
-        } else {
-            // use title and author and year
-            $this->holding->setTitle($this->driver->getTitle())
-                          ->setAuthor($this->driver->getPrimaryAuthor())
-                          ->setYear($year);
-        }
-        // check query and fire
-        if ($this->holding->checkQuery()) {
-            $result = $this->holding->query();
-            // check if any ppn is available locally
-
-            if (isset($result['holdings'])) {
-                // search for local available PPNs
-                foreach ($result['holdings'] as $ppn => $holding) {
-                    foreach ($holding as $entry) {
-                        if (isset($entry['isil']) && in_array($entry['isil'], $this->getIsils())) {
-                            // save PPN
-                            $this->ppns[] = '(DE-576)'.$ppn;
-                            $this->libraries[] = $entry['isil'];
-                        }
-
-                    }
-                }
-            }
-            // if no locally available ppn found, just take the first one
-            if (count($this->ppns) < 1 && isset($result['holdings'])) {
-                reset($result['holdings']);
-                $this->ppns[] = '(DE-576)'.key($result['holdings']);
-            }
-
-        }
 
         // check if any of the isils from webservic matches local isils
         if (is_array($this->libraries) && count($this->libraries) > 0) {
@@ -1045,6 +938,4 @@ return $this->checkHoldingsLocal();
         }
         return $zdb;
     }
-
-
 }
